@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
 import styled from "styled-components";
-import { ThemeProp } from "./_app";
 
 const Content = styled.main`
   border: red solid 1px;
