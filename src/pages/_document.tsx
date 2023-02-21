@@ -1,6 +1,7 @@
 import Document, { DocumentContext } from "next/document";
 import { ServerStyleSheet } from "styled-components";
 
+// Styled Components SSR support for SWC compiler.
 export default class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
     const sheet = new ServerStyleSheet();

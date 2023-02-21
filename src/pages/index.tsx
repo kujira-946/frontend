@@ -1,8 +1,12 @@
 import Head from "next/head";
 import Image from "next/image";
 import styled from "styled-components";
+import { ThemeProp } from "./_app";
 
 const Content = styled.main`
+  color: ${(props: ThemeProp) => props.theme.colors.text};
+  background-color: ${(props: ThemeProp) => props.theme.colors.background};
+
   border: red solid 1px;
 `;
 

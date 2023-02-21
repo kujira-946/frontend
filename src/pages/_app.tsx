@@ -1,3 +1,4 @@
+import * as React from "react";
 import type { AppProps } from "next/app";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 
@@ -34,11 +35,11 @@ const GlobalStyles = createGlobalStyle`
     text-decoration: none;
   }
 
-  @media (prefers-color-scheme: dark) {
+  /* @media (prefers-color-scheme: dark) {
     html {
       color-scheme: dark;
     }
-  }
+  } */
 
   /* HTML5 display-role reset for older browsers */
   article, aside, details, figcaption, figure, 
@@ -78,7 +79,7 @@ type Theme = {
   };
 };
 
-export type Themes = {
+type Themes = {
   light: Theme;
   dark: Theme;
 };
@@ -98,11 +99,15 @@ const themes: Themes = {
   },
 };
 
+export type ThemeProp = { theme: Theme };
+
 export default function App({ Component, pageProps }: AppProps) {
+  const [theme, setTheme] = React.useState<"light" | "dark">("light");
+
   return (
-    <ThemeProvider theme={themes}>
+    <ThemeProvider theme={themes[theme]}>
       <GlobalStyles />
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </ThemeProvider>
   );
 }
