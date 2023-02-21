@@ -2,7 +2,13 @@ import Head from "next/head";
 import Image from "next/image";
 import styled from "styled-components";
 
-const Content = styled.main`
+import * as Components from "@/components";
+import { ThemeProp } from "./_app";
+
+const AboveTheFold = styled.main`
+  height: 100vh;
+  background-color: ${(props: ThemeProp) => props.theme.backgroundOne};
+
   border: red solid 1px;
 `;
 
@@ -16,7 +22,8 @@ export default function Home() {
         <link rel="icon" href="/favicon-light.ico" />
       </Head>
 
-      <Content>something</Content>
+      <Components.Navbar />
+      <AboveTheFold>something</AboveTheFold>
     </>
   );
 }
