@@ -3,6 +3,8 @@ import Image from "next/image";
 import styled from "styled-components";
 
 import * as Components from "@/components";
+import * as Sizes from "@/utils/sizes";
+import * as Styles from "@/utils/styles";
 import { ThemeProp } from "./_app";
 
 const AboveTheFold = styled.main`
@@ -10,6 +12,19 @@ const AboveTheFold = styled.main`
   background-color: ${(props: ThemeProp) => props.theme.backgroundOne};
 
   border: red solid 1px;
+`;
+
+const Section = styled.section`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0px auto;
+  width: 100%;
+  max-width: ${Sizes.widths.content}px;
+
+  ${Styles.setMediaPaddings(140)};
+
+  border: blue solid 1px;
 `;
 
 export default function Home() {
@@ -23,7 +38,9 @@ export default function Home() {
       </Head>
 
       <Components.Navbar />
-      <AboveTheFold>something</AboveTheFold>
+      <AboveTheFold>
+        <Section>Something</Section>
+      </AboveTheFold>
     </>
   );
 }

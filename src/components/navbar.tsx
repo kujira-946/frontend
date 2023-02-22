@@ -24,7 +24,7 @@ const Main = styled.main`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: ${Sizes.widths.navbar}px;
+  max-width: ${Sizes.widths.content}px;
 `;
 
 const Links = styled.section`

@@ -1,9 +1,9 @@
 export const widths = {
   desktop: 1200,
-  tablet: 1020,
+  tablet: 1024,
   mobile: 500,
 
-  navbar: 920,
+  content: 920,
 };
 
 export const fontWeights = {
