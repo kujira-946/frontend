@@ -10,6 +10,9 @@ import { ThemeProp } from "./_app";
 const AboveTheFold = styled.main`
   height: 100vh;
   background-color: ${(props: ThemeProp) => props.theme.backgroundOne};
+  padding-top: 140px;
+
+  ${Styles.setMediaPaddings(140)};
 
   border: red solid 1px;
 `;
@@ -21,8 +24,6 @@ const Section = styled.section`
   margin: 0px auto;
   width: 100%;
   max-width: ${Sizes.widths.content}px;
-
-  ${Styles.setMediaPaddings(140)};
 
   border: blue solid 1px;
 `;

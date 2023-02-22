@@ -1,5 +1,6 @@
 import { css } from "styled-components";
 
+import * as Colors from "./colors";
 import * as Sizes from "./sizes";
 import { ThemeProp } from "./../pages/_app";
 
@@ -19,8 +20,6 @@ export function setMediaPaddings(verticalPadding?: number) {
   `;
 }
 
-const textLight = "#F5F5F5";
-const textDark = "#262626";
 const transition = "transition: 0.1s ease-in;";
 
 export function setText(fontSize: number) {
@@ -43,7 +42,7 @@ const buttonStyles = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${textLight};
+  color: ${Colors.text.dark};
   border-radius: 4px;
   font-weight: ${Sizes.fontWeights.semiBold};
 
