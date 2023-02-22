@@ -1,19 +1,3 @@
-export const widths = {
-  desktop: 1200,
-  tablet: 1024,
-  mobile: 500,
-
-  content: 920,
-};
-
-export const fontWeights = {
-  light: 300,
-  regular: 400,
-  medium: 500,
-  semiBold: 600,
-  bold: 700,
-};
-
 export const pxAsRem = {
   two: "0.125rem",
   four: "0.25rem",
@@ -39,4 +23,24 @@ export const pxAsRem = {
   fortyFour: "2.75rem",
   fortySix: "2.875rem",
   fortyEight: "3rem",
+};
+
+export const widths = {
+  desktop: 1200,
+  tablet: 1024,
+  mobile: 500,
+
+  content: 920,
+
+  smallButtonHeight: pxAsRem.thirty,
+  mediumButtonHeight: pxAsRem.thirtyEight,
+  largeButtonHeight: pxAsRem.fortyEight,
+};
+
+export const fontWeights = {
+  light: 300,
+  regular: 400,
+  medium: 500,
+  semiBold: 600,
+  bold: 700,
 };

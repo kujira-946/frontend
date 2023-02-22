@@ -119,6 +119,7 @@ const GlobalStyles = createGlobalStyle`
     border: 0;
     font-size: 100%;
     font: inherit;
+    line-height: 150%;
     vertical-align: baseline;
   }
 

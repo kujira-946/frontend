@@ -7,6 +7,12 @@ import * as Sizes from "@/utils/sizes";
 import * as Styles from "@/utils/styles";
 import { ThemeProp } from "./_app";
 
+const Content = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+`;
+
 const AboveTheFold = styled.main`
   height: 100vh;
   background-color: ${(props: ThemeProp) => props.theme.backgroundOne};
@@ -56,20 +62,23 @@ export default function Home() {
         <link rel="icon" href="/favicon-light.ico" />
       </Head>
 
-      <Components.Navbar />
-      <AboveTheFold>
-        <Section>
-          <Copy>
-            <CopyHeader>
-              You have a money problem. Or two. We all do.
-            </CopyHeader>
-            <CopyBody>
-              We can solve these problems by being more cognizant of how, when,
-              why, and where we spend our money.
-            </CopyBody>
-          </Copy>
-        </Section>
-      </AboveTheFold>
+      <Content>
+        <Components.Navbar />
+
+        <AboveTheFold>
+          <Section>
+            <Copy>
+              <CopyHeader>
+                You have a money problem. Or two. We all do.
+              </CopyHeader>
+              <CopyBody>
+                We can solve these problems by being more cognizant of how,
+                when, why, and where we spend our money.
+              </CopyBody>
+            </Copy>
+          </Section>
+        </AboveTheFold>
+      </Content>
     </>
   );
 }

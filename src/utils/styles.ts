@@ -20,7 +20,7 @@ export function setMediaPaddings(verticalPadding?: number) {
   `;
 }
 
-const transition = "transition: 0.1s ease-in;";
+export const transition = "transition: 0.1s ease-in;";
 
 type Pixels = keyof typeof Sizes.pxAsRem;
 export function setText(fontSize: Pixels) {
@@ -38,14 +38,11 @@ export function setText(fontSize: Pixels) {
   `;
 }
 
-const buttonStyles = css`
+export const basicButtonStyles = css`
   ${transition};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: ${Colors.text.dark};
-  border-radius: 4px;
-  font-weight: ${Sizes.fontWeights.semiBold};
+  border: none;
+  outline: none;
+  cursor: pointer;
 
   @media (hover: hover) {
     :hover {
@@ -57,17 +54,27 @@ const buttonStyles = css`
 
 type ButtonType = "primary" | "secondary";
 type ButtonSize = "small" | "medium" | "large";
-
 export function setButton(buttonType: ButtonType, buttonSize: ButtonSize) {
   return css`
-    ${buttonStyles};
+    ${basicButtonStyles};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: ${(props) => {
+      return buttonSize === "small"
+        ? Sizes.widths.smallButtonHeight
+        : buttonSize === "medium"
+        ? Sizes.widths.mediumButtonHeight
+        : Sizes.widths.largeButtonHeight;
+    }};
     padding: ${(props) => {
       return buttonSize === "small"
-        ? `${Sizes.pxAsRem.six} ${Sizes.pxAsRem.twelve}`
+        ? `0 ${Sizes.pxAsRem.twelve}`
         : buttonSize === "medium"
-        ? `${Sizes.pxAsRem.eight} ${Sizes.pxAsRem.sixteen}`
-        : `${Sizes.pxAsRem.ten} ${Sizes.pxAsRem.twenty}`;
+        ? `0 ${Sizes.pxAsRem.sixteen}`
+        : `0 ${Sizes.pxAsRem.twenty}`;
     }};
+    color: ${Colors.text.dark};
     background-color: ${(props: ThemeProp) => {
       if (buttonType === "primary") {
         return props.theme.primaryMain;
@@ -75,14 +82,17 @@ export function setButton(buttonType: ButtonType, buttonSize: ButtonSize) {
         return props.theme.secondaryMain;
       }
     }};
+    border-radius: 4px;
     font-size: ${(props) => {
       if (buttonSize === "small") return Sizes.pxAsRem.twelve;
       else if (buttonSize === "medium") return Sizes.pxAsRem.fourteen;
       else return Sizes.pxAsRem.eighteen;
     }};
+    font-weight: ${Sizes.fontWeights.semiBold};
 
     @media (hover: hover) {
       :hover {
+        color: ${Colors.text.dark};
         background-color: ${(props: ThemeProp) => {
           if (buttonType === "primary") {
             return props.theme.primaryDark;
