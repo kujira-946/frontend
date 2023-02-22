@@ -34,7 +34,7 @@ const Links = styled.section`
 `;
 
 const LoginButton = styled(Link)`
-  ${Styles.setText(12)};
+  ${Styles.setText("twelve")};
 `;
 
 const RegisterButton = styled(Link)`

@@ -22,11 +22,12 @@ export function setMediaPaddings(verticalPadding?: number) {
 
 const transition = "transition: 0.1s ease-in;";
 
-export function setText(fontSize: number) {
+type Pixels = keyof typeof Sizes.pxAsRem;
+export function setText(fontSize: Pixels) {
   return css`
     ${transition};
     color: ${(props: ThemeProp) => props.theme.backgroundSix};
-    font-size: ${fontSize}px;
+    font-size: ${Sizes.pxAsRem[fontSize]};
 
     @media (hover: hover) {
       :hover {
@@ -61,9 +62,11 @@ export function setButton(buttonType: ButtonType, buttonSize: ButtonSize) {
   return css`
     ${buttonStyles};
     padding: ${(props) => {
-      if (buttonSize === "small") return "6px 12px";
-      else if (buttonSize === "medium") return "8px 16px";
-      else return "10px 20px";
+      return buttonSize === "small"
+        ? `${Sizes.pxAsRem.six} ${Sizes.pxAsRem.twelve}`
+        : buttonSize === "medium"
+        ? `${Sizes.pxAsRem.eight} ${Sizes.pxAsRem.sixteen}`
+        : `${Sizes.pxAsRem.ten} ${Sizes.pxAsRem.twenty}`;
     }};
     background-color: ${(props: ThemeProp) => {
       if (buttonType === "primary") {
@@ -73,9 +76,9 @@ export function setButton(buttonType: ButtonType, buttonSize: ButtonSize) {
       }
     }};
     font-size: ${(props) => {
-      if (buttonSize === "small") return "12px";
-      else if (buttonSize === "medium") return "14px";
-      else return "18px";
+      if (buttonSize === "small") return Sizes.pxAsRem.twelve;
+      else if (buttonSize === "medium") return Sizes.pxAsRem.fourteen;
+      else return Sizes.pxAsRem.eighteen;
     }};
 
     @media (hover: hover) {
