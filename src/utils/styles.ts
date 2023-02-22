@@ -2,7 +2,7 @@ import { css } from "styled-components";
 
 import * as Colors from "./colors";
 import * as Sizes from "./sizes";
-import { ThemeProp } from "./../pages/_app";
+import { ThemeProps } from "./../pages/_app";
 
 export function setMediaPaddings(verticalPadding?: number) {
   return css`
@@ -26,12 +26,12 @@ type Pixels = keyof typeof Sizes.pxAsRem;
 export function setText(fontSize: Pixels) {
   return css`
     ${transition};
-    color: ${(props: ThemeProp) => props.theme.backgroundSix};
+    color: ${(props: ThemeProps) => props.theme.backgroundSix};
     font-size: ${Sizes.pxAsRem[fontSize]};
 
     @media (hover: hover) {
       :hover {
-        color: ${(props: ThemeProp) => props.theme.text};
+        color: ${(props: ThemeProps) => props.theme.text};
         text-decoration: none;
       }
     }
@@ -75,7 +75,7 @@ export function setButton(buttonType: ButtonType, buttonSize: ButtonSize) {
         : `0 ${Sizes.pxAsRem.twenty}`;
     }};
     color: ${Colors.text.dark};
-    background-color: ${(props: ThemeProp) => {
+    background-color: ${(props: ThemeProps) => {
       if (buttonType === "primary") {
         return props.theme.primaryMain;
       } else {
@@ -93,7 +93,7 @@ export function setButton(buttonType: ButtonType, buttonSize: ButtonSize) {
     @media (hover: hover) {
       :hover {
         color: ${Colors.text.dark};
-        background-color: ${(props: ThemeProp) => {
+        background-color: ${(props: ThemeProps) => {
           if (buttonType === "primary") {
             return props.theme.primaryDark;
           } else {

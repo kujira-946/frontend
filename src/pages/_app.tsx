@@ -126,8 +126,8 @@ const GlobalStyles = createGlobalStyle`
   html,
   body {
     max-width: 100vw;
-    color: ${(props: ThemeProp) => props.theme.text};
-    background-color: ${(props: ThemeProp) => props.theme.backgroundTwo};
+    color: ${(props: ThemeProps) => props.theme.text};
+    background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
     font-family: ${poppins.style.fontFamily};
     overflow-x: hidden;
   }
@@ -258,7 +258,7 @@ const themes: Themes = {
   },
 };
 
-export type ThemeProp = { theme: Theme };
+export type ThemeProps = { theme: Theme };
 
 export default function App({ Component, pageProps }: AppProps) {
   const [theme, setTheme] = React.useState<"light" | "dark">("light");

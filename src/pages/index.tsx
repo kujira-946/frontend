@@ -5,7 +5,7 @@ import styled from "styled-components";
 import * as Components from "@/components";
 import * as Sizes from "@/utils/sizes";
 import * as Styles from "@/utils/styles";
-import { ThemeProp } from "./_app";
+import { ThemeProps } from "./_app";
 
 const Content = styled.div`
   position: relative;
@@ -15,7 +15,7 @@ const Content = styled.div`
 
 const AboveTheFold = styled.main`
   height: 100vh;
-  background-color: ${(props: ThemeProp) => props.theme.backgroundOne};
+  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
   padding-top: 140px;
 
   ${Styles.setMediaPaddings(140)};
@@ -40,14 +40,14 @@ const Copy = styled.article`
 
 const CopyHeader = styled.h1`
   margin: 0 0 ${Sizes.pxAsRem.twelve};
-  color: ${(props: ThemeProp) => props.theme.text};
+  color: ${(props: ThemeProps) => props.theme.text};
   font-size: ${Sizes.pxAsRem.thirtyTwo};
   font-weight: ${Sizes.fontWeights.bold};
 `;
 
 const CopyBody = styled.p`
   margin: 0;
-  color: ${(props: ThemeProp) => props.theme.text};
+  color: ${(props: ThemeProps) => props.theme.text};
   font-size: ${Sizes.pxAsRem.eighteen};
   font-weight: ${Sizes.fontWeights.medium};
 `;
