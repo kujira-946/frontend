@@ -32,7 +32,7 @@ export const fontSizes = {
   thirtyTwo: "2rem",
   thirtyFour: "2.125rem",
   thirtySix: "2.25rem",
-  thirtyEight: "2 .375rem",
+  thirtyEight: "2.375rem",
   forty: "2.5rem",
   fortyTwo: "2.625rem",
   fortyFour: "2.75rem",
