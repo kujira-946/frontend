@@ -28,6 +28,24 @@ const Section = styled.section`
   border: blue solid 1px;
 `;
 
+const Copy = styled.article`
+  max-width: 500px;
+`;
+
+const CopyHeader = styled.h1`
+  margin: 0 0 ${Sizes.pxAsRem.twelve};
+  color: ${(props: ThemeProp) => props.theme.text};
+  font-size: ${Sizes.pxAsRem.thirtyTwo};
+  font-weight: ${Sizes.fontWeights.bold};
+`;
+
+const CopyBody = styled.p`
+  margin: 0;
+  color: ${(props: ThemeProp) => props.theme.text};
+  font-size: ${Sizes.pxAsRem.eighteen};
+  font-weight: ${Sizes.fontWeights.medium};
+`;
+
 export default function Home() {
   return (
     <>
@@ -40,7 +58,17 @@ export default function Home() {
 
       <Components.Navbar />
       <AboveTheFold>
-        <Section>Something</Section>
+        <Section>
+          <Copy>
+            <CopyHeader>
+              You have a money problem. Or two. We all do.
+            </CopyHeader>
+            <CopyBody>
+              We can solve these problems by being more cognizant of how, when,
+              why, and where we spend our money.
+            </CopyBody>
+          </Copy>
+        </Section>
       </AboveTheFold>
     </>
   );

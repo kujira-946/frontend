@@ -14,12 +14,12 @@ export const fontWeights = {
   bold: 700,
 };
 
-export const fontSizes = {
+export const pxAsRem = {
   four: "0.25rem",
   six: "0.375rem",
   eight: "0.5rem",
   ten: "0.625rem",
-  twelve: "0.75rems",
+  twelve: "0.75rem",
   fourteen: "0.875rem",
   sixteen: "1rem",
   eighteen: "1.125rem",
