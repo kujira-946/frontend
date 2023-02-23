@@ -3,10 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 
+import * as Icons from "@/components/icons";
 import * as Styles from "@/utils/styles";
 import * as Sizes from "@/utils/sizes";
-import * as Icons from "@/components/icons";
+import * as Hooks from "@/utils/hooks";
+import * as Redux from "@/redux";
 import { ThemeProps } from "@/pages/_app";
+import { RootState } from "@/store";
 
 const Nav = styled.nav`
   position: fixed;
@@ -65,6 +68,18 @@ const RegisterButton = styled(Link)`
 `;
 
 export const Navbar = () => {
+  const dispatch = Hooks.useAppDispatch();
+  const theme = Hooks.useAppSelector((state: RootState) => {
+    return state.ui.theme;
+  });
+
+  function toggleTheme(): void {
+    if (theme === "light") dispatch(Redux.uiActions.setTheme("dark"));
+    else dispatch(Redux.uiActions.setTheme("light"));
+  }
+
+  console.log("Theme:", theme);
+
   const [themeHover, setThemeHover] = React.useState(false);
 
   return (
@@ -79,7 +94,7 @@ export const Navbar = () => {
         <Links>
           <ThemeButton
             type="button"
-            onClick={() => console.log("Toggle Theme")}
+            onClick={toggleTheme}
             onMouseEnter={() => setThemeHover(true)}
             onMouseLeave={() => setThemeHover(false)}
           >

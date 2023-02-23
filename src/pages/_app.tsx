@@ -1,9 +1,11 @@
 import * as React from "react";
+import { Provider } from "react-redux";
 import localFont from "@next/font/local";
 import type { AppProps } from "next/app";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 
 import * as Colors from "@/utils/colors";
+import { store } from "@/store";
 
 const poppins = localFont({
   src: [
@@ -264,9 +266,11 @@ export default function App({ Component, pageProps }: AppProps) {
   const [theme, setTheme] = React.useState<"light" | "dark">("light");
 
   return (
-    <ThemeProvider theme={themes[theme]}>
-      <GlobalStyles />
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={themes[theme]}>
+        <GlobalStyles />
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </Provider>
   );
 }
