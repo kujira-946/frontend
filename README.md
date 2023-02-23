@@ -1,38 +1,66 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<main
+	style="padding: 24px; background-color: #1c1c1c; border-radius: 8px;"
+>
 
-## Getting Started
+<section
+	style="padding: 20px; background-color: #272727; border: #4f4f4f solid 1px; border-radius: 6px;"
+>
+<h1
+	style="font-size: 44px; font-weight: bold; text-align: center;"
+>
+	Kujira
+</h1>
 
-First, run the development server:
+<p
+	style="padding: 12px 6px; background-color: #373737; border-radius: 4px; font-size: 16px; text-align: center; box-shadow: 0px 4px 12px #151515;"
+>
+	Understand your spending habits.
+</p>
+</section>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+</br>
+</br>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<section
+	style="padding: 20px; background-color: #272727; border-radius: 6px; box-shadow: 0px 4px 12px #151515;"
+>
+<h1
+	style="font-size: 24px; font-weight: bold; text-align: center;"
+>
+	Front-End Technologies
+</h1>
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+<ul>
+	<li><code>TypeScript</code> : Language</li>
+	<li><code>Next</code> : React Framework</li>
+	<li><code>Styled Components</code> : CSS-in-JS</li>
+	<li><code>Preact Signals</code> : Component State Management</li>
+	<li><code>Redux Toolkit</code> : Global State Management (mainly used to interface with API data)</li>
+	<li><code>Reselect</code> : Redux Caching</li>
+	<li><code>Redux Saga</code> : Redux Middleware & CRUD</li>
+</ul>
+</section>
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+</br>
+</br>
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+<section
+	style="padding: 20px; background-color: #272727; border-radius: 6px; box-shadow: 0px 4px 12px #151515;"
+>
+<h1
+	style="font-size: 24px; font-weight: bold; text-align: center;"
+>
+	Back-End Technologies
+</h1>
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+<ul>
+	<li><code>TypeScript</code> : Language</li>
+	<li><code>Express</code> : Framework</li>
+	<li><code>Prisma</code> : ORM</li>
+	<li><code>BCrypt</code> : Hashing & Salting</li>
+	<li><code>JSON Web Tokens</code> : Authentication, Authorization, Verification</li>
+	<li><code>Nodemailer</code> : Email</li>
+</ul>
+</section>
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+</main>
