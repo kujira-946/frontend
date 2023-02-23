@@ -41,26 +41,4 @@
 </ul>
 </section>
 
-</br>
-</br>
-
-<section
-	style="padding: 20px; background-color: #272727; border-radius: 6px; box-shadow: 0px 4px 12px #151515;"
->
-<h1
-	style="font-size: 24px; font-weight: bold; text-align: center;"
->
-	Back-End Technologies
-</h1>
-
-<ul>
-	<li><code>TypeScript</code> : Language</li>
-	<li><code>Express</code> : Framework</li>
-	<li><code>Prisma</code> : ORM</li>
-	<li><code>BCrypt</code> : Hashing & Salting</li>
-	<li><code>JSON Web Tokens</code> : Authentication, Authorization, Verification</li>
-	<li><code>Nodemailer</code> : Email</li>
-</ul>
-</section>
-
 </main>
