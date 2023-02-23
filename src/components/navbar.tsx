@@ -10,6 +10,7 @@ import * as Hooks from "@/utils/hooks";
 import * as Redux from "@/redux";
 import { ThemeProps } from "@/pages/_app";
 import { RootState } from "@/store";
+import { signal } from "@preact/signals";
 
 const Nav = styled.nav`
   position: fixed;
@@ -67,6 +68,8 @@ const RegisterButton = styled(Link)`
   ${Styles.setButton("primary", "small")};
 `;
 
+const themeButtonHovered = signal(true);
+
 export const Navbar = () => {
   const dispatch = Hooks.useAppDispatch();
   const theme = Hooks.useAppSelector((state: RootState) => {
@@ -77,10 +80,6 @@ export const Navbar = () => {
     if (theme === "light") dispatch(Redux.uiActions.setTheme("dark"));
     else dispatch(Redux.uiActions.setTheme("light"));
   }
-
-  console.log("Theme:", theme);
-
-  const [themeHover, setThemeHover] = React.useState(false);
 
   return (
     <Nav>
@@ -95,10 +94,10 @@ export const Navbar = () => {
           <ThemeButton
             type="button"
             onClick={toggleTheme}
-            onMouseEnter={() => setThemeHover(true)}
-            onMouseLeave={() => setThemeHover(false)}
+            onMouseEnter={() => (themeButtonHovered.value = true)}
+            onMouseLeave={() => (themeButtonHovered.value = false)}
           >
-            <Icons.IconModeDark hover={themeHover} />
+            <Icons.IconModeDark hovered={themeButtonHovered.value} />
           </ThemeButton>
           <LoginButton href="/login">Log In</LoginButton>
           <RegisterButton href="/register">Register</RegisterButton>

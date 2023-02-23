@@ -24,7 +24,9 @@ const Icon = (props: SVGProps) => {
 export const IconModeDark = styled(Icon).attrs(
   (props: SVGProps & ThemeProps) => ({
     height: 12,
-    fill: props.hover ? props.theme.backgroundSix : props.theme.backgroundFour,
+    fill: props.hovered
+      ? props.theme.backgroundSix
+      : props.theme.backgroundFour,
   })
 )`
   ${transition};
