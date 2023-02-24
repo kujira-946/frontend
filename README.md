@@ -34,8 +34,8 @@
 	<li><code>TypeScript</code> : Language</li>
 	<li><code>Next</code> : React Framework</li>
 	<li><code>Styled Components</code> : CSS-in-JS</li>
-	<li><code>Preact Signals</code> : Component State Management</li>
-	<li><code>Redux Toolkit</code> : Global State Management (mainly used to interface with API data)</li>
+	<li><code>Preact Signals</code> : Global & Local State Management For Front-end-related Data</li>
+	<li><code>Redux Toolkit</code> : Global State Management For Back-end Related Data</li>
 	<li><code>Reselect</code> : Redux Caching</li>
 	<li><code>Redux Saga</code> : Redux Middleware & CRUD</li>
 </ul>

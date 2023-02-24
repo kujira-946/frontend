@@ -1,3 +1,3 @@
-import { uiActions, uiReducer } from "./ui/ui-slice";
+import { uiActions, uiReducer } from "./ui-slice";
 
 export { uiActions, uiReducer };

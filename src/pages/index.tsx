@@ -5,7 +5,7 @@ import styled from "styled-components";
 import * as Components from "@/components";
 import * as Sizes from "@/utils/sizes";
 import * as Styles from "@/utils/styles";
-import { ThemeProps } from "./_app";
+import { ThemeProps } from "@/components/layout";
 
 const Content = styled.div`
   position: relative;

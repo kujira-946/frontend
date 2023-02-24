@@ -8,9 +8,9 @@ import * as Styles from "@/utils/styles";
 import * as Sizes from "@/utils/sizes";
 import * as Hooks from "@/utils/hooks";
 import * as Redux from "@/redux";
-import { ThemeProps } from "@/pages/_app";
+import { ThemeProps } from "./layout";
+import { navbarSignals } from "@/signals";
 import { RootState } from "@/store";
-import { signal } from "@preact/signals";
 
 const Nav = styled.nav`
   position: fixed;
@@ -68,18 +68,16 @@ const RegisterButton = styled(Link)`
   ${Styles.setButton("primary", "small")};
 `;
 
-const themeButtonHovered = signal(true);
-
 export const Navbar = () => {
   const dispatch = Hooks.useAppDispatch();
-  const theme = Hooks.useAppSelector((state: RootState) => {
-    return state.ui.theme;
-  });
+  const theme = Hooks.useAppSelector((state: RootState) => state.ui.theme);
 
   function toggleTheme(): void {
     if (theme === "light") dispatch(Redux.uiActions.setTheme("dark"));
     else dispatch(Redux.uiActions.setTheme("light"));
   }
+
+  const { themeButtonHovered } = navbarSignals;
 
   return (
     <Nav>
