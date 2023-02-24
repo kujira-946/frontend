@@ -2,7 +2,7 @@ import * as React from "react";
 import { ThemeProvider } from "styled-components";
 
 import * as Colors from "@/utils/colors";
-import { uiSignals } from "@/signals";
+import { SignalsStoreContext } from "@/pages/_app";
 
 type ThemeContents = {
   text: string;
@@ -93,8 +93,9 @@ export type ThemeProps = { theme: ThemeContents };
 type Props = { children: React.ReactNode };
 
 export const Layout = (props: Props) => {
+  const signalsStore = React.useContext(SignalsStoreContext);
   return (
-    <ThemeProvider theme={themes[uiSignals.theme.value]}>
+    <ThemeProvider theme={themes[signalsStore.ui.theme.value]}>
       {props.children}
     </ThemeProvider>
   );

@@ -1,14 +1,14 @@
-import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
+import { useContext } from "react";
 import { useSignal } from "@preact/signals-react";
 
 import * as Icons from "@/components/icons";
 import * as Styles from "@/utils/styles";
 import * as Sizes from "@/utils/sizes";
-import { uiSignalsHelpers, uiSignals } from "@/signals";
 import { ThemeProps } from "./layout";
+import { SignalsStoreContext } from "@/pages/_app";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -75,6 +75,7 @@ const RegisterButton = styled(Link)`
 // ========================================================================================= //
 
 export const Navbar = () => {
+  const signalsStore = useContext(SignalsStoreContext);
   const themeButtonHovered = useSignal(false);
 
   return (
@@ -89,11 +90,11 @@ export const Navbar = () => {
         <Links>
           <ThemeButton
             type="button"
-            onClick={uiSignalsHelpers.toggleTheme}
+            onClick={signalsStore.uiHelpers.toggleTheme}
             onMouseEnter={() => (themeButtonHovered.value = true)}
             onMouseLeave={() => (themeButtonHovered.value = false)}
           >
-            {uiSignals.theme.value === "light" ? (
+            {signalsStore.ui.theme.value === "light" ? (
               <Icons.IconModeDark
                 height={12}
                 hovered={themeButtonHovered.value}

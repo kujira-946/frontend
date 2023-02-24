@@ -1,11 +1,12 @@
-import * as React from "react";
-import { Provider } from "react-redux";
 import localFont from "@next/font/local";
 import type { AppProps } from "next/app";
+import { createContext } from "react";
+import { Provider } from "react-redux";
 import { createGlobalStyle } from "styled-components";
 
 import { Layout } from "@/components/layout";
 import { store } from "@/store";
+import { SignalsStore, signalsStore } from "@/signals";
 
 const poppins = localFont({
   src: [
@@ -174,13 +175,17 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
+export const SignalsStoreContext = createContext<SignalsStore>(signalsStore);
+
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <GlobalStyles />
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <SignalsStoreContext.Provider value={signalsStore}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </SignalsStoreContext.Provider>
     </Provider>
   );
 }

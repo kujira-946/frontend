@@ -1,18 +1,11 @@
-import { signal } from "@preact/signals-react";
+import * as UI from "./ui-signals";
 
-// ========================================================================================= //
-// [ UI SIGNALS ] ========================================================================== //
-// ========================================================================================= //
-
-type Theme = "light" | "dark";
-
-export const uiSignals = {
-  theme: signal<Theme>("light"),
+export type SignalsStore = {
+  ui: UI.UISignals;
+  uiHelpers: UI.UISignalsHelpers;
 };
 
-export const uiSignalsHelpers = {
-  toggleTheme: function (): void {
-    if (uiSignals.theme.value === "light") uiSignals.theme.value = "dark";
-    else uiSignals.theme.value = "light";
-  },
+export const signalsStore: SignalsStore = {
+  ui: UI.uiSignals,
+  uiHelpers: UI.uiSignalsHelpers,
 };
