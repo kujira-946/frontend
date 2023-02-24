@@ -1,11 +1,25 @@
 import * as UI from "./ui-signals";
 
+// ========================================================================================= //
+// [ SIGNALS STORE ] ======================================================================= //
+// ========================================================================================= //
+
 export type SignalsStore = {
   ui: UI.UISignals;
-  uiHelpers: UI.UISignalsHelpers;
 };
 
 export const signalsStore: SignalsStore = {
   ui: UI.uiSignals,
-  uiHelpers: UI.uiSignalsHelpers,
+};
+
+// ========================================================================================= //
+// [ SIGNALS HELPERS ] ===================================================================== //
+// ========================================================================================= //
+
+type SignalsHelpers = {
+  ui: UI.UISignalsHelpers;
+};
+
+export const signalsHelpers: SignalsHelpers = {
+  ui: UI.uiSignalsHelpers,
 };

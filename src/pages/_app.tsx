@@ -1,7 +1,7 @@
 import localFont from "@next/font/local";
 import type { AppProps } from "next/app";
 import { createContext } from "react";
-import { Provider } from "react-redux";
+import { Provider as ReduxProvider } from "react-redux";
 import { createGlobalStyle } from "styled-components";
 
 import { Layout } from "@/components/layout";
@@ -175,17 +175,19 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
-export const SignalsStoreContext = createContext<SignalsStore>(signalsStore);
+export const SignalsStoreContext = createContext<SignalsStore>(
+  {} as SignalsStore
+);
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <Provider store={store}>
+    <ReduxProvider store={store}>
       <GlobalStyles />
       <SignalsStoreContext.Provider value={signalsStore}>
         <Layout>
           <Component {...pageProps} />
         </Layout>
       </SignalsStoreContext.Provider>
-    </Provider>
+    </ReduxProvider>
   );
 }

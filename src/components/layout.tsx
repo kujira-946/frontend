@@ -93,9 +93,10 @@ export type ThemeProps = { theme: ThemeContents };
 type Props = { children: React.ReactNode };
 
 export const Layout = (props: Props) => {
-  const signalsStore = React.useContext(SignalsStoreContext);
+  const { ui } = React.useContext(SignalsStoreContext);
+
   return (
-    <ThemeProvider theme={themes[signalsStore.ui.theme.value]}>
+    <ThemeProvider theme={themes[ui.theme.value]}>
       {props.children}
     </ThemeProvider>
   );
