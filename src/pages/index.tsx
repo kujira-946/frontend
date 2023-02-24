@@ -7,6 +7,10 @@ import * as Sizes from "@/utils/sizes";
 import * as Styles from "@/utils/styles";
 import { ThemeProps } from "@/components/layout";
 
+// ========================================================================================= //
+// [ STYLED COMPONENTS ] =================================================================== //
+// ========================================================================================= //
+
 const Content = styled.div`
   position: relative;
   display: flex;
@@ -51,6 +55,10 @@ const CopyBody = styled.p`
   font-size: ${Sizes.pxAsRem.eighteen};
   font-weight: ${Sizes.fontWeights.medium};
 `;
+
+// ========================================================================================= //
+// [ EXPORTED COMPONENT ] ================================================================== //
+// ========================================================================================= //
 
 export default function Home() {
   return (

@@ -12,6 +12,10 @@ import { ThemeProps } from "./layout";
 import { navbarSignals } from "@/signals";
 import { RootState } from "@/store";
 
+// ========================================================================================= //
+// [ STYLED COMPONENTS ] =================================================================== //
+// ========================================================================================= //
+
 const Nav = styled.nav`
   position: fixed;
   top: 0px;
@@ -67,6 +71,10 @@ const LoginButton = styled(Link)`
 const RegisterButton = styled(Link)`
   ${Styles.setButton("primary", "small")};
 `;
+
+// ========================================================================================= //
+// [ EXPORTED COMPONENT ] ================================================================== //
+// ========================================================================================= //
 
 export const Navbar = () => {
   const dispatch = Hooks.useAppDispatch();
