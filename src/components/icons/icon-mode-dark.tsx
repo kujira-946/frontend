@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { ThemeProps } from "@/pages/_app";
+import { ThemeProps } from "@/components/layout";
 import { transition } from "@/utils/styles";
 import { SVGProps } from "@/utils/types";
 
@@ -23,7 +23,6 @@ const Icon = (props: SVGProps) => {
 
 export const IconModeDark = styled(Icon).attrs(
   (props: SVGProps & ThemeProps) => ({
-    height: 12,
     fill: props.hovered
       ? props.theme.backgroundSix
       : props.theme.backgroundFour,

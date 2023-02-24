@@ -2,8 +2,7 @@ import * as React from "react";
 import { ThemeProvider } from "styled-components";
 
 import * as Colors from "@/utils/colors";
-import { RootState } from "@/store";
-import { useAppSelector } from "@/utils/hooks";
+import { uiSignals } from "@/signals";
 
 type ThemeContents = {
   text: string;
@@ -94,7 +93,9 @@ export type ThemeProps = { theme: ThemeContents };
 type Props = { children: React.ReactNode };
 
 export const Layout = (props: Props) => {
-  const theme = useAppSelector((state: RootState) => state.ui.theme);
-
-  return <ThemeProvider theme={themes[theme]}>{props.children}</ThemeProvider>;
+  return (
+    <ThemeProvider theme={themes[uiSignals.theme.value]}>
+      {props.children}
+    </ThemeProvider>
+  );
 };
