@@ -1,66 +1,29 @@
 export const text = {
   light: "#262626",
-  dark: "#F5F5F5",
+  dark: "#EBEBEB",
 };
 
 export const background = {
   light: {
-    one: "#F5F5F5",
-    two: "#F0F0F0",
-    three: "#E6E6E6",
-    four: "#C4C4C4",
-    five: "#B7B7B7",
-    six: "#757575",
+    one: "#FFFFFF",
+    two: "#FCFCFC",
+    three: "#F5F5F5",
+    four: "#F0F0F0",
+    five: "#E6E6E6",
+    six: "#C4C4C4",
+    seven: "#B7B7B7",
+    eight: "#757575",
   },
   dark: {
-    one: "#262626",
-    two: "#2B2B2B",
-    three: "#363636",
-    four: "#545454",
-    five: "#616161",
-    six: "#A3A3A3",
+    one: "#171717",
+    two: "#1A1A1A",
+    three: "#262626",
+    four: "#2B2B2B",
+    five: "#363636",
+    six: "#545454",
+    seven: "#616161",
+    eight: "#A3A3A3",
   },
-};
-
-export const primary = {
-  light: {
-    lighter: "#9CE3D1",
-    main: "#4CCCAD",
-    darker: "#278B73",
-  },
-  dark: {
-    lighter: "#38E1B8",
-    main: "#189D7D",
-    darker: "#0A4235",
-  },
-};
-
-export const secondary = {
-  light: {
-    lighter: "#C3DFF9",
-    main: "#68AEEF",
-    darker: "#177BD9",
-  },
-  dark: {
-    lighter: "#8DB4D8",
-    main: "#4181BC",
-    darker: "#274E72",
-  },
-};
-
-export const need = {
-  light: "#4BC320",
-  dark: "#6CBC4F",
-};
-
-export const impulse = {
-  light: "#EE8320",
-  dark: "#C8803E",
-};
-
-export const earned = {
-  light: "#9246CE",
-  dark: "#AD66E5",
 };
 
 export const pending = {
@@ -83,14 +46,61 @@ export const warning = {
   dark: "#E4A427",
 };
 
-export const shadow = {
+export const primary = {
   light: {
-    one: "box-shadow: 0px 8px 16px #E8E8E8",
-    two: "box-shadow: 0px 8px 16px #CCCCCC",
+    lighter: "#9CE3D1",
+    main: "#4CCCAD",
+    darker: "#278B73",
   },
   dark: {
-    one: "box-shadow: 0px 8px 16px #232323",
-    two: "box-shadow: 0px 8px 16px #1C1C1C",
+    lighter: "#38E1B8",
+    main: "#189D7D",
+    darker: "#0A4235",
+  },
+};
+
+export const secondary = {
+  light: {
+    lighter: "#C3DFF9",
+    main: "#68AEEF",
+    darker: "#177BD9",
+  },
+  dark: {
+    lighter: "#9BB6CF",
+    main: "#5784AF",
+    darker: "#405F7C",
+  },
+};
+
+export const need = {
+  light: "#4BC320",
+  dark: "#6CBC4F",
+};
+
+export const impulse = {
+  light: "#EE8320",
+  dark: "#C8803E",
+};
+
+export const earned = {
+  light: "#9246CE",
+  dark: "#AD66E5",
+};
+
+export const shadow = {
+  light: {
+    one: "box-shadow: 0px 8px 16px #F5F5F5",
+    two: "box-shadow: 0px 12px 24px #F0F0F0",
+    three: "box-shadow: 0px 16px 32px #EBEBEB",
+    four: "box-shadow: 0px 20px 40px #E6E6E6",
+    five: "box-shadow: 0px 24px 48px #E0E0E0",
+  },
+  dark: {
+    one: "box-shadow: 0px 8px 16px #121212",
+    two: "box-shadow: 0px 12px 24px #0F0F0F",
+    three: "box-shadow: 0px 16px 32px #0D0D0D",
+    four: "box-shadow: 0px 20px 40px #0A0A0A",
+    five: "box-shadow: 0px 24px 48px #080808",
   },
 };
 

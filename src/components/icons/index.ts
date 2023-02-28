@@ -1,4 +1,4 @@
-import { IconModeLight } from "./icon-mode-light";
-import { IconModeDark } from "./icon-mode-dark";
+import { ThemeLight } from "./theme-light";
+import { ThemeDark } from "./theme-dark";
 
-export { IconModeDark, IconModeLight };
+export { ThemeLight, ThemeDark };

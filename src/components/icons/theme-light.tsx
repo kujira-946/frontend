@@ -28,7 +28,7 @@ const Icon = (props: SVGProps) => {
   );
 };
 
-export const IconModeLight = styled(Icon).attrs(
+export const ThemeLight = styled(Icon).attrs(
   (props: SVGProps & ThemeProps) => ({
     fill: props.hovered
       ? props.theme.backgroundSix
