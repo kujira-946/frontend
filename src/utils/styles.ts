@@ -2,7 +2,7 @@ import { css } from "styled-components";
 
 import * as Colors from "./colors";
 import * as Sizes from "./sizes";
-import { ThemeProps } from "./../pages/_app";
+import { ThemeProps } from "@/components/layout";
 
 export function setMediaPaddings(verticalPadding?: number) {
   return css`
@@ -74,7 +74,7 @@ export function setButton(buttonType: ButtonType, buttonSize: ButtonSize) {
         ? `0 ${Sizes.pxAsRem.sixteen}`
         : `0 ${Sizes.pxAsRem.twenty}`;
     }};
-    color: ${Colors.text.dark};
+    color: ${Colors.background.light.one};
     background-color: ${(props: ThemeProps) => {
       if (buttonType === "primary") {
         return props.theme.primaryMain;
