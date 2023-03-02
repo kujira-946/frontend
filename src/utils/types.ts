@@ -7,4 +7,8 @@ export type SVGProps = {
   hoveredFill?: string;
 };
 
+export type LogoProps = {
+  
+} & SVGProps;
+
 export type IconProps = SVGProps & ThemeProps;

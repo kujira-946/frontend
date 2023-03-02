@@ -87,7 +87,11 @@ export const Navbar = () => {
     <Nav>
       <Main>
         <Image
-          src="/logo-full-horizontal.svg"
+          src={
+            theme === "light"
+              ? "/logo-full-horizontal-light.svg"
+              : "/logo-full-horizontal-dark.svg"
+          }
           alt="Logo"
           width={81.07}
           height={20}
