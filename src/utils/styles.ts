@@ -27,7 +27,7 @@ type Weights = keyof typeof Sizes.fontWeights;
 export function setText(fontSize: Pixels, fontWeight: Weights) {
   return css`
     ${transition};
-    color: ${(props: ThemeProps) => props.theme.text};
+    color: ${(props: ThemeProps) => props.theme.backgroundEight};
     font-size: ${Sizes.pxAsRem[fontSize]};
     font-weight: ${Sizes.fontWeights[fontWeight]};
 
