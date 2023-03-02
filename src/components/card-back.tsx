@@ -7,10 +7,10 @@ import { ThemeProps } from "./layout";
 // ========================================================================================= //
 
 const Container = styled.article`
-	position: absolute;
-	right: 0;
-	top: 50%;
-	transform: translateY(-50%);
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   width: 280px;
@@ -95,7 +95,7 @@ const BottomLine = styled.div`
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-export const CardFront = () => {
+export const CardBack = () => {
   return (
     <Container>
       <Header>

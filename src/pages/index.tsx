@@ -89,9 +89,10 @@ const LearnMoreButton = styled.button`
 `;
 
 const Cards = styled.article`
+  position: relative;
   flex: 1;
 
-  /* border: red solid 1px; */
+  border: red solid 1px;
 `;
 
 // ========================================================================================= //
@@ -131,6 +132,7 @@ export default function Home() {
             </CopyAndButtons>
 
             <Cards>
+              <Components.CardBack />
               <Components.CardFront />
             </Cards>
           </Section>
