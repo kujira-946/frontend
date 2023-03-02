@@ -6,6 +6,7 @@ import { useContext } from "react";
 
 import * as Icons from "@/components/icons";
 import * as Styles from "@/utils/styles";
+import * as Colors from "@/utils/colors";
 import * as Sizes from "@/utils/sizes";
 import { SignalsStoreContext } from "@/pages/_app";
 import { signalsHelpers } from "@/signals";
@@ -64,20 +65,8 @@ const ThemeButton = styled.button`
   }
 `;
 
-const ThemeDarkIcon = styled(Icons.ThemeDark).attrs((props: IconProps) => ({
-  fill: props.hovered ? props.theme.backgroundSix : props.theme.backgroundFour,
-}))`
-  ${Styles.transition};
-`;
-
-const ThemeLightIcon = styled(Icons.ThemeLight).attrs((props: IconProps) => ({
-  fill: props.hovered ? props.theme.backgroundSix : props.theme.backgroundFour,
-}))`
-  ${Styles.transition};
-`;
-
 const LoginButton = styled(Link)`
-  ${Styles.setText("twelve")};
+  ${Styles.setText("twelve", "medium")};
 `;
 
 const RegisterButton = styled(Link)`
@@ -109,9 +98,19 @@ export const Navbar = () => {
             onMouseLeave={() => (themeButtonHovered.value = false)}
           >
             {ui.theme.value === "light" ? (
-              <ThemeDarkIcon height={12} hovered={themeButtonHovered.value} />
+              <Icons.ThemeDark
+                height={12}
+                hovered={themeButtonHovered.value}
+                fill={Colors.background[ui.theme.value].six}
+                hoveredFill={Colors.background[ui.theme.value].eight}
+              />
             ) : (
-              <ThemeLightIcon height={12} hovered={themeButtonHovered.value} />
+              <Icons.ThemeLight
+                height={12}
+                hovered={themeButtonHovered.value}
+                fill={Colors.background[ui.theme.value].six}
+                hoveredFill={Colors.background[ui.theme.value].eight}
+              />
             )}
           </ThemeButton>
           <LoginButton href="/login">Log In</LoginButton>

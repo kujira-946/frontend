@@ -23,11 +23,13 @@ export function setMediaPaddings(verticalPadding?: number) {
 export const transition = "transition: 0.1s ease-in;";
 
 type Pixels = keyof typeof Sizes.pxAsRem;
-export function setText(fontSize: Pixels) {
+type Weights = keyof typeof Sizes.fontWeights;
+export function setText(fontSize: Pixels, fontWeight: Weights) {
   return css`
     ${transition};
-    color: ${(props: ThemeProps) => props.theme.backgroundSix};
+    color: ${(props: ThemeProps) => props.theme.text};
     font-size: ${Sizes.pxAsRem[fontSize]};
+    font-weight: ${Sizes.fontWeights[fontWeight]};
 
     @media (hover: hover) {
       :hover {
