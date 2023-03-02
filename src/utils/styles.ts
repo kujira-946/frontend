@@ -20,13 +20,10 @@ export function setMediaPaddings(verticalPadding?: number) {
   `;
 }
 
-export const transition = "transition: 0.1s ease-in;";
-
 type Pixels = keyof typeof Sizes.pxAsRem;
 type Weights = keyof typeof Sizes.fontWeights;
 export function setText(fontSize: Pixels, fontWeight: Weights) {
   return css`
-    ${transition};
     color: ${(props: ThemeProps) => props.theme.backgroundEight};
     font-size: ${Sizes.pxAsRem[fontSize]};
     font-weight: ${Sizes.fontWeights[fontWeight]};
@@ -41,7 +38,6 @@ export function setText(fontSize: Pixels, fontWeight: Weights) {
 }
 
 export const basicButtonStyles = css`
-  ${transition};
   border: none;
   outline: none;
   cursor: pointer;
@@ -110,3 +106,27 @@ export function setButton(
     }
   `;
 }
+
+export const inputStyles = css`
+  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
+  border: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
+
+  ::placeholder {
+    ${(props: ThemeProps) => props.theme.backgroundSeven};
+  }
+
+  :hover {
+    background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
+    border: ${(props: ThemeProps) => props.theme.backgroundSix} solid 1px;
+  }
+`;
+
+export const cardStyles = css`
+  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
+  border: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
+
+  :hover {
+    background-color: ${(props: ThemeProps) => props.theme.backgroundThree};
+    border: ${(props: ThemeProps) => props.theme.backgroundSix} solid 1px;
+  }
+`;

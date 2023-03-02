@@ -122,6 +122,7 @@ const GlobalStyles = createGlobalStyle`
     font: inherit;
     line-height: 170%;
     vertical-align: baseline;
+    transition: 0.1s ease-in;
   }
 
   html,

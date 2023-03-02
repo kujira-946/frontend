@@ -7,6 +7,8 @@ import * as Sizes from "@/utils/sizes";
 import * as Styles from "@/utils/styles";
 import { ThemeProps } from "@/components/layout";
 import Link from "next/link";
+import { useContext } from "react";
+import { SignalsStoreContext } from "./_app";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -27,9 +29,11 @@ const AboveTheFold = styled.main`
 `;
 
 const Section = styled.section`
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 80px;
   margin: 0px auto;
   width: 100%;
   max-width: ${Sizes.widths.content}px;
@@ -84,11 +88,19 @@ const LearnMoreButton = styled.button`
   flex: 1;
 `;
 
+const Cards = styled.article`
+  flex: 1;
+
+  /* border: red solid 1px; */
+`;
+
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
 export default function Home() {
+  const { ui } = useContext(SignalsStoreContext);
+
   return (
     <>
       <Head>
@@ -117,6 +129,10 @@ export default function Home() {
                 <LearnMoreButton>Learn More</LearnMoreButton>
               </Buttons>
             </CopyAndButtons>
+
+            <Cards>
+              <Components.CardFront />
+            </Cards>
           </Section>
         </AboveTheFold>
       </Content>
