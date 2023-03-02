@@ -100,7 +100,7 @@ export const CardFront = () => {
     <Container
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.2 }}
+      transition={{ duration: 0.2, delay: 1 }}
     >
       <Header>
         <Circle />

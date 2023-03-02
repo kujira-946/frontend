@@ -69,7 +69,7 @@ const TopLine = styled.div`
   height: 8px;
   background-color: ${(props: ThemeProps) => props.theme.backgroundSix};
   border-radius: 999px;
-	margin-right: 12px;
+  margin-right: 12px;
 `;
 
 const BottomLine = styled.div`
@@ -94,7 +94,7 @@ export const CardBack = () => {
         opacity: 1,
         transform: "rotate(-15deg) translateX(-10px) translateY(-78%)",
       }}
-      transition={{ duration: 0.3, delay: 1 }}
+      transition={{ duration: 0.3, delay: 1.5 }}
     >
       <Header>
         <Circle />

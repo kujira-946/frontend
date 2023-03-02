@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Image from "next/image";
 import styled from "styled-components";
 
 import * as Components from "@/components";
@@ -7,8 +6,7 @@ import * as Sizes from "@/utils/sizes";
 import * as Styles from "@/utils/styles";
 import { ThemeProps } from "@/components/layout";
 import Link from "next/link";
-import { useContext } from "react";
-import { SignalsStoreContext } from "./_app";
+import { motion } from "framer-motion";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -39,7 +37,7 @@ const Section = styled.section`
   max-width: ${Sizes.widths.content}px;
 `;
 
-const CopyAndButtons = styled.div`
+const CopyAndButtons = styled(motion.div)`
   display: flex;
   flex-direction: column;
   gap: 40px;
@@ -98,8 +96,6 @@ const Cards = styled.article`
 // ========================================================================================= //
 
 export default function Home() {
-  const { ui } = useContext(SignalsStoreContext);
-
   return (
     <>
       <Head>
@@ -114,7 +110,11 @@ export default function Home() {
 
         <AboveTheFold>
           <Section>
-            <CopyAndButtons>
+            <CopyAndButtons
+              initial={{ opacity: 0, transform: "translateY(-12px)" }}
+              animate={{ opacity: 1, transform: "translateY(0px)" }}
+              transition={{ duration: 0.3, delay: 0.5 }}
+            >
               <Copy>
                 <CopyHeader>
                   You have a money problem. Or two. We all do.
