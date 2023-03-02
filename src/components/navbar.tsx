@@ -27,11 +27,8 @@ const Nav = styled.nav`
   align-items: center;
   padding: 8px 0px;
   width: 100%;
-  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
 
   ${Styles.setMediaPaddings(8)};
-
-  border: blue solid 1px;
 `;
 
 const Main = styled.main`

@@ -1,6 +1,6 @@
 export const text = {
   light: "#262626",
-  dark: "#EBEBEB",
+  dark: "#CECECE",
 };
 
 export const background = {
@@ -37,8 +37,8 @@ export const success = {
 };
 
 export const failure = {
-  light: "#E13333",
-  dark: "#DA4A4A",
+  light: "#EA2A2A",
+  dark: "#BC5454",
 };
 
 export const warning = {

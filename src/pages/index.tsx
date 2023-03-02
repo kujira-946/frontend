@@ -19,7 +19,7 @@ const Content = styled.div`
 
 const AboveTheFold = styled.main`
   height: 100vh;
-  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
+  background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
   padding-top: 140px;
 
   ${Styles.setMediaPaddings(140)};
@@ -80,8 +80,7 @@ export default function Home() {
                 You have a money problem. Or two. We all do.
               </CopyHeader>
               <CopyBody>
-                We can solve these problems by being more cognizant of how,
-                when, why, and where we spend our money.
+                So, how do we fix them? With a little bit of perspective.
               </CopyBody>
             </Copy>
           </Section>
