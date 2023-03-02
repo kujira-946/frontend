@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import styled from "styled-components";
 
 import { ThemeProps } from "./layout";
@@ -6,11 +7,9 @@ import { ThemeProps } from "./layout";
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
-const Container = styled.article`
+const Container = styled(motion.article)`
   position: absolute;
   right: 0;
-  top: 50%;
-  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   width: 280px;
@@ -26,66 +25,55 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   height: 40px;
-  border-bottom: ${(props: ThemeProps) => props.theme.primaryMain} solid 1px;
   padding: 10px 16px;
+`;
+
+const Block = styled.div`
+  height: 40px;
+  background-color: ${(props: ThemeProps) => props.theme.primaryMain};
 `;
 
 const Circle = styled.div`
   width: 14px;
   height: 14px;
-  border: ${(props: ThemeProps) => props.theme.backgroundFive} solid 1px;
+  background-color: ${(props: ThemeProps) => props.theme.backgroundFive};
   border-radius: 999px;
 `;
 
 const Body = styled.div`
   display: flex;
   flex: 1;
-  justify-content: center;
-  align-items: flex-end;
-  padding: 16px;
-`;
-
-const OvalsContainer = styled.div`
-  display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  padding: 16px 16px 60px;
 `;
 
-const Ovals = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-`;
-
-const Oval = styled.div`
-  width: 10px;
-  height: 24px;
-  background-color: ${(props: ThemeProps) => props.theme.backgroundFive};
-  border-radius: 999px;
-`;
-
-const Footer = styled.div`
-  padding: 16px;
+const Square = styled.div`
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background-color: ${(props: ThemeProps) => props.theme.backgroundSix};
 `;
 
 const Lines = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   gap: 8px;
   width: max-content;
 `;
 
 const TopLine = styled.div`
-  width: 34px;
+  width: 80px;
   height: 8px;
   background-color: ${(props: ThemeProps) => props.theme.backgroundSix};
   border-radius: 999px;
+	margin-right: 12px;
 `;
 
 const BottomLine = styled.div`
-  width: 80px;
+  width: 120px;
   height: 8px;
   background-color: ${(props: ThemeProps) => props.theme.backgroundSix};
   border-radius: 999px;
@@ -97,42 +85,30 @@ const BottomLine = styled.div`
 
 export const CardBack = () => {
   return (
-    <Container>
+    <Container
+      initial={{
+        opacity: 0,
+        transform: "rotate(0deg) translateX(0px) translateY(-20%)",
+      }}
+      animate={{
+        opacity: 1,
+        transform: "rotate(-15deg) translateX(-10px) translateY(-78%)",
+      }}
+      transition={{ duration: 0.3, delay: 1 }}
+    >
       <Header>
         <Circle />
       </Header>
 
-      <Body>
-        <OvalsContainer>
-          <Ovals>
-            <Oval />
-            <Oval />
-            <Oval />
-          </Ovals>
-          <Ovals>
-            <Oval />
-            <Oval />
-            <Oval />
-          </Ovals>
-          <Ovals>
-            <Oval />
-            <Oval />
-            <Oval />
-          </Ovals>
-          <Ovals>
-            <Oval />
-            <Oval />
-            <Oval />
-          </Ovals>
-        </OvalsContainer>
-      </Body>
+      <Block />
 
-      <Footer>
+      <Body>
         <Lines>
           <TopLine />
           <BottomLine />
         </Lines>
-      </Footer>
+        <Square />
+      </Body>
     </Container>
   );
 };

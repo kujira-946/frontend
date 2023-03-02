@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import styled from "styled-components";
 
 import { ThemeProps } from "./layout";
@@ -6,11 +7,10 @@ import { ThemeProps } from "./layout";
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
-const Container = styled.article`
+const Container = styled(motion.article)`
 	position: absolute;
 	right: 0;
-	top: 50%;
-	transform: translateY(-50%);
+	transform: translateY(-20%);
   display: flex;
   flex-direction: column;
   width: 280px;
@@ -19,7 +19,7 @@ const Container = styled.article`
   border-radius: 6px;
   border: ${(props: ThemeProps) => props.theme.primaryMain} solid 1px;
 
-  ${(props: ThemeProps) => props.theme.shadowOne};
+  ${(props: ThemeProps) => props.theme.shadowTwo};
 `;
 
 const Header = styled.div`
@@ -97,7 +97,11 @@ const BottomLine = styled.div`
 
 export const CardFront = () => {
   return (
-    <Container>
+    <Container
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2 }}
+    >
       <Header>
         <Circle />
       </Header>

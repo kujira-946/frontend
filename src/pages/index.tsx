@@ -91,8 +91,6 @@ const LearnMoreButton = styled.button`
 const Cards = styled.article`
   position: relative;
   flex: 1;
-
-  border: red solid 1px;
 `;
 
 // ========================================================================================= //
