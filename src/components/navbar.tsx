@@ -81,6 +81,8 @@ export const Navbar = () => {
   const { ui } = useContext(SignalsStoreContext);
   const themeButtonHovered = useSignal(false);
 
+  const theme = ui.theme.value;
+
   return (
     <Nav>
       <Main>
@@ -97,19 +99,19 @@ export const Navbar = () => {
             onMouseEnter={() => (themeButtonHovered.value = true)}
             onMouseLeave={() => (themeButtonHovered.value = false)}
           >
-            {ui.theme.value === "light" ? (
+            {theme === "light" ? (
               <Icons.ThemeDark
                 height={12}
                 hovered={themeButtonHovered.value}
-                fill={Colors.background[ui.theme.value].six}
-                hoveredFill={Colors.background[ui.theme.value].eight}
+                fill={Colors.background[theme].six}
+                hoveredFill={Colors.background[theme].eight}
               />
             ) : (
               <Icons.ThemeLight
                 height={12}
                 hovered={themeButtonHovered.value}
-                fill={Colors.background[ui.theme.value].six}
-                hoveredFill={Colors.background[ui.theme.value].eight}
+                fill={Colors.background[theme].six}
+                hoveredFill={Colors.background[theme].eight}
               />
             )}
           </ThemeButton>
