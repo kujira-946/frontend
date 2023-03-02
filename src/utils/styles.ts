@@ -94,14 +94,19 @@ export function setButton(
       else return Sizes.fontSizes.largeButtonFont;
     }};
     font-weight: ${Sizes.fontWeights.semiBold};
+    transition: 0.1s ease-in;
 
     @media (hover: hover) {
       :hover {
-        color: ${outlined ? hoverBackgroundColor : Colors.background.light.one};
+        color: ${(props: ThemeProps) => {
+          return outlined ? props.theme.text : Colors.background.light.one;
+        }};
         background-color: ${outlined ? "transparent" : hoverBackgroundColor};
-        border: ${outlined
-          ? `${hoverBackgroundColor} solid 1px`
-          : "transparent solid 1px"};
+        border: ${(props: ThemeProps) => {
+          return outlined
+            ? `${props.theme.text} solid 1px`
+            : "transparent solid 1px";
+        }};
       }
     }
   `;

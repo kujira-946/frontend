@@ -45,6 +45,7 @@ const CopyAndButtons = styled(motion.div)`
 
 const Copy = styled.article`
   max-width: 500px;
+  color: ${(props: ThemeProps) => props.theme.text};
 `;
 
 const CopyHeader = styled.h1`
@@ -55,7 +56,6 @@ const CopyHeader = styled.h1`
 
 const CopyBody = styled.p`
   margin: 0;
-  color: ${(props: ThemeProps) => props.theme.text};
   font-size: ${Sizes.pxAsRem.eighteen};
   font-weight: ${Sizes.fontWeights.medium};
 `;
