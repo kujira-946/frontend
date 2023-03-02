@@ -1,6 +1,6 @@
 import { SVGProps } from "@/utils/types";
 
-export const Add = (props: SVGProps) => {
+export const CheckboxInactive = (props: SVGProps) => {
   return (
     <svg
       width="auto"
@@ -9,14 +9,14 @@ export const Add = (props: SVGProps) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clipPath="url(#clip0_617_7)">
+      <g clipPath="url(#clip0_614_431)">
         <path
-          d="M41.7926 0V41.793H0V58.2074H41.7926V100H58.207V58.2074H100V41.793H58.207V0H41.7926Z"
+          d="M88.8889 11.1111V88.8889H11.1111V11.1111H88.8889ZM88.8889 0H11.1111C5 0 0 5 0 11.1111V88.8889C0 95 5 100 11.1111 100H88.8889C95 100 100 95 100 88.8889V11.1111C100 5 95 0 88.8889 0Z"
           fill={props.hovered ? props.hoveredFill : props.fill}
         />
       </g>
       <defs>
-        <clipPath id="clip0_617_7">
+        <clipPath id="clip0_614_431">
           <rect width="100" height="100" fill="white" />
         </clipPath>
       </defs>
