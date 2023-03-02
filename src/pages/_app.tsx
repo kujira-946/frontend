@@ -122,7 +122,7 @@ const GlobalStyles = createGlobalStyle`
     border: 0;
     font-size: 100%;
     font: inherit;
-    line-height: 150%;
+    line-height: 170%;
     vertical-align: baseline;
   }
 

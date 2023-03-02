@@ -54,54 +54,57 @@ export const basicButtonStyles = css`
   }
 `;
 
-type ButtonType = "primary" | "secondary";
-type ButtonSize = "small" | "medium" | "large";
-export function setButton(buttonType: ButtonType, buttonSize: ButtonSize) {
+type ButtonSize = "smaller" | "small" | "medium" | "large";
+export function setButton(
+  buttonSize: ButtonSize,
+  backgroundColor: string,
+  hoverBackgroundColor: string,
+  outlined: boolean = false,
+  inside: boolean = false
+) {
   return css`
     ${basicButtonStyles};
     display: flex;
     justify-content: center;
     align-items: center;
     height: ${(props) => {
-      return buttonSize === "small"
-        ? Sizes.widths.smallButtonHeight
-        : buttonSize === "medium"
-        ? Sizes.widths.mediumButtonHeight
-        : Sizes.widths.largeButtonHeight;
+      if (buttonSize === "smaller") return Sizes.heights.smallerButtonHeight;
+      else if (buttonSize === "small") return Sizes.heights.smallButtonHeight;
+      else if (buttonSize === "medium") return Sizes.heights.mediumButtonHeight;
+      else return Sizes.heights.largeButtonHeight;
     }};
     padding: ${(props) => {
-      return buttonSize === "small"
-        ? `0 ${Sizes.pxAsRem.twelve}`
-        : buttonSize === "medium"
-        ? `0 ${Sizes.pxAsRem.sixteen}`
-        : `0 ${Sizes.pxAsRem.twenty}`;
-    }};
-    color: ${Colors.background.light.one};
-    background-color: ${(props: ThemeProps) => {
-      if (buttonType === "primary") {
-        return props.theme.primaryMain;
+      if (buttonSize === "smaller") {
+        return `${Sizes.pxAsRem.four} ${Sizes.pxAsRem.ten}`;
+      } else if (buttonSize === "small") {
+        return `${Sizes.pxAsRem.six} ${Sizes.pxAsRem.twelve}`;
+      } else if (buttonSize === "medium") {
+        return `${Sizes.pxAsRem.eight} ${Sizes.pxAsRem.fourteen}`;
       } else {
-        return props.theme.secondaryMain;
+        return `${Sizes.pxAsRem.ten} ${Sizes.pxAsRem.eighteen}`;
       }
     }};
-    border-radius: 4px;
+    color: ${outlined ? backgroundColor : Colors.background.light.one};
+    background-color: ${outlined ? "transparent" : backgroundColor};
+    border: ${outlined
+      ? `${backgroundColor} solid 1px`
+      : "transparent solid 1px"};
+    border-radius: ${inside ? "4px" : "6px"};
     font-size: ${(props) => {
-      if (buttonSize === "small") return Sizes.pxAsRem.twelve;
-      else if (buttonSize === "medium") return Sizes.pxAsRem.fourteen;
-      else return Sizes.pxAsRem.eighteen;
+      if (buttonSize === "smaller") return Sizes.fontSizes.smallerButtonFont;
+      else if (buttonSize === "small") return Sizes.fontSizes.smallButtonFont;
+      else if (buttonSize === "medium") return Sizes.fontSizes.mediumButtonFont;
+      else return Sizes.fontSizes.largeButtonFont;
     }};
     font-weight: ${Sizes.fontWeights.semiBold};
 
     @media (hover: hover) {
       :hover {
-        color: ${Colors.text.dark};
-        background-color: ${(props: ThemeProps) => {
-          if (buttonType === "primary") {
-            return props.theme.primaryDark;
-          } else {
-            return props.theme.secondaryDark;
-          }
-        }};
+        color: ${outlined ? hoverBackgroundColor : Colors.background.light.one};
+        background-color: ${hoverBackgroundColor};
+        border: ${outlined
+          ? `${hoverBackgroundColor} solid 1px`
+          : "transparent solid 1px"};
       }
     }
   `;

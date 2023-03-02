@@ -6,6 +6,7 @@ import * as Components from "@/components";
 import * as Sizes from "@/utils/sizes";
 import * as Styles from "@/utils/styles";
 import { ThemeProps } from "@/components/layout";
+import Link from "next/link";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -54,6 +55,15 @@ const CopyBody = styled.p`
   color: ${(props: ThemeProps) => props.theme.text};
   font-size: ${Sizes.pxAsRem.eighteen};
   font-weight: ${Sizes.fontWeights.medium};
+`;
+
+const RegisterButton = styled(Link)`
+  ${(props: ThemeProps) =>
+    Styles.setButton(
+      "large",
+      props.theme.primaryMain,
+      props.theme.primaryDark
+    )};
 `;
 
 // ========================================================================================= //

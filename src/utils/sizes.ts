@@ -31,10 +31,20 @@ export const widths = {
   mobile: 500,
 
   content: 920,
+};
 
-  smallButtonHeight: pxAsRem.thirty,
+export const heights = {
+  smallerButtonHeight: pxAsRem.twentySix,
+  smallButtonHeight: pxAsRem.thirtyTwo,
   mediumButtonHeight: pxAsRem.thirtyEight,
   largeButtonHeight: pxAsRem.fortyEight,
+};
+
+export const fontSizes = {
+  smallerButtonFont: pxAsRem.ten,
+  smallButtonFont: pxAsRem.twelve,
+  mediumButtonFont: pxAsRem.fourteen,
+  largeButtonFont: pxAsRem.eighteen,
 };
 
 export const fontWeights = {

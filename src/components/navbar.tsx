@@ -50,10 +50,10 @@ const ThemeButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${Sizes.widths.smallButtonHeight};
-  height: ${Sizes.widths.smallButtonHeight};
+  width: ${Sizes.heights.smallButtonHeight};
+  height: ${Sizes.heights.smallButtonHeight};
   background-color: inherit;
-  border-radius: 4px;
+  border-radius: 6px;
 
   @media (hover: hover) {
     :hover {
@@ -67,7 +67,12 @@ const LoginButton = styled(Link)`
 `;
 
 const RegisterButton = styled(Link)`
-  ${Styles.setButton("primary", "small")};
+  ${(props: ThemeProps) =>
+    Styles.setButton(
+      "small",
+      props.theme.primaryMain,
+      props.theme.primaryDark
+    )};
 `;
 
 // ========================================================================================= //
