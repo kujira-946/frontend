@@ -24,8 +24,6 @@ const AboveTheFold = styled.main`
   padding-top: 140px;
 
   ${Styles.setMediaPaddings(140)};
-
-  border: red solid 1px;
 `;
 
 const Section = styled.section`
@@ -35,8 +33,12 @@ const Section = styled.section`
   margin: 0px auto;
   width: 100%;
   max-width: ${Sizes.widths.content}px;
+`;
 
-  border: blue solid 1px;
+const CopyAndButtons = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 `;
 
 const Copy = styled.article`
@@ -45,7 +47,6 @@ const Copy = styled.article`
 
 const CopyHeader = styled.h1`
   margin: 0 0 ${Sizes.pxAsRem.twelve};
-  color: ${(props: ThemeProps) => props.theme.text};
   font-size: ${Sizes.pxAsRem.thirtyTwo};
   font-weight: ${Sizes.fontWeights.bold};
 `;
@@ -57,6 +58,11 @@ const CopyBody = styled.p`
   font-weight: ${Sizes.fontWeights.medium};
 `;
 
+const Buttons = styled.article`
+  display: flex;
+  gap: 20px;
+`;
+
 const RegisterButton = styled(Link)`
   ${(props: ThemeProps) =>
     Styles.setButton(
@@ -64,6 +70,18 @@ const RegisterButton = styled(Link)`
       props.theme.primaryMain,
       props.theme.primaryDark
     )};
+  flex: 1;
+`;
+
+const LearnMoreButton = styled.button`
+  ${(props: ThemeProps) =>
+    Styles.setButton(
+      "large",
+      props.theme.primaryMain,
+      props.theme.primaryDark,
+      true
+    )};
+  flex: 1;
 `;
 
 // ========================================================================================= //
@@ -85,14 +103,20 @@ export default function Home() {
 
         <AboveTheFold>
           <Section>
-            <Copy>
-              <CopyHeader>
-                You have a money problem. Or two. We all do.
-              </CopyHeader>
-              <CopyBody>
-                So, how do we fix them? With a little bit of perspective.
-              </CopyBody>
-            </Copy>
+            <CopyAndButtons>
+              <Copy>
+                <CopyHeader>
+                  You have a money problem. Or two. We all do.
+                </CopyHeader>
+                <CopyBody>
+                  So, how do we fix them? With a little bit of perspective.
+                </CopyBody>
+              </Copy>
+              <Buttons>
+                <RegisterButton href="/register">Register</RegisterButton>
+                <LearnMoreButton>Learn More</LearnMoreButton>
+              </Buttons>
+            </CopyAndButtons>
           </Section>
         </AboveTheFold>
       </Content>

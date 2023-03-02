@@ -67,6 +67,7 @@ export function setButton(
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 8px;
     height: ${(props) => {
       if (buttonSize === "smaller") return Sizes.heights.smallerButtonHeight;
       else if (buttonSize === "small") return Sizes.heights.smallButtonHeight;
@@ -101,7 +102,7 @@ export function setButton(
     @media (hover: hover) {
       :hover {
         color: ${outlined ? hoverBackgroundColor : Colors.background.light.one};
-        background-color: ${hoverBackgroundColor};
+        background-color: ${outlined ? "transparent" : hoverBackgroundColor};
         border: ${outlined
           ? `${hoverBackgroundColor} solid 1px`
           : "transparent solid 1px"};
