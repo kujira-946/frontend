@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ThemeProvider } from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 
 import * as Colors from "@/utils/colors";
 import { SignalsStoreContext } from "@/pages/_app";

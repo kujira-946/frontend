@@ -58,3 +58,7 @@ export const fontWeights = {
   extraBold: 800,
   black: 900,
 };
+
+export const zIndexes = {
+  navbar: 10,
+};

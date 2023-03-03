@@ -10,7 +10,6 @@ import * as Colors from "@/utils/colors";
 import * as Sizes from "@/utils/sizes";
 import { SignalsStoreContext } from "@/pages/_app";
 import { signalsHelpers } from "@/signals";
-import { IconProps } from "@/utils/types";
 import { ThemeProps } from "./layout";
 
 // ========================================================================================= //
@@ -22,11 +21,13 @@ const Nav = styled.nav`
   top: 0px;
   right: 0px;
   left: 0px;
+  z-index: ${Sizes.zIndexes.navbar};
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 8px 0px;
   width: 100%;
+  padding: 8px 0px;
+  background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
 
   ${Styles.setMediaPaddings(8)};
 `;
