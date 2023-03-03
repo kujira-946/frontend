@@ -82,9 +82,9 @@ const CopyrightAndLegal = styled.section`
 
 const Copyright = styled.span`
   ${(props: ThemeProps) => {
-    return Styles.setText("ten", "medium", props.theme.backgroundSix);
+    return Styles.setText("ten", "medium", props.theme.backgroundFive);
   }};
-  color: ${(props: ThemeProps) => props.theme.backgroundSix};
+  color: ${(props: ThemeProps) => props.theme.backgroundFive};
 `;
 
 const LegalLinks = styled.div`
