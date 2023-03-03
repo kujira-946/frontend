@@ -1,5 +1,4 @@
 import { useDetectInView } from "@/utils/hooks";
-import styled from "styled-components";
 
 type Props = {
   children: React.ReactNode;

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 import * as Styles from "@/utils/styles";
 import * as Sizes from "@/utils/sizes";
-import * as Global from "@/components";
+import { LazyLoad } from "@/components";
 import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
@@ -62,7 +62,7 @@ const transition = { duration: 0.3, delay: 0.5 };
 export const About = () => {
   return (
     <Container>
-      <Global.LazyLoad threshold={threshold}>
+      <LazyLoad threshold={threshold}>
         <CopyAndFigure
           initial={initial}
           animate={animate}
@@ -77,9 +77,9 @@ export const About = () => {
             </CopyBody>
           </Copy>
         </CopyAndFigure>
-      </Global.LazyLoad>
+      </LazyLoad>
 
-      <Global.LazyLoad threshold={threshold}>
+      <LazyLoad threshold={threshold}>
         <CopyAndFigure
           initial={initial}
           animate={animate}
@@ -94,9 +94,9 @@ export const About = () => {
             </CopyBody>
           </Copy>
         </CopyAndFigure>
-      </Global.LazyLoad>
+      </LazyLoad>
 
-      <Global.LazyLoad threshold={threshold}>
+      <LazyLoad threshold={threshold}>
         <CopyAndFigure
           initial={initial}
           animate={animate}
@@ -112,7 +112,7 @@ export const About = () => {
             </CopyBody>
           </Copy>
         </CopyAndFigure>
-      </Global.LazyLoad>
+      </LazyLoad>
     </Container>
   );
 };
