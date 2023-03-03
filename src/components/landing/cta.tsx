@@ -24,22 +24,19 @@ const Copy = styled.article`
   max-width: 600px;
   margin: 0 auto ${Sizes.pxAsRem.forty};
   color: ${(props: ThemeProps) => props.theme.text};
-  transition: 0.1s ease-in;
 `;
 
 const CopyHeader = styled.h2`
-  ${(props: ThemeProps) => {
-    return Styles.setText("twentyFour", "bold", props.theme.text);
-  }};
   margin: 0 0;
+  font-size: ${Sizes.pxAsRem.twentyFour};
+  font-weight: ${Sizes.fontWeights.bold};
   text-align: center;
 `;
 
 const CopyBody = styled.h2`
-  ${(props: ThemeProps) => {
-    return Styles.setText("sixteen", "medium", props.theme.text);
-  }};
   margin: 0 0;
+  font-size: ${Sizes.pxAsRem.sixteen};
+  font-weight: ${Sizes.fontWeights.medium};
   text-align: center;
 `;
 

@@ -20,28 +20,6 @@ export function setMediaPaddings(verticalPadding?: number) {
   `;
 }
 
-type Pixels = keyof typeof Sizes.pxAsRem;
-type Weights = keyof typeof Sizes.fontWeights;
-export function setText(
-  fontSize: Pixels,
-  fontWeight: Weights,
-  color: string,
-  hoverColor?: string
-) {
-  return css`
-    color: ${color};
-    font-size: ${Sizes.pxAsRem[fontSize]};
-    font-weight: ${Sizes.fontWeights[fontWeight]};
-
-    @media (hover: hover) {
-      :hover {
-        color: ${hoverColor || color};
-        text-decoration: none;
-      }
-    }
-  `;
-}
-
 export const basicButtonStyles = css`
   border: none;
   outline: none;
@@ -61,7 +39,7 @@ export function setButton(
   backgroundColor: string,
   hoverBackgroundColor: string,
   outlined: boolean = false,
-  inside: boolean = false
+  borderRadius: number = 6
 ) {
   return css`
     ${basicButtonStyles};
@@ -91,7 +69,7 @@ export function setButton(
     border: ${outlined
       ? `${backgroundColor} solid 1px`
       : "transparent solid 1px"};
-    border-radius: ${inside ? "4px" : "6px"};
+    border-radius: ${borderRadius}px;
     font-size: ${(props) => {
       if (buttonSize === "smaller") return Sizes.fontSizes.smallerButtonFont;
       else if (buttonSize === "small") return Sizes.fontSizes.smallButtonFont;

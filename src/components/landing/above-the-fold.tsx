@@ -39,22 +39,20 @@ const CopyAndButtons = styled(motion.div)`
 `;
 
 const Copy = styled.article`
+  width: 100%;
   max-width: 500px;
   color: ${(props: ThemeProps) => props.theme.text};
-  transition: 0.1s ease-in;
 `;
 
 const CopyHeader = styled.h1`
-  ${(props: ThemeProps) => {
-    return Styles.setText("thirtyTwo", "bold", props.theme.text);
-  }};
+  font-size: ${Sizes.pxAsRem.thirtyTwo};
+  font-weight: ${Sizes.fontWeights.bold};
   margin: 0 0 ${Sizes.pxAsRem.twelve};
 `;
 
 const CopyBody = styled.p`
-  ${(props: ThemeProps) => {
-    return Styles.setText("eighteen", "medium", props.theme.text);
-  }};
+  font-size: ${Sizes.pxAsRem.eighteen};
+  font-weight: ${Sizes.fontWeights.medium};
   margin: 0;
 `;
 
@@ -64,23 +62,25 @@ const Buttons = styled.article`
 `;
 
 const RegisterButton = styled(Link)`
-  ${(props: ThemeProps) =>
-    Styles.setButton(
+  ${(props: ThemeProps) => {
+    return Styles.setButton(
       "large",
       props.theme.primaryMain,
       props.theme.primaryDark
-    )};
+    );
+  }};
   flex: 1;
 `;
 
 const LearnMoreButton = styled.button`
-  ${(props: ThemeProps) =>
-    Styles.setButton(
+  ${(props: ThemeProps) => {
+    return Styles.setButton(
       "large",
       props.theme.primaryMain,
       props.theme.primaryDark,
       true
-    )};
+    );
+  }};
   flex: 1;
 `;
 
@@ -115,6 +115,7 @@ export const AboveTheFold = () => {
             <LearnMoreButton>Learn More</LearnMoreButton>
           </Buttons>
         </CopyAndButtons>
+
         <Cards>
           <CardBack />
           <CardFront />

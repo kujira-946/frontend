@@ -43,35 +43,33 @@ const BodyLinkGroup = styled.article`
   display: flex;
   flex-direction: column;
   gap: ${Sizes.pxAsRem.eight};
+  color: ${(props: ThemeProps) => props.theme.text};
 `;
 
 const BodyLinkHeader = styled.h5`
-  ${(props: ThemeProps) => {
-    return Styles.setText("fourteen", "semiBold", props.theme.text);
-  }};
-  margin: 0 0 ${Sizes.pxAsRem.four}; ;
+  margin: 0 0 ${Sizes.pxAsRem.four};
+  font-size: ${Sizes.pxAsRem.fourteen};
+  font-weight: ${Sizes.fontWeights.semiBold};
 `;
 
 const BodyLinkRegister = styled(Link)`
-  ${(props: ThemeProps) => {
-    return Styles.setText(
-      "twelve",
-      "medium",
-      props.theme.primaryMain,
-      props.theme.primaryDark
-    );
-  }};
+  color: ${(props: ThemeProps) => props.theme.primaryMain};
+  font-size: ${Sizes.pxAsRem.twelve};
+  font-weight: ${Sizes.fontWeights.medium};
+
+  :hover {
+    color: ${(props: ThemeProps) => props.theme.primaryDark};
+  }
 `;
 
 const BodyLink = styled(Link)`
-  ${(props: ThemeProps) => {
-    return Styles.setText(
-      "twelve",
-      "medium",
-      props.theme.backgroundSeven,
-      props.theme.text
-    );
-  }};
+  color: ${(props: ThemeProps) => props.theme.backgroundEight};
+  font-size: ${Sizes.pxAsRem.twelve};
+  font-weight: ${Sizes.fontWeights.medium};
+
+  :hover {
+    color: ${(props: ThemeProps) => props.theme.text};
+  }
 `;
 
 const CopyrightAndLegal = styled.section`
@@ -81,10 +79,9 @@ const CopyrightAndLegal = styled.section`
 `;
 
 const Copyright = styled.span`
-  ${(props: ThemeProps) => {
-    return Styles.setText("ten", "medium", props.theme.backgroundFive);
-  }};
   color: ${(props: ThemeProps) => props.theme.backgroundFive};
+  font-size: ${Sizes.pxAsRem.ten};
+  font-weight: ${Sizes.fontWeights.medium};
 `;
 
 const LegalLinks = styled.div`
@@ -94,15 +91,9 @@ const LegalLinks = styled.div`
 `;
 
 const LegalLink = styled(Link)`
-  ${(props: ThemeProps) => {
-    return Styles.setText(
-      "ten",
-      "medium",
-      props.theme.backgroundSeven,
-      props.theme.text
-    );
-  }};
   color: ${(props: ThemeProps) => props.theme.backgroundSeven};
+  font-size: ${Sizes.pxAsRem.ten};
+  font-weight: ${Sizes.fontWeights.medium};
 `;
 
 // ========================================================================================= //

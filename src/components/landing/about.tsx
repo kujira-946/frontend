@@ -29,21 +29,18 @@ const CopyAndFigure = styled.article`
 
 const Copy = styled.article`
   color: ${(props: ThemeProps) => props.theme.text};
-  transition: 0.1s ease-in;
 `;
 
 const CopyHeader = styled.h2`
-  ${(props: ThemeProps) => {
-    return Styles.setText("twenty", "bold", props.theme.text);
-  }};
   margin: 0 0 ${Sizes.pxAsRem.twelve};
+  font-size: ${Sizes.pxAsRem.twenty};
+  font-weight: ${Sizes.fontWeights.bold};
 `;
 
 const CopyBody = styled.p`
-  ${(props: ThemeProps) => {
-    return Styles.setText("fourteen", "medium", props.theme.text);
-  }};
   margin: 0;
+  font-size: ${Sizes.pxAsRem.fourteen};
+  font-weight: ${Sizes.fontWeights.medium};
 `;
 
 // ========================================================================================= //
