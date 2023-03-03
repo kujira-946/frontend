@@ -3,7 +3,7 @@ import styled from "styled-components";
 import * as Overview from "@/components/overview";
 import * as Sizes from "@/utils/sizes";
 import * as Constants from "@/utils/constants.landing";
-import { LazyLoad } from "@/components";
+import { LazyLoad, NoInteraction } from "@/components";
 import { ThemeProps } from "@/components/layout";
 import { AboutCopy } from "./about-copy";
 
@@ -48,9 +48,9 @@ export const About = () => {
               recurring costs, and remaining cash, all within your personal
               monthly overview."
           />
-          <div>
-            <Overview.DropdownHeader cost={415.49} />
-          </div>
+          <NoInteraction>
+            <Overview.Dropdown name="Recurring Costs (2)" cost={415.19} />
+          </NoInteraction>
         </CopyAndFigure>
       </LazyLoad>
 

@@ -95,20 +95,20 @@ export const Dropdown = (props: Props) => {
   return (
     <Container>
       <Header>
-        <HeaderName value={props.name} />
-        <HeaderCost>{props.cost}</HeaderCost>
+        <HeaderName readOnly={true} value={props.name} />
+        <HeaderCost>${props.cost}</HeaderCost>
       </Header>
 
       <Body>
-        <PurchaseCells>{fjiojewia.map((foo: bar) => {
+        {/* <PurchaseCells>{fjiojewia.map((foo: bar) => {
 					return <Logbook.PurchaseCell />
-				})}</PurchaseCells>
+				})}</PurchaseCells> */}
         <AddButton>
           <Icons.Add
             height={12}
             fill={Colors.background[ui.theme.value].eight}
-          />{" "}
-          Add
+          />
+          <div>Add</div>
         </AddButton>
       </Body>
     </Container>

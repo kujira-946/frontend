@@ -101,7 +101,7 @@ export function setButton(
   `;
 }
 
-export const preventUserInput = css`
+export const preventUserInteraction = css`
   pointer-events: none;
   user-select: none;
 `;
