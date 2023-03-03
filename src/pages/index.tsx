@@ -2,6 +2,7 @@ import Head from "next/head";
 import styled from "styled-components";
 
 import * as Landing from "@/components/landing";
+import { useEffect } from "react";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -18,6 +19,13 @@ const Main = styled.main`
 // ========================================================================================= //
 
 export default function Home() {
+  // ↓↓↓ Starts the page back at the top when refreshing. ↓↓↓ //
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.history.scrollRestoration = "manual";
+    }
+  }, []);
+
   return (
     <>
       <Head>
