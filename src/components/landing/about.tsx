@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import { motion } from "framer-motion";
 
 import * as Styles from "@/utils/styles";
 import * as Sizes from "@/utils/sizes";
+import * as Constants from "@/utils/constants.landing";
 import { LazyLoad } from "@/components";
-import { ThemeProps } from "../layout";
+import { ThemeProps } from "@/components/layout";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -19,17 +19,17 @@ const Container = styled.section`
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
 `;
 
-const Copy = styled.article`
-  color: ${(props: ThemeProps) => props.theme.text};
-  transition: 0.1s ease-in;
-`;
-
-const CopyAndFigure = styled(motion.article)`
+const CopyAndFigure = styled.article`
   display: flex;
   align-items: center;
   gap: 3.75rem;
   width: 100%;
   max-width: ${Sizes.widths.content}px;
+`;
+
+const Copy = styled.article`
+  color: ${(props: ThemeProps) => props.theme.text};
+  transition: 0.1s ease-in;
 `;
 
 const CopyHeader = styled.h2`
@@ -47,27 +47,19 @@ const CopyBody = styled.p`
 `;
 
 // ========================================================================================= //
-// [ CONSTANTS ] =========================================================================== //
-// ========================================================================================= //
-
-const threshold = 0.8;
-const initial = { opacity: 0, transform: "translateY(-8px)" };
-const animate = { opacity: 1, transform: "translateY(0px)" };
-const transition = { duration: 0.3, delay: 0.5 };
-
-// ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
 export const About = () => {
   return (
     <Container>
-      <LazyLoad threshold={threshold}>
-        <CopyAndFigure
-          initial={initial}
-          animate={animate}
-          transition={transition}
-        >
+      <LazyLoad
+        threshold={Constants.threshold}
+        initial={Constants.initial}
+        animate={Constants.animate}
+        transition={Constants.transition}
+      >
+        <CopyAndFigure>
           <Copy>
             <CopyHeader>Everything In One Place</CopyHeader>
             <CopyBody>
@@ -79,12 +71,13 @@ export const About = () => {
         </CopyAndFigure>
       </LazyLoad>
 
-      <LazyLoad threshold={threshold}>
-        <CopyAndFigure
-          initial={initial}
-          animate={animate}
-          transition={transition}
-        >
+      <LazyLoad
+        threshold={Constants.threshold}
+        initial={Constants.initial}
+        animate={Constants.animate}
+        transition={Constants.transition}
+      >
+        <CopyAndFigure>
           <Copy>
             <CopyHeader>Real-Time Tracking</CopyHeader>
             <CopyBody>
@@ -96,12 +89,13 @@ export const About = () => {
         </CopyAndFigure>
       </LazyLoad>
 
-      <LazyLoad threshold={threshold}>
-        <CopyAndFigure
-          initial={initial}
-          animate={animate}
-          transition={transition}
-        >
+      <LazyLoad
+        threshold={Constants.threshold}
+        initial={Constants.initial}
+        animate={Constants.animate}
+        transition={Constants.transition}
+      >
+        <CopyAndFigure>
           <Copy>
             <CopyHeader>Be In Control</CopyHeader>
             <CopyBody>

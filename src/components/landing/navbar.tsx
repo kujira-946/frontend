@@ -10,7 +10,7 @@ import * as Colors from "@/utils/colors";
 import * as Sizes from "@/utils/sizes";
 import { SignalsStoreContext } from "@/pages/_app";
 import { signalsHelpers } from "@/signals";
-import { ThemeProps } from "../layout";
+import { ThemeProps } from "@/components/layout";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //

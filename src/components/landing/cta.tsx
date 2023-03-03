@@ -2,17 +2,16 @@ import Link from "next/link";
 import styled from "styled-components";
 
 import * as Styles from "@/utils/styles";
-import { ThemeProps } from "../layout";
+import * as Sizes from "@/utils/sizes";
+import * as Constants from "@/utils/constants.landing";
+import { ThemeProps } from "@/components/layout";
+import { LazyLoad } from "@/components";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
 const Container = styled.section`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 40px;
   padding: 80px 20px;
   background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
 `;
@@ -23,6 +22,7 @@ const Copy = styled.article`
   gap: 4px;
   width: 100%;
   max-width: 600px;
+  margin: 0 auto ${Sizes.pxAsRem.forty};
   color: ${(props: ThemeProps) => props.theme.text};
   transition: 0.1s ease-in;
 `;
@@ -52,6 +52,7 @@ const RegisterButton = styled(Link)`
     )};
   width: 100%;
   max-width: 600px;
+  margin: 0 auto;
 `;
 
 // ========================================================================================= //
@@ -61,14 +62,21 @@ const RegisterButton = styled(Link)`
 export const CTA = () => {
   return (
     <Container>
-      <Copy>
-        <CopyHeader>Interested?</CopyHeader>
-        <CopyBody>
-          Register with Kujira to keep track of your monthly purchases and gain
-          control of your financial health.
-        </CopyBody>
-      </Copy>
-      <RegisterButton href="/register">Register</RegisterButton>
+      <LazyLoad
+        threshold={0.8}
+        initial={Constants.initial}
+        animate={Constants.animate}
+        transition={Constants.transition}
+      >
+        <Copy>
+          <CopyHeader>Interested?</CopyHeader>
+          <CopyBody>
+            Register with Kujira to keep track of your monthly purchases and
+            gain control of your financial health.
+          </CopyBody>
+        </Copy>
+        <RegisterButton href="/register">Register</RegisterButton>
+      </LazyLoad>
     </Container>
   );
 };

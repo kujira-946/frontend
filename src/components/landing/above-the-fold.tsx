@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 import * as Styles from "@/utils/styles";
 import * as Sizes from "@/utils/sizes";
-import { ThemeProps } from "../layout";
+import { ThemeProps } from "@/components/layout";
 
 import { CardBack } from "./card-back";
 import { CardFront } from "./card-front";
