@@ -9,7 +9,7 @@ export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 // https://overreacted.io/making-setinterval-declarative-with-react-hooks/
-export const useInterval = (callback: Function, delay: number) => {
+export function useInterval(callback: Function, delay: number): void {
   const savedCallback = useRef<Function>();
   // Remember the latest callback.
   useEffect(() => {
@@ -24,4 +24,6 @@ export const useInterval = (callback: Function, delay: number) => {
       return () => clearInterval(id);
     }
   }, [delay]);
-};
+}
+
+

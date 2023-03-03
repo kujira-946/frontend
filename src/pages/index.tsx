@@ -1,7 +1,7 @@
 import Head from "next/head";
 import styled from "styled-components";
 
-import { IndexComponents as Components } from "@/components";
+import * as Components from "@/components/landing";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -24,7 +24,7 @@ export default function Home() {
         <title>Kujira</title>
         <meta name="description" content="Kujira app" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon-light.ico" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Main>

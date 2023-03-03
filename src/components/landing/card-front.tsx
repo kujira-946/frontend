@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
 
-import { ThemeProps } from "./layout";
+import { ThemeProps } from "../layout"; 
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //

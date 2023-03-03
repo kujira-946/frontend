@@ -2,7 +2,6 @@ import Link from "next/link";
 import styled from "styled-components";
 
 import * as Styles from "@/utils/styles";
-import * as Sizes from "@/utils/sizes";
 import { ThemeProps } from "../layout";
 
 // ========================================================================================= //

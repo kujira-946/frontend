@@ -1,10 +1,10 @@
-import { Navbar } from "./index/navbar";
-import { CardBack } from "./index/card-back";
-import { CardFront } from "./index/card-front";
-import { AboveTheFold } from "./index/above-the-fold";
-import { About } from "./index/about";
-import { CTA } from "./index/cta";
-import { Footer } from "./index/footer";
+import { Navbar } from "./landing/navbar";
+import { CardBack } from "./landing/card-back";
+import { CardFront } from "./landing/card-front";
+import { AboveTheFold } from "./landing/above-the-fold";
+import { About } from "./landing/about";
+import { CTA } from "./landing/cta";
+import { Footer } from "./landing/footer";
 
 export const IndexComponents = {
   Navbar,
