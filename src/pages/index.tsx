@@ -1,7 +1,7 @@
 import Head from "next/head";
 import styled from "styled-components";
 
-import * as Components from "@/components";
+import { IndexComponents as Components } from "@/components";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //

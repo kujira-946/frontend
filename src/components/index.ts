@@ -6,4 +6,12 @@ import { About } from "./index/about";
 import { CTA } from "./index/cta";
 import { Footer } from "./index/footer";
 
-export { Navbar, CardBack, CardFront, AboveTheFold, About, CTA, Footer };
+export const IndexComponents = {
+  Navbar,
+  CardBack,
+  CardFront,
+  AboveTheFold,
+  About,
+  CTA,
+  Footer,
+};
