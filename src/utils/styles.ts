@@ -37,8 +37,9 @@ export const basicButtonStyles = css`
   }
 `;
 
-type ButtonSize = "smaller" | "small" | "medium" | "large";
 type BorderRadius = keyof typeof Sizes.pxAsRem;
+
+type ButtonSize = "smaller" | "small" | "medium" | "large";
 export function setButton(
   buttonSize: ButtonSize,
   backgroundColor: string,
@@ -100,26 +101,22 @@ export function setButton(
   `;
 }
 
-export const inputStyles = css`
-  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
-  border: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
+export function inputStyles(borderRadius: BorderRadius = "six") {
+  return css`
+    color: ${(props: ThemeProps) => props.theme.text};
+    background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
+    border: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
+    border-radius: ${Sizes.pxAsRem[borderRadius]};
+    outline: none;
 
-  ::placeholder {
-    ${(props: ThemeProps) => props.theme.backgroundSeven};
-  }
+    ::placeholder {
+      ${(props: ThemeProps) => props.theme.backgroundSeven};
+    }
 
-  :hover {
-    background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
-    border: ${(props: ThemeProps) => props.theme.backgroundSix} solid 1px;
-  }
-`;
-
-export const cardStyles = css`
-  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
-  border: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
-
-  :hover {
-    background-color: ${(props: ThemeProps) => props.theme.backgroundThree};
-    border: ${(props: ThemeProps) => props.theme.backgroundSix} solid 1px;
-  }
-`;
+    :hover {
+      color: ${(props: ThemeProps) => props.theme.text};
+      background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
+      border: ${(props: ThemeProps) => props.theme.backgroundSix} solid 1px;
+    }
+  `;
+}
