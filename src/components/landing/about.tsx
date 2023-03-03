@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
-import * as Components from "@/components";
-import * as Styles from "@/utils/styles";
+import * as Overview from "@/components/overview";
 import * as Sizes from "@/utils/sizes";
 import * as Constants from "@/utils/constants.landing";
+import { LazyLoad } from "@/components";
 import { ThemeProps } from "@/components/layout";
 import { AboutCopy } from "./about-copy";
 
@@ -35,7 +35,7 @@ const CopyAndFigure = styled.article`
 export const About = () => {
   return (
     <Container id="landing-about">
-      <Components.LazyLoad
+      <LazyLoad
         threshold={Constants.threshold}
         initial={Constants.initial}
         animate={Constants.animate}
@@ -49,12 +49,12 @@ export const About = () => {
               monthly overview."
           />
           <div>
-            <Components.OverviewDropdownHeader cost={415.49} />
+            <Overview.DropdownHeader cost={415.49} />
           </div>
         </CopyAndFigure>
-      </Components.LazyLoad>
+      </LazyLoad>
 
-      <Components.LazyLoad
+      <LazyLoad
         threshold={Constants.threshold}
         initial={Constants.initial}
         animate={Constants.animate}
@@ -68,9 +68,9 @@ export const About = () => {
               information on your financial health."
           />
         </CopyAndFigure>
-      </Components.LazyLoad>
+      </LazyLoad>
 
-      <Components.LazyLoad
+      <LazyLoad
         threshold={Constants.threshold}
         initial={Constants.initial}
         animate={Constants.animate}
@@ -85,7 +85,7 @@ export const About = () => {
               control of your cash or if it’s in control of you."
           />
         </CopyAndFigure>
-      </Components.LazyLoad>
+      </LazyLoad>
     </Container>
   );
 };

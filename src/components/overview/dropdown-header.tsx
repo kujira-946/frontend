@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { useSignal } from "@preact/signals-react";
 
-import { ThemeProps } from "@/components/layout";
 import * as Styles from "@/utils/styles";
 import * as Sizes from "@/utils/sizes";
-import * as Types from "@/types/form";
+import * as Types from "@/types";
+import { ThemeProps } from "@/components/layout";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -39,16 +39,16 @@ type Props = {
   cost: number;
 };
 
-export const OverviewDropdownHeader = (props: Props) => {
+export const DropdownHeader = (props: Props) => {
   const name = useSignal("");
 
-  function handleNameChange(event: Types.Input) {
+  function setName(event: Types.Input) {
     name.value = event.currentTarget.value;
   }
 
   return (
     <Container>
-      <Name onChange={handleNameChange} value={name.value} />
+      <Name onChange={setName} value={name.value} />
       <Cost>${props.cost}</Cost>
     </Container>
   );

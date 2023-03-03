@@ -195,8 +195,8 @@ type ThemeContents = {
   secondaryMain: string;
   secondaryDark: string;
   need: string;
+  planned: string;
   impulse: string;
-  earned: string;
   shadowOne: string;
   shadowTwo: string;
   shadowThree: string;
@@ -232,8 +232,8 @@ const themes: Themes = {
     secondaryMain: Colors.secondary.light.main,
     secondaryDark: Colors.secondary.light.darker,
     need: Colors.need.light,
+    planned: Colors.planned.light,
     impulse: Colors.impulse.light,
-    earned: Colors.earned.light,
     shadowOne: Colors.shadow.light.one,
     shadowTwo: Colors.shadow.light.two,
     shadowThree: Colors.shadow.light.three,
@@ -262,8 +262,8 @@ const themes: Themes = {
     secondaryMain: Colors.secondary.dark.main,
     secondaryDark: Colors.secondary.dark.darker,
     need: Colors.need.dark,
+    planned: Colors.planned.dark,
     impulse: Colors.impulse.dark,
-    earned: Colors.earned.dark,
     shadowOne: Colors.shadow.dark.one,
     shadowTwo: Colors.shadow.dark.two,
     shadowThree: Colors.shadow.dark.three,

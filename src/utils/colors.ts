@@ -77,14 +77,14 @@ export const need = {
   dark: "#6CBC4F",
 };
 
+export const planned = {
+  light: "#9246CE",
+  dark: "#AD66E5",
+};
+
 export const impulse = {
   light: "#EE8320",
   dark: "#C8803E",
-};
-
-export const earned = {
-  light: "#9246CE",
-  dark: "#AD66E5",
 };
 
 export const shadow = {

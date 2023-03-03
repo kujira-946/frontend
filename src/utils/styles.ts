@@ -101,11 +101,25 @@ export function setButton(
   `;
 }
 
-export function inputStyles(borderRadius: BorderRadius = "six") {
+export const preventUserInput = css`
+  pointer-events: none;
+  user-select: none;
+`;
+
+export function inputStyles(
+  borderRadius: BorderRadius = "six",
+  hasValue: boolean = false
+) {
   return css`
     color: ${(props: ThemeProps) => props.theme.text};
-    background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
-    border: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
+    background-color: ${(props: ThemeProps) => {
+      return hasValue ? props.theme.backgroundTwo : props.theme.backgroundOne;
+    }};
+    border: ${(props: ThemeProps) => {
+      return hasValue
+        ? `${props.theme.backgroundTwo} solid 1px`
+        : `${props.theme.backgroundFour} solid 1px`;
+    }};
     border-radius: ${Sizes.pxAsRem[borderRadius]};
     outline: none;
 
