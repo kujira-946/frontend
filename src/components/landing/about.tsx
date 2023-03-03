@@ -3,6 +3,7 @@ import styled from "styled-components";
 import * as Styles from "@/utils/styles";
 import * as Sizes from "@/utils/sizes";
 import { ThemeProps } from "../layout";
+import { useDetectInView } from "@/utils/hooks";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -45,45 +46,77 @@ const CopyBody = styled.p`
 `;
 
 // ========================================================================================= //
+// [ HELPER COMPONENTS ] =================================================================== //
+// ========================================================================================= //
+
+const OverviewCopy = () => {
+  const { ref, inView } = useDetectInView(1, false);
+
+  console.log("overview:", inView);
+
+  return (
+    <CopyAndFigure ref={ref}>
+      <Copy>
+        <CopyHeader>Everything In One Place</CopyHeader>
+        <CopyBody>
+          Easily track important information, such as your income, savings,
+          recurring costs, and remaining cash, all within your personal monthly
+          overview.
+        </CopyBody>
+      </Copy>
+    </CopyAndFigure>
+  );
+};
+
+const LogbookCopy = () => {
+  const { ref, inView } = useDetectInView(1);
+
+  console.log("logbook:", inView);
+
+  return (
+    <CopyAndFigure ref={ref}>
+      <Copy>
+        <CopyHeader>Real-Time Tracking</CopyHeader>
+        <CopyBody>
+          Your personal monthly overview will update in real time as you log
+          your daily purchases, allowing you to have the most up-to-date
+          information on your financial health.
+        </CopyBody>
+      </Copy>
+    </CopyAndFigure>
+  );
+};
+
+const ReviewCopy = () => {
+  const { ref, inView } = useDetectInView(1);
+
+  console.log("review:", inView);
+
+  return (
+    <CopyAndFigure ref={ref}>
+      <Copy>
+        <CopyHeader>Be In Control</CopyHeader>
+        <CopyBody>
+          Learn and grow by reviewing your monthly purchases, organized by
+          category; reflect on your bad purchasing patterns; and be in better
+          control of your finances. Determine whether you’re in control of your
+          cash or if it’s in control of you.
+        </CopyBody>
+      </Copy>
+    </CopyAndFigure>
+  );
+};
+
+// ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
 export const About = () => {
   return (
     <Container>
-      <CopyAndFigure>
-        <Copy>
-          <CopyHeader>Everything In One Place</CopyHeader>
-          <CopyBody>
-            Easily track important information, such as your income, savings,
-            recurring costs, and remaining cash, all within your personal
-            monthly overview.
-          </CopyBody>
-        </Copy>
-      </CopyAndFigure>
-
-      <CopyAndFigure>
-        <Copy>
-          <CopyHeader>Real-Time Tracking</CopyHeader>
-          <CopyBody>
-            Your personal monthly overview will update in real time as you log
-            your daily purchases, allowing you to have the most up-to-date
-            information on your financial health.
-          </CopyBody>
-        </Copy>
-      </CopyAndFigure>
-
-      <CopyAndFigure>
-        <Copy>
-          <CopyHeader>Be In Control</CopyHeader>
-          <CopyBody>
-            Learn and grow by reviewing your monthly purchases, organized by
-            category; reflect on your bad purchasing patterns; and be in better
-            control of your finances. Determine whether you’re in control of
-            your cash or if it’s in control of you.
-          </CopyBody>
-        </Copy>
-      </CopyAndFigure>
+      <OverviewCopy />
+      <LogbookCopy />
+      <ReviewCopy />
     </Container>
   );
 };

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
+import { useSignal } from "@preact/signals-react";
 
 import { AppDispatch, RootState } from "@/store";
 
@@ -26,4 +27,33 @@ export function useInterval(callback: Function, delay: number): void {
   }, [delay]);
 }
 
+export function useDetectInView(
+  threshold: number = 0.1,
+  onlyOnce: boolean = true
+) {
+  const ref = useRef(null);
+  const inView = useSignal(false);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (onlyOnce) {
+          if (entry.isIntersecting) inView.value = true;
+        } else {
+          inView.value = entry.isIntersecting;
+        }
+      },
+      {
+        rootMargin: "0px",
+        threshold,
+      }
+    );
+    if (ref.current) observer.observe(ref.current);
+
+    return function cleanUp(): void {
+      if (ref.current) observer.unobserve(ref.current);
+    };
+  }, [threshold, inView]);
+
+  return { ref, inView: inView.value };
+}
