@@ -10,7 +10,7 @@ import * as Colors from "@/utils/colors";
 import * as Sizes from "@/utils/sizes";
 import { SignalsStoreContext } from "@/pages/_app";
 import { signalsHelpers } from "@/signals";
-import { ThemeProps } from "./layout";
+import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -64,7 +64,13 @@ const ThemeButton = styled.button`
 `;
 
 const LoginButton = styled(Link)`
-  ${Styles.setText("twelve", "medium")};
+  ${(props: ThemeProps) =>
+    Styles.setText(
+      "twelve",
+      "medium",
+      props.theme.backgroundEight,
+      props.theme.text
+    )};
 `;
 
 const RegisterButton = styled(Link)`

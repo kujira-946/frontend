@@ -45,15 +45,17 @@ const Copy = styled.article`
 `;
 
 const CopyHeader = styled.h1`
+  ${(props: ThemeProps) => {
+    return Styles.setText("thirtyTwo", "bold", props.theme.text);
+  }};
   margin: 0 0 ${Sizes.pxAsRem.twelve};
-  font-size: ${Sizes.pxAsRem.thirtyTwo};
-  font-weight: ${Sizes.fontWeights.bold};
 `;
 
 const CopyBody = styled.p`
+  ${(props: ThemeProps) => {
+    return Styles.setText("eighteen", "medium", props.theme.text);
+  }};
   margin: 0;
-  font-size: ${Sizes.pxAsRem.eighteen};
-  font-weight: ${Sizes.fontWeights.medium};
 `;
 
 const Buttons = styled.article`

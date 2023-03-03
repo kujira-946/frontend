@@ -32,6 +32,7 @@ export default function Home() {
         <Components.AboveTheFold />
         <Components.About />
         <Components.CTA />
+        <Components.Footer />
       </Main>
     </>
   );

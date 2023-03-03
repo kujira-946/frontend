@@ -12,7 +12,7 @@ import { ThemeProps } from "../layout";
 const Container = styled.section`
   display: flex;
   flex-direction: column;
-	align-items: center;
+  align-items: center;
   gap: 40px;
   padding: 80px 20px;
   background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
@@ -29,16 +29,18 @@ const Copy = styled.article`
 `;
 
 const CopyHeader = styled.h2`
+  ${(props: ThemeProps) => {
+    return Styles.setText("twentyFour", "bold", props.theme.text);
+  }};
   margin: 0 0;
-  font-size: ${Sizes.pxAsRem.twentyFour};
-  font-weight: ${Sizes.fontWeights.bold};
   text-align: center;
 `;
 
 const CopyBody = styled.h2`
+  ${(props: ThemeProps) => {
+    return Styles.setText("sixteen", "medium", props.theme.text);
+  }};
   margin: 0 0;
-  font-size: ${Sizes.pxAsRem.sixteen};
-  font-weight: ${Sizes.fontWeights.medium};
   text-align: center;
 `;
 

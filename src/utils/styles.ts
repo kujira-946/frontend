@@ -22,15 +22,20 @@ export function setMediaPaddings(verticalPadding?: number) {
 
 type Pixels = keyof typeof Sizes.pxAsRem;
 type Weights = keyof typeof Sizes.fontWeights;
-export function setText(fontSize: Pixels, fontWeight: Weights) {
+export function setText(
+  fontSize: Pixels,
+  fontWeight: Weights,
+  color: string,
+  hoverColor?: string
+) {
   return css`
-    color: ${(props: ThemeProps) => props.theme.backgroundEight};
+    color: ${color};
     font-size: ${Sizes.pxAsRem[fontSize]};
     font-weight: ${Sizes.fontWeights[fontWeight]};
 
     @media (hover: hover) {
       :hover {
-        color: ${(props: ThemeProps) => props.theme.text};
+        color: ${hoverColor || color};
         text-decoration: none;
       }
     }
