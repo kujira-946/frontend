@@ -1,7 +1,7 @@
 import Head from "next/head";
 import styled from "styled-components";
 
-import * as Components from "@/components/landing";
+import * as Landing from "@/components/landing";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -28,11 +28,11 @@ export default function Home() {
       </Head>
 
       <Main>
-        <Components.Navbar />
-        <Components.AboveTheFold />
-        <Components.About />
-        <Components.CTA />
-        <Components.Footer />
+        <Landing.Navbar />
+        <Landing.AboveTheFold />
+        <Landing.About />
+        <Landing.CTA />
+        <Landing.Footer />
       </Main>
     </>
   );

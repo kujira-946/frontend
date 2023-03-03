@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
+import { useContext } from "react";
 
 import * as Styles from "@/utils/styles";
 import * as Sizes from "@/utils/sizes";
-import { ThemeProps } from "../layout";
-import { useContext } from "react";
 import { SignalsStoreContext } from "@/pages/_app";
+import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
