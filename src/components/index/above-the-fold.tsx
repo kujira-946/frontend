@@ -16,7 +16,7 @@ import { CardFront } from "./card-front";
 const Container = styled.section`
   height: 100vh;
   background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
-  padding-top: 140px;
+  padding-top: 180px;
 
   ${Styles.setMediaPaddings(140)};
 `;

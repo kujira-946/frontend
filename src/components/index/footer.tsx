@@ -122,16 +122,22 @@ export const Footer = () => {
     <Container>
       <Content>
         <Body>
-          <Image
-            src={
-              ui.theme.value === "light"
-                ? "/logo-text-outlined-light.svg"
-                : "/logo-text-outlined-dark.svg"
-            }
-            alt="Logo Text"
-            width={100}
-            height={30.55}
-          />
+          {ui.theme.value === "light" ? (
+            <Image
+              src="/logo-text-outlined-light.svg"
+              alt="Logo Text"
+              width={100}
+              height={30.55}
+            />
+          ) : (
+            <Image
+              src="/logo-text-outlined-dark.svg"
+              alt="Logo Text"
+              width={100}
+              height={30.55}
+            />
+          )}
+
           <BodyLinks>
             <BodyLinkGroup>
               <BodyLinkHeader>Navigation</BodyLinkHeader>

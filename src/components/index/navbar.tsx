@@ -95,16 +95,22 @@ export const Navbar = () => {
   return (
     <Nav>
       <Main>
-        <Image
-          src={
-            theme === "light"
-              ? "/logo-full-horizontal-light.svg"
-              : "/logo-full-horizontal-dark.svg"
-          }
-          alt="Logo"
-          width={81.07}
-          height={20}
-        />
+        {theme === "light" ? (
+          <Image
+            src="/logo-full-horizontal-light.svg"
+            alt="Logo"
+            width={81.07}
+            height={20}
+          />
+        ) : (
+          <Image
+            src="/logo-full-horizontal-dark.svg"
+            alt="Logo"
+            width={81.07}
+            height={20}
+          />
+        )}
+
         <Links>
           <ThemeButton
             type="button"
