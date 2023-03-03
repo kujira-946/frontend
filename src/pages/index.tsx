@@ -31,6 +31,7 @@ export default function Home() {
         <Components.Navbar />
         <Components.AboveTheFold />
         <Components.About />
+        <Components.CTA />
       </Main>
     </>
   );
