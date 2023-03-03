@@ -21,7 +21,11 @@ export function setMediaPaddings(verticalPadding?: number) {
 }
 
 export const basicButtonStyles = css`
+  margin: 0;
+  padding: 0;
+  background: none;
   border: none;
+  border-radius: 0;
   outline: none;
   cursor: pointer;
 
@@ -34,12 +38,13 @@ export const basicButtonStyles = css`
 `;
 
 type ButtonSize = "smaller" | "small" | "medium" | "large";
+type BorderRadius = keyof typeof Sizes.pxAsRem;
 export function setButton(
   buttonSize: ButtonSize,
   backgroundColor: string,
   hoverBackgroundColor: string,
   outlined: boolean = false,
-  borderRadius: number = 6
+  borderRadius: BorderRadius = "six"
 ) {
   return css`
     ${basicButtonStyles};
@@ -69,7 +74,7 @@ export function setButton(
     border: ${outlined
       ? `${backgroundColor} solid 1px`
       : "transparent solid 1px"};
-    border-radius: ${borderRadius}px;
+    border-radius: ${Sizes.pxAsRem[borderRadius]};
     font-size: ${(props) => {
       if (buttonSize === "smaller") return Sizes.fontSizes.smallerButtonFont;
       else if (buttonSize === "small") return Sizes.fontSizes.smallButtonFont;

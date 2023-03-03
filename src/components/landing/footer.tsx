@@ -23,6 +23,7 @@ const Container = styled.footer`
 const Content = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 60px;
   width: 100%;
   max-width: ${Sizes.widths.content}px;
@@ -72,9 +73,30 @@ const BodyLink = styled(Link)`
   }
 `;
 
+const BackToTopButton = styled.button`
+  ${(props: ThemeProps) => {
+    return Styles.setButton(
+      "medium",
+      props.theme.backgroundOne,
+      props.theme.backgroundThree
+    );
+  }};
+  color: ${(props: ThemeProps) => props.theme.backgroundEight};
+  background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
+  border: ${(props: ThemeProps) => props.theme.backgroundThree} solid 1px;
+  font-size: ${Sizes.pxAsRem.twelve};
+  font-weight: ${Sizes.fontWeights.medium};
+
+  :hover {
+    background-color: ${(props: ThemeProps) => props.theme.backgroundThree};
+    border: ${(props: ThemeProps) => props.theme.backgroundThree} solid 1px;
+  }
+`;
+
 const CopyrightAndLegal = styled.section`
   display: flex;
   justify-content: space-between;
+  width: 100%;
   transition: 0.1s ease-in;
 `;
 
@@ -94,6 +116,10 @@ const LegalLink = styled(Link)`
   color: ${(props: ThemeProps) => props.theme.backgroundSeven};
   font-size: ${Sizes.pxAsRem.ten};
   font-weight: ${Sizes.fontWeights.medium};
+
+  :hover {
+    color: ${(props: ThemeProps) => props.theme.text};
+  }
 `;
 
 // ========================================================================================= //
@@ -105,6 +131,12 @@ const legalLinks = {
   terms: "Terms",
   refunds: "Refunds",
 };
+
+function scrollToTop(): void {
+  if (typeof window !== "undefined") {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
 
 export const Footer = () => {
   const { ui } = useContext(SignalsStoreContext);
@@ -137,6 +169,8 @@ export const Footer = () => {
             </BodyLinkGroup>
           </BodyLinks>
         </Body>
+
+        <BackToTopButton onClick={scrollToTop}>Back To Top</BackToTopButton>
 
         <CopyrightAndLegal>
           <Copyright>© 2023 Kujira. All rights reserved.</Copyright>
