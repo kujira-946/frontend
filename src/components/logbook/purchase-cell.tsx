@@ -89,7 +89,6 @@ type Props = {
   hideDrag: boolean;
   hideCategories: boolean;
   hideClose: boolean;
-
   descriptionFrozen: boolean;
   costFrozen: boolean;
 };
@@ -101,7 +100,8 @@ export const PurchaseCell = ({
   hideDrag = false,
   hideCategories = false,
   hideClose = false,
-  ...props
+  descriptionFrozen = false,
+  costFrozen = false,
 }: Props) => {
   const { ui } = useContext(SignalsStoreContext);
 
@@ -142,7 +142,7 @@ export const PurchaseCell = ({
         value={description.value}
         placeholder="Description"
         hasValue={description.value.length > 0}
-        frozen={props.descriptionFrozen}
+        frozen={descriptionFrozen}
       />
 
       <Input
@@ -151,7 +151,7 @@ export const PurchaseCell = ({
         value={cost.value}
         placeholder="Cost"
         hasValue={cost.value.length > 0}
-        frozen={props.costFrozen}
+        frozen={costFrozen}
       />
 
       {!hideClose && (

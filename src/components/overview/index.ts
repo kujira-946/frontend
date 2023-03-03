@@ -1,3 +1,3 @@
-import { DropdownHeader } from "./dropdown-header";
+import { Dropdown } from "./dropdown";
 
-export { DropdownHeader };
+export { Dropdown };
