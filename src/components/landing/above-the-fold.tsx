@@ -93,21 +93,10 @@ const Cards = styled.article`
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-function scrollDown(): void {
-  if (typeof window !== "undefined") {
-    // Each browser may handle how it determines the height of the window, such as
-    // taking scroll into consideration or not. Taking the max of various height
-    // properties allows us to reliably obtain the full document height.
-    let scrollHeight = Math.max(
-      document.body.scrollHeight,
-      document.documentElement.scrollHeight,
-      document.body.offsetHeight,
-      document.documentElement.offsetHeight,
-      document.body.clientHeight,
-      document.documentElement.clientHeight
-    );
-    window.scrollTo({ top: scrollHeight, behavior: "smooth" });
-  }
+function scrollToAbout(): void {
+  document
+    .getElementById("landing-about")
+    ?.scrollIntoView({ behavior: "smooth" });
 }
 
 export const AboveTheFold = () => {
@@ -129,7 +118,9 @@ export const AboveTheFold = () => {
           </Copy>
           <Buttons>
             <RegisterButton href="/register">Register</RegisterButton>
-            <LearnMoreButton onClick={scrollDown}>Learn More</LearnMoreButton>
+            <LearnMoreButton onClick={scrollToAbout}>
+              Learn More
+            </LearnMoreButton>
           </Buttons>
         </CopyAndButtons>
 

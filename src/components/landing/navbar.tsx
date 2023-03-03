@@ -17,11 +17,6 @@ import { ThemeProps } from "../layout";
 // ========================================================================================= //
 
 const Nav = styled.nav`
-  position: fixed;
-  top: 0px;
-  right: 0px;
-  left: 0px;
-  z-index: ${Sizes.zIndexes.navbar};
   display: flex;
   justify-content: center;
   align-items: center;

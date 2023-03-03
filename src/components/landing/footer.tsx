@@ -88,6 +88,7 @@ const BackToTopButton = styled.button`
   font-weight: ${Sizes.fontWeights.medium};
 
   :hover {
+    color: ${(props: ThemeProps) => props.theme.text};
     background-color: ${(props: ThemeProps) => props.theme.backgroundThree};
     border: ${(props: ThemeProps) => props.theme.backgroundThree} solid 1px;
   }

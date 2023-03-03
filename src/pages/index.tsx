@@ -9,7 +9,6 @@ import { useEffect } from "react";
 // ========================================================================================= //
 
 const Main = styled.main`
-  position: relative;
   display: flex;
   flex-direction: column;
 `;

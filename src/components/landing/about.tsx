@@ -49,7 +49,7 @@ const CopyBody = styled.p`
 
 export const About = () => {
   return (
-    <Container>
+    <Container id="landing-about">
       <LazyLoad
         threshold={Constants.threshold}
         initial={Constants.initial}

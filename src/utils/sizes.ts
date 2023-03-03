@@ -59,6 +59,4 @@ export const fontWeights = {
   black: 900,
 };
 
-export const zIndexes = {
-  navbar: 10,
-};
+export const zIndexes = {};
