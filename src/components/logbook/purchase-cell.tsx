@@ -20,6 +20,7 @@ const Container = styled.article`
   gap: ${Sizes.pxAsRem.eight};
   padding: ${Sizes.pxAsRem.six} ${Sizes.pxAsRem.eight};
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
+  border: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
 `;
 
 const CategoryButtons = styled.div`
@@ -33,19 +34,30 @@ const CategoryButton = styled.button<CategoryButtonProps & ThemeProps>`
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 3.25rem;
   padding: ${Sizes.pxAsRem.two} ${Sizes.pxAsRem.four};
   color: ${(props: CategoryButtonProps & ThemeProps) => {
-    if (props.category === "need") return props.theme.need;
-    else if (props.category === "planned") return props.theme.planned;
+    if (props.category === "Need") return props.theme.need;
+    else if (props.category === "Planned") return props.theme.planned;
     else return props.theme.impulse;
   }};
+  background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
+  border: ${(props: ThemeProps) => props.theme.backgroundThree} solid 1px;
   border-radius: ${Sizes.pxAsRem.four};
   font-size: ${Sizes.pxAsRem.ten};
   font-weight: ${Sizes.fontWeights.semiBold};
+
+  :hover {
+    background-color: ${(props: ThemeProps) => props.theme.backgroundThree};
+    border: ${(props: ThemeProps) => props.theme.backgroundSix} solid 1px;
+  }
 `;
 
 type InputProps = { hasValue: boolean; frozen: boolean };
 const Input = styled.input<InputProps>`
+  flex: 1;
+  padding: ${Sizes.pxAsRem.four} ${Sizes.pxAsRem.six};
+  color: ${(props: ThemeProps) => props.theme.text};
   background-color: ${(props: InputProps & ThemeProps) => {
     return props.hasValue
       ? props.theme.backgroundTwo
@@ -59,6 +71,7 @@ const Input = styled.input<InputProps>`
       : `${props.theme.backgroundFour} solid 1px`;
   }};
   border-radius: ${Sizes.pxAsRem.four};
+  outline: none;
 
   ::placeholder {
     ${(props: ThemeProps) => props.theme.backgroundSeven};
@@ -77,7 +90,7 @@ const Input = styled.input<InputProps>`
     border: ${(props: ThemeProps) => props.theme.backgroundSix} solid 1px;
   }
 
-  ${(props) => props.frozen && Styles.preventUserInput};
+  ${(props) => props.frozen && Styles.preventUserInteraction};
 `;
 
 // ========================================================================================= //
@@ -85,25 +98,23 @@ const Input = styled.input<InputProps>`
 // ========================================================================================= //
 
 type Props = {
-  borderRadius: keyof typeof Sizes.pxAsRem;
-  hideDrag: boolean;
-  hideCategories: boolean;
-  hideClose: boolean;
-  descriptionFrozen: boolean;
-  costFrozen: boolean;
+  borderRadius?: keyof typeof Sizes.pxAsRem;
+  hideDrag?: true;
+  hideCategories?: true;
+  hideClose?: true;
+  descriptionFrozen?: true;
+  costFrozen?: true;
 };
 
-const categories: Types.Category[] = ["need", "planned", "impulse"];
+const categories: Types.Category[] = ["Need", "Planned", "Impulse"];
 
-export const PurchaseCell = ({
-  borderRadius = "six",
-  hideDrag = false,
-  hideCategories = false,
-  hideClose = false,
-  descriptionFrozen = false,
-  costFrozen = false,
-}: Props) => {
+export const PurchaseCell = (props: Props) => {
   const { ui } = useContext(SignalsStoreContext);
+
+  const dragHovered = useSignal(false);
+  function setDragHovered(hover: boolean): void {
+    dragHovered.value = hover;
+  }
 
   const description = useSignal("");
   function setDescription(event: Types.Input) {
@@ -115,13 +126,35 @@ export const PurchaseCell = ({
     cost.value = event.currentTarget.value;
   }
 
+  const closeHovered = useSignal(false);
+  function setCloseHovered(hover: boolean): void {
+    closeHovered.value = hover;
+  }
+
   return (
-    <Container style={{ borderRadius: Sizes.pxAsRem[borderRadius] }}>
-      {!hideDrag && (
-        <Icons.Drag height={10} fill={Colors.background[ui.theme.value].six} />
+    <Container
+      style={{
+        borderRadius: props.borderRadius
+          ? Sizes.pxAsRem[props.borderRadius]
+          : Sizes.pxAsRem.six,
+      }}
+    >
+      {!props.hideDrag && (
+        <div
+          onMouseEnter={() => setDragHovered(true)}
+          onMouseLeave={() => setDragHovered(false)}
+          style={{ cursor: "grab" }}
+        >
+          <Icons.Drag
+            height={12}
+            fill={Colors.background[ui.theme.value].six}
+            hovered={dragHovered.value}
+            hoveredFill={Colors.background[ui.theme.value].eight}
+          />
+        </div>
       )}
 
-      {!hideCategories && (
+      {!props.hideCategories && (
         <CategoryButtons>
           {categories.map((category: Types.Category) => {
             return (
@@ -129,7 +162,7 @@ export const PurchaseCell = ({
                 key={`purchase-cell-${category}`}
                 category={category}
               >
-                {category.toUpperCase()}
+                {category}
               </CategoryButton>
             );
           })}
@@ -142,7 +175,7 @@ export const PurchaseCell = ({
         value={description.value}
         placeholder="Description"
         hasValue={description.value.length > 0}
-        frozen={descriptionFrozen}
+        frozen={!!props.descriptionFrozen}
       />
 
       <Input
@@ -151,11 +184,22 @@ export const PurchaseCell = ({
         value={cost.value}
         placeholder="Cost"
         hasValue={cost.value.length > 0}
-        frozen={costFrozen}
+        frozen={!!props.costFrozen}
       />
 
-      {!hideClose && (
-        <Icons.Close height={10} fill={Colors.background[ui.theme.value].six} />
+      {!props.hideClose && (
+        <div
+          onMouseEnter={() => setCloseHovered(true)}
+          onMouseLeave={() => setCloseHovered(false)}
+          style={{ cursor: "pointer" }}
+        >
+          <Icons.Close
+            height={12}
+            fill={Colors.background[ui.theme.value].six}
+            hovered={closeHovered.value}
+            hoveredFill={Colors.background[ui.theme.value].eight}
+          />
+        </div>
       )}
     </Container>
   );

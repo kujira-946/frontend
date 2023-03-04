@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 import * as Overview from "@/components/overview";
+import * as Logbook from "@/components/logbook";
 import * as Sizes from "@/utils/sizes";
 import * as Constants from "@/utils/constants.landing";
 import { LazyLoad, NoInteraction } from "@/components";
@@ -48,9 +49,14 @@ export const About = () => {
               recurring costs, and remaining cash, all within your personal
               monthly overview."
           />
-          <NoInteraction>
-            <Overview.Dropdown name="Recurring Costs (2)" cost={415.19} />
-          </NoInteraction>
+          {/* <NoInteraction> */}
+            <Overview.Dropdown
+              headerTitle="Recurring Costs (2)"
+              headerCost={415.19}
+            >
+              <Logbook.PurchaseCell />
+            </Overview.Dropdown>
+          {/* </NoInteraction> */}
         </CopyAndFigure>
       </LazyLoad>
 

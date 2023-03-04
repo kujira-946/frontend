@@ -7,4 +7,4 @@ export type Submit = React.FormEvent<HTMLFormElement>;
 
 // ↓↓↓ Logbook ↓↓↓ //
 
-export type Category = "need" | "planned" | "impulse";
+export type Category = "Need" | "Planned" | "Impulse";

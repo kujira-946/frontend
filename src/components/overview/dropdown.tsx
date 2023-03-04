@@ -15,15 +15,25 @@ import { ThemeProps } from "@/components/layout";
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
-const Container = styled.article`
+type ContainerProps = { open: boolean };
+const Container = styled.article<ContainerProps>`
+  background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
+  border: ${(props: ContainerProps & ThemeProps) => {
+    return props.open
+      ? `${props.theme.backgroundSix} solid 1px`
+      : `${props.theme.backgroundFour} solid 1px`;
+  }};
   border-radius: ${Sizes.pxAsRem.six};
+  /* overflow: hidden; */
 `;
 
 const Header = styled.header`
   display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: ${Sizes.pxAsRem.twelve};
   padding: ${Sizes.pxAsRem.ten} ${Sizes.pxAsRem.twelve};
+  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
   color: ${(props: ThemeProps) => props.theme.text};
   border-bottom: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
 `;
@@ -74,8 +84,9 @@ const AddButton = styled.button`
 // TODO : After adding in the above feature, remove the `name` prop.
 
 type Props = {
-  name: string;
-  cost: number;
+  headerTitle: string;
+  headerCost: number;
+  children?: React.ReactNode;
 };
 
 export const Dropdown = (props: Props) => {
@@ -87,28 +98,26 @@ export const Dropdown = (props: Props) => {
   }
 
   // TODO : Uncomment these when dropdown name edit feature is added to the backend.
-  // const name = useSignal("");
+  // const headerTitle = useSignal("");
   // function setName(event: Types.Input) {
-  //   name.value = event.currentTarget.value;
+  //   headerTitle.value = event.currentTarget.value;
   // }
 
   return (
-    <Container>
+    <Container open={open.value}>
       <Header>
-        <HeaderName readOnly={true} value={props.name} />
-        <HeaderCost>${props.cost}</HeaderCost>
+        <HeaderName readOnly={true} value={props.headerTitle} />
+        <HeaderCost>${props.headerCost}</HeaderCost>
       </Header>
 
       <Body>
-        {/* <PurchaseCells>{fjiojewia.map((foo: bar) => {
-					return <Logbook.PurchaseCell />
-				})}</PurchaseCells> */}
+        <PurchaseCells>{props.children}</PurchaseCells>
         <AddButton>
           <Icons.Add
             height={12}
             fill={Colors.background[ui.theme.value].eight}
           />
-          <div>Add</div>
+          Add
         </AddButton>
       </Body>
     </Container>
