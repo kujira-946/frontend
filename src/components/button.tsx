@@ -11,14 +11,15 @@ import { ThemeProps } from "./layout";
 
 type Size = "smaller" | "small" | "medium" | "large";
 
-type ContainerProps = {
+type Props = {
   size: Size;
+  borderRadius?: Types.PxAsRem;
   color: string;
   hoverColor?: string;
   outlined?: true;
 };
 
-const Container = styled.button<ContainerProps>`
+export const Button = styled.button<Props>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -41,13 +42,18 @@ const Container = styled.button<ContainerProps>`
     else if (props.size === "medium") return Sizes.pxAsRem.thirtyTwo;
     else return Sizes.pxAsRem.twentySix;
   }};
-  color: ${(props: ContainerProps & ThemeProps) => {
+  color: ${(props: Props & ThemeProps) => {
     return props.outlined ? props.color : props.theme.text;
   }};
   background-color: ${(props) => {
     return props.outlined ? "transparent" : props.color;
   }};
   border: ${(props) => `${props.color} solid 1px`};
+  border-radius: ${(props) => {
+    return props.borderRadius
+      ? Sizes.pxAsRem[props.borderRadius]
+      : Sizes.pxAsRem.six;
+  }};
   font-size: ${(props) => {
     if (props.size === "smaller") return Sizes.pxAsRem.ten;
     else if (props.size === "small") return Sizes.pxAsRem.twelve;
@@ -60,7 +66,7 @@ const Container = styled.button<ContainerProps>`
 
   @media (hover: hover) {
     :hover {
-      color: ${(props: ContainerProps & ThemeProps) => {
+      color: ${(props: Props & ThemeProps) => {
         return props.outlined
           ? props.hoverColor || props.color
           : props.theme.text;
@@ -72,36 +78,3 @@ const Container = styled.button<ContainerProps>`
     }
   }
 `;
-
-// ========================================================================================= //
-// [ EXPORTED COMPONENT ] ================================================================== //
-// ========================================================================================= //
-
-type Props = {
-  onClick?: VoidFunction;
-  size: Size;
-  borderRadius?: Types.PxAsRem;
-  color: string;
-  hoverColor?: string;
-  outlined?: true;
-  children: React.ReactNode;
-};
-
-export const Button = (props: Props) => {
-  return (
-    <Container
-      onClick={props.onClick}
-      style={{
-        borderRadius: props.borderRadius
-          ? Sizes.pxAsRem[props.borderRadius]
-          : Sizes.pxAsRem.six,
-      }}
-      size={props.size}
-      color={props.color}
-      hoverColor={props.hoverColor}
-      outlined={props.outlined}
-    >
-      {props.children}
-    </Container>
-  );
-};
