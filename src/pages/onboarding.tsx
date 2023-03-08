@@ -1,7 +1,9 @@
-import { ConfirmationModal } from "@/components";
-import { useSignal } from "@preact/signals-react";
 import Head from "next/head";
 import styled from "styled-components";
+import { effect, useSignal } from "@preact/signals-react";
+
+import * as Types from "@/utils/types";
+import { ConfirmationModal, Input } from "@/components";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -68,8 +70,6 @@ const pages: Page[] = [
   },
 ];
 
-const maxPage = pages.length;
-
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
@@ -83,11 +83,25 @@ const Onboarding = () => {
   }
 
   function toNextPage(): void {
-    if (currentPage.value + 1 <= maxPage) currentPage.value += 1;
-    else currentPage.value = maxPage;
+    if (currentPage.value + 1 <= pages.length) currentPage.value += 1;
+    else currentPage.value = pages.length;
   }
 
-  console.log("currentPage:", currentPage.value);
+  const income = useSignal("");
+  const savings = useSignal("");
+  const errorMessage = useSignal("");
+
+  effect(() => {
+    if (
+      currentPage.value === 1 &&
+      income.value.length > 0 &&
+      !Number(income.value)
+    ) {
+      errorMessage.value = "You must enter a number.";
+    } else {
+      errorMessage.value = "";
+    }
+  });
 
   return (
     <>
@@ -101,14 +115,24 @@ const Onboarding = () => {
       <Main>
         <ConfirmationModal
           backButtonAction={toPreviousPage}
+          supportingText="$3,584.51 remaining"
           title={pages[currentPage.value - 1].title}
           currentPage={currentPage.value}
-          maxPage={maxPage}
+          maxPage={pages.length}
           bodyTexts={pages[currentPage.value - 1].bodyTexts}
           submitButtonAction={toNextPage}
           submitButtonText={pages[currentPage.value - 1].submitButtonText}
           showArrow
-        />
+        >
+          <Input
+            title="Income ($)"
+            userInput={income.value}
+            setUserInput={(event: Types.Input) =>
+              (income.value = event.currentTarget.value)
+            }
+            errorMessage={errorMessage.value}
+          />
+        </ConfirmationModal>
       </Main>
     </>
   );

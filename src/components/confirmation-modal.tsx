@@ -14,9 +14,9 @@ import { ThemeProps } from "./layout";
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
-type Overlay = { overlay?: true };
+type SharedProps = { overlay?: true };
 
-const Parent = styled.div<Overlay>`
+const Parent = styled.div<SharedProps>`
   position: fixed;
   top: 0;
   right: 0;
@@ -32,7 +32,7 @@ const Parent = styled.div<Overlay>`
   }};
 `;
 
-const Child = styled(motion.main)<Overlay>`
+const Child = styled(motion.main)<SharedProps>`
   display: flex;
   flex-direction: column;
   gap: ${Sizes.pxAsRem.twelve};
@@ -41,7 +41,7 @@ const Child = styled(motion.main)<Overlay>`
   max-width: 600px;
   border-radius: ${Sizes.pxAsRem.six};
 
-  ${(props: Overlay & ThemeProps) => {
+  ${(props: SharedProps & ThemeProps) => {
     return props.overlay ? props.theme.shadowOverlay : props.theme.shadowOne;
   }};
 `;
@@ -83,6 +83,12 @@ const Page = styled.span`
   font-weight: ${Sizes.fontWeights.bold};
 `;
 
+const SupportingText = styled.p`
+  color: ${(props: ThemeProps) => props.theme.secondaryMain};
+  font-size: ${Sizes.pxAsRem.twelve};
+  font-weight: ${Sizes.fontWeights.bold};
+`;
+
 const BodyText = styled.p`
   color: ${(props: ThemeProps) => props.theme.text};
   font-size: ${Sizes.pxAsRem.fourteen};
@@ -108,6 +114,7 @@ const SubmitButton = styled.button`
 
 type Props = {
   backButtonAction: () => void;
+  supportingText?: string;
   title: string;
   currentPage: number;
   maxPage: number;
@@ -142,6 +149,10 @@ export const ConfirmationModal = (props: Props) => {
             {props.currentPage}/{props.maxPage}
           </Page>
         </Header>
+
+        {props.supportingText && (
+          <SupportingText>{props.supportingText}</SupportingText>
+        )}
 
         {props.bodyTexts &&
           props.bodyTexts.map((text: string, index: number) => {
