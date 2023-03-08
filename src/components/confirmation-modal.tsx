@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import { useContext } from "react";
+import { motion } from "framer-motion";
 
 import * as Icons from "@/components/icons";
 import * as Colors from "@/utils/colors";
 import * as Styles from "@/utils/styles";
 import * as Sizes from "@/utils/sizes";
+import * as Constants from "@/utils/constants.landing";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "./layout";
 
@@ -12,11 +14,20 @@ import { ThemeProps } from "./layout";
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
-const Container = styled.main`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
+type Overlay = { overlay?: true };
+
+const Parent = styled.div<Overlay>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: ${(props) => {
+    return props.overlay ? Colors.overlay : "transparent";
+  }};
+`;
+
+const Child = styled(motion.main)<Overlay>`
   display: flex;
   flex-direction: column;
   gap: ${Sizes.pxAsRem.twelve};
@@ -25,7 +36,9 @@ const Container = styled.main`
   max-width: 600px;
   border-radius: ${Sizes.pxAsRem.six};
 
-  ${(props: ThemeProps) => props.theme.shadowOne};
+  ${(props: Overlay & ThemeProps) => {
+    return props.overlay ? props.theme.shadowOverlay : props.theme.shadowOne;
+  }};
 `;
 
 const Header = styled.header`
@@ -81,6 +94,7 @@ const SubmitButton = styled.button`
       "four"
     );
   }};
+  margin-top: ${Sizes.pxAsRem.four};
 `;
 
 // ========================================================================================= //
@@ -96,6 +110,7 @@ type Props = {
   submitButtonAction: () => void;
   submitButtonText: string;
   showArrow?: true;
+  overlay?: true;
   children?: React.ReactNode;
 };
 
@@ -103,37 +118,44 @@ export const ConfirmationModal = (props: Props) => {
   const { ui } = useContext(SignalsStoreContext);
 
   return (
-    <Container>
-      <Header>
-        <BackButton onClick={props.backButtonAction}>
-          <Icons.ChevronLeft
-            height={14}
-            fill={Colors.background[ui.theme.value].eight}
-          />
-        </BackButton>
-        <Title>{props.title}</Title>
-        <Page>
-          {props.currentPage}/{props.maxPage}
-        </Page>
-      </Header>
+    <Parent overlay={props.overlay}>
+      <Child
+        initial={Constants.initial}
+        animate={Constants.animate}
+        transition={Constants.transition}
+        overlay={props.overlay}
+      >
+        <Header>
+          <BackButton onClick={props.backButtonAction}>
+            <Icons.ChevronLeft
+              height={14}
+              fill={Colors.background[ui.theme.value].eight}
+            />
+          </BackButton>
+          <Title>{props.title}</Title>
+          <Page>
+            {props.currentPage}/{props.maxPage}
+          </Page>
+        </Header>
 
-      {props.bodyTexts &&
-        props.bodyTexts.map((text: string, index: number) => {
-          return (
-            <BodyText key={`confirmation-modal-${text}-${index}`}>
-              {text}
-            </BodyText>
-          );
-        })}
+        {props.bodyTexts &&
+          props.bodyTexts.map((text: string, index: number) => {
+            return (
+              <BodyText key={`confirmation-modal-${text}-${index}`}>
+                {text}
+              </BodyText>
+            );
+          })}
 
-      {props.children}
+        {props.children}
 
-      <SubmitButton onClick={props.submitButtonAction}>
-        {props.submitButtonText}
-        {props.showArrow && (
-          <Icons.ArrowRight height={12} fill={Colors.text.button} />
-        )}
-      </SubmitButton>
-    </Container>
+        <SubmitButton onClick={props.submitButtonAction}>
+          {props.submitButtonText}
+          {props.showArrow && (
+            <Icons.ArrowRight height={12} fill={Colors.text.button} />
+          )}
+        </SubmitButton>
+      </Child>
+    </Parent>
   );
 };
