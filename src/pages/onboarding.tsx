@@ -1,7 +1,9 @@
 import Head from "next/head";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 import { effect, useSignal } from "@preact/signals-react";
 
+import * as Components from "@/components/onboarding";
 import * as Types from "@/utils/types";
 import { ConfirmationModal, Input } from "@/components";
 
@@ -56,7 +58,7 @@ const pages: Page[] = [
     title: "Your Savings",
     bodyTexts: [
       "You never know when you’re going to have a rainy period in your life, so it’s important to set aside a part of your cash into your savings so that you can rely on it when that time comes.",
-      "Enter the portion of your take-home income you’d like to save every month, either as a percentage (e.g. 20%) or in strict dollars (e.g. 100).",
+      "Enter the percentage portion of your take-home income you’d like to save every month.",
       "If you’re not sure how much you want to save, a common percentage-based budget is the 50/30/20 rule, where 50% of your income goes to your needs, 30% goes to your wants, and 20% goes into your savings. If you want to start with that, enter either “20%” or “800” below and proceed to the next step.",
     ],
     submitButtonText: "Final Step",
@@ -75,6 +77,8 @@ const pages: Page[] = [
 // ========================================================================================= //
 
 const Onboarding = () => {
+  const router = useRouter();
+
   const currentPage = useSignal(1);
 
   function toPreviousPage(): void {
@@ -83,22 +87,61 @@ const Onboarding = () => {
   }
 
   function toNextPage(): void {
-    if (currentPage.value + 1 <= pages.length) currentPage.value += 1;
+    if (currentPage.value === 6) router.push("/dashboard/logbook");
+    else if (currentPage.value + 1 <= pages.length) currentPage.value += 1;
     else currentPage.value = pages.length;
   }
 
+  const supportingText = useSignal("");
+
   const income = useSignal("");
   const savings = useSignal("");
+  const recurringExpenses = useSignal<Types.Purchase[]>([]);
+
+  function addRecurringExpense(): void {
+    recurringExpenses.value = [
+      ...recurringExpenses.value,
+      { description: "", cost: "" },
+    ];
+  }
+
   const errorMessage = useSignal("");
   const disableSubmit = useSignal(false);
 
+  // ↓↓↓ Error Handling ↓↓↓ //
+
   effect(() => {
     // Income Page
-    if (currentPage.value === 2 && !Number(income.value)) {
-      if (income.value.length === 0) disableSubmit.value = true;
-      else errorMessage.value = "You must enter a number.";
+    if (currentPage.value === 2) {
+      if (income.value.length === 0) {
+        disableSubmit.value = true;
+      } else if (!Number(income.value) || Number(income.value) < 0) {
+        errorMessage.value = "You must enter a number greater than 0.";
+        disableSubmit.value = true;
+      } else {
+        errorMessage.value = "";
+        disableSubmit.value = false;
+      }
     }
-    // Reset
+    // Savings Page
+    else if (currentPage.value === 5) {
+      if (savings.value.length === 0) {
+        disableSubmit.value = true;
+      } else if (!Number(savings.value) && savings.value !== "0") {
+        errorMessage.value = "You must enter a number.";
+        disableSubmit.value = true;
+      } else if (Number(savings.value) < 0) {
+        errorMessage.value = "Minimum 0%";
+        disableSubmit.value = true;
+      } else if (Number(savings.value) > 100) {
+        errorMessage.value = "Maximum 100%";
+        disableSubmit.value = true;
+      } else {
+        errorMessage.value = "";
+        disableSubmit.value = false;
+      }
+    }
+    // Reset when no errors
     else {
       errorMessage.value = "";
       disableSubmit.value = false;
@@ -117,7 +160,7 @@ const Onboarding = () => {
       <Main>
         <ConfirmationModal
           backButtonAction={toPreviousPage}
-          supportingText="$3,584.51 remaining"
+          supportingText={`$3,584.51 remaining`}
           title={pages[currentPage.value - 1].title}
           currentPage={currentPage.value}
           maxPage={pages.length}
@@ -125,15 +168,23 @@ const Onboarding = () => {
           submitButtonAction={toNextPage}
           submitButtonText={pages[currentPage.value - 1].submitButtonText}
           disableSubmit={disableSubmit.value}
+          showBackButton={currentPage.value === 1 ? false : true}
           showArrow
         >
           {currentPage.value === 2 ? (
-            <Input
-              title="Income ($)"
-              userInput={income.value}
-              setUserInput={(event: Types.Input) =>
-                (income.value = event.currentTarget.value)
-              }
+            <Components.Income
+              income={income}
+              errorMessage={errorMessage.value}
+            />
+          ) : currentPage.value === 3 ? (
+            <Components.RecurringExpenses
+              recurringExpenses={recurringExpenses.value}
+              addRecurringExpense={addRecurringExpense}
+            />
+          ) : currentPage.value === 5 ? (
+            <Components.Savings
+              income={Number(income.value)}
+              savings={savings}
               errorMessage={errorMessage.value}
             />
           ) : null}

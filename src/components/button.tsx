@@ -25,6 +25,7 @@ export const Button = styled.button<Props>`
   justify-content: center;
   align-items: center;
   gap: ${Sizes.pxAsRem.eight};
+  width: 100%;
   margin: 0;
   padding: ${(props) => {
     if (props.size === "smaller") {

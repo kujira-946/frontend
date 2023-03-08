@@ -199,6 +199,7 @@ type ThemeContents = {
   need: string;
   planned: string;
   impulse: string;
+  regret: string;
   shadowOne: string;
   shadowTwo: string;
   shadowThree: string;
@@ -236,6 +237,7 @@ const themes: Themes = {
     need: Colors.need.light,
     planned: Colors.planned.light,
     impulse: Colors.impulse.light,
+    regret: Colors.regret.light,
     shadowOne: Colors.shadow.light.one,
     shadowTwo: Colors.shadow.light.two,
     shadowThree: Colors.shadow.light.three,
@@ -266,6 +268,7 @@ const themes: Themes = {
     need: Colors.need.dark,
     planned: Colors.planned.dark,
     impulse: Colors.impulse.dark,
+    regret: Colors.regret.dark,
     shadowOne: Colors.shadow.dark.one,
     shadowTwo: Colors.shadow.dark.two,
     shadowThree: Colors.shadow.dark.three,

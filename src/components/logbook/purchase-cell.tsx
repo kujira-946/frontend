@@ -23,6 +23,13 @@ const Container = styled.article`
   border: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
 `;
 
+const DragButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+`;
+
 const CategoryButtons = styled.div`
   display: flex;
   gap: ${Sizes.pxAsRem.four};
@@ -39,7 +46,8 @@ const CategoryButton = styled.button<CategoryButtonProps & ThemeProps>`
   color: ${(props: CategoryButtonProps & ThemeProps) => {
     if (props.category === "Need") return props.theme.need;
     else if (props.category === "Planned") return props.theme.planned;
-    else return props.theme.impulse;
+    else if (props.category === "Impulse") return props.theme.impulse;
+    else return props.theme.regret;
   }};
   background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
   border: ${(props: ThemeProps) => props.theme.backgroundThree} solid 1px;
@@ -97,6 +105,13 @@ const Input = styled.input<InputProps>`
   ${(props) => props.frozen && Styles.preventUserInteraction};
 `;
 
+const CloseButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`;
+
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
@@ -110,7 +125,7 @@ type Props = {
   costFrozen?: true;
 };
 
-const categories: Types.Category[] = ["Need", "Planned", "Impulse"];
+const categories: Types.Category[] = ["Need", "Planned", "Impulse", "Regret"];
 
 export const PurchaseCell = (props: Props) => {
   const { ui } = useContext(SignalsStoreContext);
@@ -144,10 +159,9 @@ export const PurchaseCell = (props: Props) => {
       }}
     >
       {!props.hideDrag && (
-        <div
+        <DragButton
           onMouseEnter={() => setDragHovered(true)}
           onMouseLeave={() => setDragHovered(false)}
-          style={{ cursor: "grab" }}
         >
           <Icons.Drag
             height={12}
@@ -155,7 +169,7 @@ export const PurchaseCell = (props: Props) => {
             hovered={dragHovered.value}
             hoveredFill={Colors.background[ui.theme.value].eight}
           />
-        </div>
+        </DragButton>
       )}
 
       {!props.hideCategories && (
@@ -192,10 +206,9 @@ export const PurchaseCell = (props: Props) => {
       />
 
       {!props.hideClose && (
-        <div
+        <CloseButton
           onMouseEnter={() => setCloseHovered(true)}
           onMouseLeave={() => setCloseHovered(false)}
-          style={{ cursor: "pointer" }}
         >
           <Icons.Close
             height={12}
@@ -203,7 +216,7 @@ export const PurchaseCell = (props: Props) => {
             hovered={closeHovered.value}
             hoveredFill={Colors.background[ui.theme.value].eight}
           />
-        </div>
+        </CloseButton>
       )}
     </Container>
   );

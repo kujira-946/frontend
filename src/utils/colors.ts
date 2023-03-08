@@ -88,6 +88,11 @@ export const impulse = {
   dark: "#C8803E",
 };
 
+export const regret = {
+  light: "#E254A9",
+  dark: "#C469A0",
+};
+
 export const shadow = {
   light: {
     one: "box-shadow: 0px 8px 16px #F5F5F5",

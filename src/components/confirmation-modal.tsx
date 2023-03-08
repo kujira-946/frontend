@@ -107,7 +107,7 @@ const ArrowIconContainer = styled.div`
 // ========================================================================================= //
 
 type Props = {
-  backButtonAction: () => void;
+  backButtonAction?: () => void;
   supportingText?: string;
   title: string;
   currentPage: number;
@@ -115,9 +115,10 @@ type Props = {
   bodyTexts?: string[];
   submitButtonAction: () => void;
   submitButtonText: string;
+  disableSubmit?: boolean;
+  showBackButton?: boolean;
   showArrow?: true;
   overlay?: true;
-  disableSubmit?: boolean;
   children?: React.ReactNode;
 };
 
@@ -134,12 +135,14 @@ export const ConfirmationModal = (props: Props) => {
         overlay={props.overlay}
       >
         <Header>
-          <BackButton onClick={props.backButtonAction}>
-            <Icons.ChevronLeft
-              height={14}
-              fill={Colors.background[theme].eight}
-            />
-          </BackButton>
+          {props.showBackButton && props.backButtonAction && (
+            <BackButton onClick={props.backButtonAction}>
+              <Icons.ChevronLeft
+                height={14}
+                fill={Colors.background[theme].eight}
+              />
+            </BackButton>
+          )}
           <Title>{props.title}</Title>
           <Page>
             {props.currentPage}/{props.maxPage}
