@@ -6,7 +6,7 @@ import * as Icons from "@/components/icons";
 import * as Styles from "@/utils/styles";
 import * as Colors from "@/utils/colors";
 import * as Sizes from "@/utils/sizes";
-import * as Types from "@/types";
+import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
 
