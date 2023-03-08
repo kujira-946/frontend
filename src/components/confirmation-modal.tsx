@@ -117,6 +117,7 @@ type Props = {
   submitButtonText: string;
   showArrow?: true;
   overlay?: true;
+  disableSubmit?: boolean;
   children?: React.ReactNode;
 };
 
@@ -161,12 +162,16 @@ export const ConfirmationModal = (props: Props) => {
         {props.children}
 
         <Button
+          disabled={props.disableSubmit}
           onClick={props.submitButtonAction}
           size="medium"
           borderRadius="four"
           color={Colors.primary[theme].main}
           hoverColor={Colors.primary[theme].darker}
-          style={{ marginTop: Sizes.pxAsRem.four }}
+          style={{
+            marginTop: Sizes.pxAsRem.four,
+            opacity: props.disableSubmit ? 0.5 : 1,
+          }}
         >
           {props.submitButtonText}
           {props.showArrow && (

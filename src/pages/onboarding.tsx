@@ -90,16 +90,18 @@ const Onboarding = () => {
   const income = useSignal("");
   const savings = useSignal("");
   const errorMessage = useSignal("");
+  const disableSubmit = useSignal(false);
 
   effect(() => {
-    if (
-      currentPage.value === 1 &&
-      income.value.length > 0 &&
-      !Number(income.value)
-    ) {
-      errorMessage.value = "You must enter a number.";
-    } else {
+    // Income Page
+    if (currentPage.value === 2 && !Number(income.value)) {
+      if (income.value.length === 0) disableSubmit.value = true;
+      else errorMessage.value = "You must enter a number.";
+    }
+    // Reset
+    else {
       errorMessage.value = "";
+      disableSubmit.value = false;
     }
   });
 
@@ -122,6 +124,7 @@ const Onboarding = () => {
           bodyTexts={pages[currentPage.value - 1].bodyTexts}
           submitButtonAction={toNextPage}
           submitButtonText={pages[currentPage.value - 1].submitButtonText}
+          disableSubmit={disableSubmit.value}
           showArrow
         >
           {currentPage.value === 2 ? (

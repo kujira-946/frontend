@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import * as Colors from "@/utils/colors";
+import * as Styles from "@/utils/styles";
 import * as Sizes from "@/utils/sizes";
 import * as Types from "@/utils/types";
 import { ThemeProps } from "./layout";
@@ -17,6 +17,7 @@ type Props = {
   color: string;
   hoverColor?: string;
   outlined?: true;
+  disabled?: boolean;
 };
 
 export const Button = styled.button<Props>`
@@ -61,8 +62,11 @@ export const Button = styled.button<Props>`
     else return Sizes.pxAsRem.eighteen;
   }};
   font-weight: ${Sizes.fontWeights.semiBold};
+  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
   outline: none;
   cursor: pointer;
+
+  ${(props) => props.disabled && Styles.preventUserInteraction};
 
   @media (hover: hover) {
     :hover {
