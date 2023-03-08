@@ -124,14 +124,16 @@ const Onboarding = () => {
           submitButtonText={pages[currentPage.value - 1].submitButtonText}
           showArrow
         >
-          <Input
-            title="Income ($)"
-            userInput={income.value}
-            setUserInput={(event: Types.Input) =>
-              (income.value = event.currentTarget.value)
-            }
-            errorMessage={errorMessage.value}
-          />
+          {currentPage.value === 2 ? (
+            <Input
+              title="Income ($)"
+              userInput={income.value}
+              setUserInput={(event: Types.Input) =>
+                (income.value = event.currentTarget.value)
+              }
+              errorMessage={errorMessage.value}
+            />
+          ) : null}
         </ConfirmationModal>
       </Main>
     </>

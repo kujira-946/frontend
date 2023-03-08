@@ -43,7 +43,7 @@ const Child = styled(motion.main)<SharedProps>`
   border-radius: ${Sizes.pxAsRem.six};
 
   ${(props: SharedProps & ThemeProps) => {
-    return props.overlay ? props.theme.shadowOverlay : props.theme.shadowOne;
+    return props.overlay ? props.theme.shadowOverlay : props.theme.shadowTwo;
   }};
 `;
 
@@ -93,21 +93,14 @@ const SupportingText = styled.p`
 const BodyText = styled.p`
   color: ${(props: ThemeProps) => props.theme.text};
   font-size: ${Sizes.pxAsRem.fourteen};
-  font-weight: ${Sizes.fontWeights.medium};
+  font-weight: ${Sizes.fontWeights.regular};
 `;
 
-// const SubmitButton = styled.button`
-//   ${(props: ThemeProps) => {
-//     return Styles.setButton(
-//       "medium",
-//       props.theme.primaryMain,
-//       props.theme.primaryDark,
-//       false,
-//       "four"
-//     );
-//   }};
-//   margin-top: ${Sizes.pxAsRem.four};
-// `;
+const ArrowIconContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
@@ -173,10 +166,13 @@ export const ConfirmationModal = (props: Props) => {
           borderRadius="four"
           color={Colors.primary[theme].main}
           hoverColor={Colors.primary[theme].darker}
+          style={{ marginTop: Sizes.pxAsRem.four }}
         >
           {props.submitButtonText}
           {props.showArrow && (
-            <Icons.ArrowRight height={12} fill={Colors.text.button} />
+            <ArrowIconContainer>
+              <Icons.ArrowRight height={12} fill={Colors.text.button} />
+            </ArrowIconContainer>
           )}
         </Button>
       </Child>

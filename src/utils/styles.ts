@@ -1,8 +1,6 @@
 import { css } from "styled-components";
 
-import * as Colors from "./colors";
 import * as Sizes from "./sizes";
-import { ThemeProps } from "@/components/layout";
 
 export function setMediaPaddings(verticalPadding?: number) {
   return css`
