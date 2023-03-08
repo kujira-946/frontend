@@ -58,8 +58,10 @@ const BodyLinkRegister = styled(Link)`
   font-size: ${Sizes.pxAsRem.twelve};
   font-weight: ${Sizes.fontWeights.medium};
 
-  :hover {
-    color: ${(props: ThemeProps) => props.theme.primaryDark};
+  @media (hover: hover) {
+    :hover {
+      color: ${(props: ThemeProps) => props.theme.primaryDark};
+    }
   }
 `;
 
@@ -68,8 +70,10 @@ const BodyLink = styled(Link)`
   font-size: ${Sizes.pxAsRem.twelve};
   font-weight: ${Sizes.fontWeights.medium};
 
-  :hover {
-    color: ${(props: ThemeProps) => props.theme.text};
+  @media (hover: hover) {
+    :hover {
+      color: ${(props: ThemeProps) => props.theme.text};
+    }
   }
 `;
 
@@ -87,10 +91,12 @@ const BackToTopButton = styled.button`
   font-size: ${Sizes.pxAsRem.twelve};
   font-weight: ${Sizes.fontWeights.medium};
 
-  :hover {
-    color: ${(props: ThemeProps) => props.theme.text};
-    background-color: ${(props: ThemeProps) => props.theme.backgroundThree};
-    border: ${(props: ThemeProps) => props.theme.backgroundThree} solid 1px;
+  @media (hover: hover) {
+    :hover {
+      color: ${(props: ThemeProps) => props.theme.text};
+      background-color: ${(props: ThemeProps) => props.theme.backgroundThree};
+      border: ${(props: ThemeProps) => props.theme.backgroundThree} solid 1px;
+    }
   }
 `;
 
@@ -118,8 +124,10 @@ const LegalLink = styled(Link)`
   font-size: ${Sizes.pxAsRem.ten};
   font-weight: ${Sizes.fontWeights.medium};
 
-  :hover {
-    color: ${(props: ThemeProps) => props.theme.text};
+  @media (hover: hover) {
+    :hover {
+      color: ${(props: ThemeProps) => props.theme.text};
+    }
   }
 `;
 

@@ -127,6 +127,7 @@ const GlobalStyles = createGlobalStyle`
   body {
     max-width: 100vw;
     color: ${(props: ThemeProps) => props.theme.text};
+    background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
     font-family: ${poppins.style.fontFamily};
     overflow-x: hidden;
   }

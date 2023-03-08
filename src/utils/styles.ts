@@ -70,7 +70,7 @@ export function setButton(
         return `${Sizes.pxAsRem.ten} ${Sizes.pxAsRem.eighteen}`;
       }
     }};
-    color: ${outlined ? backgroundColor : Colors.background.light.one};
+    color: ${outlined ? backgroundColor : Colors.text.button};
     background-color: ${outlined ? "transparent" : backgroundColor};
     border: ${outlined
       ? `${backgroundColor} solid 1px`
@@ -88,7 +88,7 @@ export function setButton(
     @media (hover: hover) {
       :hover {
         color: ${(props: ThemeProps) => {
-          return outlined ? props.theme.text : Colors.background.light.one;
+          return outlined ? props.theme.text : Colors.text.button;
         }};
         background-color: ${outlined ? "transparent" : hoverBackgroundColor};
         border: ${(props: ThemeProps) => {
@@ -127,10 +127,12 @@ export function inputStyles(
       ${(props: ThemeProps) => props.theme.backgroundSeven};
     }
 
-    :hover {
-      color: ${(props: ThemeProps) => props.theme.text};
-      background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
-      border: ${(props: ThemeProps) => props.theme.backgroundSix} solid 1px;
+    @media (hover: hover) {
+      :hover {
+        color: ${(props: ThemeProps) => props.theme.text};
+        background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
+        border: ${(props: ThemeProps) => props.theme.backgroundSix} solid 1px;
+      }
     }
   `;
 }

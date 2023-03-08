@@ -1,6 +1,7 @@
 export const text = {
   light: "#262626",
   dark: "#CECECE",
+  button: "#FFFFFF",
 };
 
 export const background = {

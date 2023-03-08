@@ -1,8 +1,8 @@
 import Head from "next/head";
 import styled from "styled-components";
+import { useEffect } from "react";
 
 import * as Landing from "@/components/landing";
-import { useEffect } from "react";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -17,7 +17,7 @@ const Main = styled.main`
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-export default function Home() {
+const Home = () => {
   // ↓↓↓ Starts the page back at the top when refreshing. ↓↓↓ //
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -43,4 +43,6 @@ export default function Home() {
       </Main>
     </>
   );
-}
+};
+
+export default Home;

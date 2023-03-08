@@ -47,9 +47,11 @@ const CategoryButton = styled.button<CategoryButtonProps & ThemeProps>`
   font-size: ${Sizes.pxAsRem.ten};
   font-weight: ${Sizes.fontWeights.semiBold};
 
-  :hover {
-    background-color: ${(props: ThemeProps) => props.theme.backgroundThree};
-    border: ${(props: ThemeProps) => props.theme.backgroundSix} solid 1px;
+  @media (hover: hover) {
+    :hover {
+      background-color: ${(props: ThemeProps) => props.theme.backgroundThree};
+      border: ${(props: ThemeProps) => props.theme.backgroundSix} solid 1px;
+    }
   }
 `;
 
@@ -77,13 +79,15 @@ const Input = styled.input<InputProps>`
     ${(props: ThemeProps) => props.theme.backgroundSeven};
   }
 
-  :hover {
-    background-color: ${(props: InputProps & ThemeProps) => {
-      return !props.frozen && props.theme.backgroundThree;
-    }};
-    border: ${(props: InputProps & ThemeProps) => {
-      return !props.frozen && `${props.theme.backgroundSix} solid 1px`;
-    }};
+  @media (hover: hover) {
+    :hover {
+      background-color: ${(props: InputProps & ThemeProps) => {
+        return !props.frozen && props.theme.backgroundThree;
+      }};
+      border: ${(props: InputProps & ThemeProps) => {
+        return !props.frozen && `${props.theme.backgroundSix} solid 1px`;
+      }};
+    }
   }
 
   :active {

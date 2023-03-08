@@ -63,8 +63,10 @@ const LoginButton = styled(Link)`
   font-size: ${Sizes.pxAsRem.twelve};
   font-weight: ${Sizes.fontWeights.medium};
 
-  :hover {
-    color: ${(props: ThemeProps) => props.theme.text};
+  @media (hover: hover) {
+    :hover {
+      color: ${(props: ThemeProps) => props.theme.text};
+    }
   }
 `;
 
