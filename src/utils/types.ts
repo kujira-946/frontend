@@ -1,10 +1,10 @@
-import * as React from "react";
+import { ChangeEvent, FormEvent } from "react";
 import { pxAsRem } from "./sizes";
 
 // ↓↓↓ Form ↓↓↓ //
 
-export type Input = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
-export type Submit = React.FormEvent<HTMLFormElement>;
+export type Input = ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
+export type Submit = FormEvent<HTMLFormElement>;
 
 // ↓↓↓ Logbook ↓↓↓ //
 

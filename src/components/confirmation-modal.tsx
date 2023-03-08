@@ -9,6 +9,7 @@ import * as Sizes from "@/utils/sizes";
 import * as Constants from "@/utils/constants.landing";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "./layout";
+import { Button } from "./button";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -95,18 +96,18 @@ const BodyText = styled.p`
   font-weight: ${Sizes.fontWeights.medium};
 `;
 
-const SubmitButton = styled.button`
-  ${(props: ThemeProps) => {
-    return Styles.setButton(
-      "medium",
-      props.theme.primaryMain,
-      props.theme.primaryDark,
-      false,
-      "four"
-    );
-  }};
-  margin-top: ${Sizes.pxAsRem.four};
-`;
+// const SubmitButton = styled.button`
+//   ${(props: ThemeProps) => {
+//     return Styles.setButton(
+//       "medium",
+//       props.theme.primaryMain,
+//       props.theme.primaryDark,
+//       false,
+//       "four"
+//     );
+//   }};
+//   margin-top: ${Sizes.pxAsRem.four};
+// `;
 
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
@@ -128,6 +129,7 @@ type Props = {
 
 export const ConfirmationModal = (props: Props) => {
   const { ui } = useContext(SignalsStoreContext);
+  const theme = ui.theme.value;
 
   return (
     <Parent overlay={props.overlay}>
@@ -141,7 +143,7 @@ export const ConfirmationModal = (props: Props) => {
           <BackButton onClick={props.backButtonAction}>
             <Icons.ChevronLeft
               height={14}
-              fill={Colors.background[ui.theme.value].eight}
+              fill={Colors.background[theme].eight}
             />
           </BackButton>
           <Title>{props.title}</Title>
@@ -165,12 +167,18 @@ export const ConfirmationModal = (props: Props) => {
 
         {props.children}
 
-        <SubmitButton onClick={props.submitButtonAction}>
+        <Button
+          onClick={props.submitButtonAction}
+          size="medium"
+          borderRadius="four"
+          color={Colors.primary[theme].main}
+          hoverColor={Colors.primary[theme].darker}
+        >
           {props.submitButtonText}
           {props.showArrow && (
             <Icons.ArrowRight height={12} fill={Colors.text.button} />
           )}
-        </SubmitButton>
+        </Button>
       </Child>
     </Parent>
   );
