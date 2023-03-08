@@ -23,6 +23,7 @@ const Container = styled.button<ContainerProps>`
   justify-content: center;
   align-items: center;
   gap: ${Sizes.pxAsRem.eight};
+  margin: 0;
   padding: ${(props) => {
     if (props.size === "smaller") {
       return `${Sizes.pxAsRem.six} ${Sizes.pxAsRem.ten}`;
@@ -54,6 +55,7 @@ const Container = styled.button<ContainerProps>`
     else return Sizes.pxAsRem.eighteen;
   }};
   font-weight: ${Sizes.fontWeights.semiBold};
+  outline: none;
   cursor: pointer;
 
   @media (hover: hover) {
@@ -90,7 +92,9 @@ export const Button = (props: Props) => {
     <Container
       onClick={props.onClick}
       style={{
-        borderRadius: Sizes.pxAsRem[props.borderRadius] || Sizes.pxAsRem.six,
+        borderRadius: props.borderRadius
+          ? Sizes.pxAsRem[props.borderRadius]
+          : Sizes.pxAsRem.six,
       }}
       size={props.size}
       color={props.color}
