@@ -54,7 +54,7 @@ const Header = styled.header`
   width: 100%;
 `;
 
-const BackButton = styled.button`
+const HeaderButton = styled.button`
   ${Styles.basicButtonStyles};
   display: flex;
   justify-content: center;
@@ -78,7 +78,7 @@ const Title = styled.h1`
   font-weight: ${Sizes.fontWeights.bold};
 `;
 
-const Page = styled.span`
+const CornerText = styled.span`
   color: ${(props: ThemeProps) => props.theme.backgroundSeven};
   font-size: ${Sizes.pxAsRem.twelve};
   font-weight: ${Sizes.fontWeights.bold};
@@ -107,19 +107,23 @@ const ArrowIconContainer = styled.div`
 // ========================================================================================= //
 
 type Props = {
+  children?: React.ReactNode;
+  overlay?: true;
+
+  showBackButton?: boolean;
   backButtonAction?: () => void;
-  supportingText?: string;
   title: string;
-  currentPage: number;
-  maxPage: number;
+  cornerText: string;
+  closeButtonAction?: () => void;
+
+  supportingText?: string;
+
   bodyTexts?: string[];
+
   submitButtonAction: () => void;
   submitButtonText: string;
   disableSubmit?: boolean;
-  showBackButton?: boolean;
-  showArrow?: true;
-  overlay?: true;
-  children?: React.ReactNode;
+  showSubmitArrow?: true;
 };
 
 export const ConfirmationModal = (props: Props) => {
@@ -136,17 +140,23 @@ export const ConfirmationModal = (props: Props) => {
       >
         <Header>
           {props.showBackButton && props.backButtonAction && (
-            <BackButton onClick={props.backButtonAction}>
+            <HeaderButton onClick={props.backButtonAction}>
               <Icons.ChevronLeft
                 height={14}
                 fill={Colors.background[theme].eight}
               />
-            </BackButton>
+            </HeaderButton>
           )}
           <Title>{props.title}</Title>
-          <Page>
-            {props.currentPage}/{props.maxPage}
-          </Page>
+          <CornerText>{props.cornerText}</CornerText>
+          {props.closeButtonAction && (
+            <HeaderButton onClick={props.closeButtonAction}>
+              <Icons.Close
+                height={14}
+                fill={Colors.background[theme].eight}
+              />
+            </HeaderButton>
+          )}
         </Header>
 
         {props.supportingText && (
@@ -177,7 +187,7 @@ export const ConfirmationModal = (props: Props) => {
           }}
         >
           {props.submitButtonText}
-          {props.showArrow && (
+          {props.showSubmitArrow && (
             <ArrowIconContainer>
               <Icons.ArrowRight height={12} fill={Colors.text.button} />
             </ArrowIconContainer>
