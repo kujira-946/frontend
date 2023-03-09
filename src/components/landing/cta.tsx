@@ -41,12 +41,6 @@ const CopyBody = styled.h2`
 `;
 
 const RegisterButton = styled(Link)`
-  ${(props: ThemeProps) =>
-    Styles.setButton(
-      "medium",
-      props.theme.primaryMain,
-      props.theme.primaryDark
-    )};
   width: 100%;
   max-width: 600px;
   margin: 0 auto;

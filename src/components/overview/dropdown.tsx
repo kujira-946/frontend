@@ -24,7 +24,6 @@ const Container = styled.article<ContainerProps>`
       : `${props.theme.backgroundFour} solid 1px`;
   }};
   border-radius: ${Sizes.pxAsRem.six};
-  /* overflow: hidden; */
 `;
 
 const Header = styled.header`
@@ -39,7 +38,6 @@ const Header = styled.header`
 `;
 
 const HeaderName = styled.input`
-  ${Styles.inputStyles("three")};
   padding: ${Sizes.pxAsRem.four} ${Sizes.pxAsRem.six};
   font-size: ${Sizes.pxAsRem.twelve};
   font-weight: ${Sizes.fontWeights.semiBold};
@@ -64,15 +62,6 @@ const PurchaseCells = styled.div`
 `;
 
 const AddButton = styled.button`
-  ${(props: ThemeProps) => {
-    return Styles.setButton(
-      "small",
-      props.theme.backgroundFour,
-      props.theme.backgroundFive,
-      false,
-      "four"
-    );
-  }};
   color: ${(props: ThemeProps) => props.theme.backgroundEight};
 `;
 

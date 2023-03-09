@@ -2,7 +2,7 @@ import Head from "next/head";
 import styled from "styled-components";
 import { useEffect } from "react";
 
-import * as Landing from "@/components/landing";
+import * as Components from "@/components/landing";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -35,11 +35,11 @@ const Home = () => {
       </Head>
 
       <Main>
-        <Landing.Navbar />
-        <Landing.AboveTheFold />
-        <Landing.About />
-        <Landing.CTA />
-        <Landing.Footer />
+        <Components.Navbar />
+        <Components.AboveTheFold />
+        <Components.About />
+        <Components.CTA />
+        <Components.Footer />
       </Main>
     </>
   );

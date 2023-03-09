@@ -70,14 +70,7 @@ const LoginButton = styled(Link)`
   }
 `;
 
-const RegisterButton = styled(Link)`
-  ${(props: ThemeProps) =>
-    Styles.setButton(
-      "small",
-      props.theme.primaryMain,
-      props.theme.primaryDark
-    )};
-`;
+const RegisterButton = styled(Link)``;
 
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //

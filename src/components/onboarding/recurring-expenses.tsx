@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useContext } from "react";
 
-import * as Components from "@/components";
+import * as Global from "@/components";
 import * as Logbook from "@/components/logbook";
 import * as Colors from "@/utils/colors";
 import * as Sizes from "@/utils/sizes";
@@ -47,7 +47,7 @@ export const RecurringExpenses = (props: Props) => {
         )}
       </PurchaseCells>
 
-      <Components.Button
+      <Global.Button
         onClick={props.addRecurringExpense}
         size="medium"
         borderRadius="four"
@@ -58,7 +58,7 @@ export const RecurringExpenses = (props: Props) => {
         }}
       >
         Add Purchase
-      </Components.Button>
+      </Global.Button>
     </Container>
   );
 };

@@ -62,25 +62,10 @@ const Buttons = styled.article`
 `;
 
 const RegisterButton = styled(Link)`
-  ${(props: ThemeProps) => {
-    return Styles.setButton(
-      "large",
-      props.theme.primaryMain,
-      props.theme.primaryDark
-    );
-  }};
   flex: 1;
 `;
 
 const LearnMoreButton = styled.button`
-  ${(props: ThemeProps) => {
-    return Styles.setButton(
-      "large",
-      props.theme.primaryMain,
-      props.theme.primaryDark,
-      true
-    );
-  }};
   flex: 1;
 `;
 

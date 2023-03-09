@@ -78,13 +78,6 @@ const BodyLink = styled(Link)`
 `;
 
 const BackToTopButton = styled.button`
-  ${(props: ThemeProps) => {
-    return Styles.setButton(
-      "medium",
-      props.theme.backgroundOne,
-      props.theme.backgroundThree
-    );
-  }};
   color: ${(props: ThemeProps) => props.theme.backgroundEight};
   background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
   border: ${(props: ThemeProps) => props.theme.backgroundThree} solid 1px;
