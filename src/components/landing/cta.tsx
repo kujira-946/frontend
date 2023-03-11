@@ -71,9 +71,9 @@ export const CTA = () => {
         <Link href="/register">
           <Globals.Button
             size="large"
-            maxWidth={600}
-            color={Colors.primary[ui.theme.value].main}
-            hoverColor={Colors.primary[ui.theme.value].darker}
+            maxWidth="600px"
+            background={Colors.primary[ui.theme.value].main}
+            hoverBackground={Colors.primary[ui.theme.value].darker}
           >
             Register
           </Globals.Button>

@@ -3,6 +3,8 @@ import Link from "next/link";
 import styled from "styled-components";
 import { useContext } from "react";
 
+import * as Globals from "@/components";
+import * as Colors from "@/utils/colors";
 import * as Sizes from "@/utils/sizes";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
@@ -76,7 +78,7 @@ const BodyLink = styled(Link)`
   }
 `;
 
-const BackToTopButton = styled.button`
+const BackToTopButton = styled(Globals.Button)`
   color: ${(props: ThemeProps) => props.theme.backgroundEight};
   background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
   border: ${(props: ThemeProps) => props.theme.backgroundThree} solid 1px;
@@ -171,7 +173,24 @@ export const Footer = () => {
           </BodyLinks>
         </Body>
 
-        <BackToTopButton onClick={scrollToTop}>Back To Top</BackToTopButton>
+        {/* <BackToTopButton onClick={scrollToTop} size="small">
+          Back To Top
+        </BackToTopButton> */}
+
+        <Globals.Button
+          onClick={scrollToTop}
+          size="small"
+          fontWeight="medium"
+          color={Colors.background[ui.theme.value].seven}
+          hoverColor={Colors.background[ui.theme.value].eight}
+          background={Colors.background[ui.theme.value].two}
+          hoverBackground={Colors.background[ui.theme.value].three}
+          border={Colors.background[ui.theme.value].four}
+          hoverBorder={Colors.background[ui.theme.value].six}
+          compact
+        >
+          Back To Top
+        </Globals.Button>
 
         <CopyrightAndLegal>
           <Copyright>© 2023 Kujira. All rights reserved.</Copyright>

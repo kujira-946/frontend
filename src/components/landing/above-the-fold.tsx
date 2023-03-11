@@ -104,8 +104,8 @@ export const AboveTheFold = () => {
             <Link href="/register" style={{ width: "100%" }}>
               <Globals.Button
                 size="large"
-                color={Colors.primary[ui.theme.value].main}
-                hoverColor={Colors.primary[ui.theme.value].darker}
+                background={Colors.primary[ui.theme.value].main}
+                hoverBackground={Colors.primary[ui.theme.value].darker}
               >
                 Register
               </Globals.Button>
@@ -114,9 +114,11 @@ export const AboveTheFold = () => {
             <Globals.Button
               onClick={scrollToAbout}
               size="large"
+              borderThickness={2}
               color={Colors.primary[ui.theme.value].main}
               hoverColor={Colors.primary[ui.theme.value].darker}
-              outlined
+              border={Colors.primary[ui.theme.value].main}
+              hoverBorder={Colors.primary[ui.theme.value].darker}
             >
               Learn More
             </Globals.Button>

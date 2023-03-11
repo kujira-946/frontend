@@ -127,8 +127,8 @@ export const Navbar = () => {
           <Link href="/register">
             <Globals.Button
               size="small"
-              color={Colors.primary[ui.theme.value].main}
-              hoverColor={Colors.primary[ui.theme.value].darker}
+              background={Colors.primary[ui.theme.value].main}
+              hoverBackground={Colors.primary[ui.theme.value].darker}
             >
               Register
             </Globals.Button>
