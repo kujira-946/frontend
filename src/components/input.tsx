@@ -1,11 +1,14 @@
 import styled from "styled-components";
-import { useRef } from "react";
+import { useContext, useRef } from "react";
 import { useSignal } from "@preact/signals-react";
 import { motion } from "framer-motion";
 
+import * as Icons from "@/components/icons";
+import * as Colors from "@/utils/colors";
 import * as Styles from "@/utils/styles";
 import * as Sizes from "@/utils/sizes";
 import * as Types from "@/utils/types";
+import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "./layout";
 
 // ========================================================================================= //
@@ -51,7 +54,14 @@ const ErrorMessage = styled(motion.span)`
   font-weight: ${Sizes.fontWeights.semiBold};
 `;
 
+const InputFieldAndIcon = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${Sizes.pxAsRem.twelve};
+`;
+
 const InputField = styled.input<SharedProps>`
+  flex: 1;
   width: 100%;
   color: ${(props: ThemeProps) => props.theme.text};
   background-color: transparent;
@@ -61,11 +71,19 @@ const InputField = styled.input<SharedProps>`
   outline: none;
   cursor: text;
 
+  border: red solid 1px;
+
   ${(props) => !props.focused && Styles.preventUserInteraction};
 
   ::placeholder {
     color: ${(props: ThemeProps) => props.theme.backgroundSeven};
   }
+`;
+
+const IconContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 // ========================================================================================= //
@@ -78,20 +96,33 @@ type Props = {
   userInput: string;
   setUserInput: (event: Types.Input) => void;
   errorMessage?: string;
+  password?: true;
 };
 
 export const Input = (props: Props) => {
+  const { ui } = useContext(SignalsStoreContext);
+
   const inputFieldRef = useRef<any>(null);
   const focused = useSignal(false);
+  const hidden = useSignal(true);
+  const hiddenHovered = useSignal(false);
 
   function focusInputField(): void {
     inputFieldRef.current && inputFieldRef.current.focus();
     focused.value = true;
   }
 
+  function toggleHidden(): void {
+    hidden.value = !hidden.value;
+  }
+
   return (
     <Container
-      style={{ borderRadius: props.borderRadius || Sizes.pxAsRem.six }}
+      style={{
+        borderRadius: props.borderRadius
+          ? Sizes.pxAsRem[props.borderRadius]
+          : Sizes.pxAsRem.six,
+      }}
       onClick={focusInputField}
       focused={focused.value}
     >
@@ -103,14 +134,45 @@ export const Input = (props: Props) => {
 
       {props.errorMessage && <ErrorMessage>{props.errorMessage}</ErrorMessage>}
 
-      <InputField
-        value={props.userInput}
-        placeholder={props.title}
-        ref={inputFieldRef}
-        onChange={props.setUserInput}
-        onBlur={() => (focused.value = false)}
-        focused={focused.value}
-      />
+      <InputFieldAndIcon>
+        <InputField
+          type={props.password ? "password" : "text"}
+          value={props.userInput}
+          placeholder={props.title}
+          ref={inputFieldRef}
+          onChange={props.setUserInput}
+          onBlur={() => (focused.value = false)}
+          focused={focused.value}
+        />
+        {props.password &&
+          (hidden.value ? (
+            <IconContainer
+              onClick={toggleHidden}
+              onMouseEnter={() => (hiddenHovered.value = true)}
+              onMouseLeave={() => (hiddenHovered.value = false)}
+            >
+              <Icons.Hidden
+                height={16}
+                fill={Colors.background[ui.theme.value].eight}
+                hovered={hiddenHovered.value}
+                hoveredFill={Colors.text[ui.theme.value]}
+              />
+            </IconContainer>
+          ) : (
+            <IconContainer
+              onClick={toggleHidden}
+              onMouseEnter={() => (hiddenHovered.value = true)}
+              onMouseLeave={() => (hiddenHovered.value = false)}
+            >
+              <Icons.Revealed
+                height={16}
+                fill={Colors.background[ui.theme.value].eight}
+                hovered={hiddenHovered.value}
+                hoveredFill={Colors.text[ui.theme.value]}
+              />
+            </IconContainer>
+          ))}
+      </InputFieldAndIcon>
     </Container>
   );
 };
