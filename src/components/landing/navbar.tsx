@@ -1,16 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
-import { useSignal } from "@preact/signals-react";
 import { useContext } from "react";
+import { useSignal } from "@preact/signals-react";
 
+import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
-import * as Styles from "@/utils/styles";
 import * as Colors from "@/utils/colors";
+import * as Styles from "@/utils/styles";
 import * as Sizes from "@/utils/sizes";
 import { SignalsStoreContext } from "@/pages/_app";
+import { ThemeProps } from "@/components/layout";
 import { signalsHelpers } from "@/signals";
-import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -42,7 +43,7 @@ const Links = styled.section`
 `;
 
 const ThemeButton = styled.button`
-  ${Styles.basicButtonStyles};
+  ${Styles.clearButton};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -70,8 +71,6 @@ const LoginButton = styled(Link)`
   }
 `;
 
-const RegisterButton = styled(Link)``;
-
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
@@ -80,12 +79,10 @@ export const Navbar = () => {
   const { ui } = useContext(SignalsStoreContext);
   const themeButtonHovered = useSignal(false);
 
-  const theme = ui.theme.value;
-
   return (
     <Nav>
       <Main>
-        {theme === "light" ? (
+        {ui.theme.value === "light" ? (
           <Image
             src="/logo-full-horizontal-light.svg"
             alt="Logo"
@@ -108,24 +105,34 @@ export const Navbar = () => {
             onMouseEnter={() => (themeButtonHovered.value = true)}
             onMouseLeave={() => (themeButtonHovered.value = false)}
           >
-            {theme === "light" ? (
+            {ui.theme.value === "light" ? (
               <Icons.ThemeDark
                 height={12}
                 hovered={themeButtonHovered.value}
-                fill={Colors.background[theme].six}
-                hoveredFill={Colors.background[theme].eight}
+                fill={Colors.background[ui.theme.value].six}
+                hoveredFill={Colors.background[ui.theme.value].eight}
               />
             ) : (
               <Icons.ThemeLight
                 height={12}
                 hovered={themeButtonHovered.value}
-                fill={Colors.background[theme].six}
-                hoveredFill={Colors.background[theme].eight}
+                fill={Colors.background[ui.theme.value].six}
+                hoveredFill={Colors.background[ui.theme.value].eight}
               />
             )}
           </ThemeButton>
+
           <LoginButton href="/login">Log In</LoginButton>
-          <RegisterButton href="/register">Register</RegisterButton>
+
+          <Link href="/register">
+            <Globals.Button
+              size="small"
+              color={Colors.primary[ui.theme.value].main}
+              hoverColor={Colors.primary[ui.theme.value].darker}
+            >
+              Register
+            </Globals.Button>
+          </Link>
         </Links>
       </Main>
     </Nav>

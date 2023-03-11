@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+import * as Colors from "@/utils/colors";
 import * as Styles from "@/utils/styles";
 import * as Sizes from "@/utils/sizes";
 import * as Types from "@/utils/types";
@@ -13,6 +14,7 @@ type Size = "smaller" | "small" | "medium" | "large";
 
 type Props = {
   size: Size;
+  maxWidth?: number;
   borderRadius?: Types.PxAsRem;
   color: string;
   hoverColor?: string;
@@ -26,6 +28,13 @@ export const Button = styled.button<Props>`
   align-items: center;
   gap: ${Sizes.pxAsRem.eight};
   width: 100%;
+  max-width: ${(props) => props.maxWidth}px;
+  height: ${(props) => {
+    if (props.size === "smaller") return Sizes.pxAsRem.twentySix;
+    else if (props.size === "small") return Sizes.pxAsRem.thirtyTwo;
+    else if (props.size === "medium") return Sizes.pxAsRem.thirtyEight;
+    else return Sizes.pxAsRem.fortyEight;
+  }};
   margin: 0;
   padding: ${(props) => {
     if (props.size === "smaller") {
@@ -38,14 +47,8 @@ export const Button = styled.button<Props>`
       return `${Sizes.pxAsRem.twelve} ${Sizes.pxAsRem.eighteen}`;
     }
   }};
-  height: ${(props) => {
-    if (props.size === "smaller") return Sizes.pxAsRem.fortyEight;
-    else if (props.size === "small") return Sizes.pxAsRem.thirtyEight;
-    else if (props.size === "medium") return Sizes.pxAsRem.thirtyTwo;
-    else return Sizes.pxAsRem.twentySix;
-  }};
   color: ${(props: Props & ThemeProps) => {
-    return props.outlined ? props.color : props.theme.text;
+    return props.outlined ? props.color : Colors.text.button;
   }};
   background-color: ${(props) => {
     return props.outlined ? "transparent" : props.color;
@@ -74,7 +77,7 @@ export const Button = styled.button<Props>`
       color: ${(props: Props & ThemeProps) => {
         return props.outlined
           ? props.hoverColor || props.color
-          : props.theme.text;
+          : Colors.text.button;
       }};
       background-color: ${(props) => {
         return props.outlined ? "transparent" : props.hoverColor || props.color;

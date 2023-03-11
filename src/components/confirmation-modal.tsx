@@ -55,7 +55,7 @@ const Header = styled.header`
 `;
 
 const HeaderButton = styled.button`
-  ${Styles.basicButtonStyles};
+  ${Styles.clearButton};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -128,7 +128,6 @@ type Props = {
 
 export const ConfirmationModal = (props: Props) => {
   const { ui } = useContext(SignalsStoreContext);
-  const theme = ui.theme.value;
 
   return (
     <Parent overlay={props.overlay}>
@@ -143,7 +142,7 @@ export const ConfirmationModal = (props: Props) => {
             <HeaderButton onClick={props.backButtonAction}>
               <Icons.ChevronLeft
                 height={14}
-                fill={Colors.background[theme].eight}
+                fill={Colors.background[ui.theme.value].eight}
               />
             </HeaderButton>
           )}
@@ -153,7 +152,7 @@ export const ConfirmationModal = (props: Props) => {
             <HeaderButton onClick={props.closeButtonAction}>
               <Icons.Close
                 height={14}
-                fill={Colors.background[theme].eight}
+                fill={Colors.background[ui.theme.value].eight}
               />
             </HeaderButton>
           )}
@@ -179,8 +178,8 @@ export const ConfirmationModal = (props: Props) => {
           onClick={props.submitButtonAction}
           size="medium"
           borderRadius="four"
-          color={Colors.primary[theme].main}
-          hoverColor={Colors.primary[theme].darker}
+          color={Colors.primary[ui.theme.value].main}
+          hoverColor={Colors.primary[ui.theme.value].darker}
           style={{
             marginTop: Sizes.pxAsRem.four,
             opacity: props.disableSubmit ? 0.5 : 1,

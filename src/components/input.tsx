@@ -1,5 +1,5 @@
-import * as React from "react";
 import styled from "styled-components";
+import { useRef } from "react";
 import { useSignal } from "@preact/signals-react";
 import { motion } from "framer-motion";
 
@@ -81,7 +81,7 @@ type Props = {
 };
 
 export const Input = (props: Props) => {
-  const inputFieldRef = React.useRef<any>(null);
+  const inputFieldRef = useRef<any>(null);
   const focused = useSignal(false);
 
   function focusInputField(): void {

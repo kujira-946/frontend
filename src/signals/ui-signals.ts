@@ -11,7 +11,7 @@ export type UISignals = {
 };
 
 export const uiSignals: UISignals = {
-  theme: signal<Theme>("dark"),
+  theme: signal<Theme>("light"),
 };
 
 // ========================================================================================= //

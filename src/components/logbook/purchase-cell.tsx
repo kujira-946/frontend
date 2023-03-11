@@ -3,8 +3,8 @@ import { useContext } from "react";
 import { useSignal } from "@preact/signals-react";
 
 import * as Icons from "@/components/icons";
-import * as Styles from "@/utils/styles";
 import * as Colors from "@/utils/colors";
+import * as Styles from "@/utils/styles";
 import * as Sizes from "@/utils/sizes";
 import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
@@ -37,7 +37,7 @@ const CategoryButtons = styled.div`
 
 type CategoryButtonProps = { category: Types.Category };
 const CategoryButton = styled.button<CategoryButtonProps & ThemeProps>`
-  ${Styles.basicButtonStyles};
+  ${Styles.clearButton};
   display: flex;
   justify-content: center;
   align-items: center;

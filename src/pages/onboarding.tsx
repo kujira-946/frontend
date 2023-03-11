@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import { effect, useSignal } from "@preact/signals-react";
 
+import * as Globals from "@/components";
 import * as Components from "@/components/onboarding";
 import * as Constants from "@/utils/constants.onboarding";
 import * as Types from "@/utils/types";
-import { ConfirmationModal, Input } from "@/components";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -109,7 +109,7 @@ const Onboarding = () => {
       </Head>
 
       <Main>
-        <ConfirmationModal
+        <Globals.ConfirmationModal
           backButtonAction={toPreviousPage}
           supportingText={`$3,584.51 remaining`}
           title={Constants.pages[currentPage.value - 1].title}
@@ -140,7 +140,7 @@ const Onboarding = () => {
               errorMessage={errorMessage.value}
             />
           ) : null}
-        </ConfirmationModal>
+        </Globals.ConfirmationModal>
       </Main>
     </>
   );

@@ -1,17 +1,22 @@
 import Link from "next/link";
 import styled from "styled-components";
+import { useContext } from "react";
 
-import * as Styles from "@/utils/styles";
+import * as Globals from "@/components";
+import * as Colors from "@/utils/colors";
 import * as Sizes from "@/utils/sizes";
 import * as Constants from "@/utils/constants.landing";
+import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
-import { LazyLoad } from "@/components";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
 const Container = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 80px 20px;
   background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
 `;
@@ -40,20 +45,16 @@ const CopyBody = styled.h2`
   text-align: center;
 `;
 
-const RegisterButton = styled(Link)`
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-`;
-
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
 export const CTA = () => {
+  const { ui } = useContext(SignalsStoreContext);
+
   return (
     <Container>
-      <LazyLoad
+      <Globals.LazyLoad
         threshold={0.8}
         initial={Constants.initial}
         animate={Constants.animate}
@@ -66,8 +67,18 @@ export const CTA = () => {
             gain control of your financial health.
           </CopyBody>
         </Copy>
-        <RegisterButton href="/register">Register</RegisterButton>
-      </LazyLoad>
+
+        <Link href="/register">
+          <Globals.Button
+            size="large"
+            maxWidth={600}
+            color={Colors.primary[ui.theme.value].main}
+            hoverColor={Colors.primary[ui.theme.value].darker}
+          >
+            Register
+          </Globals.Button>
+        </Link>
+      </Globals.LazyLoad>
     </Container>
   );
 };

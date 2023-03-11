@@ -1,9 +1,13 @@
 import Link from "next/link";
 import styled from "styled-components";
+import { useContext } from "react";
 import { motion } from "framer-motion";
 
+import * as Globals from "@/components";
+import * as Colors from "@/utils/colors";
 import * as Styles from "@/utils/styles";
 import * as Sizes from "@/utils/sizes";
+import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
 
 import { CardBack } from "./card-back";
@@ -61,14 +65,6 @@ const Buttons = styled.article`
   gap: 20px;
 `;
 
-const RegisterButton = styled(Link)`
-  flex: 1;
-`;
-
-const LearnMoreButton = styled.button`
-  flex: 1;
-`;
-
 const Cards = styled.article`
   position: relative;
   flex: 1;
@@ -85,6 +81,8 @@ function scrollToAbout(): void {
 }
 
 export const AboveTheFold = () => {
+  const { ui } = useContext(SignalsStoreContext);
+
   return (
     <Container>
       <ATFContent>
@@ -101,11 +99,27 @@ export const AboveTheFold = () => {
               So, how do we fix them? With a little bit of perspective.
             </CopyBody>
           </Copy>
+
           <Buttons>
-            <RegisterButton href="/register">Register</RegisterButton>
-            <LearnMoreButton onClick={scrollToAbout}>
+            <Link href="/register" style={{ width: "100%" }}>
+              <Globals.Button
+                size="large"
+                color={Colors.primary[ui.theme.value].main}
+                hoverColor={Colors.primary[ui.theme.value].darker}
+              >
+                Register
+              </Globals.Button>
+            </Link>
+
+            <Globals.Button
+              onClick={scrollToAbout}
+              size="large"
+              color={Colors.primary[ui.theme.value].main}
+              hoverColor={Colors.primary[ui.theme.value].darker}
+              outlined
+            >
               Learn More
-            </LearnMoreButton>
+            </Globals.Button>
           </Buttons>
         </CopyAndButtons>
 

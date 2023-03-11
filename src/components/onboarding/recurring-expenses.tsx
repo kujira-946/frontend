@@ -31,7 +31,6 @@ type Props = {
 
 export const RecurringExpenses = (props: Props) => {
   const { ui } = useContext(SignalsStoreContext);
-  const theme = ui.theme.value;
 
   return (
     <Container>
@@ -51,8 +50,8 @@ export const RecurringExpenses = (props: Props) => {
         onClick={props.addRecurringExpense}
         size="medium"
         borderRadius="four"
-        color={Colors.background[theme].three}
-        hoverColor={Colors.background[theme].five}
+        color={Colors.background[ui.theme.value].three}
+        hoverColor={Colors.background[ui.theme.value].five}
         style={{
           marginTop: Sizes.pxAsRem.sixteen,
         }}

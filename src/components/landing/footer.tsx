@@ -3,7 +3,6 @@ import Link from "next/link";
 import styled from "styled-components";
 import { useContext } from "react";
 
-import * as Styles from "@/utils/styles";
 import * as Sizes from "@/utils/sizes";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";

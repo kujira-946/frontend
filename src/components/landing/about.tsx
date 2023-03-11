@@ -1,10 +1,8 @@
 import styled from "styled-components";
 
-import * as Overview from "@/components/overview";
-import * as Logbook from "@/components/logbook";
+import * as Globals from "@/components";
 import * as Sizes from "@/utils/sizes";
 import * as Constants from "@/utils/constants.landing";
-import { LazyLoad, NoInteraction } from "@/components";
 import { ThemeProps } from "@/components/layout";
 import { AboutCopy } from "./about-copy";
 
@@ -36,7 +34,7 @@ const CopyAndFigure = styled.article`
 export const About = () => {
   return (
     <Container id="landing-about">
-      <LazyLoad
+      <Globals.LazyLoad
         threshold={Constants.threshold}
         initial={Constants.initial}
         animate={Constants.animate}
@@ -49,18 +47,11 @@ export const About = () => {
               recurring costs, and remaining cash, all within your personal
               monthly overview."
           />
-          {/* <NoInteraction> */}
-            <Overview.Dropdown
-              headerTitle="Recurring Costs (2)"
-              headerCost={415.19}
-            >
-              <Logbook.PurchaseCell />
-            </Overview.Dropdown>
-          {/* </NoInteraction> */}
         </CopyAndFigure>
-      </LazyLoad>
+        {/* <Globals.NoInteraction></Globals.NoInteraction> */}
+      </Globals.LazyLoad>
 
-      <LazyLoad
+      <Globals.LazyLoad
         threshold={Constants.threshold}
         initial={Constants.initial}
         animate={Constants.animate}
@@ -74,9 +65,9 @@ export const About = () => {
               information on your financial health."
           />
         </CopyAndFigure>
-      </LazyLoad>
+      </Globals.LazyLoad>
 
-      <LazyLoad
+      <Globals.LazyLoad
         threshold={Constants.threshold}
         initial={Constants.initial}
         animate={Constants.animate}
@@ -91,7 +82,7 @@ export const About = () => {
               control of your cash or if it’s in control of you."
           />
         </CopyAndFigure>
-      </LazyLoad>
+      </Globals.LazyLoad>
     </Container>
   );
 };

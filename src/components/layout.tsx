@@ -1,5 +1,5 @@
-import * as React from "react";
 import localFont from "@next/font/local";
+import { useContext } from "react";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 
 import * as Colors from "@/utils/colors";
@@ -283,7 +283,7 @@ export type ThemeProps = { theme: ThemeContents };
 type Props = { children: React.ReactNode };
 
 export const Layout = (props: Props) => {
-  const { ui } = React.useContext(SignalsStoreContext);
+  const { ui } = useContext(SignalsStoreContext);
 
   return (
     <ThemeProvider theme={themes[ui.theme.value]}>

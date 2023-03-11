@@ -18,7 +18,7 @@ export function setMediaPaddings(verticalPadding?: number) {
   `;
 }
 
-export const basicButtonStyles = css`
+export const clearButton = css`
   margin: 0;
   padding: 0;
   background: none;
