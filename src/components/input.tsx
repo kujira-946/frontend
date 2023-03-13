@@ -114,8 +114,6 @@ export const Input = (props: Props) => {
     focused.value = true;
   }
 
-  console.log("Input Field!:", props.title);
-
   return (
     <Container
       style={{

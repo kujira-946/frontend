@@ -5,11 +5,12 @@ import { useContext } from "react";
 
 import * as Globals from "@/components";
 import * as Colors from "@/utils/colors";
+import * as Functions from "@/utils/functions";
 import * as Sizes from "@/utils/sizes";
 import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
-import { useSignal } from "@preact/signals-react";
+import { effect, useSignal } from "@preact/signals-react";
 
 import { AuthFormPasswords } from "./auth-form-passwords";
 
@@ -92,6 +93,37 @@ export const AuthForm = (props: Props) => {
   const password = useSignal("");
   const confirmPassword = useSignal("");
 
+  const emailError = useSignal("");
+  const usernameError = useSignal("");
+
+  effect(() => {
+    if (email.value !== "") {
+      if (!email.value.includes("@")) {
+        emailError.value = "Enter a valid email.";
+      } else if (!email.value.includes(".com")) {
+        emailError.value = "Enter a valid email.";
+      } else {
+        emailError.value = "";
+      }
+    } else {
+      emailError.value = "";
+    }
+
+    if (username.value !== "") {
+      if (!Functions.checkIsLetter(username.value)) {
+        usernameError.value = "Invalid character(s).";
+      } else if (username.value.length < 6) {
+        usernameError.value = "Too short.";
+      } else if (username.value.length > 16) {
+        usernameError.value = "Too long.";
+      } else {
+        usernameError.value = "";
+      }
+    } else {
+      usernameError.value = "";
+    }
+  });
+
   function handleSubmit(event: Types.Submit): void {
     event.preventDefault();
     if (props.title === "Register") {
@@ -138,6 +170,7 @@ export const AuthForm = (props: Props) => {
           <Globals.Input
             borderRadius="four"
             title="Email"
+            errorMessage={emailError.value}
             userInput={email.value}
             setUserInput={(event: Types.Input) =>
               (email.value = event.currentTarget.value)
@@ -148,6 +181,7 @@ export const AuthForm = (props: Props) => {
             <Globals.Input
               borderRadius="four"
               title="Username"
+              errorMessage={usernameError.value}
               userInput={username.value}
               setUserInput={(event: Types.Input) =>
                 (username.value = event.currentTarget.value)
