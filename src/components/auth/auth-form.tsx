@@ -11,6 +11,8 @@ import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
 import { useSignal } from "@preact/signals-react";
 
+import { AuthFormPasswords } from "./auth-form-passwords";
+
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
@@ -91,6 +93,7 @@ export const AuthForm = (props: Props) => {
   const confirmPassword = useSignal("");
 
   function handleSubmit(event: Types.Submit): void {
+    event.preventDefault();
     if (props.title === "Register") {
       alert("Registered!");
     } else {
@@ -121,9 +124,9 @@ export const AuthForm = (props: Props) => {
           <Caption>
             {props.caption}{" "}
             <Redirect
-              href={props.title === "Register" ? "/register" : "/login"}
+              href={props.title === "Register" ? "/login" : "/register"}
             >
-              {props.title}
+              {props.title === "Register" ? "Log In" : "Register"}
             </Redirect>
           </Caption>
         </TitleAndCaption>
@@ -151,34 +154,22 @@ export const AuthForm = (props: Props) => {
               }
             />
           )}
-          {/* Password */}
-          <Globals.Input
-            borderRadius="four"
-            title="Password"
-            userInput={password.value}
-            setUserInput={(event: Types.Input) =>
-              (password.value = event.currentTarget.value)
+          {/* Password / Confirm Password */}
+          <AuthFormPasswords
+            isRegister={props.title === "Register"}
+            password={password.value}
+            setPassword={(userInput: string) => (password.value = userInput)}
+            confirmPassword={confirmPassword.value}
+            setConfirmPassword={(userInput: string) =>
+              (confirmPassword.value = userInput)
             }
-            password
           />
-          {/* Confirm Password */}
-          {props.title === "Register" && (
-            <Globals.Input
-              borderRadius="four"
-              title="Confirm Password"
-              userInput={confirmPassword.value}
-              setUserInput={(event: Types.Input) =>
-                (confirmPassword.value = event.currentTarget.value)
-              }
-              password
-            />
-          )}
         </Inputs>
 
         <Globals.Button
           type="submit"
           size="medium"
-          borderRadius="six"
+          borderRadius="four"
           background={Colors.primary[ui.theme.value].main}
           hoverBackground={Colors.primary[ui.theme.value].darker}
         >

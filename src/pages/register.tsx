@@ -1,25 +1,8 @@
-import styled from "styled-components";
-
-import * as Components from "@/components/register";
-
-// ========================================================================================= //
-// [ STYLED COMPONENTS ] =================================================================== //
-// ========================================================================================= //
-
-const Main = styled.main``;
-
-// ========================================================================================= //
-// [ EXPORTED COMPONENT ] ================================================================== //
-// ========================================================================================= //
+import * as Components from "@/components/auth";
 
 const Register = () => {
   return (
-    <>
-      <Components.AuthForm
-        title="Register"
-        caption="Already have an account?"
-      />
-    </>
+    <Components.AuthForm title="Register" caption="Already have an account?" />
   );
 };
 

@@ -71,8 +71,6 @@ const InputField = styled.input<SharedProps>`
   outline: none;
   cursor: text;
 
-  border: red solid 1px;
-
   ${(props) => !props.focused && Styles.preventUserInteraction};
 
   ::placeholder {
@@ -92,10 +90,15 @@ const IconContainer = styled.div`
 
 type Props = {
   borderRadius?: Types.PxAsRem;
+
   title: string;
+  errorMessage?: string;
+
   userInput: string;
   setUserInput: (event: Types.Input) => void;
-  errorMessage?: string;
+
+  hidden?: boolean;
+  toggleHidden?: () => void;
   password?: true;
 };
 
@@ -104,7 +107,6 @@ export const Input = (props: Props) => {
 
   const inputFieldRef = useRef<any>(null);
   const focused = useSignal(false);
-  const hidden = useSignal(true);
   const hiddenHovered = useSignal(false);
 
   function focusInputField(): void {
@@ -112,9 +114,7 @@ export const Input = (props: Props) => {
     focused.value = true;
   }
 
-  function toggleHidden(): void {
-    hidden.value = !hidden.value;
-  }
+  console.log("Input Field!:", props.title);
 
   return (
     <Container
@@ -136,7 +136,7 @@ export const Input = (props: Props) => {
 
       <InputFieldAndIcon>
         <InputField
-          type={props.password ? "password" : "text"}
+          type={props.hidden ? "password" : "text"}
           value={props.userInput}
           placeholder={props.title}
           ref={inputFieldRef}
@@ -145,9 +145,9 @@ export const Input = (props: Props) => {
           focused={focused.value}
         />
         {props.password &&
-          (hidden.value ? (
+          (props.hidden ? (
             <IconContainer
-              onClick={toggleHidden}
+              onClick={props.toggleHidden}
               onMouseEnter={() => (hiddenHovered.value = true)}
               onMouseLeave={() => (hiddenHovered.value = false)}
             >
@@ -160,7 +160,7 @@ export const Input = (props: Props) => {
             </IconContainer>
           ) : (
             <IconContainer
-              onClick={toggleHidden}
+              onClick={props.toggleHidden}
               onMouseEnter={() => (hiddenHovered.value = true)}
               onMouseLeave={() => (hiddenHovered.value = false)}
             >
