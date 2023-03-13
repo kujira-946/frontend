@@ -63,6 +63,12 @@ const Caption = styled.p`
 
 const Redirect = styled(Link)`
   color: ${(props: ThemeProps) => props.theme.primaryMain};
+
+  @media (hover: hover) {
+    :hover {
+      color: ${(props: ThemeProps) => props.theme.primaryDark};
+    }
+  }
 `;
 
 const Form = styled.form`
@@ -92,6 +98,12 @@ const CheckboxConfirmationText = styled.div`
 const LegalRedirect = styled(Link)`
   color: ${(props: ThemeProps) => props.theme.secondaryMain};
   font-weight: ${Sizes.fontWeights.semiBold};
+
+  @media (hover: hover) {
+    :hover {
+      color: ${(props: ThemeProps) => props.theme.secondaryDark};
+    }
+  }
 `;
 
 const IconContainer = styled.div`
