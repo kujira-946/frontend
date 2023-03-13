@@ -147,14 +147,22 @@ export const AuthForm = (props: Props) => {
     }
   });
 
-  function checkNoErrors(): boolean {
+  function checkLoginErrors(): boolean {
     return (
       email.value.length > 0 &&
       emailError.value === "" &&
-      username.value.length > 0 &&
-      usernameError.value === "" &&
       password.value.length > 0 &&
       passwordError.value === ""
+    );
+  }
+
+  function checkRegistrationErrors(): boolean {
+    return (
+      checkLoginErrors() &&
+      username.value.length > 0 &&
+      usernameError.value === "" &&
+      confirmPassword.value.length > 0 &&
+      confirmPasswordError.value === ""
     );
   }
 
@@ -166,11 +174,7 @@ export const AuthForm = (props: Props) => {
         username: username.value,
         password: password.value,
       };
-      if (
-        checkNoErrors() &&
-        confirmPassword.value.length > 0 &&
-        confirmPasswordError.value === ""
-      ) {
+      if (checkRegistrationErrors()) {
         console.log(data);
       }
     } else {
@@ -178,7 +182,7 @@ export const AuthForm = (props: Props) => {
         email: email.value,
         password: password.value,
       };
-      if (checkNoErrors()) {
+      if (checkLoginErrors()) {
         console.log(data);
       }
     }

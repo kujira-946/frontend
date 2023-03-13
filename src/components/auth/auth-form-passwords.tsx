@@ -1,4 +1,4 @@
-import { effect, useSignal } from "@preact/signals-react";
+import { useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Types from "@/utils/types";
