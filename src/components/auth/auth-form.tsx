@@ -29,7 +29,7 @@ const Container = styled.main`
   padding: ${Sizes.pxAsRem.sixteen};
   border-radius: ${Sizes.pxAsRem.six};
 
-  ${(props: ThemeProps) => props.theme.shadowOne};
+  ${(props: ThemeProps) => props.theme.shadowTwo};
 `;
 
 const Header = styled.header`
@@ -120,6 +120,7 @@ const IconContainer = styled.div`
 type Props = {
   title: "Register" | "Log In";
   caption: string;
+  toConfirmation: () => void;
 };
 
 export const AuthForm = (props: Props) => {
@@ -216,6 +217,11 @@ export const AuthForm = (props: Props) => {
       };
       if (checkRegistrationErrors()) {
         console.log(data);
+        if (true) {
+          // This conditional should only be `true` when the registration is successful and the user has been sent a verification code.
+          // This might be feasible by first closing over the API return value and then doing a check with that.
+          props.toConfirmation();
+        }
       }
     } else {
       const data = {
@@ -224,6 +230,11 @@ export const AuthForm = (props: Props) => {
       };
       if (checkLoginErrors()) {
         console.log(data);
+        if (true) {
+          // This conditional should only be `true` when the registration is successful and the user has been sent a verification code.
+          // This might be feasible by first closing over the API return value and then doing a check with that.
+          props.toConfirmation();
+        }
       }
     }
   }

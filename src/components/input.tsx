@@ -18,6 +18,8 @@ import { ThemeProps } from "./layout";
 type SharedProps = { focused: boolean };
 
 const Container = styled.section<SharedProps>`
+  width: 100%;
+  padding: ${Sizes.pxAsRem.twelve};
   background-color: ${(props: SharedProps & ThemeProps) => {
     return props.focused
       ? props.theme.backgroundTwo
@@ -28,7 +30,6 @@ const Container = styled.section<SharedProps>`
       ? `${props.theme.backgroundSix} solid 1px`
       : `${props.theme.backgroundFour} solid 1px`;
   }};
-  padding: ${Sizes.pxAsRem.twelve};
   cursor: pointer;
 
   @media (hover: hover) {
