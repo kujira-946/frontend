@@ -140,6 +140,7 @@ export const Input = (props: Props) => {
           ref={inputFieldRef}
           onChange={props.setUserInput}
           onBlur={() => (focused.value = false)}
+          onFocus={() => (focused.value = true)}
           focused={focused.value}
         />
         {props.password &&
