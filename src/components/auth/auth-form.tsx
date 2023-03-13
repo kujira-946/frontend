@@ -2,15 +2,15 @@ import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 import { useContext } from "react";
+import { effect, useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
-import * as Colors from "@/utils/colors";
 import * as Functions from "@/utils/functions";
+import * as Colors from "@/utils/colors";
 import * as Sizes from "@/utils/sizes";
 import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
-import { effect, useSignal } from "@preact/signals-react";
 
 import { AuthFormPasswords } from "./auth-form-passwords";
 
@@ -95,8 +95,11 @@ export const AuthForm = (props: Props) => {
 
   const emailError = useSignal("");
   const usernameError = useSignal("");
+  const passwordError = useSignal("");
+  const confirmPasswordError = useSignal("");
 
   effect(() => {
+    // ↓↓↓ Email error check ↓↓↓ //
     if (email.value !== "") {
       if (!email.value.includes("@")) {
         emailError.value = "Enter a valid email.";
@@ -108,7 +111,7 @@ export const AuthForm = (props: Props) => {
     } else {
       emailError.value = "";
     }
-
+    // ↓↓↓ Username error check ↓↓↓ //
     if (username.value !== "") {
       if (!Functions.checkIsLetter(username.value)) {
         usernameError.value = "Invalid character(s).";
@@ -122,16 +125,66 @@ export const AuthForm = (props: Props) => {
     } else {
       usernameError.value = "";
     }
+    // ↓↓↓ Password error check ↓↓↓ //
+    if (props.title === "Register" && password.value !== "") {
+      if (password.value.length < 12) {
+        passwordError.value = "Too short.";
+      } else {
+        passwordError.value = "";
+      }
+    } else {
+      passwordError.value = "";
+    }
+    // ↓↓↓ Confirm password error check ↓↓↓ //
+    if (confirmPassword.value !== "") {
+      if (confirmPassword.value !== password.value) {
+        confirmPasswordError.value = "Passwords don't match.";
+      } else {
+        confirmPasswordError.value = "";
+      }
+    } else {
+      confirmPasswordError.value = "";
+    }
   });
+
+  function checkNoErrors(): boolean {
+    return (
+      email.value.length > 0 &&
+      emailError.value === "" &&
+      username.value.length > 0 &&
+      usernameError.value === "" &&
+      password.value.length > 0 &&
+      passwordError.value === ""
+    );
+  }
 
   function handleSubmit(event: Types.Submit): void {
     event.preventDefault();
     if (props.title === "Register") {
-      alert("Registered!");
+      const data = {
+        email: email.value,
+        username: username.value,
+        password: password.value,
+      };
+      if (
+        checkNoErrors() &&
+        confirmPassword.value.length > 0 &&
+        confirmPasswordError.value === ""
+      ) {
+        console.log(data);
+      }
     } else {
-      alert("Logged In!");
+      const data = {
+        email: email.value,
+        password: password.value,
+      };
+      if (checkNoErrors()) {
+        console.log(data);
+      }
     }
   }
+
+  console.log("auth form");
 
   return (
     <Container>
@@ -193,10 +246,12 @@ export const AuthForm = (props: Props) => {
             isRegister={props.title === "Register"}
             password={password.value}
             setPassword={(userInput: string) => (password.value = userInput)}
+            passwordError={passwordError.value}
             confirmPassword={confirmPassword.value}
             setConfirmPassword={(userInput: string) =>
               (confirmPassword.value = userInput)
             }
+            confirmPasswordError={confirmPasswordError.value}
           />
         </Inputs>
 

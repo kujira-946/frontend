@@ -8,44 +8,22 @@ type Props = {
 
   password: string;
   setPassword: (userInput: string) => void;
+  passwordError: string;
 
   confirmPassword: string;
   setConfirmPassword: (userInput: string) => void;
+  confirmPasswordError: string;
 };
 
 export const AuthFormPasswords = (props: Props) => {
   const hidden = useSignal(true);
-  const passwordError = useSignal("");
-  const confirmPasswordError = useSignal("");
-
-  effect(() => {
-    if (props.password !== "") {
-      if (props.password.length < 12) {
-        passwordError.value = "Too short.";
-      } else {
-        passwordError.value = "";
-      }
-    } else {
-      passwordError.value = "";
-    }
-
-    if (props.confirmPassword !== "") {
-      if (props.confirmPassword !== props.password) {
-        confirmPasswordError.value = "Passwords don't match.";
-      } else {
-        confirmPasswordError.value = "";
-      }
-    } else {
-      confirmPasswordError.value = "";
-    }
-  });
 
   return (
     <>
       <Globals.Input
         borderRadius="four"
         title="Password"
-        errorMessage={passwordError.value}
+        errorMessage={props.passwordError}
         userInput={props.password}
         setUserInput={(event: Types.Input) =>
           props.setPassword(event.currentTarget.value)
@@ -59,7 +37,7 @@ export const AuthFormPasswords = (props: Props) => {
         <Globals.Input
           borderRadius="four"
           title="Confirm Password"
-          errorMessage={confirmPasswordError.value}
+          errorMessage={props.confirmPasswordError}
           userInput={props.confirmPassword}
           setUserInput={(event: Types.Input) =>
             props.setConfirmPassword(event.currentTarget.value)
