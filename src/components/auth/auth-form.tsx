@@ -2,10 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 import { useContext } from "react";
+import { useDispatch } from "react-redux";
 import { effect, useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
+import * as Sagas from "@/sagas";
 import * as Functions from "@/utils/functions";
 import * as Colors from "@/utils/colors";
 import * as Sizes from "@/utils/sizes";
@@ -125,6 +127,7 @@ type Props = {
 
 export const AuthForm = (props: Props) => {
   const { ui } = useContext(SignalsStoreContext);
+  const dispatch = useDispatch();
 
   const email = useSignal("");
   const username = useSignal("");
@@ -217,6 +220,7 @@ export const AuthForm = (props: Props) => {
       };
       if (checkRegistrationErrors()) {
         console.log(data);
+        dispatch(Sagas.fetchUsersRequest());
         if (true) {
           // This conditional should only be `true` when the registration is successful and the user has been sent a verification code.
           // This might be feasible by first closing over the API return value and then doing a check with that.

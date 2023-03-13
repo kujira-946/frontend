@@ -1,3 +1,12 @@
 import { uiActions, uiReducer } from "./ui-slice";
+import { usersActions, usersReducer } from "./user-slice";
+import { errorsActions, errorsReducer } from "./errors-slice";
 
-export { uiActions, uiReducer };
+export {
+  uiActions,
+  uiReducer,
+  usersActions,
+  usersReducer,
+  errorsActions,
+  errorsReducer,
+};

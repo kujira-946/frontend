@@ -27,3 +27,10 @@ export type SVGProps = {
 // ↓↓↓ Styles ↓↓↓ //
 
 export type PxAsRem = keyof typeof pxAsRem;
+
+// ↓↓↓ Sagas ↓↓↓ //
+
+export type SagaAction<Payload> = {
+  type: string;
+  payload: Payload;
+};
