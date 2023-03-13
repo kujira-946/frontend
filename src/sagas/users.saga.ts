@@ -16,10 +16,31 @@ enum UserActionTypes {
 // [ ACTIONS ] ============================================================================= //
 // ========================================================================================= //
 
-export function fetchUsersRequest(): Types.SagaAction<any> {
+export function fetchUsersRequest(): Types.SagaAction<null> {
   return {
     type: UserActionTypes.FETCH_USERS,
     payload: null,
+  };
+}
+
+export function fetchUserRequest(): Types.SagaAction<null> {
+  return {
+    type: UserActionTypes.FETCH_USER,
+    payload: null,
+  };
+}
+
+export function updateUserRequest(id: number): Types.SagaAction<number> {
+  return {
+    type: UserActionTypes.UPDATE_USER,
+    payload: id,
+  };
+}
+
+export function deleteUserRequest(id: number): Types.SagaAction<number> {
+  return {
+    type: UserActionTypes.DELETE_USER,
+    payload: id,
   };
 }
 
