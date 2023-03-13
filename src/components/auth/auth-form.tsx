@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { effect, useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
+import * as Icons from "@/components/icons";
 import * as Functions from "@/utils/functions";
 import * as Colors from "@/utils/colors";
 import * as Sizes from "@/utils/sizes";
@@ -76,6 +77,30 @@ const Inputs = styled.section`
   gap: ${Sizes.pxAsRem.four};
 `;
 
+const CheckboxConfirmation = styled.section`
+  display: flex;
+  align-items: center;
+  gap: ${Sizes.pxAsRem.twelve};
+  font-size: ${Sizes.pxAsRem.fourteen};
+  font-weight: ${Sizes.fontWeights.medium};
+`;
+
+const CheckboxConfirmationText = styled.div`
+  flex: 1;
+`;
+
+const LegalRedirect = styled(Link)`
+  color: ${(props: ThemeProps) => props.theme.secondaryMain};
+  font-weight: ${Sizes.fontWeights.semiBold};
+`;
+
+const IconContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`;
+
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
@@ -97,6 +122,8 @@ export const AuthForm = (props: Props) => {
   const usernameError = useSignal("");
   const passwordError = useSignal("");
   const confirmPasswordError = useSignal("");
+
+  const checkboxActive = useSignal(false);
 
   effect(() => {
     // ↓↓↓ Email error check ↓↓↓ //
@@ -162,7 +189,8 @@ export const AuthForm = (props: Props) => {
       username.value.length > 0 &&
       usernameError.value === "" &&
       confirmPassword.value.length > 0 &&
-      confirmPasswordError.value === ""
+      confirmPasswordError.value === "" &&
+      checkboxActive.value
     );
   }
 
@@ -187,8 +215,6 @@ export const AuthForm = (props: Props) => {
       }
     }
   }
-
-  console.log("auth form");
 
   return (
     <Container>
@@ -259,12 +285,55 @@ export const AuthForm = (props: Props) => {
           />
         </Inputs>
 
+        <CheckboxConfirmation>
+          {checkboxActive.value ? (
+            <IconContainer onClick={() => (checkboxActive.value = false)}>
+              <Icons.CheckboxActive
+                height={20}
+                fill={Colors.secondary[ui.theme.value].main}
+              />
+            </IconContainer>
+          ) : (
+            <IconContainer onClick={() => (checkboxActive.value = true)}>
+              <Icons.CheckboxInactive
+                height={20}
+                fill={Colors.text[ui.theme.value]}
+              />
+            </IconContainer>
+          )}
+          {props.title === "Register" ? (
+            <CheckboxConfirmationText>
+              I agree to the{" "}
+              <LegalRedirect href="/terms" target="_blank">
+                Terms Of Service
+              </LegalRedirect>
+              ,{" "}
+              <LegalRedirect href="/privacy" target="_blank">
+                Privacy Policy
+              </LegalRedirect>
+              , and{" "}
+              <LegalRedirect href="/cookie" target="_blank">
+                Cookie Policy
+              </LegalRedirect>
+            </CheckboxConfirmationText>
+          ) : (
+            <CheckboxConfirmationText>
+              Stay logged in for 30 days on this device.
+            </CheckboxConfirmationText>
+          )}
+        </CheckboxConfirmation>
+
         <Globals.Button
           type="submit"
           size="medium"
           borderRadius="four"
           background={Colors.primary[ui.theme.value].main}
           hoverBackground={Colors.primary[ui.theme.value].darker}
+          disabled={
+            props.title === "Register"
+              ? !checkRegistrationErrors()
+              : !checkLoginErrors()
+          }
         >
           {props.title}
         </Globals.Button>
