@@ -30,17 +30,21 @@ export function fetchUserRequest(): Types.SagaAction<null> {
   };
 }
 
-export function updateUserRequest(id: number): Types.SagaAction<number> {
+export function updateUserRequest(
+  id: number
+): Types.SagaAction<{ id: number }> {
   return {
     type: UserActionTypes.UPDATE_USER,
-    payload: id,
+    payload: { id },
   };
 }
 
-export function deleteUserRequest(id: number): Types.SagaAction<number> {
+export function deleteUserRequest(
+  id: number
+): Types.SagaAction<{ id: number }> {
   return {
     type: UserActionTypes.DELETE_USER,
-    payload: id,
+    payload: { id },
   };
 }
 
@@ -51,7 +55,7 @@ export function deleteUserRequest(id: number): Types.SagaAction<number> {
 function* fetchUsers() {
   try {
     const endpoint = RouteBases.USERS;
-    const response = yield Saga.call(axios.get, endpoint);
+    const response = yield Saga.call(axios.get, RouteBases.USERS);
 
     console.log("Fetch Users Response:", response);
   } catch (error) {

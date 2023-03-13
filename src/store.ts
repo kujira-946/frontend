@@ -7,7 +7,7 @@ import * as Sagas from "@/sagas";
 
 const rootReducer = {
   ui: Redux.uiReducer,
-  users: Redux.usersReducer,
+  entities: Redux.entitiesReducer,
   errors: Redux.errorsReducer,
 };
 

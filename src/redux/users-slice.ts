@@ -20,23 +20,23 @@ type User = {
   updatedAt: Date;
 };
 
-type UserState = {
+type EntitiesState = {
   user: User | null;
 };
 
-const initialState: UserState = {
+const initialState: EntitiesState = {
   user: null,
 };
 
-const userSlice = createSlice({
-  name: "user",
+const entitiesSlice = createSlice({
+  name: "entities",
   initialState,
   reducers: {
-    setUser: (state: UserState, action: PayloadAction<User>) => {
+    setUser: (state: EntitiesState, action: PayloadAction<User>) => {
       state.user = action.payload;
     },
   },
 });
 
-export const usersActions = userSlice.actions;
-export const usersReducer = userSlice.reducer;
+export const entitiesActions = entitiesSlice.actions;
+export const entitiesReducer = entitiesSlice.reducer;
