@@ -139,7 +139,7 @@ export const Verification = (props: Props) => {
         />
 
         <Caption>
-          Didn't receive a code?{" "}
+          {"Didn't receive a code? "}
           <ResendButton type="button" onClick={resendVerificationCode}>
             Resend Code
           </ResendButton>
