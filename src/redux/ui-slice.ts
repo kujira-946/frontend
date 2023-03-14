@@ -1,17 +1,33 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type UIState = {
+// ========================================================================================= //
+// [ TYPES ] =============================================================================== //
+// ========================================================================================= //
+
+export type UIState = {
+  verificationCodeLoading: boolean;
   userLoading: boolean;
 };
 
+// ========================================================================================= //
+// [ SLICE ] =============================================================================== //
+// ========================================================================================= //
+
 const initialState: UIState = {
-  userLoading: true,
+  verificationCodeLoading: false,
+  userLoading: false,
 };
 
 const uiSlice = createSlice({
   name: "ui",
   initialState,
   reducers: {
+    setVerificationCodeLoading: (
+      state: UIState,
+      action: PayloadAction<boolean>
+    ) => {
+      state.verificationCodeLoading = action.payload;
+    },
     setUserLoading: (state: UIState, action: PayloadAction<boolean>) => {
       state.userLoading = action.payload;
     },

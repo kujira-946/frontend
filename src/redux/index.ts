@@ -1,6 +1,12 @@
-import { uiActions, uiReducer } from "./ui-slice";
-import { entitiesActions, entitiesReducer } from "./entities-slice";
-import { errorsActions, errorsReducer } from "./errors-slice";
+import { UIState, uiActions, uiReducer } from "./ui-slice";
+import {
+  EntitiesState,
+  entitiesActions,
+  entitiesReducer,
+} from "./entities-slice";
+import { ErrorsState, errorsActions, errorsReducer } from "./errors-slice";
+
+export type { UIState, EntitiesState, ErrorsState };
 
 export {
   uiActions,

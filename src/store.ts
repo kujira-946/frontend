@@ -6,6 +6,12 @@ import * as Redux from "@/redux";
 import * as AuthSaga from "@/sagas/auth.saga";
 import * as UsersSaga from "@/sagas/users.saga";
 
+export type GlobalState = {
+  ui: Redux.UIState;
+  entities: Redux.EntitiesState;
+  errors: Redux.ErrorsState;
+};
+
 const rootReducer = {
   ui: Redux.uiReducer,
   entities: Redux.entitiesReducer,

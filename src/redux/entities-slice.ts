@@ -1,5 +1,4 @@
-import { PayloadAction } from "@reduxjs/toolkit";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // ========================================================================================= //
 // [ TYPES ] =============================================================================== //
@@ -72,13 +71,13 @@ type LogbookEntry = {
   logbookId: number;
 } & Dates;
 
+export type EntitiesState = {
+  user: User | null;
+};
+
 // ========================================================================================= //
 // [ SLICE ] =============================================================================== //
 // ========================================================================================= //
-
-type EntitiesState = {
-  user: User | null;
-};
 
 const initialState: EntitiesState = {
   user: null,

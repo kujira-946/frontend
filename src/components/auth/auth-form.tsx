@@ -1,13 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
-import { useContext } from "react";
-import { useDispatch } from "react-redux";
+import { useContext, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { effect, useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
-import * as AuthSagas from "@/sagas/auth.saga";
+import * as AuthActions from "@/sagas/auth.saga";
 import * as Functions from "@/utils/functions";
 import * as Colors from "@/utils/colors";
 import * as Sizes from "@/utils/sizes";
@@ -16,6 +16,7 @@ import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
 
 import { AuthFormPasswords } from "./auth-form-passwords";
+import { GlobalState } from "@/store";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -128,6 +129,7 @@ type Props = {
 export const AuthForm = (props: Props) => {
   const { ui } = useContext(SignalsStoreContext);
   const dispatch = useDispatch();
+  const { auth } = useSelector((state: GlobalState) => state.errors);
 
   const email = useSignal("");
   const username = useSignal("");
@@ -140,6 +142,10 @@ export const AuthForm = (props: Props) => {
   const confirmPasswordError = useSignal("");
 
   const checkboxActive = useSignal(false);
+
+  useEffect(() => {
+    
+  }, [auth.emailCheck, auth.usernameCheck, auth.general]);
 
   effect(() => {
     // ↓↓↓ Email error check ↓↓↓ //
@@ -210,37 +216,44 @@ export const AuthForm = (props: Props) => {
     );
   }
 
-  function handleSubmit(event: Types.Submit): void {
-    event.preventDefault();
-    if (props.title === "Register") {
-      const data: Types.RegistrationData = {
-        email: email.value,
-        username: username.value,
-        password: password.value,
-      };
-      if (checkRegistrationErrors()) {
-        console.log(data);
-        dispatch(AuthSagas.registerRequest(data));
-        if (true) {
-          // This conditional should only be `true` when the registration is successful and the user has been sent a verification code.
-          // This might be feasible by first closing over the API return value and then doing a check with that.
-          props.toConfirmation();
-        }
-      }
-    } else {
-      const data = {
-        email: email.value,
-        password: password.value,
-      };
-      if (checkLoginErrors()) {
-        console.log(data);
-        if (true) {
-          // This conditional should only be `true` when the registration is successful and the user has been sent a verification code.
-          // This might be feasible by first closing over the API return value and then doing a check with that.
-          props.toConfirmation();
-        }
+  function _register(): void {
+    const data: Types.RegistrationData = {
+      email: email.value,
+      username: username.value,
+      password: password.value,
+    };
+    if (checkRegistrationErrors()) {
+      console.log(data);
+      dispatch(AuthActions.checkEmailAvailabilityRequest(email.value));
+      dispatch(AuthActions.checkUsernameAvailabilityRequest(username.value));
+      // dispatch(AuthActions.registerRequest(data));
+      if (false) {
+        // This conditional should only be `true` when the registration is successful and the user has been sent a verification code.
+        // This might be feasible by first closing over the API return value and then doing a check with that.
+        props.toConfirmation();
       }
     }
+  }
+
+  function _login(): void {
+    const data = {
+      email: email.value,
+      password: password.value,
+    };
+    if (checkLoginErrors()) {
+      console.log(data);
+      if (false) {
+        // This conditional should only be `true` when the registration is successful and the user has been sent a verification code.
+        // This might be feasible by first closing over the API return value and then doing a check with that.
+        props.toConfirmation();
+      }
+    }
+  }
+
+  function handleSubmit(event: Types.Submit): void {
+    event.preventDefault();
+    if (props.title === "Register") _register();
+    else _login();
   }
 
   return (
