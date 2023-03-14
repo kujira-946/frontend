@@ -1,21 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type Theme = "light" | "dark";
-
 type UIState = {
-  theme: Theme;
+  userLoading: boolean;
 };
 
 const initialState: UIState = {
-  theme: "light",
+  userLoading: true,
 };
 
 const uiSlice = createSlice({
   name: "ui",
   initialState,
   reducers: {
-    setTheme: (state: UIState, action: PayloadAction<Theme>) => {
-      state.theme = action.payload;
+    setUserLoading: (state: UIState, action: PayloadAction<boolean>) => {
+      state.userLoading = action.payload;
     },
   },
 });

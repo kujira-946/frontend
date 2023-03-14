@@ -1,11 +1,11 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 
-import { Theme } from "./ui-slice";
-
 // ========================================================================================= //
 // [ TYPES ] =============================================================================== //
 // ========================================================================================= //
+
+type Theme = "light" | "dark";
 
 type Dates = {
   createdAt: Date;
@@ -88,7 +88,7 @@ const entitiesSlice = createSlice({
   name: "entities",
   initialState,
   reducers: {
-    setUser: (state: EntitiesState, action: PayloadAction<User>) => {
+    setUser: (state: EntitiesState, action: PayloadAction<User | null>) => {
       state.user = action.payload;
     },
   },
