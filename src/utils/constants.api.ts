@@ -7,3 +7,5 @@ export enum RouteBases {
   LOGBOOKS = "/api/v1/logbooks",
   LOGBOOK_ENTRIES = "/api/v1/logbook-entries",
 }
+
+export const productionRoot = "https://kuijra-backend.up.railway.app";

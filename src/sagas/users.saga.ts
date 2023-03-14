@@ -3,7 +3,7 @@ import axios from "axios";
 
 import * as Redux from "@/redux";
 import * as Types from "@/utils/types";
-import { RouteBases } from "@/utils/constants.api";
+import { productionRoot, RouteBases } from "@/utils/constants.api";
 
 enum UserActionTypes {
   FETCH_USERS = "FETCH_USERS",
@@ -54,13 +54,16 @@ export function deleteUserRequest(
 
 function* fetchUsers() {
   try {
-    const endpoint = RouteBases.USERS;
-    const response = yield Saga.call(axios.get, RouteBases.USERS);
+    const response = yield Saga.call(
+      axios.get,
+      productionRoot + RouteBases.USERS
+    );
+    // yield Saga.put(Redux.entitiesActions.setUser(response.data));
 
-    console.log("Fetch Users Response:", response);
+    console.log("Fetch Users Response:", response.data);
   } catch (error) {
     console.log(error);
-    yield Saga.put(Redux.errorsActions.setUser("User error"));
+    yield Saga.put(Redux.errorsActions.setUser("Failed to fetch users."));
   }
 }
 
