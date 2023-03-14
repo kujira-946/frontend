@@ -1,19 +1,50 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
+
 type ErrorsState = {
-  user: string;
+  auth: string;
+  users: string;
+  purchases: string;
+  overviews: string;
+  overviewGroups: string;
+  logbooks: string;
+  logbookEntries: string;
 };
 
 const initialState: ErrorsState = {
-  user: "",
+  auth: "",
+  users: "",
+  purchases: "",
+  overviews: "",
+  overviewGroups: "",
+  logbooks: "",
+  logbookEntries: "",
 };
 
 const errorsSlice = createSlice({
   name: "errors",
   initialState,
   reducers: {
-    setUser: (state: ErrorsState, action: PayloadAction<string>) => {
-      state.user = action.payload;
+    setAuth: (state: ErrorsState, action: PayloadAction<string>) => {
+      state.auth = action.payload;
+    },
+    setUsers: (state: ErrorsState, action: PayloadAction<string>) => {
+      state.users = action.payload;
+    },
+    setPurchases: (state: ErrorsState, action: PayloadAction<string>) => {
+      state.purchases = action.payload;
+    },
+    setOverviews: (state: ErrorsState, action: PayloadAction<string>) => {
+      state.overviews = action.payload;
+    },
+    setOverviewGroups: (state: ErrorsState, action: PayloadAction<string>) => {
+      state.overviewGroups = action.payload;
+    },
+    setLogbooks: (state: ErrorsState, action: PayloadAction<string>) => {
+      state.logbooks = action.payload;
+    },
+    setLogbookEntries: (state: ErrorsState, action: PayloadAction<string>) => {
+      state.logbookEntries = action.payload;
     },
   },
 });
