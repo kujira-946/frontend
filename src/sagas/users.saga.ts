@@ -16,33 +16,31 @@ enum UserActionTypes {
 // [ ACTIONS ] ============================================================================= //
 // ========================================================================================= //
 
-export function fetchUsersRequest(): Types.SagaAction<null> {
+export function fetchUsersRequest(): Types.NullAction {
   return {
     type: UserActionTypes.FETCH_USERS,
     payload: null,
   };
 }
 
-type IdAction = Types.SagaAction<{ userId: number }>;
-
-export function fetchUserRequest(userId: number): IdAction {
+export function fetchUserRequest(id: number): Types.IdAction {
   return {
     type: UserActionTypes.FETCH_USER,
-    payload: { userId },
+    payload: { id },
   };
 }
 
-export function updateUserRequest(userId: number): IdAction {
+export function updateUserRequest(id: number): Types.IdAction {
   return {
     type: UserActionTypes.UPDATE_USER,
-    payload: { userId },
+    payload: { id },
   };
 }
 
-export function deleteUserRequest(userId: number): IdAction {
+export function deleteUserRequest(id: number): Types.IdAction {
   return {
     type: UserActionTypes.DELETE_USER,
-    payload: { userId },
+    payload: { id },
   };
 }
 
@@ -50,11 +48,14 @@ export function deleteUserRequest(userId: number): IdAction {
 // [ SAGAS ] =============================================================================== //
 // ========================================================================================= //
 
+const rootEndpoint = productionRoot + RouteBases.USERS;
+
 function* fetchUsers() {
   try {
-    const endpoint = productionRoot + RouteBases.USERS;
+    const endpoint = rootEndpoint;
     const response = yield Saga.call(axios.get, endpoint);
     yield Saga.put(Redux.entitiesActions.setUser(response.data));
+    yield Saga.put(Redux.errorsActions.setUsers(""));
 
     // console.log("Fetch Users Response:", response.data);
   } catch (error) {
@@ -63,14 +64,15 @@ function* fetchUsers() {
   }
 }
 
-function* fetchUser(action: IdAction) {
+function* fetchUser(action: Types.IdAction) {
   try {
     yield Saga.put(Redux.uiActions.setUserLoading(true));
-    const { userId } = action.payload;
-    const endpoint = productionRoot + RouteBases.USERS + `/${userId}`;
+    const { id } = action.payload;
+    const endpoint = rootEndpoint + `/${id}`;
     const response = yield Saga.call(axios.get, endpoint);
     // yield Saga.put(Redux.entitiesActions.setUser(response.data));
     yield Saga.put(Redux.uiActions.setUserLoading(false));
+    yield Saga.put(Redux.errorsActions.setUsers(""));
 
     console.log("Fetch User Response:", response.data);
   } catch (error) {
@@ -79,14 +81,15 @@ function* fetchUser(action: IdAction) {
   }
 }
 
-function* updateUser(action: IdAction) {
+function* updateUser(action: Types.IdAction) {
   try {
     yield Saga.put(Redux.uiActions.setUserLoading(true));
-    const { userId } = action.payload;
-    const endpoint = productionRoot + RouteBases.USERS + `/${userId}`;
+    const { id } = action.payload;
+    const endpoint = rootEndpoint + `/${id}`;
     const response = yield Saga.call(axios.patch, endpoint);
     // yield Saga.put(Redux.entitiesActions.setUser(response.data));
     yield Saga.put(Redux.uiActions.setUserLoading(false));
+    yield Saga.put(Redux.errorsActions.setUsers(""));
 
     console.log("Update User Response:", response.data);
   } catch (error) {
@@ -95,14 +98,15 @@ function* updateUser(action: IdAction) {
   }
 }
 
-function* deleteUser(action: IdAction) {
+function* deleteUser(action: Types.IdAction) {
   try {
     yield Saga.put(Redux.uiActions.setUserLoading(true));
-    const { userId } = action.payload;
-    const endpoint = productionRoot + RouteBases.USERS + `/${userId}`;
-    Saga.call(axios.delete, endpoint);
+    const { id } = action.payload;
+    const endpoint = rootEndpoint + `/${id}`;
+    yield Saga.call(axios.delete, endpoint);
     yield Saga.put(Redux.entitiesActions.setUser(null));
     yield Saga.put(Redux.uiActions.setUserLoading(false));
+    yield Saga.put(Redux.errorsActions.setUsers(""));
   } catch (error) {
     console.log(error);
     yield Saga.put(Redux.errorsActions.setUsers("Failed to delete user."));

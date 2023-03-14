@@ -7,7 +7,7 @@ import { effect, useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
-import * as Sagas from "@/sagas";
+import * as AuthSagas from "@/sagas/auth.saga";
 import * as Functions from "@/utils/functions";
 import * as Colors from "@/utils/colors";
 import * as Sizes from "@/utils/sizes";
@@ -213,14 +213,14 @@ export const AuthForm = (props: Props) => {
   function handleSubmit(event: Types.Submit): void {
     event.preventDefault();
     if (props.title === "Register") {
-      const data = {
+      const data: Types.RegistrationData = {
         email: email.value,
         username: username.value,
         password: password.value,
       };
       if (checkRegistrationErrors()) {
         console.log(data);
-        dispatch(Sagas.fetchUsersRequest());
+        dispatch(AuthSagas.registerRequest(data));
         if (true) {
           // This conditional should only be `true` when the registration is successful and the user has been sent a verification code.
           // This might be feasible by first closing over the API return value and then doing a check with that.

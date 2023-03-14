@@ -3,7 +3,8 @@ import createSagaMiddleware from "@redux-saga/core";
 import { configureStore } from "@reduxjs/toolkit";
 
 import * as Redux from "@/redux";
-import * as Sagas from "@/sagas";
+import * as AuthSaga from "@/sagas/auth.saga";
+import * as UsersSaga from "@/sagas/users.saga";
 
 const rootReducer = {
   ui: Redux.uiReducer,
@@ -12,7 +13,7 @@ const rootReducer = {
 };
 
 function* rootSaga() {
-  yield Saga.all([Sagas.usersSaga()]);
+  yield Saga.all([AuthSaga.authSaga(), UsersSaga.usersSaga()]);
 }
 const sagaMiddleware = createSagaMiddleware();
 
