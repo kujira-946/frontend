@@ -6,7 +6,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type UIState = {
   notification: string;
-  verificationCodeLoading: boolean;
+  verificationCodeExists: boolean;
   userLoading: boolean;
 };
 
@@ -16,7 +16,7 @@ export type UIState = {
 
 const initialState: UIState = {
   notification: "",
-  verificationCodeLoading: false,
+  verificationCodeExists: false,
   userLoading: false,
 };
 
@@ -27,11 +27,11 @@ const uiSlice = createSlice({
     setNotification: (state: UIState, action: PayloadAction<string>) => {
       state.notification = action.payload;
     },
-    setVerificationCodeLoading: (
+    setVerificationCodeExists: (
       state: UIState,
       action: PayloadAction<boolean>
     ) => {
-      state.verificationCodeLoading = action.payload;
+      state.verificationCodeExists = action.payload;
     },
     setUserLoading: (state: UIState, action: PayloadAction<boolean>) => {
       state.userLoading = action.payload;

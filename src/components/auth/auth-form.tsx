@@ -129,6 +129,9 @@ type Props = {
 export const AuthForm = (props: Props) => {
   const { ui } = useContext(SignalsStoreContext);
   const { errors } = useSelector((state: GlobalState) => state);
+  const { verificationCodeExists } = useSelector(
+    (state: GlobalState) => state.ui
+  );
   const dispatch = useDispatch();
 
   const email = useSignal("");
@@ -220,15 +223,15 @@ export const AuthForm = (props: Props) => {
     if (checkRegistrationErrors()) {
       dispatch(AuthActions.checkEmailAvailabilityRequest(email.value));
       dispatch(AuthActions.checkUsernameAvailabilityRequest(username.value));
-      const data: Types.RegistrationData = {
-        email: email.value,
-        username: username.value,
-        password: password.value,
-      };
-      console.log(data);
-      // if (registration is successful and we got a confirmation code) {
-      //   props.toConfirmation();
-      // }
+      if (errors.authEmail.length === 0 && errors.authUsername.length === 0) {
+        const data: Types.RegistrationData = {
+          email: email.value,
+          username: username.value,
+          password: password.value,
+        };
+        // dispatch(AuthActions.registerRequest(data));
+      }
+      if (verificationCodeExists) props.toConfirmation();
     }
   }
 
@@ -239,14 +242,13 @@ export const AuthForm = (props: Props) => {
         password: password.value,
       };
       console.log(data);
-      // if (login is successful, and we got a confirmation code) {
-      //   props.toConfirmation();
-      // }
+      if (verificationCodeExists) props.toConfirmation();
     }
   }
 
   function handleSubmit(event: Types.Submit): void {
     event.preventDefault();
+    // if (props.title === "Register") register();
     if (props.title === "Register") register();
     else login();
   }

@@ -106,39 +106,48 @@ const rootEndpoint = productionRoot + RouteBases.AUTH;
 function* checkEmailAvailability(action: CheckEmailAction) {
   try {
     const endpoint = rootEndpoint + "/register/check-email-availability";
-    const response = yield Saga.call(axios.get, endpoint, action.payload);
+    const response = yield Saga.call(axios.patch, endpoint, action.payload);
     yield Saga.put(Redux.errorsActions.setAuthEmail(""));
 
     console.log("Check Email Availability Response:", response);
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
-    yield Saga.put(Redux.errorsActions.setAuthEmail(Functions.sagaResponseError(error)));
+    yield Saga.put(
+      Redux.errorsActions.setAuthEmail(Functions.sagaResponseError(error))
+    );
   }
 }
 
 function* checkUsernameAvailability(action: CheckUsernameAction) {
   try {
     const endpoint = rootEndpoint + "/register/check-username-availability";
-    const response = yield Saga.call(axios.get, endpoint, action.payload);
-    yield Saga.put(Redux.errorsActions.setAuthEmail(""));
+    const response = yield Saga.call(axios.patch, endpoint, action.payload);
+    yield Saga.put(Redux.errorsActions.setAuthUsername(""));
 
     console.log("Check Username Availability Response:", response);
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
-    yield Saga.put(Redux.errorsActions.setAuthUsername(Functions.sagaResponseError(error)));
+    yield Saga.put(
+      Redux.errorsActions.setAuthUsername(Functions.sagaResponseError(error))
+    );
   }
 }
 
 function* register(action: RegisterAction) {
   try {
-    yield Saga.put(Redux.uiActions.setVerificationCodeLoading(true));
     const endpoint = rootEndpoint + "/register";
     const response = yield Saga.call(axios.post, endpoint, action.payload);
-    yield Saga.put(Redux.uiActions.setVerificationCodeLoading(false));
+    yield Saga.put(Redux.uiActions.setVerificationCodeExists(true));
+    yield Saga.put(Redux.errorsActions.setAuthEmail(""));
+    yield Saga.put(Redux.errorsActions.setAuthUsername(""));
+    yield Saga.put(Redux.errorsActions.setAuth(""));
 
     console.log("Register Response:", response);
   } catch (error) {
     console.log(error);
+    yield Saga.put(
+      Redux.errorsActions.setAuth(Functions.sagaResponseError(error))
+    );
   }
 }
 
@@ -158,10 +167,8 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
 
 function* login(action: LoginAction) {
   try {
-    yield Saga.put(Redux.uiActions.setVerificationCodeLoading(true));
     const endpoint = rootEndpoint + "/login";
     const response = yield Saga.call(axios.patch, endpoint, action.payload);
-    yield Saga.put(Redux.uiActions.setVerificationCodeLoading(false));
 
     console.log("Login Response:", response);
   } catch (error) {
@@ -197,11 +204,9 @@ function* logout(action: Types.IdAction) {
 
 function* requestNewVerificationCode(action: Types.IdAction) {
   try {
-    yield Saga.put(Redux.uiActions.setVerificationCodeLoading(true));
     const endpoint =
       rootEndpoint + `/request-new-verification-code/${action.payload.id}`;
     const response = yield Saga.call(axios.patch, endpoint);
-    yield Saga.put(Redux.uiActions.setVerificationCodeLoading(false));
 
     console.log("Request New Verification Code Response:", response);
   } catch (error) {
