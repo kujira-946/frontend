@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { effect, useSignal } from "@preact/signals-react";
 
@@ -13,10 +13,10 @@ import * as Colors from "@/utils/colors";
 import * as Sizes from "@/utils/sizes";
 import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
+import { GlobalState } from "@/store";
 import { ThemeProps } from "@/components/layout";
 
 import { AuthFormPasswords } from "./auth-form-passwords";
-import { GlobalState } from "@/store";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -128,8 +128,8 @@ type Props = {
 
 export const AuthForm = (props: Props) => {
   const { ui } = useContext(SignalsStoreContext);
+  const { errors } = useSelector((state: GlobalState) => state);
   const dispatch = useDispatch();
-  const { auth } = useSelector((state: GlobalState) => state.errors);
 
   const email = useSignal("");
   const username = useSignal("");
@@ -143,12 +143,9 @@ export const AuthForm = (props: Props) => {
 
   const checkboxActive = useSignal(false);
 
-  useEffect(() => {
-    
-  }, [auth.emailCheck, auth.usernameCheck, auth.general]);
-
+  // ↓↓↓ Error checks ↓↓↓ //
   effect(() => {
-    // ↓↓↓ Email error check ↓↓↓ //
+    // Email error check
     if (email.value !== "") {
       if (!email.value.includes("@")) {
         emailError.value = "Enter a valid email.";
@@ -160,7 +157,7 @@ export const AuthForm = (props: Props) => {
     } else {
       emailError.value = "";
     }
-    // ↓↓↓ Username error check ↓↓↓ //
+    // Username error check
     if (username.value !== "") {
       if (!Functions.checkIsLetter(username.value)) {
         usernameError.value = "Invalid character(s).";
@@ -174,7 +171,7 @@ export const AuthForm = (props: Props) => {
     } else {
       usernameError.value = "";
     }
-    // ↓↓↓ Password error check ↓↓↓ //
+    // Password error check
     if (props.title === "Register" && password.value !== "") {
       if (password.value.length < 12) {
         passwordError.value = "Too short.";
@@ -184,7 +181,7 @@ export const AuthForm = (props: Props) => {
     } else {
       passwordError.value = "";
     }
-    // ↓↓↓ Confirm password error check ↓↓↓ //
+    // Confirm password error check
     if (confirmPassword.value !== "") {
       if (confirmPassword.value !== password.value) {
         confirmPasswordError.value = "Passwords don't match.";
@@ -194,6 +191,9 @@ export const AuthForm = (props: Props) => {
     } else {
       confirmPasswordError.value = "";
     }
+    // Registration Checks
+    if (!!errors.authEmail) emailError.value = errors.authEmail;
+    if (!!errors.authUsername) usernameError.value = errors.authUsername;
   });
 
   function checkLoginErrors(): boolean {
@@ -216,44 +216,39 @@ export const AuthForm = (props: Props) => {
     );
   }
 
-  function _register(): void {
-    const data: Types.RegistrationData = {
-      email: email.value,
-      username: username.value,
-      password: password.value,
-    };
+  function register(): void {
     if (checkRegistrationErrors()) {
-      console.log(data);
       dispatch(AuthActions.checkEmailAvailabilityRequest(email.value));
       dispatch(AuthActions.checkUsernameAvailabilityRequest(username.value));
-      // dispatch(AuthActions.registerRequest(data));
-      if (false) {
-        // This conditional should only be `true` when the registration is successful and the user has been sent a verification code.
-        // This might be feasible by first closing over the API return value and then doing a check with that.
-        props.toConfirmation();
-      }
+      const data: Types.RegistrationData = {
+        email: email.value,
+        username: username.value,
+        password: password.value,
+      };
+      console.log(data);
+      // if (registration is successful and we got a confirmation code) {
+      //   props.toConfirmation();
+      // }
     }
   }
 
-  function _login(): void {
-    const data = {
-      email: email.value,
-      password: password.value,
-    };
+  function login(): void {
     if (checkLoginErrors()) {
+      const data: Types.LoginData = {
+        email: email.value,
+        password: password.value,
+      };
       console.log(data);
-      if (false) {
-        // This conditional should only be `true` when the registration is successful and the user has been sent a verification code.
-        // This might be feasible by first closing over the API return value and then doing a check with that.
-        props.toConfirmation();
-      }
+      // if (login is successful, and we got a confirmation code) {
+      //   props.toConfirmation();
+      // }
     }
   }
 
   function handleSubmit(event: Types.Submit): void {
     event.preventDefault();
-    if (props.title === "Register") _register();
-    else _login();
+    if (props.title === "Register") register();
+    else login();
   }
 
   return (

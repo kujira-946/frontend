@@ -5,6 +5,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // ========================================================================================= //
 
 export type UIState = {
+  notification: string;
   verificationCodeLoading: boolean;
   userLoading: boolean;
 };
@@ -14,6 +15,7 @@ export type UIState = {
 // ========================================================================================= //
 
 const initialState: UIState = {
+  notification: "",
   verificationCodeLoading: false,
   userLoading: false,
 };
@@ -22,6 +24,9 @@ const uiSlice = createSlice({
   name: "ui",
   initialState,
   reducers: {
+    setNotification: (state: UIState, action: PayloadAction<string>) => {
+      state.notification = action.payload;
+    },
     setVerificationCodeLoading: (
       state: UIState,
       action: PayloadAction<boolean>

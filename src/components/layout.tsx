@@ -4,6 +4,7 @@ import { ThemeProvider, createGlobalStyle } from "styled-components";
 
 import * as Colors from "@/utils/colors";
 import { SignalsStoreContext } from "@/pages/_app";
+import { Notification } from "./notification";
 
 const poppins = localFont({
   src: [

@@ -1,19 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { initialAuthErrorsState } from "@/utils/constants.auth";
-
 // ========================================================================================= //
 // [ TYPES ] =============================================================================== //
 // ========================================================================================= //
 
-export type AuthErrors = {
-  emailCheck?: string;
-  usernameCheck?: string;
-  general?: string;
-};
-
 export type ErrorsState = {
-  auth: AuthErrors;
+  authEmail: string;
+  authUsername: string;
+  auth: string;
   users: string;
   purchases: string;
   overviews: string;
@@ -27,7 +21,9 @@ export type ErrorsState = {
 // ========================================================================================= //
 
 const initialState: ErrorsState = {
-  auth: initialAuthErrorsState,
+  authEmail: "",
+  authUsername: "",
+  auth: "",
   users: "",
   purchases: "",
   overviews: "",
@@ -40,7 +36,13 @@ const errorsSlice = createSlice({
   name: "errors",
   initialState,
   reducers: {
-    setAuth: (state: ErrorsState, action: PayloadAction<AuthErrors>) => {
+    setAuthEmail: (state: ErrorsState, action: PayloadAction<string>) => {
+      state.authEmail = action.payload;
+    },
+    setAuthUsername: (state: ErrorsState, action: PayloadAction<string>) => {
+      state.authUsername = action.payload;
+    },
+    setAuth: (state: ErrorsState, action: PayloadAction<string>) => {
       state.auth = action.payload;
     },
     setUsers: (state: ErrorsState, action: PayloadAction<string>) => {
