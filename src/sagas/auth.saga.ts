@@ -93,7 +93,7 @@ function* register(action: RegisterAction) {
   } catch (error) {
     console.log(error);
     yield Saga.put(
-      Redux.uiActions.setNotification(Functions.sagaResponseError(error))
+      Redux.errorsActions.setAuth(Functions.sagaResponseError(error))
     );
   }
 }

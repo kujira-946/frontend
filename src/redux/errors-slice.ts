@@ -5,8 +5,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // ========================================================================================= //
 
 export type ErrorsState = {
-  authEmail: string;
-  authUsername: string;
   auth: string;
   users: string;
   purchases: string;
@@ -21,8 +19,6 @@ export type ErrorsState = {
 // ========================================================================================= //
 
 const initialState: ErrorsState = {
-  authEmail: "",
-  authUsername: "",
   auth: "",
   users: "",
   purchases: "",
@@ -36,12 +32,6 @@ const errorsSlice = createSlice({
   name: "errors",
   initialState,
   reducers: {
-    setAuthEmail: (state: ErrorsState, action: PayloadAction<string>) => {
-      state.authEmail = action.payload;
-    },
-    setAuthUsername: (state: ErrorsState, action: PayloadAction<string>) => {
-      state.authUsername = action.payload;
-    },
     setAuth: (state: ErrorsState, action: PayloadAction<string>) => {
       state.auth = action.payload;
     },

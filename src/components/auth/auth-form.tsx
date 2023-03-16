@@ -137,7 +137,7 @@ export const AuthForm = (props: Props) => {
   );
   useEffect(() => {
     if (verificationCodeExists) props.toConfirmation();
-  }, [verificationCodeExists]);
+  }, [verificationCodeExists, props.toConfirmation]);
 
   const email = useSignal("");
   const username = useSignal("");
@@ -284,10 +284,17 @@ export const AuthForm = (props: Props) => {
             <Globals.Input
               borderRadius="four"
               title="Email"
-              errorMessage={emailError.value}
+              errorMessage={
+                errors.auth.includes("email")
+                  ? "Already taken."
+                  : emailError.value
+              }
               userInput={email.value}
               setUserInput={(event: Types.Input) => {
                 email.value = event.currentTarget.value;
+                if (errors.auth.length > 0) {
+                  dispatch(Redux.errorsActions.setAuth(""));
+                }
               }}
             />
             {/* Username */}
@@ -295,10 +302,17 @@ export const AuthForm = (props: Props) => {
               <Globals.Input
                 borderRadius="four"
                 title="Username"
-                errorMessage={usernameError.value}
+                errorMessage={
+                  errors.auth.includes("username")
+                    ? "Already taken."
+                    : usernameError.value
+                }
                 userInput={username.value}
                 setUserInput={(event: Types.Input) => {
                   username.value = event.currentTarget.value;
+                  if (errors.auth.length > 0) {
+                    dispatch(Redux.errorsActions.setAuth(""));
+                  }
                 }}
               />
             )}
@@ -370,11 +384,6 @@ export const AuthForm = (props: Props) => {
           </Globals.Button>
         </Form>
       </Container>
-
-      <Globals.Notification
-        title="Failed to register account."
-        type="failure"
-      />
     </>
   );
 };

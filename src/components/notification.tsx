@@ -26,6 +26,8 @@ const Container = styled(motion.main)`
   justify-content: center;
   align-items: center;
   gap: ${Sizes.pxAsRem.eight};
+  width: 100%;
+  max-width: 25rem;
   padding: ${Sizes.pxAsRem.twelve};
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
   border: ${(props: ThemeProps & { type: Type }) => {
