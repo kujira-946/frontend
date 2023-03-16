@@ -60,4 +60,6 @@ export const fontWeights = {
   black: 900,
 };
 
-export const zIndexes = {};
+export const zIndexes = {
+  notification: 10,
+};

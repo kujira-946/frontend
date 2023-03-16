@@ -1,4 +1,3 @@
-import { uiActions } from "./../redux/ui-slice";
 import * as Saga from "redux-saga/effects";
 import axios from "axios";
 
@@ -8,8 +7,6 @@ import * as Types from "@/utils/types";
 import { productionRoot, RouteBases } from "@/utils/constants.api";
 
 enum AuthActionTypes {
-  CHECK_EMAIL_AVAILABILITY = "CHECK_EMAIL_AVAILABILITY",
-  CHECK_USERNAME_AVAILABILITY = "CHECK_USERNAME_AVAILABILITY",
   REGISTER = "REGISTER",
   VERIFY_REGISTRATION = "VERIFY_REGISTRATION",
   LOGIN = "LOGIN",
@@ -21,24 +18,6 @@ enum AuthActionTypes {
 // ========================================================================================= //
 // [ ACTIONS ] ============================================================================= //
 // ========================================================================================= //
-
-type CheckEmailAction = Types.SagaAction<{ email: string }>;
-export function checkEmailAvailabilityRequest(email: string): CheckEmailAction {
-  return {
-    type: AuthActionTypes.CHECK_EMAIL_AVAILABILITY,
-    payload: { email },
-  };
-}
-
-type CheckUsernameAction = Types.SagaAction<{ username: string }>;
-export function checkUsernameAvailabilityRequest(
-  username: string
-): CheckUsernameAction {
-  return {
-    type: AuthActionTypes.CHECK_USERNAME_AVAILABILITY,
-    payload: { username },
-  };
-}
 
 type RegisterAction = Types.SagaAction<Types.RegistrationData>;
 export function registerRequest(data: Types.RegistrationData): RegisterAction {
@@ -62,10 +41,10 @@ export function verifyRegistrationRequest(
 }
 
 type LoginAction = Types.SagaAction<Types.LoginData>;
-export function loginRequest(email: string, password: string): LoginAction {
+export function loginRequest(data: Types.LoginData): LoginAction {
   return {
     type: AuthActionTypes.LOGIN,
-    payload: { email, password },
+    payload: data,
   };
 }
 
@@ -103,50 +82,18 @@ export function requestNewVerificationCodeRequest(id: number): Types.IdAction {
 
 const rootEndpoint = productionRoot + RouteBases.AUTH;
 
-function* checkEmailAvailability(action: CheckEmailAction) {
-  try {
-    const endpoint = rootEndpoint + "/register/check-email-availability";
-    const response = yield Saga.call(axios.patch, endpoint, action.payload);
-    yield Saga.put(Redux.errorsActions.setAuthEmail(""));
-
-    console.log("Check Email Availability Response:", response);
-  } catch (error) {
-    console.log(error);
-    yield Saga.put(
-      Redux.errorsActions.setAuthEmail(Functions.sagaResponseError(error))
-    );
-  }
-}
-
-function* checkUsernameAvailability(action: CheckUsernameAction) {
-  try {
-    const endpoint = rootEndpoint + "/register/check-username-availability";
-    const response = yield Saga.call(axios.patch, endpoint, action.payload);
-    yield Saga.put(Redux.errorsActions.setAuthUsername(""));
-
-    console.log("Check Username Availability Response:", response);
-  } catch (error) {
-    console.log(error);
-    yield Saga.put(
-      Redux.errorsActions.setAuthUsername(Functions.sagaResponseError(error))
-    );
-  }
-}
-
 function* register(action: RegisterAction) {
   try {
     const endpoint = rootEndpoint + "/register";
     const response = yield Saga.call(axios.post, endpoint, action.payload);
     yield Saga.put(Redux.uiActions.setVerificationCodeExists(true));
-    yield Saga.put(Redux.errorsActions.setAuthEmail(""));
-    yield Saga.put(Redux.errorsActions.setAuthUsername(""));
-    yield Saga.put(Redux.errorsActions.setAuth(""));
+    yield Saga.put(Redux.uiActions.setNotification(""));
 
     console.log("Register Response:", response);
   } catch (error) {
     console.log(error);
     yield Saga.put(
-      Redux.errorsActions.setAuth(Functions.sagaResponseError(error))
+      Redux.uiActions.setNotification(Functions.sagaResponseError(error))
     );
   }
 }
@@ -158,6 +105,7 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
     const response = yield Saga.call(axios.patch, endpoint, {
       verificationCode,
     });
+    yield Saga.put(Redux.uiActions.setVerificationCodeExists(false));
 
     console.log("Verify Registration Response:", response);
   } catch (error) {
@@ -216,14 +164,6 @@ function* requestNewVerificationCode(action: Types.IdAction) {
 
 export function* authSaga() {
   yield Saga.all([
-    Saga.takeEvery(
-      AuthActionTypes.CHECK_EMAIL_AVAILABILITY,
-      checkEmailAvailability
-    ),
-    Saga.takeEvery(
-      AuthActionTypes.CHECK_USERNAME_AVAILABILITY,
-      checkUsernameAvailability
-    ),
     Saga.takeEvery(AuthActionTypes.REGISTER, register),
     Saga.takeEvery(AuthActionTypes.VERIFY_REGISTRATION, verifyRegistration),
     Saga.takeEvery(AuthActionTypes.LOGIN, login),

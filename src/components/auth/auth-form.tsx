@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { effect, useSignal } from "@preact/signals-react";
 
+import * as Redux from "@/redux";
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
 import * as AuthActions from "@/sagas/auth.saga";
@@ -127,12 +128,16 @@ type Props = {
 };
 
 export const AuthForm = (props: Props) => {
+  const dispatch = useDispatch();
   const { ui } = useContext(SignalsStoreContext);
   const { errors } = useSelector((state: GlobalState) => state);
+
   const { verificationCodeExists } = useSelector(
     (state: GlobalState) => state.ui
   );
-  const dispatch = useDispatch();
+  useEffect(() => {
+    if (verificationCodeExists) props.toConfirmation();
+  }, [verificationCodeExists]);
 
   const email = useSignal("");
   const username = useSignal("");
@@ -194,19 +199,7 @@ export const AuthForm = (props: Props) => {
     } else {
       confirmPasswordError.value = "";
     }
-    // Registration Checks
-    if (!!errors.authEmail) emailError.value = errors.authEmail;
-    if (!!errors.authUsername) usernameError.value = errors.authUsername;
   });
-
-  function checkLoginErrors(): boolean {
-    return (
-      email.value.length > 0 &&
-      emailError.value === "" &&
-      password.value.length > 0 &&
-      passwordError.value === ""
-    );
-  }
 
   function checkRegistrationErrors(): boolean {
     return (
@@ -218,163 +211,170 @@ export const AuthForm = (props: Props) => {
       checkboxActive.value
     );
   }
+  function checkLoginErrors(): boolean {
+    return (
+      email.value.length > 0 &&
+      emailError.value === "" &&
+      password.value.length > 0 &&
+      passwordError.value === ""
+    );
+  }
 
   function register(): void {
     if (checkRegistrationErrors()) {
-      dispatch(AuthActions.checkEmailAvailabilityRequest(email.value));
-      dispatch(AuthActions.checkUsernameAvailabilityRequest(username.value));
-      if (errors.authEmail.length === 0 && errors.authUsername.length === 0) {
-        const data: Types.RegistrationData = {
-          email: email.value,
-          username: username.value,
-          password: password.value,
-        };
-        // dispatch(AuthActions.registerRequest(data));
-      }
-      if (verificationCodeExists) props.toConfirmation();
+      const data: Types.RegistrationData = {
+        email: email.value,
+        username: username.value,
+        password: password.value,
+      };
+      dispatch(AuthActions.registerRequest(data));
     }
   }
-
   function login(): void {
     if (checkLoginErrors()) {
       const data: Types.LoginData = {
         email: email.value,
         password: password.value,
       };
-      console.log(data);
-      if (verificationCodeExists) props.toConfirmation();
+      dispatch(AuthActions.loginRequest(data));
     }
   }
 
   function handleSubmit(event: Types.Submit): void {
     event.preventDefault();
-    // if (props.title === "Register") register();
     if (props.title === "Register") register();
     else login();
   }
 
   return (
-    <Container>
-      <Header>
-        {ui.theme.value === "light" ? (
-          <Image
-            src="/logo-full-vertical-light.svg"
-            alt="Logo"
-            width={36.04}
-            height={40}
-          />
-        ) : (
-          <Image
-            src="/logo-full-vertical-dark.svg"
-            alt="Logo"
-            width={36.04}
-            height={40}
-          />
-        )}
-        <TitleAndCaption>
-          <Title>{props.title}</Title>
-          <Caption>
-            {props.caption}{" "}
-            <Redirect
-              href={props.title === "Register" ? "/login" : "/register"}
-            >
-              {props.title === "Register" ? "Log In" : "Register"}
-            </Redirect>
-          </Caption>
-        </TitleAndCaption>
-      </Header>
-
-      <Form onSubmit={handleSubmit}>
-        <Inputs>
-          {/* Email */}
-          <Globals.Input
-            borderRadius="four"
-            title="Email"
-            errorMessage={emailError.value}
-            userInput={email.value}
-            setUserInput={(event: Types.Input) =>
-              (email.value = event.currentTarget.value)
-            }
-          />
-          {/* Username */}
-          {props.title === "Register" && (
-            <Globals.Input
-              borderRadius="four"
-              title="Username"
-              errorMessage={usernameError.value}
-              userInput={username.value}
-              setUserInput={(event: Types.Input) =>
-                (username.value = event.currentTarget.value)
-              }
+    <>
+      <Container>
+        <Header>
+          {ui.theme.value === "light" ? (
+            <Image
+              src="/logo-full-vertical-light.svg"
+              alt="Logo"
+              width={36.04}
+              height={40}
+            />
+          ) : (
+            <Image
+              src="/logo-full-vertical-dark.svg"
+              alt="Logo"
+              width={36.04}
+              height={40}
             />
           )}
-          {/* Password / Confirm Password */}
-          <AuthFormPasswords
-            isRegister={props.title === "Register"}
-            password={password.value}
-            setPassword={(userInput: string) => (password.value = userInput)}
-            passwordError={passwordError.value}
-            confirmPassword={confirmPassword.value}
-            setConfirmPassword={(userInput: string) =>
-              (confirmPassword.value = userInput)
+          <TitleAndCaption>
+            <Title>{props.title}</Title>
+            <Caption>
+              {props.caption}{" "}
+              <Redirect
+                href={props.title === "Register" ? "/login" : "/register"}
+              >
+                {props.title === "Register" ? "Log In" : "Register"}
+              </Redirect>
+            </Caption>
+          </TitleAndCaption>
+        </Header>
+
+        <Form onSubmit={handleSubmit}>
+          <Inputs>
+            {/* Email */}
+            <Globals.Input
+              borderRadius="four"
+              title="Email"
+              errorMessage={emailError.value}
+              userInput={email.value}
+              setUserInput={(event: Types.Input) => {
+                email.value = event.currentTarget.value;
+              }}
+            />
+            {/* Username */}
+            {props.title === "Register" && (
+              <Globals.Input
+                borderRadius="four"
+                title="Username"
+                errorMessage={usernameError.value}
+                userInput={username.value}
+                setUserInput={(event: Types.Input) => {
+                  username.value = event.currentTarget.value;
+                }}
+              />
+            )}
+            {/* Password / Confirm Password */}
+            <AuthFormPasswords
+              isRegister={props.title === "Register"}
+              password={password.value}
+              setPassword={(userInput: string) => (password.value = userInput)}
+              passwordError={passwordError.value}
+              confirmPassword={confirmPassword.value}
+              setConfirmPassword={(userInput: string) =>
+                (confirmPassword.value = userInput)
+              }
+              confirmPasswordError={confirmPasswordError.value}
+            />
+          </Inputs>
+
+          <CheckboxConfirmation>
+            {checkboxActive.value ? (
+              <IconContainer onClick={() => (checkboxActive.value = false)}>
+                <Icons.CheckboxActive
+                  height={20}
+                  fill={Colors.secondary[ui.theme.value].main}
+                />
+              </IconContainer>
+            ) : (
+              <IconContainer onClick={() => (checkboxActive.value = true)}>
+                <Icons.CheckboxInactive
+                  height={20}
+                  fill={Colors.text[ui.theme.value]}
+                />
+              </IconContainer>
+            )}
+            {props.title === "Register" ? (
+              <CheckboxConfirmationText>
+                I agree to the{" "}
+                <LegalRedirect href="/terms" target="_blank">
+                  Terms Of Service
+                </LegalRedirect>
+                ,{" "}
+                <LegalRedirect href="/privacy" target="_blank">
+                  Privacy Policy
+                </LegalRedirect>
+                , and{" "}
+                <LegalRedirect href="/cookie" target="_blank">
+                  Cookie Policy
+                </LegalRedirect>
+              </CheckboxConfirmationText>
+            ) : (
+              <CheckboxConfirmationText>
+                Stay logged in for 30 days on this device.
+              </CheckboxConfirmationText>
+            )}
+          </CheckboxConfirmation>
+
+          <Globals.Button
+            type="submit"
+            size="medium"
+            borderRadius="four"
+            background={Colors.primary[ui.theme.value].main}
+            hoverBackground={Colors.primary[ui.theme.value].darker}
+            disabled={
+              props.title === "Register"
+                ? !checkRegistrationErrors()
+                : !checkLoginErrors()
             }
-            confirmPasswordError={confirmPasswordError.value}
-          />
-        </Inputs>
+          >
+            {props.title}
+          </Globals.Button>
+        </Form>
+      </Container>
 
-        <CheckboxConfirmation>
-          {checkboxActive.value ? (
-            <IconContainer onClick={() => (checkboxActive.value = false)}>
-              <Icons.CheckboxActive
-                height={20}
-                fill={Colors.secondary[ui.theme.value].main}
-              />
-            </IconContainer>
-          ) : (
-            <IconContainer onClick={() => (checkboxActive.value = true)}>
-              <Icons.CheckboxInactive
-                height={20}
-                fill={Colors.text[ui.theme.value]}
-              />
-            </IconContainer>
-          )}
-          {props.title === "Register" ? (
-            <CheckboxConfirmationText>
-              I agree to the{" "}
-              <LegalRedirect href="/terms" target="_blank">
-                Terms Of Service
-              </LegalRedirect>
-              ,{" "}
-              <LegalRedirect href="/privacy" target="_blank">
-                Privacy Policy
-              </LegalRedirect>
-              , and{" "}
-              <LegalRedirect href="/cookie" target="_blank">
-                Cookie Policy
-              </LegalRedirect>
-            </CheckboxConfirmationText>
-          ) : (
-            <CheckboxConfirmationText>
-              Stay logged in for 30 days on this device.
-            </CheckboxConfirmationText>
-          )}
-        </CheckboxConfirmation>
-
-        <Globals.Button
-          type="submit"
-          size="medium"
-          borderRadius="four"
-          background={Colors.primary[ui.theme.value].main}
-          hoverBackground={Colors.primary[ui.theme.value].darker}
-          disabled={
-            props.title === "Register"
-              ? !checkRegistrationErrors()
-              : !checkLoginErrors()
-          }
-        >
-          {props.title}
-        </Globals.Button>
-      </Form>
-    </Container>
+      <Globals.Notification
+        title="Failed to register account."
+        type="failure"
+      />
+    </>
   );
 };

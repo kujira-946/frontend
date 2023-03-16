@@ -4,7 +4,6 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import * as Sizes from "@/utils/sizes";
 import { ThemeProps } from "@/components/layout";
-import { createPortal } from "react-dom";
 import { useSelector } from "react-redux";
 import { GlobalState } from "@/store";
 import { useDispatch } from "react-redux";
@@ -21,7 +20,9 @@ const Container = styled(motion.main)`
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: ${Sizes.zIndexes.notification};
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: ${Sizes.pxAsRem.eight};
@@ -54,8 +55,8 @@ const Body = styled.p`
 
 type Props = {
   title: string;
-  body: string;
   type: Type;
+  timeout?: number;
 };
 
 export const Notification = (props: Props) => {
@@ -65,27 +66,26 @@ export const Notification = (props: Props) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       dispatch(uiActions.setNotification(""));
-    }, 1000);
+    }, props.timeout || 5000);
     return function cleanUp(): void {
       clearTimeout(timer);
     };
-  }, []);
+  }, [dispatch, notification, props.timeout]);
 
-  return createPortal(
+  return (
     <AnimatePresence>
       {!!notification && (
         <Container
-          initial={{ opacity: 0, transform: "translateY(-8px)" }}
+          initial={{ opacity: 0, transform: "translateY(-12px)" }}
           animate={{ opacity: 1, transform: "translateY(0px)" }}
           exit={{ opacity: 0, transform: "translateY(-8px)" }}
           transition={{ duration: 0.3, delay: 0.4 }}
           type={props.type}
         >
           <Title>{props.title}</Title>
-          <Body>{props.body}</Body>
+          <Body>{notification}</Body>
         </Container>
       )}
-    </AnimatePresence>,
-    document.body
+    </AnimatePresence>
   );
 };
