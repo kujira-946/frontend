@@ -159,7 +159,7 @@ export const AuthForm = (props: Props) => {
     }
     // Username error check
     if (username.value !== "") {
-      if (!Functions.checkIsLetter(username.value)) {
+      if (!Functions.checkValidCharacters(username.value)) {
         usernameError.value = "Invalid character(s).";
       } else if (username.value.length < 6) {
         usernameError.value = "Too short.";
