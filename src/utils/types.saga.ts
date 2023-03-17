@@ -37,30 +37,3 @@ export type VerificationData = {
 };
 
 export type UpdateUserData = Partial<RegistrationData>;
-
-// ========================================================================================= //
-// [ API RESPONSE ] ======================================================================== //
-// ========================================================================================= //
-
-export type APIError = { data: { body: string } };
-
-type APIResponse<Data = null> = {
-  title?: string;
-  body: string;
-  footnote?: string;
-  data?: Data;
-};
-
-export type RegistrationSuccess = APIResponse<number>;
-
-export type RegistrationVerificationSuccess = APIResponse<User>;
-
-export type LoginSuccess = APIResponse<number>;
-
-export type LoginVerificationSuccess = APIResponse<User> & {
-  accessToken: string;
-};
-
-export type LogoutSuccess = APIResponse;
-
-export type NewVerificationCodeSuccess = APIError;
