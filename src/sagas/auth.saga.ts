@@ -55,7 +55,7 @@ type VerifyLoginAction = Types.SagaAction<
 export function verifyLoginRequest(
   id: number,
   verificationCode: string,
-  thirtyDays: boolean
+  thirtyDays?: boolean
 ): VerifyLoginAction {
   return {
     type: AuthActionTypes.VERIFY_LOGIN,
@@ -96,7 +96,9 @@ function* register(action: RegisterAction) {
         timeout: 10000,
       })
     );
-    yield Saga.put(Redux.uiActions.setRegister([true, data.data]));
+    yield Saga.put(
+      Redux.uiActions.setVerificationCodeSentAndTempUserId([true, data.data])
+    );
   } catch (error) {
     console.log(error);
     yield Saga.put(
@@ -113,13 +115,29 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
       verificationCode,
     });
     yield Saga.put(Redux.entitiesActions.setUser(data.data));
-    yield Saga.put(Redux.uiActions.setRegister([false, null]));
-
-    console.log("Verify Registration Response:", data);
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Verified!",
+        body: data.body,
+        type: "success",
+        timeout: 5000,
+      })
+    );
+    yield Saga.put(
+      Redux.uiActions.setVerificationCodeSentAndTempUserId([false, null])
+    );
   } catch (error) {
     console.log(error);
     yield Saga.put(
       Redux.errorsActions.setAuth(Functions.sagaResponseError(error))
+    );
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 10000,
+      })
     );
   }
 }
@@ -128,10 +146,23 @@ function* login(action: LoginAction) {
   try {
     const endpoint = rootEndpoint + "/login";
     const { data } = yield Saga.call(axios.patch, endpoint, action.payload);
-
-    console.log("Login Response:", data);
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Login Successful",
+        body: data.body,
+        footnote: data.footnote,
+        type: "success",
+        timeout: 10000,
+      })
+    );
+    yield Saga.put(
+      Redux.uiActions.setVerificationCodeSentAndTempUserId([true, data.data])
+    );
   } catch (error) {
     console.log(error);
+    yield Saga.put(
+      Redux.errorsActions.setAuth(Functions.sagaResponseError(error))
+    );
   }
 }
 
@@ -143,10 +174,32 @@ function* verifyLogin(action: VerifyLoginAction) {
       verificationCode,
       thirtyDays,
     });
-
-    console.log("Verify Login Response:", data);
+    yield Saga.put(Redux.entitiesActions.setUser(data.data));
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Verified!",
+        body: data.body,
+        type: "success",
+        timeout: 5000,
+      })
+    );
+    yield Saga.put(
+      Redux.uiActions.setVerificationCodeSentAndTempUserId([false, null])
+    );
+    localStorage.setItem("accessToken:", data.accessToken);
   } catch (error) {
     console.log(error);
+    yield Saga.put(
+      Redux.errorsActions.setAuth(Functions.sagaResponseError(error))
+    );
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 10000,
+      })
+    );
   }
 }
 

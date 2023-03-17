@@ -193,6 +193,14 @@ export const AuthForm = (props: Props) => {
     }
   });
 
+  effect(() => {
+    if (props.title === "Log In" && checkboxActive.value) {
+      dispatch(Redux.uiActions.setLoginForThirtyDays(true));
+    } else {
+      dispatch(Redux.uiActions.setLoginForThirtyDays(false));
+    }
+  });
+
   function checkRegistrationErrors(): boolean {
     return (
       checkLoginErrors() &&
@@ -313,11 +321,11 @@ export const AuthForm = (props: Props) => {
               isRegister={props.title === "Register"}
               password={password.value}
               setPassword={(userInput: string) => (password.value = userInput)}
-              passwordError={passwordError.value}
+              passwordError={errors.auth || passwordError.value}
               confirmPassword={confirmPassword.value}
-              setConfirmPassword={(userInput: string) =>
-                (confirmPassword.value = userInput)
-              }
+              setConfirmPassword={(userInput: string) => {
+                confirmPassword.value = userInput;
+              }}
               confirmPasswordError={confirmPasswordError.value}
             />
           </Inputs>

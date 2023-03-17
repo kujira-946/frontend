@@ -90,7 +90,9 @@ type Props = {
 export const Verification = (props: Props) => {
   const dispatch = useDispatch();
   const { ui } = useContext(SignalsStoreContext);
-  const { tempUserId } = useSelector((state: GlobalState) => state.ui);
+  const { tempUserId, loginForThirtyDays } = useSelector(
+    (state: GlobalState) => state.ui
+  );
   const { errors } = useSelector((state: GlobalState) => state);
 
   const verificationCode = useSignal("");
@@ -116,12 +118,22 @@ export const Verification = (props: Props) => {
       verificationCodeError.value =
         "There was an error locating the account. Please try logging in.";
     } else {
-      dispatch(
-        AuthActions.verifyRegistrationRequest(
-          tempUserId,
-          verificationCode.value
-        )
-      );
+      if (props.title === "Verify Registration") {
+        dispatch(
+          AuthActions.verifyRegistrationRequest(
+            tempUserId,
+            verificationCode.value
+          )
+        );
+      } else {
+        dispatch(
+          AuthActions.verifyLoginRequest(
+            tempUserId,
+            verificationCode.value,
+            loginForThirtyDays
+          )
+        );
+      }
     }
   }
 

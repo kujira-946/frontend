@@ -11,6 +11,7 @@ export type UIState = {
   notification: UINotification;
   verificationCodeSent: boolean;
   tempUserId: number | null;
+  loginForThirtyDays: boolean;
   userLoading: boolean;
 };
 
@@ -22,6 +23,7 @@ const initialState: UIState = {
   notification: Constants.initialUINotification,
   verificationCodeSent: false,
   tempUserId: null,
+  loginForThirtyDays: false,
   userLoading: false,
 };
 
@@ -41,12 +43,15 @@ const uiSlice = createSlice({
     ) => {
       state.verificationCodeSent = action.payload;
     },
-    setRegister: (
+    setVerificationCodeSentAndTempUserId: (
       state: UIState,
       action: PayloadAction<[boolean, number | null]>
     ) => {
       state.verificationCodeSent = action.payload[0];
       state.tempUserId = action.payload[1];
+    },
+    setLoginForThirtyDays: (state: UIState, action: PayloadAction<boolean>) => {
+      state.loginForThirtyDays = action.payload;
     },
     setUserLoading: (state: UIState, action: PayloadAction<boolean>) => {
       state.userLoading = action.payload;
