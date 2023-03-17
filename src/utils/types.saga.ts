@@ -1,3 +1,5 @@
+import { User } from "./types.entities";
+
 // ========================================================================================= //
 // [ ACTIONS ] ============================================================================= //
 // ========================================================================================= //
@@ -6,9 +8,7 @@ export type SagaAction<Payload> = {
   type: string;
   payload: Payload;
 };
-
 export type NullAction = SagaAction<null>;
-
 export type IdAction = SagaAction<{ id: number }>;
 
 // ========================================================================================= //
@@ -42,10 +42,25 @@ export type UpdateUserData = Partial<RegistrationData>;
 // [ API RESPONSE ] ======================================================================== //
 // ========================================================================================= //
 
-type APIResponse<Data> = {
-  data: { title?: string; body: string; footnote?: string; data?: Data };
+export type APIError = { data: { body: string } };
+
+type APIResponse<Data = null> = {
+  title?: string;
+  body: string;
+  footnote?: string;
+  data?: Data;
 };
 
 export type RegistrationSuccess = APIResponse<number>;
 
-export type APIError = { data: { body: string } };
+export type RegistrationVerificationSuccess = APIResponse<User>;
+
+export type LoginSuccess = APIResponse<number>;
+
+export type LoginVerificationSuccess = APIResponse<User> & {
+  accessToken: string;
+};
+
+export type LogoutSuccess = APIResponse;
+
+export type NewVerificationCodeSuccess = APIError;

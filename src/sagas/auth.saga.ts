@@ -1,9 +1,9 @@
+import { RegistrationSuccess } from "./../utils/types.saga";
 import * as Saga from "redux-saga/effects";
 import axios from "axios";
 
 import * as Redux from "@/redux";
 import { GlobalState } from "@/store";
-import * as Constants from "@/utils/constants.globals";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { productionRoot, RouteBases } from "@/utils/constants.api";
@@ -87,14 +87,14 @@ function* register(action: RegisterAction) {
     const { data } = yield Saga.call(axios.post, endpoint, action.payload);
     yield Saga.put(
       Redux.uiActions.setNotification({
-        title: response.data.title,
-        body: response.data.body,
-        footnote: response.data.footnote,
+        title: data.title,
+        body: data.body,
+        footnote: data.footnote,
         type: "success",
         timeout: 5000,
       })
     );
-    yield Saga.put(Redux.uiActions.setRegister([true, response.data.data]));
+    yield Saga.put(Redux.uiActions.setRegister([true, data.data]));
 
     // console.log("Register Response:", response);
   } catch (error) {
@@ -110,12 +110,12 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
     const { verificationCode } = action.payload;
     const id = Saga.select((state: GlobalState) => state.ui.tempUserId);
     const endpoint = rootEndpoint + `/register/${id}/verify`;
-    const response = yield Saga.call(axios.patch, endpoint, {
+    const { data } = yield Saga.call(axios.patch, endpoint, {
       verificationCode,
     });
     yield Saga.put(Redux.uiActions.setRegister([false, null]));
 
-    console.log("Verify Registration Response:", response);
+    console.log("Verify Registration Response:", data);
   } catch (error) {
     console.log(error);
     yield Saga.put(
@@ -127,9 +127,9 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
 function* login(action: LoginAction) {
   try {
     const endpoint = rootEndpoint + "/login";
-    const response = yield Saga.call(axios.patch, endpoint, action.payload);
+    const { data } = yield Saga.call(axios.patch, endpoint, action.payload);
 
-    console.log("Login Response:", response);
+    console.log("Login Response:", data);
   } catch (error) {
     console.log(error);
   }
@@ -139,12 +139,12 @@ function* verifyLogin(action: VerifyLoginAction) {
   try {
     const { id, verificationCode, thirtyDays } = action.payload;
     const endpoint = rootEndpoint + `/login/${id}/verify`;
-    const response = yield Saga.call(axios.patch, endpoint, {
+    const { data } = yield Saga.call(axios.patch, endpoint, {
       verificationCode,
       thirtyDays,
     });
 
-    console.log("Verify Login Response:", response);
+    console.log("Verify Login Response:", data);
   } catch (error) {
     console.log(error);
   }
@@ -153,9 +153,9 @@ function* verifyLogin(action: VerifyLoginAction) {
 function* logout(action: Types.IdAction) {
   try {
     const endpoint = rootEndpoint + `/logout/${action.payload.id}`;
-    const response = yield Saga.call(axios.patch, endpoint);
+    const { data } = yield Saga.call(axios.patch, endpoint);
 
-    console.log("Logout Response:", response);
+    console.log("Logout Response:", data);
   } catch (error) {
     console.log(error);
   }
@@ -165,9 +165,9 @@ function* requestNewVerificationCode(action: Types.IdAction) {
   try {
     const endpoint =
       rootEndpoint + `/request-new-verification-code/${action.payload.id}`;
-    const response = yield Saga.call(axios.patch, endpoint);
+    const { data } = yield Saga.call(axios.patch, endpoint);
 
-    console.log("Request New Verification Code Response:", response);
+    console.log("Request New Verification Code Response:", data);
   } catch (error) {
     console.log(error);
   }
