@@ -2,6 +2,8 @@ import * as Saga from "redux-saga/effects";
 import axios from "axios";
 
 import * as Redux from "@/redux";
+import { GlobalState } from "@/store";
+import * as Constants from "@/utils/constants.globals";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { productionRoot, RouteBases } from "@/utils/constants.api";
@@ -27,16 +29,13 @@ export function registerRequest(data: Types.RegistrationData): RegisterAction {
   };
 }
 
-type VerifyRegistrationAction = Types.SagaAction<
-  { id: number } & Types.VerificationData
->;
+type VerifyRegistrationAction = Types.SagaAction<Types.VerificationData>;
 export function verifyRegistrationRequest(
-  id: number,
   verificationCode: string
 ): VerifyRegistrationAction {
   return {
     type: AuthActionTypes.VERIFY_REGISTRATION,
-    payload: { id, verificationCode },
+    payload: { verificationCode },
   };
 }
 
@@ -85,11 +84,19 @@ const rootEndpoint = productionRoot + RouteBases.AUTH;
 function* register(action: RegisterAction) {
   try {
     const endpoint = rootEndpoint + "/register";
-    const response = yield Saga.call(axios.post, endpoint, action.payload);
-    yield Saga.put(Redux.uiActions.setVerificationCodeExists(true));
-    yield Saga.put(Redux.uiActions.setNotification(""));
+    const { data } = yield Saga.call(axios.post, endpoint, action.payload);
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: response.data.title,
+        body: response.data.body,
+        footnote: response.data.footnote,
+        type: "success",
+        timeout: 5000,
+      })
+    );
+    yield Saga.put(Redux.uiActions.setRegister([true, response.data.data]));
 
-    console.log("Register Response:", response);
+    // console.log("Register Response:", response);
   } catch (error) {
     console.log(error);
     yield Saga.put(
@@ -100,16 +107,20 @@ function* register(action: RegisterAction) {
 
 function* verifyRegistration(action: VerifyRegistrationAction) {
   try {
-    const { id, verificationCode } = action.payload;
+    const { verificationCode } = action.payload;
+    const id = Saga.select((state: GlobalState) => state.ui.tempUserId);
     const endpoint = rootEndpoint + `/register/${id}/verify`;
     const response = yield Saga.call(axios.patch, endpoint, {
       verificationCode,
     });
-    yield Saga.put(Redux.uiActions.setVerificationCodeExists(false));
+    yield Saga.put(Redux.uiActions.setRegister([false, null]));
 
     console.log("Verify Registration Response:", response);
   } catch (error) {
     console.log(error);
+    yield Saga.put(
+      Redux.errorsActions.setAuth(Functions.sagaResponseError(error))
+    );
   }
 }
 

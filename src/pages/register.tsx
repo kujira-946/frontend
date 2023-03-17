@@ -1,16 +1,15 @@
-import { useSignal } from "@preact/signals-react";
+import { useSelector } from "react-redux";
 
 import * as Components from "@/components/auth";
+import { GlobalState } from "@/store";
 
 const Register = () => {
-  const toConfirmation = useSignal(false);
+  const { verificationCodeSent } = useSelector(
+    (state: GlobalState) => state.ui
+  );
 
-  return !toConfirmation.value ? (
-    <Components.AuthForm
-      title="Register"
-      caption="Already have an account?"
-      toConfirmation={() => (toConfirmation.value = true)}
-    />
+  return !verificationCodeSent ? (
+    <Components.AuthForm title="Register" caption="Already have an account?" />
   ) : (
     <Components.Verification title="Verify Registration" />
   );

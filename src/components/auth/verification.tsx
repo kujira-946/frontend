@@ -1,14 +1,17 @@
 import Image from "next/image";
 import styled from "styled-components";
 import { useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useSignal } from "@preact/signals-react";
 
+import * as AuthActions from "@/sagas/auth.saga";
 import * as Globals from "@/components";
 import * as Colors from "@/utils/colors";
 import * as Styles from "@/utils/styles";
 import * as Sizes from "@/utils/sizes";
 import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
+import { GlobalState } from "@/store";
 import { ThemeProps } from "@/components/layout";
 
 // ========================================================================================= //
@@ -85,7 +88,9 @@ type Props = {
 };
 
 export const Verification = (props: Props) => {
+  const dispatch = useDispatch();
   const { ui } = useContext(SignalsStoreContext);
+  const { errors } = useSelector((state: GlobalState) => state);
 
   const verificationCode = useSignal("");
   const verificationCodeError = useSignal("");
@@ -96,11 +101,11 @@ export const Verification = (props: Props) => {
 
   function submitVerificationCode(event: Types.Submit): void {
     event.preventDefault();
-    if (true) {
-      // If the API returns an error, this part should be implemented.
-      verificationCodeError.value = "Invalid code.";
+    if (errors.auth) {
+      verificationCodeError.value = errors.auth;
+    } else {
+      dispatch(AuthActions.verifyRegistrationRequest(verificationCode.value));
     }
-    console.log("Submitted verification code!");
   }
 
   return (

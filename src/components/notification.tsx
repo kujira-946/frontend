@@ -1,19 +1,18 @@
 import styled from "styled-components";
 import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { AnimatePresence, motion } from "framer-motion";
 
+import * as Constants from "@/utils/constants.globals";
 import * as Sizes from "@/utils/sizes";
-import { ThemeProps } from "@/components/layout";
-import { useSelector } from "react-redux";
 import { GlobalState } from "@/store";
-import { useDispatch } from "react-redux";
 import { uiActions } from "@/redux";
+import { ThemeProps } from "@/components/layout";
+import { NotificationType } from "@/utils/types";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
-
-type Type = "pending" | "success" | "failure" | "warning";
 
 const Container = styled(motion.main)`
   position: fixed;
@@ -30,7 +29,7 @@ const Container = styled(motion.main)`
   max-width: 25rem;
   padding: ${Sizes.pxAsRem.twelve};
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
-  border: ${(props: ThemeProps & { type: Type }) => {
+  border: ${(props: ThemeProps & { type: NotificationType }) => {
     return `${props.theme[props.type]} solid 2px`;
   }};
   border-radius: ${Sizes.pxAsRem.six};
@@ -51,41 +50,44 @@ const Body = styled.p`
   font-weight: ${Sizes.fontWeights.medium};
 `;
 
+const Footnote = styled.p`
+  margin: 0;
+  font-size: ${Sizes.pxAsRem.ten};
+  font-weight: ${Sizes.fontWeights.semiBold};
+`;
+
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-type Props = {
-  title: string;
-  type: Type;
-  timeout?: number;
-};
-
-export const Notification = (props: Props) => {
+export const Notification = () => {
   const dispatch = useDispatch();
   const { notification } = useSelector((state: GlobalState) => state.ui);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      dispatch(uiActions.setNotification(""));
-    }, props.timeout || 5000);
+      dispatch(uiActions.setNotification(Constants.initialUINotification));
+    }, notification.timeout || 5000);
     return function cleanUp(): void {
       clearTimeout(timer);
     };
-  }, [dispatch, notification, props.timeout]);
+  }, [dispatch, notification]);
 
   return (
     <AnimatePresence>
-      {!!notification && (
+      {!!notification.title && (
         <Container
           initial={{ opacity: 0, transform: "translateY(-12px)" }}
           animate={{ opacity: 1, transform: "translateY(0px)" }}
           exit={{ opacity: 0, transform: "translateY(-8px)" }}
           transition={{ duration: 0.3, delay: 0.4 }}
-          type={props.type}
+          type={notification.type}
         >
-          <Title>{props.title}</Title>
-          <Body>{notification}</Body>
+          <Title>{notification.title}</Title>
+          <Body>{notification.body}</Body>
+          {notification.footnote && (
+            <Footnote>{notification.footnote}</Footnote>
+          )}
         </Container>
       )}
     </AnimatePresence>

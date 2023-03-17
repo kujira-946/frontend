@@ -289,6 +289,7 @@ export const Layout = (props: Props) => {
   return (
     <ThemeProvider theme={themes[ui.theme.value]}>
       <GlobalStyles />
+      <Notification />
       {props.children}
     </ThemeProvider>
   );

@@ -124,20 +124,12 @@ const IconContainer = styled.div`
 type Props = {
   title: "Register" | "Log In";
   caption: string;
-  toConfirmation: () => void;
 };
 
 export const AuthForm = (props: Props) => {
   const dispatch = useDispatch();
   const { ui } = useContext(SignalsStoreContext);
   const { errors } = useSelector((state: GlobalState) => state);
-
-  const { verificationCodeExists } = useSelector(
-    (state: GlobalState) => state.ui
-  );
-  useEffect(() => {
-    if (verificationCodeExists) props.toConfirmation();
-  }, [verificationCodeExists, props.toConfirmation]);
 
   const email = useSignal("");
   const username = useSignal("");
