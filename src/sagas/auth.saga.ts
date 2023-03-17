@@ -95,8 +95,6 @@ function* register(action: RegisterAction) {
       })
     );
     yield Saga.put(Redux.uiActions.setRegister([true, data.data]));
-
-    // console.log("Register Response:", response);
   } catch (error) {
     console.log(error);
     yield Saga.put(
@@ -107,12 +105,10 @@ function* register(action: RegisterAction) {
 
 function* verifyRegistration(action: VerifyRegistrationAction) {
   try {
-    const { verificationCode } = action.payload;
     const id = Saga.select((state: GlobalState) => state.ui.tempUserId);
     const endpoint = rootEndpoint + `/register/${id}/verify`;
-    const { data } = yield Saga.call(axios.patch, endpoint, {
-      verificationCode,
-    });
+    const { data } = yield Saga.call(axios.patch, endpoint, action.payload);
+    yield Saga.put(Redux.entitiesActions.setUser(data.data));
     yield Saga.put(Redux.uiActions.setRegister([false, null]));
 
     console.log("Verify Registration Response:", data);
