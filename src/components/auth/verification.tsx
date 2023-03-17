@@ -2,7 +2,7 @@ import Image from "next/image";
 import styled from "styled-components";
 import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useSignal } from "@preact/signals-react";
+import { effect, useSignal } from "@preact/signals-react";
 
 import * as AuthActions from "@/sagas/auth.saga";
 import * as Globals from "@/components";
@@ -90,21 +90,38 @@ type Props = {
 export const Verification = (props: Props) => {
   const dispatch = useDispatch();
   const { ui } = useContext(SignalsStoreContext);
+  const { tempUserId } = useSelector((state: GlobalState) => state.ui);
   const { errors } = useSelector((state: GlobalState) => state);
 
   const verificationCode = useSignal("");
   const verificationCodeError = useSignal("");
 
   function resendVerificationCode(): void {
-    console.log("RESEND CODE!");
+    if (tempUserId) {
+      dispatch(AuthActions.requestNewVerificationCodeRequest(tempUserId));
+    } else {
+      effect(
+        () =>
+          (verificationCodeError.value =
+            "There was an error. Please try logging in again.")
+      );
+    }
   }
 
   function submitVerificationCode(event: Types.Submit): void {
     event.preventDefault();
     if (errors.auth) {
       verificationCodeError.value = errors.auth;
+    } else if (!tempUserId) {
+      verificationCodeError.value =
+        "There was an error locating the account. Please try logging in.";
     } else {
-      dispatch(AuthActions.verifyRegistrationRequest(verificationCode.value));
+      dispatch(
+        AuthActions.verifyRegistrationRequest(
+          tempUserId,
+          verificationCode.value
+        )
+      );
     }
   }
 

@@ -1,4 +1,3 @@
-import { RegistrationSuccess } from "./../utils/types.saga";
 import * as Saga from "redux-saga/effects";
 import axios from "axios";
 
@@ -29,13 +28,16 @@ export function registerRequest(data: Types.RegistrationData): RegisterAction {
   };
 }
 
-type VerifyRegistrationAction = Types.SagaAction<Types.VerificationData>;
+type VerifyRegistrationAction = Types.SagaAction<
+  { id: number } & Types.VerificationData
+>;
 export function verifyRegistrationRequest(
+  id: number,
   verificationCode: string
 ): VerifyRegistrationAction {
   return {
     type: AuthActionTypes.VERIFY_REGISTRATION,
-    payload: { verificationCode },
+    payload: { id, verificationCode },
   };
 }
 
@@ -91,7 +93,7 @@ function* register(action: RegisterAction) {
         body: data.body,
         footnote: data.footnote,
         type: "success",
-        timeout: 5000,
+        timeout: 10000,
       })
     );
     yield Saga.put(Redux.uiActions.setRegister([true, data.data]));
@@ -105,9 +107,11 @@ function* register(action: RegisterAction) {
 
 function* verifyRegistration(action: VerifyRegistrationAction) {
   try {
-    const id = Saga.select((state: GlobalState) => state.ui.tempUserId);
+    const { id, verificationCode } = action.payload;
     const endpoint = rootEndpoint + `/register/${id}/verify`;
-    const { data } = yield Saga.call(axios.patch, endpoint, action.payload);
+    const { data } = yield Saga.call(axios.patch, endpoint, {
+      verificationCode,
+    });
     yield Saga.put(Redux.entitiesActions.setUser(data.data));
     yield Saga.put(Redux.uiActions.setRegister([false, null]));
 
@@ -162,6 +166,14 @@ function* requestNewVerificationCode(action: Types.IdAction) {
     const endpoint =
       rootEndpoint + `/request-new-verification-code/${action.payload.id}`;
     const { data } = yield Saga.call(axios.patch, endpoint);
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "New Verification Code Request",
+        body: data.body,
+        type: "success",
+        timeout: 10000,
+      })
+    );
 
     console.log("Request New Verification Code Response:", data);
   } catch (error) {
