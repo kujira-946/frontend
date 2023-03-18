@@ -186,7 +186,7 @@ function* verifyLogin(action: VerifyLoginAction) {
     yield Saga.put(
       Redux.uiActions.setVerificationCodeSentAndTempUserId([false, null])
     );
-    localStorage.setItem("accessToken:", data.accessToken);
+    localStorage.setItem("accessToken", data.accessToken);
   } catch (error) {
     console.log(error);
     yield Saga.put(
@@ -227,6 +227,7 @@ function* requestNewVerificationCode(action: Types.IdAction) {
         timeout: 10000,
       })
     );
+    localStorage.removeItem("accessToken");
 
     console.log("Request New Verification Code Response:", data);
   } catch (error) {

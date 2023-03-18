@@ -18,7 +18,6 @@ const Container = styled(motion.main)`
   position: fixed;
   top: 20px;
   left: 50%;
-  transform: translateX(-50%);
   z-index: ${Sizes.zIndexes.notification};
   display: flex;
   flex-direction: column;
@@ -77,9 +76,15 @@ export const Notification = () => {
     <AnimatePresence>
       {!!notification.title && (
         <Container
-          initial={{ opacity: 0, transform: "translateY(-12px)" }}
-          animate={{ opacity: 1, transform: "translateY(0px)" }}
-          exit={{ opacity: 0, transform: "translateY(-8px)" }}
+          initial={{
+            opacity: 0,
+            transform: "translateX(-50%) translateY(-12px)",
+          }}
+          animate={{
+            opacity: 1,
+            transform: "translateX(-50%) translateY(0px)",
+          }}
+          exit={{ opacity: 0, transform: "translateX(-50%) translateY(-8px)" }}
           transition={{ duration: 0.3, delay: 0.4 }}
           type={notification.type}
         >

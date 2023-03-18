@@ -2,22 +2,21 @@ import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 import { useContext, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { effect, useSignal } from "@preact/signals-react";
 
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
-import * as Icons from "@/components/icons";
 import * as AuthActions from "@/sagas/auth.saga";
-import * as Functions from "@/utils/functions";
 import * as Colors from "@/utils/colors";
 import * as Sizes from "@/utils/sizes";
 import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
-import { GlobalState } from "@/store";
 import { ThemeProps } from "@/components/layout";
 
-import { AuthFormPasswords } from "./auth-form-passwords";
+import { RegisterInputs } from "./register-inputs";
+import { LoginInputs } from "./login-inputs";
+import { CheckboxConfirmation } from "./checkbox-confirmation";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -81,42 +80,6 @@ const Form = styled.form`
   gap: ${Sizes.pxAsRem.sixteen};
 `;
 
-const Inputs = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: ${Sizes.pxAsRem.four};
-`;
-
-const CheckboxConfirmation = styled.section`
-  display: flex;
-  align-items: center;
-  gap: ${Sizes.pxAsRem.twelve};
-  font-size: ${Sizes.pxAsRem.fourteen};
-  font-weight: ${Sizes.fontWeights.medium};
-`;
-
-const CheckboxConfirmationText = styled.div`
-  flex: 1;
-`;
-
-const LegalRedirect = styled(Link)`
-  color: ${(props: ThemeProps) => props.theme.secondaryMain};
-  font-weight: ${Sizes.fontWeights.semiBold};
-
-  @media (hover: hover) {
-    :hover {
-      color: ${(props: ThemeProps) => props.theme.secondaryDark};
-    }
-  }
-`;
-
-const IconContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-`;
-
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
@@ -129,7 +92,6 @@ type Props = {
 export const AuthForm = (props: Props) => {
   const dispatch = useDispatch();
   const { ui } = useContext(SignalsStoreContext);
-  const { errors } = useSelector((state: GlobalState) => state);
 
   const email = useSignal("");
   const username = useSignal("");
@@ -143,7 +105,16 @@ export const AuthForm = (props: Props) => {
 
   const checkboxActive = useSignal(false);
 
-  // ↓↓↓ Error checks ↓↓↓ //
+  useEffect(() => {
+    if (props.title === "Log In") {
+      if (checkboxActive.value) {
+        dispatch(Redux.uiActions.setLoginForThirtyDays(true));
+      } else {
+        dispatch(Redux.uiActions.setLoginForThirtyDays(false));
+      }
+    }
+  }, [dispatch, props.title, checkboxActive.value]);
+
   effect(() => {
     // Email error check
     if (email.value !== "") {
@@ -157,20 +128,6 @@ export const AuthForm = (props: Props) => {
     } else {
       emailError.value = "";
     }
-    // Username error check
-    if (username.value !== "") {
-      if (!Functions.checkValidCharacters(username.value)) {
-        usernameError.value = "Invalid character(s).";
-      } else if (username.value.length < 6) {
-        usernameError.value = "Too short.";
-      } else if (username.value.length > 16) {
-        usernameError.value = "Too long.";
-      } else {
-        usernameError.value = "";
-      }
-    } else {
-      usernameError.value = "";
-    }
     // Password error check
     if (props.title === "Register" && password.value !== "") {
       if (password.value.length < 12) {
@@ -180,24 +137,6 @@ export const AuthForm = (props: Props) => {
       }
     } else {
       passwordError.value = "";
-    }
-    // Confirm password error check
-    if (confirmPassword.value !== "") {
-      if (confirmPassword.value !== password.value) {
-        confirmPasswordError.value = "Passwords don't match.";
-      } else {
-        confirmPasswordError.value = "";
-      }
-    } else {
-      confirmPasswordError.value = "";
-    }
-  });
-
-  effect(() => {
-    if (props.title === "Log In" && checkboxActive.value) {
-      dispatch(Redux.uiActions.setLoginForThirtyDays(true));
-    } else {
-      dispatch(Redux.uiActions.setLoginForThirtyDays(false));
     }
   });
 
@@ -211,6 +150,18 @@ export const AuthForm = (props: Props) => {
       checkboxActive.value
     );
   }
+  function register(): void {
+    if (checkRegistrationErrors()) {
+      dispatch(
+        AuthActions.registerRequest({
+          email: email.value,
+          username: username.value,
+          password: password.value,
+        } as Types.RegistrationData)
+      );
+    }
+  }
+
   function checkLoginErrors(): boolean {
     return (
       email.value.length > 0 &&
@@ -219,28 +170,18 @@ export const AuthForm = (props: Props) => {
       passwordError.value === ""
     );
   }
-
-  function register(): void {
-    if (checkRegistrationErrors()) {
-      const data: Types.RegistrationData = {
-        email: email.value,
-        username: username.value,
-        password: password.value,
-      };
-      dispatch(AuthActions.registerRequest(data));
-    }
-  }
   function login(): void {
     if (checkLoginErrors()) {
-      const data: Types.LoginData = {
-        email: email.value,
-        password: password.value,
-      };
-      dispatch(AuthActions.loginRequest(data));
+      dispatch(
+        AuthActions.loginRequest({
+          email: email.value,
+          password: password.value,
+        } as Types.LoginData)
+      );
     }
   }
 
-  function handleSubmit(event: Types.Submit): void {
+  function submit(event: Types.Submit): void {
     event.preventDefault();
     if (props.title === "Register") register();
     else login();
@@ -278,95 +219,31 @@ export const AuthForm = (props: Props) => {
           </TitleAndCaption>
         </Header>
 
-        <Form onSubmit={handleSubmit}>
-          <Inputs>
-            {/* Email */}
-            <Globals.Input
-              borderRadius="four"
-              title="Email"
-              errorMessage={
-                errors.auth.includes("email")
-                  ? "Already taken."
-                  : emailError.value
-              }
-              userInput={email.value}
-              setUserInput={(event: Types.Input) => {
-                email.value = event.currentTarget.value;
-                if (errors.auth.length > 0) {
-                  dispatch(Redux.errorsActions.setAuth(""));
-                }
-              }}
+        <Form onSubmit={submit}>
+          {props.title === "Register" ? (
+            <RegisterInputs
+              email={email}
+              username={username}
+              password={password}
+              confirmPassword={confirmPassword}
+              emailError={emailError}
+              usernameError={usernameError}
+              passwordError={passwordError}
+              confirmPasswordError={confirmPasswordError}
             />
-            {/* Username */}
-            {props.title === "Register" && (
-              <Globals.Input
-                borderRadius="four"
-                title="Username"
-                errorMessage={
-                  errors.auth.includes("username")
-                    ? "Already taken."
-                    : usernameError.value
-                }
-                userInput={username.value}
-                setUserInput={(event: Types.Input) => {
-                  username.value = event.currentTarget.value;
-                  if (errors.auth.length > 0) {
-                    dispatch(Redux.errorsActions.setAuth(""));
-                  }
-                }}
-              />
-            )}
-            {/* Password / Confirm Password */}
-            <AuthFormPasswords
-              isRegister={props.title === "Register"}
-              password={password.value}
-              setPassword={(userInput: string) => (password.value = userInput)}
-              passwordError={errors.auth || passwordError.value}
-              confirmPassword={confirmPassword.value}
-              setConfirmPassword={(userInput: string) => {
-                confirmPassword.value = userInput;
-              }}
-              confirmPasswordError={confirmPasswordError.value}
+          ) : (
+            <LoginInputs
+              email={email}
+              password={password}
+              emailError={emailError}
+              passwordError={passwordError}
             />
-          </Inputs>
+          )}
 
-          <CheckboxConfirmation>
-            {checkboxActive.value ? (
-              <IconContainer onClick={() => (checkboxActive.value = false)}>
-                <Icons.CheckboxActive
-                  height={20}
-                  fill={Colors.secondary[ui.theme.value].main}
-                />
-              </IconContainer>
-            ) : (
-              <IconContainer onClick={() => (checkboxActive.value = true)}>
-                <Icons.CheckboxInactive
-                  height={20}
-                  fill={Colors.text[ui.theme.value]}
-                />
-              </IconContainer>
-            )}
-            {props.title === "Register" ? (
-              <CheckboxConfirmationText>
-                I agree to the{" "}
-                <LegalRedirect href="/terms" target="_blank">
-                  Terms Of Service
-                </LegalRedirect>
-                ,{" "}
-                <LegalRedirect href="/privacy" target="_blank">
-                  Privacy Policy
-                </LegalRedirect>
-                , and{" "}
-                <LegalRedirect href="/cookie" target="_blank">
-                  Cookie Policy
-                </LegalRedirect>
-              </CheckboxConfirmationText>
-            ) : (
-              <CheckboxConfirmationText>
-                Stay logged in for 30 days on this device.
-              </CheckboxConfirmationText>
-            )}
-          </CheckboxConfirmation>
+          <CheckboxConfirmation
+            isRegister={props.title === "Register"}
+            checkboxActive={checkboxActive}
+          />
 
           <Globals.Button
             type="submit"
