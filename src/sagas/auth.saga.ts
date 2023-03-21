@@ -1,8 +1,8 @@
 import * as Saga from "redux-saga/effects";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 import * as Redux from "@/redux";
-import { GlobalState } from "@/store";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { productionRoot, RouteBases } from "@/utils/constants.api";
@@ -87,6 +87,8 @@ function* register(action: RegisterAction) {
   try {
     const endpoint = rootEndpoint + "/register";
     const { data } = yield Saga.call(axios.post, endpoint, action.payload);
+    yield Saga.put(Redux.uiActions.setTempUserId(data.data));
+    yield Saga.put(Redux.errorsActions.setAuth(""));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: data.title,
@@ -95,9 +97,6 @@ function* register(action: RegisterAction) {
         type: "success",
         timeout: 10000,
       })
-    );
-    yield Saga.put(
-      Redux.uiActions.setVerificationCodeSentAndTempUserId([true, data.data])
     );
   } catch (error) {
     console.log(error);
@@ -109,12 +108,15 @@ function* register(action: RegisterAction) {
 
 function* verifyRegistration(action: VerifyRegistrationAction) {
   try {
+    yield Saga.put(Redux.uiActions.setUserLoading(true));
     const { id, verificationCode } = action.payload;
     const endpoint = rootEndpoint + `/register/${id}/verify`;
     const { data } = yield Saga.call(axios.patch, endpoint, {
       verificationCode,
     });
     yield Saga.put(Redux.entitiesActions.setUser(data.data));
+    yield Saga.put(Redux.uiActions.resetState());
+    yield Saga.put(Redux.errorsActions.setAuth(""));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Verified!",
@@ -122,9 +124,6 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
         type: "success",
         timeout: 5000,
       })
-    );
-    yield Saga.put(
-      Redux.uiActions.setVerificationCodeSentAndTempUserId([false, null])
     );
   } catch (error) {
     console.log(error);
@@ -146,6 +145,8 @@ function* login(action: LoginAction) {
   try {
     const endpoint = rootEndpoint + "/login";
     const { data } = yield Saga.call(axios.patch, endpoint, action.payload);
+    yield Saga.put(Redux.uiActions.setTempUserId(data.data));
+    yield Saga.put(Redux.errorsActions.setAuth(""));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Login Successful",
@@ -154,9 +155,6 @@ function* login(action: LoginAction) {
         type: "success",
         timeout: 10000,
       })
-    );
-    yield Saga.put(
-      Redux.uiActions.setVerificationCodeSentAndTempUserId([true, data.data])
     );
   } catch (error) {
     console.log(error);
@@ -168,6 +166,7 @@ function* login(action: LoginAction) {
 
 function* verifyLogin(action: VerifyLoginAction) {
   try {
+    yield Saga.put(Redux.uiActions.setUserLoading(true));
     const { id, verificationCode, thirtyDays } = action.payload;
     const endpoint = rootEndpoint + `/login/${id}/verify`;
     const { data } = yield Saga.call(axios.patch, endpoint, {
@@ -175,6 +174,9 @@ function* verifyLogin(action: VerifyLoginAction) {
       thirtyDays,
     });
     yield Saga.put(Redux.entitiesActions.setUser(data.data));
+    yield Saga.put(Redux.uiActions.setUserLoading(false));
+    yield Saga.put(Redux.uiActions.resetState());
+    yield Saga.put(Redux.errorsActions.setAuth(""));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Verified!",
@@ -183,10 +185,9 @@ function* verifyLogin(action: VerifyLoginAction) {
         timeout: 5000,
       })
     );
-    yield Saga.put(
-      Redux.uiActions.setVerificationCodeSentAndTempUserId([false, null])
-    );
+    localStorage.setItem("id", data.data.id);
     localStorage.setItem("accessToken", data.accessToken);
+    Cookies.set("token", data.accessToken, { secure: true });
   } catch (error) {
     console.log(error);
     yield Saga.put(
@@ -207,6 +208,10 @@ function* logout(action: Types.IdAction) {
   try {
     const endpoint = rootEndpoint + `/logout/${action.payload.id}`;
     const { data } = yield Saga.call(axios.patch, endpoint);
+    yield Saga.put(Redux.errorsActions.setAuth(""));
+    localStorage.removeItem("id");
+    localStorage.removeItem("accessToken");
+    Cookies.remove("token");
 
     console.log("Logout Response:", data);
   } catch (error) {
@@ -219,6 +224,7 @@ function* requestNewVerificationCode(action: Types.IdAction) {
     const endpoint =
       rootEndpoint + `/request-new-verification-code/${action.payload.id}`;
     const { data } = yield Saga.call(axios.patch, endpoint);
+    yield Saga.put(Redux.errorsActions.setAuth(""));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "New Verification Code Request",
@@ -227,11 +233,20 @@ function* requestNewVerificationCode(action: Types.IdAction) {
         timeout: 10000,
       })
     );
+    localStorage.removeItem("id");
     localStorage.removeItem("accessToken");
 
     console.log("Request New Verification Code Response:", data);
   } catch (error) {
     console.log(error);
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 10000,
+      })
+    );
   }
 }
 

@@ -75,9 +75,7 @@ export const RegisterInputs = (props: Props) => {
         borderRadius="four"
         title="Email"
         errorMessage={
-          errors.auth.includes("email")
-            ? "Not available."
-            : props.emailError.value
+          errors.auth.includes("email") ? errors.auth : props.emailError.value
         }
         userInput={props.email.value}
         setUserInput={(event: Types.Input) => {
@@ -94,7 +92,7 @@ export const RegisterInputs = (props: Props) => {
         title="Username"
         errorMessage={
           errors.auth.includes("username")
-            ? "Not available."
+            ? errors.auth
             : props.usernameError.value
         }
         userInput={props.username.value}

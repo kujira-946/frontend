@@ -13,6 +13,7 @@ import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
 import { GlobalState } from "@/store";
 import { ThemeProps } from "@/components/layout";
+import { useRouter } from "next/router";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -90,10 +91,10 @@ type Props = {
 export const Verification = (props: Props) => {
   const dispatch = useDispatch();
   const { ui } = useContext(SignalsStoreContext);
+  const { errors } = useSelector((state: GlobalState) => state);
   const { tempUserId, loginForThirtyDays } = useSelector(
     (state: GlobalState) => state.ui
   );
-  const { errors } = useSelector((state: GlobalState) => state);
 
   const verificationCode = useSignal("");
   const verificationCodeError = useSignal("");
@@ -110,6 +111,7 @@ export const Verification = (props: Props) => {
     }
   }
 
+  const router = useRouter();
   function submitVerificationCode(event: Types.Submit): void {
     event.preventDefault();
     if (errors.auth) {
@@ -133,6 +135,7 @@ export const Verification = (props: Props) => {
             loginForThirtyDays
           )
         );
+        if (user) router.push("/dashboard/logbooks");
       }
     }
   }

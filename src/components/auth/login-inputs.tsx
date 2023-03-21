@@ -43,8 +43,8 @@ export const LoginInputs = (props: Props) => {
         borderRadius="four"
         title="Email"
         errorMessage={
-          errors.auth.includes("email")
-            ? "Not available."
+          errors.auth.includes("register")
+            ? errors.auth
             : props.emailError.value
         }
         userInput={props.email.value}
@@ -60,7 +60,11 @@ export const LoginInputs = (props: Props) => {
       <Globals.Input
         borderRadius="four"
         title="Password"
-        errorMessage={props.passwordError.value}
+        errorMessage={
+          errors.auth.includes("password")
+            ? errors.auth
+            : props.passwordError.value
+        }
         userInput={props.password.value}
         setUserInput={(event: Types.Input) =>
           (props.password.value = event.currentTarget.value)
