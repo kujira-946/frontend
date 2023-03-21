@@ -2,6 +2,7 @@ import * as Saga from "redux-saga/effects";
 import axios from "axios";
 
 import * as Redux from "@/redux";
+import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { productionRoot, RouteBases } from "@/utils/constants.api";
 
@@ -53,14 +54,23 @@ const rootEndpoint = productionRoot + RouteBases.USERS;
 function* fetchUsers() {
   try {
     const endpoint = rootEndpoint;
-    const response = yield Saga.call(axios.get, endpoint);
-    yield Saga.put(Redux.entitiesActions.setUser(response.data));
+    const { data } = yield Saga.call(axios.get, endpoint);
+    yield Saga.put(Redux.entitiesActions.setUser(data.data));
     yield Saga.put(Redux.errorsActions.setUsers(""));
 
     // console.log("Fetch Users Response:", response.data);
   } catch (error) {
     console.log(error);
     yield Saga.put(Redux.errorsActions.setUsers("Failed to fetch users."));
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        // body: "Failed to fetch users.",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 5000,
+      })
+    );
   }
 }
 

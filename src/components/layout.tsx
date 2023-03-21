@@ -1,10 +1,14 @@
 import localFont from "@next/font/local";
-import { useContext } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useContext, useEffect } from "react";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 
 import * as Colors from "@/utils/colors";
 import { SignalsStoreContext } from "@/pages/_app";
 import { Notification } from "./notification";
+import { useDispatch } from "react-redux";
+import { logoutRequest } from "@/sagas/auth.saga";
 
 const poppins = localFont({
   src: [
@@ -284,7 +288,19 @@ export type ThemeProps = { theme: ThemeContents };
 type Props = { children: React.ReactNode };
 
 export const Layout = (props: Props) => {
+  const dispatch = useDispatch();
   const { ui } = useContext(SignalsStoreContext);
+
+  const userId = Cookies.get("id");
+  const jwtAccessToken = Cookies.get("token");
+  useEffect(() => {
+    if (!jwtAccessToken && userId) {
+      dispatch(logoutRequest(Number(userId)));
+      Cookies.remove("id");
+    } else {
+      axios.defaults.headers.common["Authorization"] = jwtAccessToken;
+    }
+  }, [userId, jwtAccessToken]);
 
   return (
     <ThemeProvider theme={themes[ui.theme.value]}>

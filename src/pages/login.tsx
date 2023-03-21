@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -10,7 +11,7 @@ const Login = () => {
   const { tempUserId } = useSelector((state: GlobalState) => state.ui);
 
   const router = useRouter();
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = Cookies.get("token");
   useEffect(() => {
     if (user && accessToken) router.push("/dashboard/logbooks");
   }, [user, router, accessToken]);

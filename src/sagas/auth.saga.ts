@@ -185,9 +185,11 @@ function* verifyLogin(action: VerifyLoginAction) {
         timeout: 5000,
       })
     );
-    localStorage.setItem("id", data.data.id);
-    localStorage.setItem("accessToken", data.accessToken);
-    Cookies.set("token", data.accessToken, { secure: true });
+    Cookies.set("id", data.data.id);
+    Cookies.set("token", data.accessToken, {
+      secure: true,
+      expires: thirtyDays ? 30 : 7,
+    });
   } catch (error) {
     console.log(error);
     yield Saga.put(
@@ -209,8 +211,7 @@ function* logout(action: Types.IdAction) {
     const endpoint = rootEndpoint + `/logout/${action.payload.id}`;
     const { data } = yield Saga.call(axios.patch, endpoint);
     yield Saga.put(Redux.errorsActions.setAuth(""));
-    localStorage.removeItem("id");
-    localStorage.removeItem("accessToken");
+    Cookies.remove("id");
     Cookies.remove("token");
 
     console.log("Logout Response:", data);
@@ -233,8 +234,8 @@ function* requestNewVerificationCode(action: Types.IdAction) {
         timeout: 10000,
       })
     );
-    localStorage.removeItem("id");
-    localStorage.removeItem("accessToken");
+    Cookies.remove("id");
+    Cookies.remove("token");
 
     console.log("Request New Verification Code Response:", data);
   } catch (error) {
