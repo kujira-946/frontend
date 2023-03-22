@@ -211,10 +211,26 @@ function* logout(action: Types.IdAction) {
     yield Saga.put(Redux.errorsActions.setAuth(""));
     Cookies.remove("id");
     Cookies.remove("token");
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Logout Successful",
+        body: data.body,
+        type: "success",
+        timeout: 5000,
+      })
+    );
 
     console.log("Logout Response:", data);
   } catch (error) {
     console.log(error);
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 10000,
+      })
+    );
   }
 }
 
