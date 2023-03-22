@@ -4,8 +4,8 @@ import { useContext } from "react";
 import { Signal } from "@preact/signals-react";
 
 import * as Icons from "@/components/icons";
-import * as Colors from "@/utils/colors";
-import * as Sizes from "@/utils/sizes";
+import * as Colors from "@/utils/styles/styles.colors";
+import * as Sizes from "@/utils/styles.sizes";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
 

@@ -4,9 +4,9 @@ import { useContext } from "react";
 import { motion } from "framer-motion";
 
 import * as Globals from "@/components";
-import * as Colors from "@/utils/colors";
-import * as Styles from "@/utils/styles";
-import * as Sizes from "@/utils/sizes";
+import * as Colors from "@/utils/styles/styles.colors";
+import * as Styles from "@/utils/styles.helpers";
+import * as Sizes from "@/utils/styles.sizes";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
 

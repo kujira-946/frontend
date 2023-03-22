@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import * as Sizes from "@/utils/sizes";
+import * as Sizes from "@/utils/styles.sizes";
 import { ThemeProps } from "@/components/layout";
 
 // ========================================================================================= //

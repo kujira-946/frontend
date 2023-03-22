@@ -5,7 +5,7 @@ import { effect, Signal, useSignal } from "@preact/signals-react";
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
-import * as Sizes from "@/utils/sizes";
+import * as Sizes from "@/utils/styles.sizes";
 import * as Types from "@/utils/types";
 import { GlobalState } from "@/store";
 

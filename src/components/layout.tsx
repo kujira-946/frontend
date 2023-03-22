@@ -5,7 +5,7 @@ import { useContext, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 
-import * as Colors from "@/utils/colors";
+import * as Colors from "@/utils/styles/styles.colors";
 import { SignalsStoreContext } from "@/pages/_app";
 import { logoutRequest } from "@/sagas/auth.saga";
 

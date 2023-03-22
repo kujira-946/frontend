@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { preventUserInteraction } from "@/utils/styles";
+import { preventUserInteraction } from "@/utils/styles.helpers";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //

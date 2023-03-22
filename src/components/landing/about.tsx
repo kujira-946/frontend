@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 import * as Globals from "@/components";
-import * as Sizes from "@/utils/sizes";
+import * as Sizes from "@/utils/styles.sizes";
 import * as Constants from "@/utils/constants.landing";
 import { ThemeProps } from "@/components/layout";
 import { AboutCopy } from "./about-copy";

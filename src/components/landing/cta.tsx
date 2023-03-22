@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { useContext } from "react";
 
 import * as Globals from "@/components";
-import * as Colors from "@/utils/colors";
-import * as Sizes from "@/utils/sizes";
+import * as Colors from "@/utils/styles/styles.colors";
+import * as Sizes from "@/utils/styles.sizes";
 import * as Constants from "@/utils/constants.landing";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";

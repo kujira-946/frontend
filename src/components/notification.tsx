@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { AnimatePresence, motion } from "framer-motion";
 
 import * as Constants from "@/utils/constants.globals";
-import * as Sizes from "@/utils/sizes";
+import * as Sizes from "@/utils/styles.sizes";
 import { GlobalState } from "@/store";
 import { uiActions } from "@/redux";
 import { ThemeProps } from "@/components/layout";

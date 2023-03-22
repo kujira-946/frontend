@@ -3,9 +3,9 @@ import { useContext } from "react";
 import { motion } from "framer-motion";
 
 import * as Icons from "@/components/icons";
-import * as Colors from "@/utils/colors";
-import * as Styles from "@/utils/styles";
-import * as Sizes from "@/utils/sizes";
+import * as Colors from "@/utils/styles/styles.colors";
+import * as Styles from "@/utils/styles.helpers";
+import * as Sizes from "@/utils/styles.sizes";
 import * as Constants from "@/utils/constants.landing";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "./layout";

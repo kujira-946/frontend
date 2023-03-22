@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
-import * as Colors from "@/utils/colors";
-import * as Styles from "@/utils/styles";
-import * as Sizes from "@/utils/sizes";
+import * as Colors from "@/utils/styles/styles.colors";
+import * as Styles from "@/utils/styles.helpers";
+import * as Sizes from "@/utils/styles.sizes";
 import * as Types from "@/utils/types";
 import { ThemeProps } from "./layout";
 

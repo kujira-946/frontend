@@ -3,8 +3,8 @@ import { useContext } from "react";
 
 import * as Global from "@/components";
 import * as Logbook from "@/components/logbook";
-import * as Colors from "@/utils/colors";
-import * as Sizes from "@/utils/sizes";
+import * as Colors from "@/utils/styles/styles.colors";
+import * as Sizes from "@/utils/styles.sizes";
 import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
 

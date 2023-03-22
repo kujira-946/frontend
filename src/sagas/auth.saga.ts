@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
-import { RouteBases } from "@/utils/constants.api";
+import { RouteBases } from "@/utils/constants/constants.api";
 
 enum AuthActionTypes {
   REGISTER = "REGISTER",

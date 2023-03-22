@@ -15,6 +15,7 @@ export type User = {
   currency: string;
   mobileNumber?: string;
   theme: Theme;
+  onboarded: boolean;
   emailVerified: boolean;
   loggedIn: boolean;
   signedVerificationCode?: string;
