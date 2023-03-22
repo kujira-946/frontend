@@ -4,9 +4,7 @@ import { useContext } from "react";
 import { motion } from "framer-motion";
 
 import * as Globals from "@/components";
-import * as Colors from "@/utils/styles/styles.colors";
-import * as Styles from "@/utils/styles.helpers";
-import * as Sizes from "@/utils/styles.sizes";
+import * as Styles from "@/utils/styles";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
 
@@ -33,7 +31,7 @@ const ATFContent = styled.div`
   gap: 80px;
   margin: 0px auto;
   width: 100%;
-  max-width: ${Sizes.widths.content}px;
+  max-width: ${Styles.widths.content}px;
 `;
 
 const CopyAndButtons = styled(motion.div)`
@@ -49,14 +47,14 @@ const Copy = styled.article`
 `;
 
 const CopyHeader = styled.h1`
-  font-size: ${Sizes.pxAsRem.thirtyTwo};
-  font-weight: ${Sizes.fontWeights.bold};
-  margin: 0 0 ${Sizes.pxAsRem.twelve};
+  font-size: ${Styles.pxAsRem.thirtyTwo};
+  font-weight: ${Styles.fontWeights.bold};
+  margin: 0 0 ${Styles.pxAsRem.twelve};
 `;
 
 const CopyBody = styled.p`
-  font-size: ${Sizes.pxAsRem.eighteen};
-  font-weight: ${Sizes.fontWeights.medium};
+  font-size: ${Styles.pxAsRem.eighteen};
+  font-weight: ${Styles.fontWeights.medium};
   margin: 0;
 `;
 
@@ -104,8 +102,8 @@ export const AboveTheFold = () => {
             <Link href="/register" style={{ width: "100%" }}>
               <Globals.Button
                 size="large"
-                background={Colors.primary[ui.theme.value].main}
-                hoverBackground={Colors.primary[ui.theme.value].darker}
+                background={Styles.primary[ui.theme.value].main}
+                hoverBackground={Styles.primary[ui.theme.value].darker}
               >
                 Register
               </Globals.Button>
@@ -115,10 +113,10 @@ export const AboveTheFold = () => {
               onClick={scrollToAbout}
               size="large"
               borderThickness={2}
-              color={Colors.primary[ui.theme.value].main}
-              hoverColor={Colors.primary[ui.theme.value].darker}
-              border={Colors.primary[ui.theme.value].main}
-              hoverBorder={Colors.primary[ui.theme.value].darker}
+              color={Styles.primary[ui.theme.value].main}
+              hoverColor={Styles.primary[ui.theme.value].darker}
+              border={Styles.primary[ui.theme.value].main}
+              hoverBorder={Styles.primary[ui.theme.value].darker}
             >
               Learn More
             </Globals.Button>

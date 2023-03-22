@@ -4,9 +4,7 @@ import { useSignal } from "@preact/signals-react";
 
 import * as Logbook from "@/components/logbook";
 import * as Icons from "@/components/icons";
-import * as Styles from "@/utils/styles.helpers";
-import * as Colors from "@/utils/styles/styles.colors";
-import * as Sizes from "@/utils/styles.sizes";
+import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
@@ -23,42 +21,42 @@ const Container = styled.article<ContainerProps>`
       ? `${props.theme.backgroundSix} solid 1px`
       : `${props.theme.backgroundFour} solid 1px`;
   }};
-  border-radius: ${Sizes.pxAsRem.six};
+  border-radius: ${Styles.pxAsRem.six};
 `;
 
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: ${Sizes.pxAsRem.twelve};
-  padding: ${Sizes.pxAsRem.ten} ${Sizes.pxAsRem.twelve};
+  gap: ${Styles.pxAsRem.twelve};
+  padding: ${Styles.pxAsRem.ten} ${Styles.pxAsRem.twelve};
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
   color: ${(props: ThemeProps) => props.theme.text};
   border-bottom: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
 `;
 
 const HeaderName = styled.input`
-  padding: ${Sizes.pxAsRem.four} ${Sizes.pxAsRem.six};
-  font-size: ${Sizes.pxAsRem.twelve};
-  font-weight: ${Sizes.fontWeights.semiBold};
+  padding: ${Styles.pxAsRem.four} ${Styles.pxAsRem.six};
+  font-size: ${Styles.pxAsRem.twelve};
+  font-weight: ${Styles.fontWeights.semiBold};
 `;
 
 const HeaderCost = styled.span`
-  font-size: ${Sizes.pxAsRem.twelve};
-  font-weight: ${Sizes.fontWeights.medium};
+  font-size: ${Styles.pxAsRem.twelve};
+  font-weight: ${Styles.fontWeights.medium};
 `;
 
 const Body = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${Sizes.pxAsRem.eight};
-  padding: ${Sizes.pxAsRem.eight};
+  gap: ${Styles.pxAsRem.eight};
+  padding: ${Styles.pxAsRem.eight};
 `;
 
 const PurchaseCells = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${Sizes.pxAsRem.four};
+  gap: ${Styles.pxAsRem.four};
 `;
 
 const AddButton = styled.button`
@@ -104,7 +102,7 @@ export const Dropdown = (props: Props) => {
         <AddButton>
           <Icons.Add
             height={12}
-            fill={Colors.background[ui.theme.value].eight}
+            fill={Styles.background[ui.theme.value].eight}
           />
           Add
         </AddButton>

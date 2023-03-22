@@ -6,9 +6,8 @@ import { effect, useSignal } from "@preact/signals-react";
 
 import * as AuthActions from "@/sagas/auth.saga";
 import * as Globals from "@/components";
-import * as Colors from "@/utils/styles/styles.colors";
-import * as Styles from "@/utils/styles.helpers";
-import * as Sizes from "@/utils/styles.sizes";
+import * as Colors from "@/utils/styles/colors";
+import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
 import { GlobalState } from "@/store";
@@ -26,8 +25,8 @@ const Container = styled.main`
   transform: translateX(-50%) translateY(-50%);
   width: 100%;
   max-width: 400px;
-  padding: ${Sizes.pxAsRem.sixteen};
-  border-radius: ${Sizes.pxAsRem.six};
+  padding: ${Styles.pxAsRem.sixteen};
+  border-radius: ${Styles.pxAsRem.six};
 
   ${(props: ThemeProps) => props.theme.shadowTwo};
 `;
@@ -36,28 +35,28 @@ const Header = styled.header`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: ${Sizes.pxAsRem.twenty};
-  margin-bottom: ${Sizes.pxAsRem.twenty};
+  gap: ${Styles.pxAsRem.twenty};
+  margin-bottom: ${Styles.pxAsRem.twenty};
 `;
 
 const TitleAndCaption = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: ${Sizes.pxAsRem.eight};
+  gap: ${Styles.pxAsRem.eight};
 `;
 
 const Title = styled.h1`
   margin: 0;
-  font-size: ${Sizes.pxAsRem.twentyFour};
-  font-weight: ${Sizes.fontWeights.bold};
+  font-size: ${Styles.pxAsRem.twentyFour};
+  font-weight: ${Styles.fontWeights.bold};
   text-align: center;
 `;
 
 const Caption = styled.p`
   margin: 0;
-  font-size: ${Sizes.pxAsRem.fourteen};
-  font-weight: ${Sizes.fontWeights.medium};
+  font-size: ${Styles.pxAsRem.fourteen};
+  font-weight: ${Styles.fontWeights.medium};
   text-align: center;
 `;
 
@@ -65,13 +64,13 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: ${Sizes.pxAsRem.sixteen};
+  gap: ${Styles.pxAsRem.sixteen};
 `;
 
 const ResendButton = styled.button`
   ${Styles.clearButton};
   color: ${(props: ThemeProps) => props.theme.secondaryMain};
-  font-weight: ${Sizes.fontWeights.semiBold};
+  font-weight: ${Styles.fontWeights.semiBold};
 
   @media (hover: hover) {
     :hover {

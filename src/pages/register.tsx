@@ -3,8 +3,8 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 import * as Components from "@/components/auth";
+import * as Constants from "@/utils/constants";
 import { GlobalState } from "@/store";
-import { ClientRoutes } from "@/utils/constants.routes";
 
 const Register = () => {
   const { user } = useSelector((state: GlobalState) => state.entities);
@@ -12,8 +12,8 @@ const Register = () => {
 
   const router = useRouter();
   useEffect(() => {
-    if (user && user.onboarded) router.push(ClientRoutes.LOGBOOKS);
-    else router.push(ClientRoutes.LOGIN);
+    if (user && user.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
+    else router.push(Constants.ClientRoutes.LOGIN);
   }, [user, router]);
 
   return !tempUserId ? (

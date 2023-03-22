@@ -4,8 +4,7 @@ import styled from "styled-components";
 import { useContext } from "react";
 
 import * as Globals from "@/components";
-import * as Colors from "@/utils/styles/styles.colors";
-import * as Sizes from "@/utils/styles.sizes";
+import * as Styles from "@/utils/styles";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
 
@@ -27,7 +26,7 @@ const Content = styled.div`
   align-items: flex-start;
   gap: 60px;
   width: 100%;
-  max-width: ${Sizes.widths.content}px;
+  max-width: ${Styles.widths.content}px;
 `;
 
 const Body = styled.section`
@@ -44,20 +43,20 @@ const BodyLinks = styled.div`
 const BodyLinkGroup = styled.article`
   display: flex;
   flex-direction: column;
-  gap: ${Sizes.pxAsRem.eight};
+  gap: ${Styles.pxAsRem.eight};
   color: ${(props: ThemeProps) => props.theme.text};
 `;
 
 const BodyLinkHeader = styled.h5`
-  margin: 0 0 ${Sizes.pxAsRem.four};
-  font-size: ${Sizes.pxAsRem.fourteen};
-  font-weight: ${Sizes.fontWeights.semiBold};
+  margin: 0 0 ${Styles.pxAsRem.four};
+  font-size: ${Styles.pxAsRem.fourteen};
+  font-weight: ${Styles.fontWeights.semiBold};
 `;
 
 const BodyLinkRegister = styled(Link)`
   color: ${(props: ThemeProps) => props.theme.primaryMain};
-  font-size: ${Sizes.pxAsRem.twelve};
-  font-weight: ${Sizes.fontWeights.medium};
+  font-size: ${Styles.pxAsRem.twelve};
+  font-weight: ${Styles.fontWeights.medium};
 
   @media (hover: hover) {
     :hover {
@@ -68,8 +67,8 @@ const BodyLinkRegister = styled(Link)`
 
 const BodyLink = styled(Link)`
   color: ${(props: ThemeProps) => props.theme.backgroundEight};
-  font-size: ${Sizes.pxAsRem.twelve};
-  font-weight: ${Sizes.fontWeights.medium};
+  font-size: ${Styles.pxAsRem.twelve};
+  font-weight: ${Styles.fontWeights.medium};
 
   @media (hover: hover) {
     :hover {
@@ -82,8 +81,8 @@ const BackToTopButton = styled(Globals.Button)`
   color: ${(props: ThemeProps) => props.theme.backgroundEight};
   background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
   border: ${(props: ThemeProps) => props.theme.backgroundThree} solid 1px;
-  font-size: ${Sizes.pxAsRem.twelve};
-  font-weight: ${Sizes.fontWeights.medium};
+  font-size: ${Styles.pxAsRem.twelve};
+  font-weight: ${Styles.fontWeights.medium};
 
   @media (hover: hover) {
     :hover {
@@ -103,20 +102,20 @@ const CopyrightAndLegal = styled.section`
 
 const Copyright = styled.span`
   color: ${(props: ThemeProps) => props.theme.backgroundFive};
-  font-size: ${Sizes.pxAsRem.ten};
-  font-weight: ${Sizes.fontWeights.medium};
+  font-size: ${Styles.pxAsRem.ten};
+  font-weight: ${Styles.fontWeights.medium};
 `;
 
 const LegalLinks = styled.div`
   display: flex;
   align-items: center;
-  gap: ${Sizes.pxAsRem.twenty};
+  gap: ${Styles.pxAsRem.twenty};
 `;
 
 const LegalLink = styled(Link)`
   color: ${(props: ThemeProps) => props.theme.backgroundSeven};
-  font-size: ${Sizes.pxAsRem.ten};
-  font-weight: ${Sizes.fontWeights.medium};
+  font-size: ${Styles.pxAsRem.ten};
+  font-weight: ${Styles.fontWeights.medium};
 
   @media (hover: hover) {
     :hover {
@@ -181,12 +180,12 @@ export const Footer = () => {
           onClick={scrollToTop}
           size="small"
           fontWeight="medium"
-          color={Colors.background[ui.theme.value].seven}
-          hoverColor={Colors.background[ui.theme.value].eight}
-          background={Colors.background[ui.theme.value].two}
-          hoverBackground={Colors.background[ui.theme.value].three}
-          border={Colors.background[ui.theme.value].four}
-          hoverBorder={Colors.background[ui.theme.value].six}
+          color={Styles.background[ui.theme.value].seven}
+          hoverColor={Styles.background[ui.theme.value].eight}
+          background={Styles.background[ui.theme.value].two}
+          hoverBackground={Styles.background[ui.theme.value].three}
+          border={Styles.background[ui.theme.value].four}
+          hoverBorder={Styles.background[ui.theme.value].six}
           compact
         >
           Back To Top

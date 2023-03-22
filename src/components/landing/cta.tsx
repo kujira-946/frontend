@@ -3,9 +3,8 @@ import styled from "styled-components";
 import { useContext } from "react";
 
 import * as Globals from "@/components";
-import * as Colors from "@/utils/styles/styles.colors";
-import * as Sizes from "@/utils/styles.sizes";
-import * as Constants from "@/utils/constants.landing";
+import * as Constants from "@/utils/constants";
+import * as Styles from "@/utils/styles";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
 
@@ -27,21 +26,21 @@ const Copy = styled.article`
   gap: 4px;
   width: 100%;
   max-width: 600px;
-  margin: 0 auto ${Sizes.pxAsRem.forty};
+  margin: 0 auto ${Styles.pxAsRem.forty};
   color: ${(props: ThemeProps) => props.theme.text};
 `;
 
 const CopyHeader = styled.h2`
   margin: 0 0;
-  font-size: ${Sizes.pxAsRem.twentyFour};
-  font-weight: ${Sizes.fontWeights.bold};
+  font-size: ${Styles.pxAsRem.twentyFour};
+  font-weight: ${Styles.fontWeights.bold};
   text-align: center;
 `;
 
 const CopyBody = styled.h2`
   margin: 0 0;
-  font-size: ${Sizes.pxAsRem.sixteen};
-  font-weight: ${Sizes.fontWeights.medium};
+  font-size: ${Styles.pxAsRem.sixteen};
+  font-weight: ${Styles.fontWeights.medium};
   text-align: center;
 `;
 
@@ -56,9 +55,9 @@ export const CTA = () => {
     <Container>
       <Globals.LazyLoad
         threshold={0.8}
-        initial={Constants.initial}
-        animate={Constants.animate}
-        transition={Constants.transition}
+        initial={Constants.landingMotion.initial}
+        animate={Constants.landingMotion.animate}
+        transition={Constants.landingMotion.transition}
       >
         <Copy>
           <CopyHeader>Interested?</CopyHeader>
@@ -72,8 +71,8 @@ export const CTA = () => {
           <Globals.Button
             size="large"
             maxWidth="600px"
-            background={Colors.primary[ui.theme.value].main}
-            hoverBackground={Colors.primary[ui.theme.value].darker}
+            background={Styles.primary[ui.theme.value].main}
+            hoverBackground={Styles.primary[ui.theme.value].darker}
           >
             Register
           </Globals.Button>

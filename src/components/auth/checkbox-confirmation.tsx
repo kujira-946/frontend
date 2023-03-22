@@ -4,8 +4,7 @@ import { useContext } from "react";
 import { Signal } from "@preact/signals-react";
 
 import * as Icons from "@/components/icons";
-import * as Colors from "@/utils/styles/styles.colors";
-import * as Sizes from "@/utils/styles.sizes";
+import * as Styles from "@/utils/styles";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
 
@@ -16,9 +15,9 @@ import { ThemeProps } from "@/components/layout";
 const Container = styled.section`
   display: flex;
   align-items: center;
-  gap: ${Sizes.pxAsRem.twelve};
-  font-size: ${Sizes.pxAsRem.fourteen};
-  font-weight: ${Sizes.fontWeights.medium};
+  gap: ${Styles.pxAsRem.twelve};
+  font-size: ${Styles.pxAsRem.fourteen};
+  font-weight: ${Styles.fontWeights.medium};
 `;
 
 const Icon = styled.div`
@@ -34,7 +33,7 @@ const Text = styled.div`
 
 const Redirect = styled(Link)`
   color: ${(props: ThemeProps) => props.theme.secondaryMain};
-  font-weight: ${Sizes.fontWeights.semiBold};
+  font-weight: ${Styles.fontWeights.semiBold};
 
   @media (hover: hover) {
     :hover {
@@ -61,14 +60,14 @@ export const CheckboxConfirmation = (props: Props) => {
         <Icon onClick={() => (props.checkboxActive.value = false)}>
           <Icons.CheckboxActive
             height={20}
-            fill={Colors.secondary[ui.theme.value].main}
+            fill={Styles.secondary[ui.theme.value].main}
           />
         </Icon>
       ) : (
         <Icon onClick={() => (props.checkboxActive.value = true)}>
           <Icons.CheckboxInactive
             height={20}
-            fill={Colors.text[ui.theme.value]}
+            fill={Styles.text[ui.theme.value]}
           />
         </Icon>
       )}

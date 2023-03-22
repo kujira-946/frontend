@@ -1,13 +1,13 @@
 import styled from "styled-components";
 
-import { preventUserInteraction } from "@/utils/styles.helpers";
+import * as Styles from "@/utils/styles";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
 const Container = styled.div`
-  ${preventUserInteraction};
+  ${Styles.preventUserInteraction};
 `;
 
 // ========================================================================================= //

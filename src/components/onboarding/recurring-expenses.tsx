@@ -3,8 +3,7 @@ import { useContext } from "react";
 
 import * as Global from "@/components";
 import * as Logbook from "@/components/logbook";
-import * as Colors from "@/utils/styles/styles.colors";
-import * as Sizes from "@/utils/styles.sizes";
+import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
 
@@ -17,7 +16,7 @@ const Container = styled.section``;
 const PurchaseCells = styled.article`
   display: flex;
   flex-direction: column;
-  gap: ${Sizes.pxAsRem.eight};
+  gap: ${Styles.pxAsRem.eight};
 `;
 
 // ========================================================================================= //
@@ -50,10 +49,10 @@ export const RecurringExpenses = (props: Props) => {
         onClick={props.addRecurringExpense}
         size="medium"
         borderRadius="four"
-        color={Colors.background[ui.theme.value].three}
-        hoverColor={Colors.background[ui.theme.value].five}
+        color={Styles.background[ui.theme.value].three}
+        hoverColor={Styles.background[ui.theme.value].five}
         style={{
-          marginTop: Sizes.pxAsRem.sixteen,
+          marginTop: Styles.pxAsRem.sixteen,
         }}
       >
         Add Purchase

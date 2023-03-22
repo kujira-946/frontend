@@ -8,8 +8,7 @@ import { effect, useSignal } from "@preact/signals-react";
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
 import * as AuthActions from "@/sagas/auth.saga";
-import * as Colors from "@/utils/styles/styles.colors";
-import * as Sizes from "@/utils/styles.sizes";
+import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
@@ -29,8 +28,8 @@ const Container = styled.main`
   transform: translateX(-50%) translateY(-50%);
   width: 100%;
   max-width: 400px;
-  padding: ${Sizes.pxAsRem.sixteen};
-  border-radius: ${Sizes.pxAsRem.six};
+  padding: ${Styles.pxAsRem.sixteen};
+  border-radius: ${Styles.pxAsRem.six};
 
   ${(props: ThemeProps) => props.theme.shadowTwo};
 `;
@@ -39,28 +38,28 @@ const Header = styled.header`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: ${Sizes.pxAsRem.twenty};
-  margin-bottom: ${Sizes.pxAsRem.twenty};
+  gap: ${Styles.pxAsRem.twenty};
+  margin-bottom: ${Styles.pxAsRem.twenty};
 `;
 
 const TitleAndCaption = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: ${Sizes.pxAsRem.eight};
+  gap: ${Styles.pxAsRem.eight};
 `;
 
 const Title = styled.h1`
   margin: 0;
-  font-size: ${Sizes.pxAsRem.twentyFour};
-  font-weight: ${Sizes.fontWeights.bold};
+  font-size: ${Styles.pxAsRem.twentyFour};
+  font-weight: ${Styles.fontWeights.bold};
   text-align: center;
 `;
 
 const Caption = styled.p`
   margin: 0;
-  font-size: ${Sizes.pxAsRem.fourteen};
-  font-weight: ${Sizes.fontWeights.medium};
+  font-size: ${Styles.pxAsRem.fourteen};
+  font-weight: ${Styles.fontWeights.medium};
   text-align: center;
 `;
 
@@ -77,7 +76,7 @@ const Redirect = styled(Link)`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: ${Sizes.pxAsRem.sixteen};
+  gap: ${Styles.pxAsRem.sixteen};
 `;
 
 // ========================================================================================= //
@@ -249,8 +248,8 @@ export const AuthForm = (props: Props) => {
             type="submit"
             size="medium"
             borderRadius="four"
-            background={Colors.primary[ui.theme.value].main}
-            hoverBackground={Colors.primary[ui.theme.value].darker}
+            background={Styles.primary[ui.theme.value].main}
+            hoverBackground={Styles.primary[ui.theme.value].darker}
             disabled={
               props.title === "Register"
                 ? !checkRegistrationErrors()

@@ -3,9 +3,7 @@ import { useContext } from "react";
 import { useSignal } from "@preact/signals-react";
 
 import * as Icons from "@/components/icons";
-import * as Colors from "@/utils/styles/styles.colors";
-import * as Styles from "@/utils/styles.helpers";
-import * as Sizes from "@/utils/styles.sizes";
+import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
@@ -17,8 +15,8 @@ import { ThemeProps } from "@/components/layout";
 const Container = styled.article`
   display: flex;
   align-items: center;
-  gap: ${Sizes.pxAsRem.eight};
-  padding: ${Sizes.pxAsRem.six} ${Sizes.pxAsRem.eight};
+  gap: ${Styles.pxAsRem.eight};
+  padding: ${Styles.pxAsRem.six} ${Styles.pxAsRem.eight};
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
   border: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
 `;
@@ -32,7 +30,7 @@ const DragButton = styled.div`
 
 const CategoryButtons = styled.div`
   display: flex;
-  gap: ${Sizes.pxAsRem.four};
+  gap: ${Styles.pxAsRem.four};
 `;
 
 type CategoryButtonProps = { category: Types.Category };
@@ -42,7 +40,7 @@ const CategoryButton = styled.button<CategoryButtonProps & ThemeProps>`
   justify-content: center;
   align-items: center;
   width: 3.25rem;
-  padding: ${Sizes.pxAsRem.two} ${Sizes.pxAsRem.four};
+  padding: ${Styles.pxAsRem.two} ${Styles.pxAsRem.four};
   color: ${(props: CategoryButtonProps & ThemeProps) => {
     if (props.category === "Need") return props.theme.need;
     else if (props.category === "Planned") return props.theme.planned;
@@ -51,9 +49,9 @@ const CategoryButton = styled.button<CategoryButtonProps & ThemeProps>`
   }};
   background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
   border: ${(props: ThemeProps) => props.theme.backgroundThree} solid 1px;
-  border-radius: ${Sizes.pxAsRem.four};
-  font-size: ${Sizes.pxAsRem.ten};
-  font-weight: ${Sizes.fontWeights.semiBold};
+  border-radius: ${Styles.pxAsRem.four};
+  font-size: ${Styles.pxAsRem.ten};
+  font-weight: ${Styles.fontWeights.semiBold};
 
   @media (hover: hover) {
     :hover {
@@ -66,7 +64,7 @@ const CategoryButton = styled.button<CategoryButtonProps & ThemeProps>`
 type InputProps = { hasValue: boolean; frozen: boolean };
 const Input = styled.input<InputProps>`
   flex: 1;
-  padding: ${Sizes.pxAsRem.four} ${Sizes.pxAsRem.six};
+  padding: ${Styles.pxAsRem.four} ${Styles.pxAsRem.six};
   color: ${(props: ThemeProps) => props.theme.text};
   background-color: ${(props: InputProps & ThemeProps) => {
     return props.hasValue
@@ -80,7 +78,7 @@ const Input = styled.input<InputProps>`
       ? `${props.theme.backgroundTwo} solid 1px`
       : `${props.theme.backgroundFour} solid 1px`;
   }};
-  border-radius: ${Sizes.pxAsRem.four};
+  border-radius: ${Styles.pxAsRem.four};
   outline: none;
 
   ::placeholder {
@@ -117,7 +115,7 @@ const CloseButton = styled.div`
 // ========================================================================================= //
 
 type Props = {
-  borderRadius?: keyof typeof Sizes.pxAsRem;
+  borderRadius?: keyof typeof Styles.pxAsRem;
   hideDrag?: true;
   hideCategories?: true;
   hideClose?: true;
@@ -154,8 +152,8 @@ export const PurchaseCell = (props: Props) => {
     <Container
       style={{
         borderRadius: props.borderRadius
-          ? Sizes.pxAsRem[props.borderRadius]
-          : Sizes.pxAsRem.six,
+          ? Styles.pxAsRem[props.borderRadius]
+          : Styles.pxAsRem.six,
       }}
     >
       {!props.hideDrag && (
@@ -165,9 +163,9 @@ export const PurchaseCell = (props: Props) => {
         >
           <Icons.Drag
             height={12}
-            fill={Colors.background[ui.theme.value].six}
+            fill={Styles.background[ui.theme.value].six}
             hovered={dragHovered.value}
-            hoveredFill={Colors.background[ui.theme.value].eight}
+            hoveredFill={Styles.background[ui.theme.value].eight}
           />
         </DragButton>
       )}
@@ -212,9 +210,9 @@ export const PurchaseCell = (props: Props) => {
         >
           <Icons.Close
             height={12}
-            fill={Colors.background[ui.theme.value].six}
+            fill={Styles.background[ui.theme.value].six}
             hovered={closeHovered.value}
-            hoveredFill={Colors.background[ui.theme.value].eight}
+            hoveredFill={Styles.background[ui.theme.value].eight}
           />
         </CloseButton>
       )}

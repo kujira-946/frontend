@@ -1,8 +1,6 @@
 import styled from "styled-components";
 
-import * as Colors from "@/utils/styles/styles.colors";
-import * as Styles from "@/utils/styles.helpers";
-import * as Sizes from "@/utils/styles.sizes";
+import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { ThemeProps } from "./layout";
 
@@ -11,7 +9,7 @@ import { ThemeProps } from "./layout";
 // ========================================================================================= //
 
 type Size = "smaller" | "small" | "medium" | "large";
-type FontWeight = keyof typeof Sizes.fontWeights;
+type FontWeight = keyof typeof Styles.fontWeights;
 
 type Props = {
   size: Size;
@@ -37,31 +35,31 @@ export const Button = styled.button<Props>`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: ${Sizes.pxAsRem.eight};
+  gap: ${Styles.pxAsRem.eight};
 
   width: ${(props) => (props.compact ? "auto" : "100%")};
   max-width: ${(props) => props.maxWidth};
   height: ${(props) => {
-    if (props.size === "smaller") return Sizes.pxAsRem.twentySix;
-    else if (props.size === "small") return Sizes.pxAsRem.thirtyTwo;
-    else if (props.size === "medium") return Sizes.pxAsRem.thirtyEight;
-    else return Sizes.pxAsRem.fortyEight;
+    if (props.size === "smaller") return Styles.pxAsRem.twentySix;
+    else if (props.size === "small") return Styles.pxAsRem.thirtyTwo;
+    else if (props.size === "medium") return Styles.pxAsRem.thirtyEight;
+    else return Styles.pxAsRem.fortyEight;
   }};
 
   margin: 0;
   padding: ${(props) => {
     if (props.size === "smaller") {
-      return `${Sizes.pxAsRem.six} ${Sizes.pxAsRem.ten}`;
+      return `${Styles.pxAsRem.six} ${Styles.pxAsRem.ten}`;
     } else if (props.size === "small") {
-      return `${Sizes.pxAsRem.eight} ${Sizes.pxAsRem.twelve}`;
+      return `${Styles.pxAsRem.eight} ${Styles.pxAsRem.twelve}`;
     } else if (props.size === "medium") {
-      return `${Sizes.pxAsRem.ten} ${Sizes.pxAsRem.fourteen}`;
+      return `${Styles.pxAsRem.ten} ${Styles.pxAsRem.fourteen}`;
     } else {
-      return `${Sizes.pxAsRem.twelve} ${Sizes.pxAsRem.eighteen}`;
+      return `${Styles.pxAsRem.twelve} ${Styles.pxAsRem.eighteen}`;
     }
   }};
 
-  color: ${(props) => props.color || Colors.text.button};
+  color: ${(props) => props.color || Styles.text.button};
   background-color: ${(props) => props.background || "transparent"};
 
   border: ${(props) => {
@@ -71,17 +69,17 @@ export const Button = styled.button<Props>`
   }};
   border-radius: ${(props) => {
     return props.borderRadius
-      ? Sizes.pxAsRem[props.borderRadius]
-      : Sizes.pxAsRem.six;
+      ? Styles.pxAsRem[props.borderRadius]
+      : Styles.pxAsRem.six;
   }};
 
   font-size: ${(props) => {
-    if (props.size === "smaller") return Sizes.pxAsRem.ten;
-    else if (props.size === "small") return Sizes.pxAsRem.twelve;
-    else if (props.size === "medium") return Sizes.pxAsRem.fourteen;
-    else return Sizes.pxAsRem.eighteen;
+    if (props.size === "smaller") return Styles.pxAsRem.ten;
+    else if (props.size === "small") return Styles.pxAsRem.twelve;
+    else if (props.size === "medium") return Styles.pxAsRem.fourteen;
+    else return Styles.pxAsRem.eighteen;
   }};
-  font-weight: ${(props) => props.fontWeight || Sizes.fontWeights.semiBold};
+  font-weight: ${(props) => props.fontWeight || Styles.fontWeights.semiBold};
   opacity: ${(props) => (props.disabled ? 0.5 : 1)};
   outline: none;
   cursor: pointer;
@@ -91,7 +89,7 @@ export const Button = styled.button<Props>`
   @media (hover: hover) {
     :hover {
       color: ${(props) => {
-        return props.hoverColor || props.color || Colors.text.button;
+        return props.hoverColor || props.color || Styles.text.button;
       }};
       background-color: ${(props) => {
         return props.hoverBackground || props.background || "transparent";

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import * as Sizes from "@/utils/styles.sizes";
+import * as Styles from "@/utils/styles";
 import { ThemeProps } from "@/components/layout";
 
 // ========================================================================================= //
@@ -12,15 +12,15 @@ const Container = styled.article`
 `;
 
 const Header = styled.h2`
-  margin: 0 0 ${Sizes.pxAsRem.twelve};
-  font-size: ${Sizes.pxAsRem.twenty};
-  font-weight: ${Sizes.fontWeights.bold};
+  margin: 0 0 ${Styles.pxAsRem.twelve};
+  font-size: ${Styles.pxAsRem.twenty};
+  font-weight: ${Styles.fontWeights.bold};
 `;
 
 const Body = styled.p`
   margin: 0;
-  font-size: ${Sizes.pxAsRem.fourteen};
-  font-weight: ${Sizes.fontWeights.medium};
+  font-size: ${Styles.pxAsRem.fourteen};
+  font-weight: ${Styles.fontWeights.medium};
 `;
 
 // ========================================================================================= //

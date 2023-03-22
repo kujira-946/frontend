@@ -1,4 +1,4 @@
-import { UINotification } from "./types";
+import { UINotification } from "../types";
 
 export const initialUINotification: UINotification = {
   title: "",

@@ -3,8 +3,8 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { AnimatePresence, motion } from "framer-motion";
 
-import * as Constants from "@/utils/constants.globals";
-import * as Sizes from "@/utils/styles.sizes";
+import * as Constants from "@/utils/constants";
+import * as Styles from "@/utils/styles";
 import { GlobalState } from "@/store";
 import { uiActions } from "@/redux";
 import { ThemeProps } from "@/components/layout";
@@ -18,20 +18,20 @@ const Container = styled(motion.main)`
   position: fixed;
   top: 20px;
   left: 50%;
-  z-index: ${Sizes.zIndexes.notification};
+  z-index: ${Styles.zIndexes.notification};
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: ${Sizes.pxAsRem.eight};
+  gap: ${Styles.pxAsRem.eight};
   width: 100%;
   max-width: 25rem;
-  padding: ${Sizes.pxAsRem.twelve};
+  padding: ${Styles.pxAsRem.twelve};
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
   border: ${(props: ThemeProps & { type: NotificationType }) => {
     return `${props.theme[props.type]} solid 2px`;
   }};
-  border-radius: ${Sizes.pxAsRem.six};
+  border-radius: ${Styles.pxAsRem.six};
   text-align: center;
 
   ${(props: ThemeProps) => props.theme.shadowThree};
@@ -39,20 +39,20 @@ const Container = styled(motion.main)`
 
 const Title = styled.h1`
   margin: 0;
-  font-size: ${Sizes.pxAsRem.sixteen};
-  font-weight: ${Sizes.fontWeights.bold};
+  font-size: ${Styles.pxAsRem.sixteen};
+  font-weight: ${Styles.fontWeights.bold};
 `;
 
 const Body = styled.p`
   margin: 0;
-  font-size: ${Sizes.pxAsRem.fourteen};
-  font-weight: ${Sizes.fontWeights.medium};
+  font-size: ${Styles.pxAsRem.fourteen};
+  font-weight: ${Styles.fontWeights.medium};
 `;
 
 const Footnote = styled.p`
   margin: 0;
-  font-size: ${Sizes.pxAsRem.ten};
-  font-weight: ${Sizes.fontWeights.semiBold};
+  font-size: ${Styles.pxAsRem.ten};
+  font-weight: ${Styles.fontWeights.semiBold};
 `;
 
 // ========================================================================================= //

@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 import * as Globals from "@/components";
-import * as Sizes from "@/utils/styles.sizes";
-import * as Constants from "@/utils/constants.landing";
+import * as Constants from "@/utils/constants";
+import * as Styles from "@/utils/styles";
 import { ThemeProps } from "@/components/layout";
 import { AboutCopy } from "./about-copy";
 
@@ -24,7 +24,7 @@ const CopyAndFigure = styled.article`
   align-items: center;
   gap: 3.75rem;
   width: 100%;
-  max-width: ${Sizes.widths.content}px;
+  max-width: ${Styles.widths.content}px;
 `;
 
 // ========================================================================================= //
@@ -35,10 +35,10 @@ export const About = () => {
   return (
     <Container id="landing-about">
       <Globals.LazyLoad
-        threshold={Constants.threshold}
-        initial={Constants.initial}
-        animate={Constants.animate}
-        transition={Constants.transition}
+        threshold={Constants.landingMotion.threshold}
+        initial={Constants.landingMotion.initial}
+        animate={Constants.landingMotion.animate}
+        transition={Constants.landingMotion.transition}
       >
         <CopyAndFigure>
           <AboutCopy
@@ -52,10 +52,10 @@ export const About = () => {
       </Globals.LazyLoad>
 
       <Globals.LazyLoad
-        threshold={Constants.threshold}
-        initial={Constants.initial}
-        animate={Constants.animate}
-        transition={Constants.transition}
+        threshold={Constants.landingMotion.threshold}
+        initial={Constants.landingMotion.initial}
+        animate={Constants.landingMotion.animate}
+        transition={Constants.landingMotion.transition}
       >
         <CopyAndFigure>
           <AboutCopy
@@ -68,10 +68,10 @@ export const About = () => {
       </Globals.LazyLoad>
 
       <Globals.LazyLoad
-        threshold={Constants.threshold}
-        initial={Constants.initial}
-        animate={Constants.animate}
-        transition={Constants.transition}
+        threshold={Constants.landingMotion.threshold}
+        initial={Constants.landingMotion.initial}
+        animate={Constants.landingMotion.animate}
+        transition={Constants.landingMotion.transition}
       >
         <CopyAndFigure>
           <AboutCopy

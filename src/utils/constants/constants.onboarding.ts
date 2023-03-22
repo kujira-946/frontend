@@ -1,10 +1,10 @@
-type Page = {
+type Copy = {
   title: string;
   bodyTexts: string[];
   submitButtonText: string;
 };
 
-export const pages: Page[] = [
+export const onboardingCopies: Copy[] = [
   {
     title: "Hi, and welcome to Kujira!",
     bodyTexts: [

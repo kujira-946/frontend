@@ -4,7 +4,7 @@ import { Signal, useSignal } from "@preact/signals-react";
 
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
-import * as Sizes from "@/utils/styles.sizes";
+import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { GlobalState } from "@/store";
 
@@ -15,7 +15,7 @@ import { GlobalState } from "@/store";
 const Container = styled.section`
   display: flex;
   flex-direction: column;
-  gap: ${Sizes.pxAsRem.four};
+  gap: ${Styles.pxAsRem.four};
 `;
 
 // ========================================================================================= //

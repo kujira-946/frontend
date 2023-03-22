@@ -1,4 +1,4 @@
-import { pxAsRem } from "./sizes";
+import { pxAsRem } from "../styles";
 
 export type SVGProps = {
   height: number;

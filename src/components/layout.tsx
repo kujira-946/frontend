@@ -5,11 +5,12 @@ import { useContext, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 
-import * as Colors from "@/utils/styles/styles.colors";
+import * as Colors from "@/utils/styles/colors";
 import { SignalsStoreContext } from "@/pages/_app";
 import { logoutRequest } from "@/sagas/auth.saga";
 
 import { Notification } from "./notification";
+import { fetchUserRequest } from "@/sagas/users.saga";
 
 const poppins = localFont({
   src: [
@@ -301,6 +302,8 @@ export const Layout = (props: Props) => {
 
   const userId = Cookies.get("id");
   useEffect(() => {
+    if (userId) dispatch(fetchUserRequest(Number(userId)));
+
     if (!jwtAccessToken && userId) {
       dispatch(logoutRequest(Number(userId)));
       Cookies.remove("id");

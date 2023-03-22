@@ -4,9 +4,7 @@ import { useSignal } from "@preact/signals-react";
 import { motion } from "framer-motion";
 
 import * as Icons from "@/components/icons";
-import * as Colors from "@/utils/styles/styles.colors";
-import * as Styles from "@/utils/styles.helpers";
-import * as Sizes from "@/utils/styles.sizes";
+import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "./layout";
@@ -19,7 +17,7 @@ type SharedProps = { focused: boolean };
 
 const Container = styled.section<SharedProps>`
   width: 100%;
-  padding: ${Sizes.pxAsRem.twelve};
+  padding: ${Styles.pxAsRem.twelve};
   background-color: ${(props: SharedProps & ThemeProps) => {
     return props.focused
       ? props.theme.backgroundTwo
@@ -41,24 +39,24 @@ const Container = styled.section<SharedProps>`
 
 const Title = styled(motion.span)`
   display: block;
-  margin-bottom: ${Sizes.pxAsRem.four};
+  margin-bottom: ${Styles.pxAsRem.four};
   color: ${(props: ThemeProps) => props.theme.backgroundEight};
-  font-size: ${Sizes.pxAsRem.ten};
-  font-weight: ${Sizes.fontWeights.semiBold};
+  font-size: ${Styles.pxAsRem.ten};
+  font-weight: ${Styles.fontWeights.semiBold};
 `;
 
 const ErrorMessage = styled(motion.span)`
   display: block;
-  margin-bottom: ${Sizes.pxAsRem.four};
+  margin-bottom: ${Styles.pxAsRem.four};
   color: ${(props: ThemeProps) => props.theme.failure};
-  font-size: ${Sizes.pxAsRem.twelve};
-  font-weight: ${Sizes.fontWeights.semiBold};
+  font-size: ${Styles.pxAsRem.twelve};
+  font-weight: ${Styles.fontWeights.semiBold};
 `;
 
 const InputFieldAndIcon = styled.div`
   display: flex;
   align-items: center;
-  gap: ${Sizes.pxAsRem.twelve};
+  gap: ${Styles.pxAsRem.twelve};
 `;
 
 const InputField = styled.input<SharedProps>`
@@ -67,8 +65,8 @@ const InputField = styled.input<SharedProps>`
   color: ${(props: ThemeProps) => props.theme.text};
   background-color: transparent;
   border: none;
-  font-size: ${Sizes.pxAsRem.fourteen};
-  font-weight: ${Sizes.fontWeights.medium};
+  font-size: ${Styles.pxAsRem.fourteen};
+  font-weight: ${Styles.fontWeights.medium};
   outline: none;
   cursor: text;
 
@@ -119,8 +117,8 @@ export const Input = (props: Props) => {
     <Container
       style={{
         borderRadius: props.borderRadius
-          ? Sizes.pxAsRem[props.borderRadius]
-          : Sizes.pxAsRem.six,
+          ? Styles.pxAsRem[props.borderRadius]
+          : Styles.pxAsRem.six,
       }}
       onClick={focusInputField}
       focused={focused.value}
@@ -153,9 +151,9 @@ export const Input = (props: Props) => {
             >
               <Icons.Hidden
                 height={16}
-                fill={Colors.background[ui.theme.value].eight}
+                fill={Styles.background[ui.theme.value].eight}
                 hovered={hiddenHovered.value}
-                hoveredFill={Colors.text[ui.theme.value]}
+                hoveredFill={Styles.text[ui.theme.value]}
               />
             </IconContainer>
           ) : (
@@ -166,9 +164,9 @@ export const Input = (props: Props) => {
             >
               <Icons.Revealed
                 height={16}
-                fill={Colors.background[ui.theme.value].eight}
+                fill={Styles.background[ui.theme.value].eight}
                 hovered={hiddenHovered.value}
-                hoveredFill={Colors.text[ui.theme.value]}
+                hoveredFill={Styles.text[ui.theme.value]}
               />
             </IconContainer>
           ))}

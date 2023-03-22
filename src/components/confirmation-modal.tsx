@@ -3,10 +3,8 @@ import { useContext } from "react";
 import { motion } from "framer-motion";
 
 import * as Icons from "@/components/icons";
-import * as Colors from "@/utils/styles/styles.colors";
-import * as Styles from "@/utils/styles.helpers";
-import * as Sizes from "@/utils/styles.sizes";
-import * as Constants from "@/utils/constants.landing";
+import * as Constants from "@/utils/constants";
+import * as Styles from "@/utils/styles";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "./layout";
 import { Button } from "./button";
@@ -29,18 +27,18 @@ const Parent = styled.div<SharedProps>`
   width: 100vw;
   height: 100vh;
   background-color: ${(props) => {
-    return props.overlay ? Colors.overlay : "transparent";
+    return props.overlay ? Styles.overlay : "transparent";
   }};
 `;
 
 const Child = styled(motion.main)<SharedProps>`
   display: flex;
   flex-direction: column;
-  gap: ${Sizes.pxAsRem.twelve};
-  padding: ${Sizes.pxAsRem.sixteen};
+  gap: ${Styles.pxAsRem.twelve};
+  padding: ${Styles.pxAsRem.sixteen};
   width: 100%;
   max-width: 600px;
-  border-radius: ${Sizes.pxAsRem.six};
+  border-radius: ${Styles.pxAsRem.six};
 
   ${(props: SharedProps & ThemeProps) => {
     return props.overlay ? props.theme.shadowOverlay : props.theme.shadowTwo;
@@ -74,26 +72,26 @@ const HeaderButton = styled.button`
 const Title = styled.h1`
   flex: 1;
   color: ${(props: ThemeProps) => props.theme.text};
-  font-size: ${Sizes.pxAsRem.sixteen};
-  font-weight: ${Sizes.fontWeights.bold};
+  font-size: ${Styles.pxAsRem.sixteen};
+  font-weight: ${Styles.fontWeights.bold};
 `;
 
 const CornerText = styled.span`
   color: ${(props: ThemeProps) => props.theme.backgroundSeven};
-  font-size: ${Sizes.pxAsRem.twelve};
-  font-weight: ${Sizes.fontWeights.bold};
+  font-size: ${Styles.pxAsRem.twelve};
+  font-weight: ${Styles.fontWeights.bold};
 `;
 
 const SupportingText = styled.p`
   color: ${(props: ThemeProps) => props.theme.secondaryMain};
-  font-size: ${Sizes.pxAsRem.twelve};
-  font-weight: ${Sizes.fontWeights.bold};
+  font-size: ${Styles.pxAsRem.twelve};
+  font-weight: ${Styles.fontWeights.bold};
 `;
 
 const BodyText = styled.p`
   color: ${(props: ThemeProps) => props.theme.text};
-  font-size: ${Sizes.pxAsRem.fourteen};
-  font-weight: ${Sizes.fontWeights.regular};
+  font-size: ${Styles.pxAsRem.fourteen};
+  font-weight: ${Styles.fontWeights.regular};
 `;
 
 const ArrowIconContainer = styled.div`
@@ -132,9 +130,9 @@ export const ConfirmationModal = (props: Props) => {
   return (
     <Parent overlay={props.overlay}>
       <Child
-        initial={Constants.initial}
-        animate={Constants.animate}
-        transition={Constants.transition}
+        initial={Constants.landingMotion.initial}
+        animate={Constants.landingMotion.animate}
+        transition={Constants.landingMotion.transition}
         overlay={props.overlay}
       >
         <Header>
@@ -142,7 +140,7 @@ export const ConfirmationModal = (props: Props) => {
             <HeaderButton onClick={props.backButtonAction}>
               <Icons.ChevronLeft
                 height={14}
-                fill={Colors.background[ui.theme.value].eight}
+                fill={Styles.background[ui.theme.value].eight}
               />
             </HeaderButton>
           )}
@@ -152,7 +150,7 @@ export const ConfirmationModal = (props: Props) => {
             <HeaderButton onClick={props.closeButtonAction}>
               <Icons.Close
                 height={14}
-                fill={Colors.background[ui.theme.value].eight}
+                fill={Styles.background[ui.theme.value].eight}
               />
             </HeaderButton>
           )}
@@ -178,17 +176,17 @@ export const ConfirmationModal = (props: Props) => {
           onClick={props.submitButtonAction}
           size="medium"
           borderRadius="four"
-          color={Colors.primary[ui.theme.value].main}
-          hoverColor={Colors.primary[ui.theme.value].darker}
+          color={Styles.primary[ui.theme.value].main}
+          hoverColor={Styles.primary[ui.theme.value].darker}
           style={{
-            marginTop: Sizes.pxAsRem.four,
+            marginTop: Styles.pxAsRem.four,
             opacity: props.disableSubmit ? 0.5 : 1,
           }}
         >
           {props.submitButtonText}
           {props.showSubmitArrow && (
             <ArrowIconContainer>
-              <Icons.ArrowRight height={12} fill={Colors.text.button} />
+              <Icons.ArrowRight height={12} fill={Styles.text.button} />
             </ArrowIconContainer>
           )}
         </Button>

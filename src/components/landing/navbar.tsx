@@ -6,9 +6,7 @@ import { useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
-import * as Colors from "@/utils/styles/styles.colors";
-import * as Styles from "@/utils/styles.helpers";
-import * as Sizes from "@/utils/styles.sizes";
+import * as Styles from "@/utils/styles";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
 import { signalsHelpers } from "@/signals";
@@ -33,7 +31,7 @@ const Main = styled.main`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: ${Sizes.widths.content}px;
+  max-width: ${Styles.widths.content}px;
 `;
 
 const Links = styled.section`
@@ -47,8 +45,8 @@ const ThemeButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${Sizes.heights.smallButtonHeight};
-  height: ${Sizes.heights.smallButtonHeight};
+  width: ${Styles.heights.smallButtonHeight};
+  height: ${Styles.heights.smallButtonHeight};
   background-color: inherit;
   border-radius: 6px;
 
@@ -61,8 +59,8 @@ const ThemeButton = styled.button`
 
 const LoginButton = styled(Link)`
   color: ${(props: ThemeProps) => props.theme.backgroundEight};
-  font-size: ${Sizes.pxAsRem.twelve};
-  font-weight: ${Sizes.fontWeights.medium};
+  font-size: ${Styles.pxAsRem.twelve};
+  font-weight: ${Styles.fontWeights.medium};
 
   @media (hover: hover) {
     :hover {
@@ -109,15 +107,15 @@ export const Navbar = () => {
               <Icons.ThemeDark
                 height={12}
                 hovered={themeButtonHovered.value}
-                fill={Colors.background[ui.theme.value].six}
-                hoveredFill={Colors.background[ui.theme.value].eight}
+                fill={Styles.background[ui.theme.value].six}
+                hoveredFill={Styles.background[ui.theme.value].eight}
               />
             ) : (
               <Icons.ThemeLight
                 height={12}
                 hovered={themeButtonHovered.value}
-                fill={Colors.background[ui.theme.value].six}
-                hoveredFill={Colors.background[ui.theme.value].eight}
+                fill={Styles.background[ui.theme.value].six}
+                hoveredFill={Styles.background[ui.theme.value].eight}
               />
             )}
           </ThemeButton>
@@ -127,8 +125,8 @@ export const Navbar = () => {
           <Link href="/register">
             <Globals.Button
               size="small"
-              background={Colors.primary[ui.theme.value].main}
-              hoverBackground={Colors.primary[ui.theme.value].darker}
+              background={Styles.primary[ui.theme.value].main}
+              hoverBackground={Styles.primary[ui.theme.value].darker}
             >
               Register
             </Globals.Button>
