@@ -6,7 +6,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type ErrorsState = {
   auth: string;
-  users: string;
   purchases: string;
   overviews: string;
   overviewGroups: string;
@@ -20,7 +19,6 @@ export type ErrorsState = {
 
 const initialState: ErrorsState = {
   auth: "",
-  users: "",
   purchases: "",
   overviews: "",
   overviewGroups: "",
@@ -34,9 +32,6 @@ const errorsSlice = createSlice({
   reducers: {
     setAuth: (state: ErrorsState, action: PayloadAction<string>) => {
       state.auth = action.payload;
-    },
-    setUsers: (state: ErrorsState, action: PayloadAction<string>) => {
-      state.users = action.payload;
     },
     setPurchases: (state: ErrorsState, action: PayloadAction<string>) => {
       state.purchases = action.payload;

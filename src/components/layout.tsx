@@ -2,13 +2,14 @@ import localFont from "@next/font/local";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useContext, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 
 import * as Colors from "@/utils/colors";
 import { SignalsStoreContext } from "@/pages/_app";
-import { Notification } from "./notification";
-import { useDispatch } from "react-redux";
 import { logoutRequest } from "@/sagas/auth.saga";
+
+import { Notification } from "./notification";
 
 const poppins = localFont({
   src: [
@@ -285,6 +286,13 @@ const themes: Themes = {
 
 export type ThemeProps = { theme: ThemeContents };
 
+// ↓↓↓ Global Axios Defaults ↓↓↓ //
+axios.defaults.baseURL = "https://kuijra-backend.up.railway.app";
+const jwtAccessToken = Cookies.get("token");
+if (jwtAccessToken) {
+  axios.defaults.headers.common["Authorization"] = jwtAccessToken;
+}
+
 type Props = { children: React.ReactNode };
 
 export const Layout = (props: Props) => {
@@ -292,13 +300,10 @@ export const Layout = (props: Props) => {
   const { ui } = useContext(SignalsStoreContext);
 
   const userId = Cookies.get("id");
-  const jwtAccessToken = Cookies.get("token");
   useEffect(() => {
     if (!jwtAccessToken && userId) {
       dispatch(logoutRequest(Number(userId)));
       Cookies.remove("id");
-    } else {
-      axios.defaults.headers.common["Authorization"] = jwtAccessToken;
     }
   }, [userId, jwtAccessToken]);
 

@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
-import { productionRoot, RouteBases } from "@/utils/constants.api";
+import { RouteBases } from "@/utils/constants.api";
 
 enum AuthActionTypes {
   REGISTER = "REGISTER",
@@ -81,11 +81,9 @@ export function requestNewVerificationCodeRequest(id: number): Types.IdAction {
 // [ SAGAS ] =============================================================================== //
 // ========================================================================================= //
 
-const rootEndpoint = productionRoot + RouteBases.AUTH;
-
 function* register(action: RegisterAction) {
   try {
-    const endpoint = rootEndpoint + "/register";
+    const endpoint = RouteBases.AUTH + "/register";
     const { data } = yield Saga.call(axios.post, endpoint, action.payload);
     yield Saga.put(Redux.uiActions.setTempUserId(data.data));
     yield Saga.put(Redux.errorsActions.setAuth(""));
@@ -110,7 +108,7 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
   try {
     yield Saga.put(Redux.uiActions.setUserLoading(true));
     const { id, verificationCode } = action.payload;
-    const endpoint = rootEndpoint + `/register/${id}/verify`;
+    const endpoint = RouteBases.AUTH + `/register/${id}/verify`;
     const { data } = yield Saga.call(axios.patch, endpoint, {
       verificationCode,
     });
@@ -143,7 +141,7 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
 
 function* login(action: LoginAction) {
   try {
-    const endpoint = rootEndpoint + "/login";
+    const endpoint = RouteBases.AUTH + "/login";
     const { data } = yield Saga.call(axios.patch, endpoint, action.payload);
     yield Saga.put(Redux.uiActions.setTempUserId(data.data));
     yield Saga.put(Redux.errorsActions.setAuth(""));
@@ -168,7 +166,7 @@ function* verifyLogin(action: VerifyLoginAction) {
   try {
     yield Saga.put(Redux.uiActions.setUserLoading(true));
     const { id, verificationCode, thirtyDays } = action.payload;
-    const endpoint = rootEndpoint + `/login/${id}/verify`;
+    const endpoint = RouteBases.AUTH + `/login/${id}/verify`;
     const { data } = yield Saga.call(axios.patch, endpoint, {
       verificationCode,
       thirtyDays,
@@ -185,7 +183,7 @@ function* verifyLogin(action: VerifyLoginAction) {
         timeout: 5000,
       })
     );
-    Cookies.set("id", data.data.id);
+    Cookies.set("id", data.data.id, { secure: true });
     Cookies.set("token", data.accessToken, {
       secure: true,
       expires: thirtyDays ? 30 : 7,
@@ -208,7 +206,7 @@ function* verifyLogin(action: VerifyLoginAction) {
 
 function* logout(action: Types.IdAction) {
   try {
-    const endpoint = rootEndpoint + `/logout/${action.payload.id}`;
+    const endpoint = RouteBases.AUTH + `/logout/${action.payload.id}`;
     const { data } = yield Saga.call(axios.patch, endpoint);
     yield Saga.put(Redux.errorsActions.setAuth(""));
     Cookies.remove("id");
@@ -223,7 +221,7 @@ function* logout(action: Types.IdAction) {
 function* requestNewVerificationCode(action: Types.IdAction) {
   try {
     const endpoint =
-      rootEndpoint + `/request-new-verification-code/${action.payload.id}`;
+      RouteBases.AUTH + `/request-new-verification-code/${action.payload.id}`;
     const { data } = yield Saga.call(axios.patch, endpoint);
     yield Saga.put(Redux.errorsActions.setAuth(""));
     yield Saga.put(

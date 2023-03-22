@@ -4,7 +4,7 @@ import axios from "axios";
 import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
-import { productionRoot, RouteBases } from "@/utils/constants.api";
+import { RouteBases } from "@/utils/constants.api";
 
 enum UserActionTypes {
   FETCH_USERS = "FETCH_USERS",
@@ -49,19 +49,14 @@ export function deleteUserRequest(id: number): Types.IdAction {
 // [ SAGAS ] =============================================================================== //
 // ========================================================================================= //
 
-const rootEndpoint = productionRoot + RouteBases.USERS;
-
 function* fetchUsers() {
   try {
-    const endpoint = rootEndpoint;
-    const { data } = yield Saga.call(axios.get, endpoint);
+    const { data } = yield Saga.call(axios.get, RouteBases.USERS);
     yield Saga.put(Redux.entitiesActions.setUser(data.data));
-    yield Saga.put(Redux.errorsActions.setUsers(""));
 
     // console.log("Fetch Users Response:", response.data);
   } catch (error) {
     console.log(error);
-    yield Saga.put(Redux.errorsActions.setUsers("Failed to fetch users."));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -78,16 +73,23 @@ function* fetchUser(action: Types.IdAction) {
   try {
     yield Saga.put(Redux.uiActions.setUserLoading(true));
     const { id } = action.payload;
-    const endpoint = rootEndpoint + `/${id}`;
+    const endpoint = RouteBases.USERS + `/${id}`;
     const response = yield Saga.call(axios.get, endpoint);
     // yield Saga.put(Redux.entitiesActions.setUser(response.data));
     yield Saga.put(Redux.uiActions.setUserLoading(false));
-    yield Saga.put(Redux.errorsActions.setUsers(""));
 
     console.log("Fetch User Response:", response.data);
   } catch (error) {
     console.log(error);
-    yield Saga.put(Redux.errorsActions.setUsers("Failed to fetch user."));
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        // body: "Failed to fetch users.",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 5000,
+      })
+    );
   }
 }
 
@@ -95,16 +97,22 @@ function* updateUser(action: Types.IdAction) {
   try {
     yield Saga.put(Redux.uiActions.setUserLoading(true));
     const { id } = action.payload;
-    const endpoint = rootEndpoint + `/${id}`;
+    const endpoint = RouteBases.USERS + `/${id}`;
     const response = yield Saga.call(axios.patch, endpoint);
     // yield Saga.put(Redux.entitiesActions.setUser(response.data));
     yield Saga.put(Redux.uiActions.setUserLoading(false));
-    yield Saga.put(Redux.errorsActions.setUsers(""));
 
     console.log("Update User Response:", response.data);
   } catch (error) {
     console.log(error);
-    yield Saga.put(Redux.errorsActions.setUsers("Failed to update user."));
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 5000,
+      })
+    );
   }
 }
 
@@ -112,14 +120,20 @@ function* deleteUser(action: Types.IdAction) {
   try {
     yield Saga.put(Redux.uiActions.setUserLoading(true));
     const { id } = action.payload;
-    const endpoint = rootEndpoint + `/${id}`;
+    const endpoint = RouteBases.USERS + `/${id}`;
     yield Saga.call(axios.delete, endpoint);
     yield Saga.put(Redux.entitiesActions.setUser(null));
     yield Saga.put(Redux.uiActions.setUserLoading(false));
-    yield Saga.put(Redux.errorsActions.setUsers(""));
   } catch (error) {
     console.log(error);
-    yield Saga.put(Redux.errorsActions.setUsers("Failed to delete user."));
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 5000,
+      })
+    );
   }
 }
 
