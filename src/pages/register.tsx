@@ -12,8 +12,10 @@ const Register = () => {
 
   const router = useRouter();
   useEffect(() => {
-    if (user && user.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
-    else router.push(Constants.ClientRoutes.LOGIN);
+    if (user) {
+      if (user.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
+      else router.push(Constants.ClientRoutes.ONBOARDING);
+    }
   }, [user, router]);
 
   return !tempUserId ? (

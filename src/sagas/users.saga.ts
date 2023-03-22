@@ -4,7 +4,7 @@ import axios from "axios";
 import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
-import { RouteBases } from "@/utils/constants/constants.api";
+import { ApiRoutes } from "@/utils/constants/constants.routes";
 
 enum UserActionTypes {
   FETCH_USERS = "FETCH_USERS",
@@ -51,7 +51,7 @@ export function deleteUserRequest(id: number): Types.IdAction {
 
 function* fetchUsers() {
   try {
-    const { data } = yield Saga.call(axios.get, RouteBases.USERS);
+    const { data } = yield Saga.call(axios.get, ApiRoutes.USERS);
     yield Saga.put(Redux.entitiesActions.setUser(data.data));
 
     // console.log("Fetch Users Response:", response.data);
@@ -73,7 +73,7 @@ function* fetchUser(action: Types.IdAction) {
   try {
     yield Saga.put(Redux.uiActions.setUserLoading(true));
     const { id } = action.payload;
-    const endpoint = RouteBases.USERS + `/${id}`;
+    const endpoint = ApiRoutes.USERS + `/${id}`;
     const response = yield Saga.call(axios.get, endpoint);
     // yield Saga.put(Redux.entitiesActions.setUser(response.data));
     yield Saga.put(Redux.uiActions.setUserLoading(false));
@@ -97,7 +97,7 @@ function* updateUser(action: Types.IdAction) {
   try {
     yield Saga.put(Redux.uiActions.setUserLoading(true));
     const { id } = action.payload;
-    const endpoint = RouteBases.USERS + `/${id}`;
+    const endpoint = ApiRoutes.USERS + `/${id}`;
     const response = yield Saga.call(axios.patch, endpoint);
     // yield Saga.put(Redux.entitiesActions.setUser(response.data));
     yield Saga.put(Redux.uiActions.setUserLoading(false));
@@ -120,7 +120,7 @@ function* deleteUser(action: Types.IdAction) {
   try {
     yield Saga.put(Redux.uiActions.setUserLoading(true));
     const { id } = action.payload;
-    const endpoint = RouteBases.USERS + `/${id}`;
+    const endpoint = ApiRoutes.USERS + `/${id}`;
     yield Saga.call(axios.delete, endpoint);
     yield Saga.put(Redux.entitiesActions.setUser(null));
     yield Saga.put(Redux.uiActions.setUserLoading(false));
