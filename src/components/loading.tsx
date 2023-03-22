@@ -13,8 +13,10 @@ const Container = styled.main`
   bottom: 0;
   left: 0;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: ${Styles.pxAsRem.four};
   background-color: ${Styles.overlay};
 `;
 
@@ -57,11 +59,19 @@ const RingThree = styled.div`
   animation-delay: -0.15s;
 `;
 
+const Text = styled.p`
+  margin: 0;
+  font-size: ${Styles.pxAsRem.sixteen};
+  font-weight: ${Styles.fontWeights.medium};
+`;
+
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-export const Loading = () => {
+type Props = { text?: string };
+
+export const Loading = (props: Props) => {
   return (
     <Container>
       <Spinner>
@@ -69,6 +79,7 @@ export const Loading = () => {
         <RingTwo />
         <RingThree />
       </Spinner>
+      <Text>{props.text}</Text>
     </Container>
   );
 };
