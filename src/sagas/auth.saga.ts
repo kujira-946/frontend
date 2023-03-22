@@ -106,7 +106,7 @@ function* register(action: RegisterAction) {
 
 function* verifyRegistration(action: VerifyRegistrationAction) {
   try {
-    yield Saga.put(Redux.uiActions.setUserLoading(true));
+    yield Saga.put(Redux.uiActions.setFetchingUser(true));
     const { id, verificationCode } = action.payload;
     const endpoint = ApiRoutes.AUTH + `/register/${id}/verify`;
     const { data } = yield Saga.call(axios.patch, endpoint, {
@@ -169,7 +169,7 @@ function* login(action: LoginAction) {
 
 function* verifyLogin(action: VerifyLoginAction) {
   try {
-    yield Saga.put(Redux.uiActions.setUserLoading(true));
+    yield Saga.put(Redux.uiActions.setFetchingUser(true));
     const { id, verificationCode, thirtyDays } = action.payload;
     const endpoint = ApiRoutes.AUTH + `/login/${id}/verify`;
     const { data } = yield Saga.call(axios.patch, endpoint, {
@@ -177,7 +177,7 @@ function* verifyLogin(action: VerifyLoginAction) {
       thirtyDays,
     });
     yield Saga.put(Redux.entitiesActions.setUser(data.data));
-    yield Saga.put(Redux.uiActions.setUserLoading(false));
+    yield Saga.put(Redux.uiActions.setFetchingUser(false));
     yield Saga.put(Redux.uiActions.resetState());
     yield Saga.put(Redux.errorsActions.setAuth(""));
     yield Saga.put(

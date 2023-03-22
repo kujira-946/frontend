@@ -71,11 +71,11 @@ function* fetchUsers() {
 
 function* fetchUser(action: Types.IdAction) {
   try {
-    yield Saga.put(Redux.uiActions.setUserLoading(true));
+    yield Saga.put(Redux.uiActions.setFetchingUser(true));
     const { id } = action.payload;
     const endpoint = ApiRoutes.USERS + `/${id}`;
     const { data } = yield Saga.call(axios.get, endpoint);
-    yield Saga.put(Redux.uiActions.setUserLoading(false));
+    yield Saga.put(Redux.uiActions.setFetchingUser(false));
     yield Saga.put(Redux.entitiesActions.setUser(data.data));
   } catch (error) {
     console.log(error);
@@ -93,12 +93,12 @@ function* fetchUser(action: Types.IdAction) {
 
 function* updateUser(action: Types.IdAction) {
   try {
-    yield Saga.put(Redux.uiActions.setUserLoading(true));
+    yield Saga.put(Redux.uiActions.setFetchingUser(true));
     const { id } = action.payload;
     const endpoint = ApiRoutes.USERS + `/${id}`;
     const { data } = yield Saga.call(axios.patch, endpoint);
     // yield Saga.put(Redux.entitiesActions.setUser(data));
-    yield Saga.put(Redux.uiActions.setUserLoading(false));
+    yield Saga.put(Redux.uiActions.setFetchingUser(false));
 
     console.log("Update User Response:", data);
   } catch (error) {
@@ -116,12 +116,12 @@ function* updateUser(action: Types.IdAction) {
 
 function* deleteUser(action: Types.IdAction) {
   try {
-    yield Saga.put(Redux.uiActions.setUserLoading(true));
+    yield Saga.put(Redux.uiActions.setFetchingUser(true));
     const { id } = action.payload;
     const endpoint = ApiRoutes.USERS + `/${id}`;
     yield Saga.call(axios.delete, endpoint);
     yield Saga.put(Redux.entitiesActions.setUser(null));
-    yield Saga.put(Redux.uiActions.setUserLoading(false));
+    yield Saga.put(Redux.uiActions.setFetchingUser(false));
   } catch (error) {
     console.log(error);
     yield Saga.put(

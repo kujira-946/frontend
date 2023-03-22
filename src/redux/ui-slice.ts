@@ -11,7 +11,7 @@ export type UIState = {
   notification: UINotification;
   tempUserId: number | null;
   loginForThirtyDays: boolean;
-  userLoading: boolean;
+  fetchingUser: boolean;
 };
 
 // ========================================================================================= //
@@ -22,7 +22,7 @@ const initialState: UIState = {
   notification: Constants.initialUINotification,
   tempUserId: null,
   loginForThirtyDays: false,
-  userLoading: false,
+  fetchingUser: false,
 };
 
 const uiSlice = createSlice({
@@ -44,8 +44,8 @@ const uiSlice = createSlice({
     setLoginForThirtyDays: (state: UIState, action: PayloadAction<boolean>) => {
       state.loginForThirtyDays = action.payload;
     },
-    setUserLoading: (state: UIState, action: PayloadAction<boolean>) => {
-      state.userLoading = action.payload;
+    setFetchingUser: (state: UIState, action: PayloadAction<boolean>) => {
+      state.fetchingUser = action.payload;
     },
   },
 });

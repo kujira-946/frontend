@@ -3,16 +3,18 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 
 import * as Constants from "@/utils/constants";
 import * as Styles from "@/utils/styles";
 import { SignalsStoreContext } from "@/pages/_app";
+import { GlobalState } from "@/store";
 import { logoutRequest } from "@/sagas/auth.saga";
 import { fetchUserRequest } from "@/sagas/users.saga";
 
 import { Notification } from "./notification";
+import { Loading } from "./loading";
 
 const poppins = localFont({
   src: [
@@ -304,9 +306,10 @@ export const Layout = (props: Props) => {
   const router = useRouter();
 
   const { ui } = useContext(SignalsStoreContext);
+  const { fetchingUser } = useSelector((state: GlobalState) => state.ui);
 
   useEffect(() => {
-    if (!jwtAccessToken && !userId) {
+    if (!jwtAccessToken || !userId) {
       router.push(Constants.ClientRoutes.LANDING);
     }
   }, []);
@@ -325,7 +328,11 @@ export const Layout = (props: Props) => {
       <GlobalStyles />
       <Notification />
 
-      {props.children}
+      {fetchingUser ? (
+        <Loading text="Loading your information..." />
+      ) : (
+        props.children
+      )}
     </ThemeProvider>
   );
 };
