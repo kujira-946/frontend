@@ -42,10 +42,10 @@ const Onboarding = () => {
   function toNextPage(): void {
     if (currentPage.value === 6) {
       router.push("/dashboard/logbook");
-    } else if (currentPage.value + 1 <= Constants.pages.length) {
+    } else if (currentPage.value + 1 <= Constants.onboardingCopies.length) {
       currentPage.value += 1;
     } else {
-      currentPage.value = Constants.pages.length;
+      currentPage.value = Constants.onboardingCopies.length;
     }
   }
 
@@ -112,12 +112,14 @@ const Onboarding = () => {
         <Globals.ConfirmationModal
           backButtonAction={toPreviousPage}
           supportingText={`$3,584.51 remaining`}
-          title={Constants.pages[currentPage.value - 1].title}
-          cornerText={`${currentPage.value}/${Constants.pages.length}`}
-          bodyTexts={Constants.pages[currentPage.value - 1].bodyTexts}
+          title={Constants.onboardingCopies[currentPage.value - 1].title}
+          cornerText={`${currentPage.value}/${Constants.onboardingCopies.length}`}
+          bodyTexts={
+            Constants.onboardingCopies[currentPage.value - 1].bodyTexts
+          }
           submitButtonAction={toNextPage}
           submitButtonText={
-            Constants.pages[currentPage.value - 1].submitButtonText
+            Constants.onboardingCopies[currentPage.value - 1].submitButtonText
           }
           disableSubmit={disableSubmit.value}
           showBackButton={currentPage.value === 1 ? false : true}

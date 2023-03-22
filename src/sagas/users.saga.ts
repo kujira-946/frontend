@@ -74,11 +74,9 @@ function* fetchUser(action: Types.IdAction) {
     yield Saga.put(Redux.uiActions.setUserLoading(true));
     const { id } = action.payload;
     const endpoint = ApiRoutes.USERS + `/${id}`;
-    const response = yield Saga.call(axios.get, endpoint);
-    // yield Saga.put(Redux.entitiesActions.setUser(response.data));
+    const { data } = yield Saga.call(axios.get, endpoint);
     yield Saga.put(Redux.uiActions.setUserLoading(false));
-
-    console.log("Fetch User Response:", response.data);
+    yield Saga.put(Redux.entitiesActions.setUser(data.data));
   } catch (error) {
     console.log(error);
     yield Saga.put(
@@ -98,11 +96,11 @@ function* updateUser(action: Types.IdAction) {
     yield Saga.put(Redux.uiActions.setUserLoading(true));
     const { id } = action.payload;
     const endpoint = ApiRoutes.USERS + `/${id}`;
-    const response = yield Saga.call(axios.patch, endpoint);
-    // yield Saga.put(Redux.entitiesActions.setUser(response.data));
+    const { data } = yield Saga.call(axios.patch, endpoint);
+    // yield Saga.put(Redux.entitiesActions.setUser(data));
     yield Saga.put(Redux.uiActions.setUserLoading(false));
 
-    console.log("Update User Response:", response.data);
+    console.log("Update User Response:", data);
   } catch (error) {
     console.log(error);
     yield Saga.put(

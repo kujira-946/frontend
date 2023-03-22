@@ -289,6 +289,7 @@ export type ThemeProps = { theme: ThemeContents };
 
 // ↓↓↓ Global Axios Defaults ↓↓↓ //
 axios.defaults.baseURL = "https://kuijra-backend.up.railway.app";
+const userId = Cookies.get("id");
 const jwtAccessToken = Cookies.get("token");
 if (jwtAccessToken) {
   axios.defaults.headers.common["Authorization"] = jwtAccessToken;
@@ -300,7 +301,6 @@ export const Layout = (props: Props) => {
   const dispatch = useDispatch();
   const { ui } = useContext(SignalsStoreContext);
 
-  const userId = Cookies.get("id");
   useEffect(() => {
     if (userId) dispatch(fetchUserRequest(Number(userId)));
 

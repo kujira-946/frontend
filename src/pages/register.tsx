@@ -16,7 +16,7 @@ const Register = () => {
       if (user.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
       else router.push(Constants.ClientRoutes.ONBOARDING);
     }
-  }, [user, router]);
+  }, [user]);
 
   return !tempUserId ? (
     <Components.AuthForm title="Register" caption="Already have an account?" />
