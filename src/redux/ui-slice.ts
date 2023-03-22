@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import * as Constants from "@/utils/constants.globals";
+import * as Constants from "@/utils/constants";
 import { UINotification } from "@/utils/types";
 
 // ========================================================================================= //

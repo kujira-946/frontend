@@ -5,7 +5,7 @@ import { effect, useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Components from "@/components/onboarding";
-import * as Constants from "@/utils/constants.onboarding";
+import * as Constants from "@/utils/constants";
 import * as Types from "@/utils/types";
 
 // ========================================================================================= //

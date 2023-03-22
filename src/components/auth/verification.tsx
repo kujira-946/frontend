@@ -6,7 +6,6 @@ import { effect, useSignal } from "@preact/signals-react";
 
 import * as AuthActions from "@/sagas/auth.saga";
 import * as Globals from "@/components";
-import * as Colors from "@/utils/styles/colors";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
@@ -185,8 +184,8 @@ export const Verification = (props: Props) => {
           type="submit"
           size="medium"
           borderRadius="four"
-          background={Colors.primary[ui.theme.value].main}
-          hoverBackground={Colors.primary[ui.theme.value].darker}
+          background={Styles.primary[ui.theme.value].main}
+          hoverBackground={Styles.primary[ui.theme.value].darker}
           disabled={verificationCode.value === ""}
         >
           Confirm
