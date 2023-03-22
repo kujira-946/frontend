@@ -1,10 +1,12 @@
 import localFont from "@next/font/local";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 
+import * as Constants from "@/utils/constants";
 import * as Styles from "@/utils/styles";
 import { SignalsStoreContext } from "@/pages/_app";
 import { logoutRequest } from "@/sagas/auth.saga";
@@ -300,6 +302,13 @@ type Props = { children: React.ReactNode };
 export const Layout = (props: Props) => {
   const dispatch = useDispatch();
   const { ui } = useContext(SignalsStoreContext);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!jwtAccessToken && !userId) {
+      router.push(Constants.ClientRoutes.LANDING);
+    }
+  }, []);
 
   useEffect(() => {
     if (userId) dispatch(fetchUserRequest(Number(userId)));

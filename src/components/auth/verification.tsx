@@ -11,7 +11,6 @@ import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
 import { GlobalState } from "@/store";
 import { ThemeProps } from "@/components/layout";
-import { useRouter } from "next/router";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -109,7 +108,6 @@ export const Verification = (props: Props) => {
     }
   }
 
-  const router = useRouter();
   function submitVerificationCode(event: Types.Submit): void {
     event.preventDefault();
     if (errors.auth) {
@@ -133,7 +131,6 @@ export const Verification = (props: Props) => {
             loginForThirtyDays
           )
         );
-        if (user) router.push("/dashboard/logbooks");
       }
     }
   }

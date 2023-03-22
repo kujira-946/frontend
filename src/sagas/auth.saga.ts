@@ -123,6 +123,11 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
         timeout: 5000,
       })
     );
+    Cookies.set("id", data.data.id, { secure: true });
+    Cookies.set("token", data.accessToken, {
+      secure: true,
+      expires: 30,
+    });
   } catch (error) {
     console.log(error);
     yield Saga.put(
