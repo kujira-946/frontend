@@ -1,12 +1,19 @@
-import { ApiRoutes, ClientRoutes } from "./constants.routes";
-import { initialUINotification } from "./constants.globals";
-import { landingMotion } from "./constants.framer";
-import { onboardingCopies } from "./constants.onboarding";
+import { ApiRoutes, ClientRoutes } from "./routes";
+import { initialUINotification } from "./globals";
+import { landingMotion } from "./framer";
+import { onboardingCopies } from "./onboarding";
 
 export {
+  // Routes
   ApiRoutes,
   ClientRoutes,
+
+  // Globals
   initialUINotification,
+
+  // Framer
   landingMotion,
+
+  // Onboarding
   onboardingCopies,
 };

@@ -4,7 +4,7 @@ import axios from "axios";
 import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
-import { ApiRoutes } from "@/utils/constants/constants.routes";
+import { ApiRoutes } from "@/utils/constants/routes";
 
 enum UserActionTypes {
   FETCH_USERS = "FETCH_USERS",

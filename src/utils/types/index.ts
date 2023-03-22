@@ -1,5 +1,5 @@
-import { Input, Submit } from "./types.react";
-import { NotificationType, UINotification } from "./types.redux";
+import { Input, Submit } from "./react";
+import { NotificationType, UINotification } from "./redux";
 import {
   SagaAction,
   NullAction,
@@ -8,16 +8,21 @@ import {
   LoginData,
   VerificationData,
   UpdateUserData,
-} from "./types.saga";
-import { SVGProps, PxAsRem } from "./types.styles";
-import { Category, Purchase } from "./types.logbook";
-import { User } from "./types.entities";
+} from "./saga";
+import { SVGProps, PxAsRem } from "./styles";
+import { Category, Purchase } from "./logbooks";
+import { User } from "./entities";
 
 export type {
+  // React
   Input,
   Submit,
+
+  // Redux
   NotificationType,
   UINotification,
+
+  // Styles
   SagaAction,
   NullAction,
   IdAction,
@@ -25,9 +30,15 @@ export type {
   LoginData,
   VerificationData,
   UpdateUserData,
+
+  // Styles
   SVGProps,
   PxAsRem,
+
+  // Logbooks
   Category,
   Purchase,
+
+  // Entities
   User,
 };

@@ -32,6 +32,7 @@ import {
 } from "./helpers";
 
 export {
+  // Colors
   text,
   background,
   pending,
@@ -47,14 +48,16 @@ export {
   shadow,
   overlay,
   shadowOverlay,
-  //
+
+  // Sizes
   pxAsRem,
   widths,
   heights,
   fontSizes,
   fontWeights,
   zIndexes,
-  //
+
+  // Helpers
   setMediaPaddings,
   clearButton,
   preventUserInteraction,
