@@ -8,6 +8,12 @@ export function checkValidCharacters(word: string): boolean {
   return true;
 }
 
+export function roundNumber(number: number, places: number): string {
+  const roundedNumber = number.toFixed(places);
+  if (!roundedNumber.includes(".")) return roundedNumber + ".00";
+  else return roundedNumber;
+}
+
 export function debounce(callback: Function, delay: number = 300) {
   let timeoutId: ReturnType<typeof setTimeout>;
 

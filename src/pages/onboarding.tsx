@@ -1,12 +1,17 @@
 import Head from "next/head";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { effect, useSignal } from "@preact/signals-react";
 
+import * as Redux from "@/redux";
 import * as Globals from "@/components";
 import * as Components from "@/components/onboarding";
 import * as Constants from "@/utils/constants";
+import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
+import { GlobalState } from "@/store";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -19,16 +24,55 @@ const Main = styled.main``;
 // ========================================================================================= //
 
 const Onboarding = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
+
+  const { user } = useSelector((state: GlobalState) => state.entities);
+
+  useEffect(() => {
+    if (user && user.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
+  }, [user]);
 
   const currentPage = useSignal(1);
   const supportingText = useSignal("");
   const income = useSignal("");
-  const savings = useSignal("");
   const recurringExpenses = useSignal<Types.Purchase[]>([]);
   const incomingPurchases = useSignal<Types.Purchase[]>([]);
+  const savings = useSignal("");
   const errorMessage = useSignal("");
   const disableSubmit = useSignal(false);
+
+  effect(() => {
+    if (currentPage.value === 1) {
+      disableSubmit.value = false;
+    } else if (income.value !== "" && savings.value !== "") {
+      if (Number(income.value) && Number(savings.value)) {
+        const roundedIncome = Functions.roundNumber(Number(income.value), 2);
+        const savedIncome =
+          Number(roundedIncome) * (Number(savings.value) / 100);
+        const roundedSavedIncome = Functions.roundNumber(
+          Number(savedIncome),
+          2
+        );
+        const remainingBudget = Functions.roundNumber(
+          Number(roundedIncome) - Number(roundedSavedIncome),
+          2
+        );
+        supportingText.value = `$${remainingBudget} remaining`;
+      } else {
+        supportingText.value = "";
+      }
+    } else if (income.value !== "") {
+      if (Number(income.value)) {
+        const roundedIncome = Functions.roundNumber(Number(income.value), 2);
+        supportingText.value = `$${roundedIncome} remaining`;
+      } else {
+        supportingText.value = "";
+      }
+    } else {
+      supportingText.value = "";
+    }
+  });
 
   function toPreviousPage(): void {
     if (currentPage.value - 1 > 0) currentPage.value -= 1;
@@ -37,7 +81,18 @@ const Onboarding = () => {
 
   function toNextPage(): void {
     if (currentPage.value === 6) {
-      router.push("/dashboard/logbook");
+      if (user) {
+        submitOnboarding();
+      } else {
+        dispatch(
+          Redux.uiActions.setNotification({
+            title: "Failure",
+            body: "Please make sure all previous fields were filled in properly.",
+            type: "failure",
+            timeout: 10000,
+          })
+        );
+      }
     } else if (currentPage.value + 1 <= Constants.onboardingCopies.length) {
       currentPage.value += 1;
     } else {
@@ -45,54 +100,26 @@ const Onboarding = () => {
     }
   }
 
-  function addRecurringExpense(): void {
-    recurringExpenses.value = [
-      ...recurringExpenses.value,
-      { description: "", cost: "" },
-    ];
-  }
+  function submitOnboarding(): void {
+    // 1. Create overview.
+    // 2. Use new overview id to create recurring and income overview groups.
+    // 3. Set the user's `onboarded` status to `true`.
 
-  // ↓↓↓ Error Handling ↓↓↓ //
-  effect(() => {
-    // Income Page
-    if (currentPage.value === 2) {
-      if (income.value.length === 0) {
-        disableSubmit.value = true;
-      } else if (Number(income.value) < 0 || income.value === "0") {
-        errorMessage.value = "You must enter a number greater than 0.";
-        disableSubmit.value = true;
-      } else if (!Number(income.value)) {
-        errorMessage.value = "You must enter a number.";
-        disableSubmit.value = true;
-      } else {
-        errorMessage.value = "";
-        disableSubmit.value = false;
-      }
+    if (Number(income.value) && Number(savings.value)) {
+      const roundedIncome = Functions.roundNumber(Number(income.value), 2);
+      const roundedSavings = Functions.roundNumber(Number(savings.value), 2);
+
+      const overviewData = {
+        income: Number(roundedIncome),
+        savings: Number(roundedSavings),
+        ownerId: user?.id,
+      };
+      const recurringOverviewGroupData = {};
+      const incomingOverviewGroupData = {};
+
+      console.log(overviewData);
     }
-    // Savings Page
-    else if (currentPage.value === 5) {
-      if (savings.value.length === 0) {
-        disableSubmit.value = true;
-      } else if (!Number(savings.value) && savings.value !== "0") {
-        errorMessage.value = "You must enter a number.";
-        disableSubmit.value = true;
-      } else if (Number(savings.value) < 0) {
-        errorMessage.value = "Minimum 0%";
-        disableSubmit.value = true;
-      } else if (Number(savings.value) > 100) {
-        errorMessage.value = "Maximum 100%";
-        disableSubmit.value = true;
-      } else {
-        errorMessage.value = "";
-        disableSubmit.value = false;
-      }
-    }
-    // Reset
-    else {
-      errorMessage.value = "";
-      disableSubmit.value = false;
-    }
-  });
+  }
 
   return (
     <>
@@ -106,7 +133,7 @@ const Onboarding = () => {
       <Main>
         <Globals.ConfirmationModal
           backButtonAction={toPreviousPage}
-          supportingText={`$3,584.51 remaining`}
+          supportingText={supportingText.value}
           title={Constants.onboardingCopies[currentPage.value - 1].title}
           cornerText={`${currentPage.value}/${Constants.onboardingCopies.length}`}
           bodyTexts={
@@ -123,18 +150,19 @@ const Onboarding = () => {
           {currentPage.value === 2 ? (
             <Components.Income
               income={income}
-              errorMessage={errorMessage.value}
+              errorMessage={errorMessage}
+              disableSubmit={disableSubmit}
             />
           ) : currentPage.value === 3 ? (
             <Components.RecurringExpenses
-              recurringExpenses={recurringExpenses.value}
-              addRecurringExpense={addRecurringExpense}
+              recurringExpenses={recurringExpenses}
             />
           ) : currentPage.value === 5 ? (
             <Components.Savings
               income={Number(income.value)}
               savings={savings}
-              errorMessage={errorMessage.value}
+              errorMessage={errorMessage}
+              disableSubmit={disableSubmit}
             />
           ) : null}
         </Globals.ConfirmationModal>

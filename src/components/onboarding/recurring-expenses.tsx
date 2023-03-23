@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useContext } from "react";
+import { Signal } from "@preact/signals-react";
 
 import * as Global from "@/components";
 import * as Logbook from "@/components/logbook";
@@ -24,17 +25,23 @@ const PurchaseCells = styled.article`
 // ========================================================================================= //
 
 type Props = {
-  recurringExpenses: Types.Purchase[];
-  addRecurringExpense: () => void;
+  recurringExpenses: Signal<Types.Purchase[]>;
 };
 
 export const RecurringExpenses = (props: Props) => {
   const { ui } = useContext(SignalsStoreContext);
 
+  function addRecurringExpense(): void {
+    props.recurringExpenses.value = [
+      ...props.recurringExpenses.value,
+      { description: "", cost: "" },
+    ];
+  }
+
   return (
     <Container>
       <PurchaseCells>
-        {props.recurringExpenses.map(
+        {props.recurringExpenses.value.map(
           (purchase: Types.Purchase, index: number) => {
             return (
               <Logbook.PurchaseCell
@@ -46,16 +53,16 @@ export const RecurringExpenses = (props: Props) => {
       </PurchaseCells>
 
       <Global.Button
-        onClick={props.addRecurringExpense}
+        onClick={addRecurringExpense}
         size="medium"
         borderRadius="four"
-        color={Styles.background[ui.theme.value].three}
-        hoverColor={Styles.background[ui.theme.value].five}
+        background={Styles.background[ui.theme.value].three}
+        hoverBackground={Styles.background[ui.theme.value].five}
         style={{
           marginTop: Styles.pxAsRem.sixteen,
         }}
       >
-        Add Purchase
+        Add
       </Global.Button>
     </Container>
   );
