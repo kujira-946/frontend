@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -18,10 +19,24 @@ const Register = () => {
     }
   }, [user]);
 
-  return !tempUserId ? (
-    <Components.AuthForm title="Register" caption="Already have an account?" />
-  ) : (
-    <Components.Verification title="Verify Registration" />
+  return (
+    <>
+      <Head>
+        <title>Kujira | Register</title>
+        <meta name="description" content="Kujira app" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      {!tempUserId ? (
+        <Components.AuthForm
+          title="Register"
+          caption="Already have an account?"
+        />
+      ) : (
+        <Components.Verification title="Verify Registration" />
+      )}
+    </>
   );
 };
 

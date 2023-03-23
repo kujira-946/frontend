@@ -21,8 +21,6 @@ const Main = styled.main``;
 const Onboarding = () => {
   const router = useRouter();
 
-  // ↓↓↓ Local State ↓↓↓ //
-
   const currentPage = useSignal(1);
   const supportingText = useSignal("");
   const income = useSignal("");
@@ -31,8 +29,6 @@ const Onboarding = () => {
   const incomingPurchases = useSignal<Types.Purchase[]>([]);
   const errorMessage = useSignal("");
   const disableSubmit = useSignal(false);
-
-  // ↓↓↓ Actions ↓↓↓ //
 
   function toPreviousPage(): void {
     if (currentPage.value - 1 > 0) currentPage.value -= 1;
@@ -57,7 +53,6 @@ const Onboarding = () => {
   }
 
   // ↓↓↓ Error Handling ↓↓↓ //
-
   effect(() => {
     // Income Page
     if (currentPage.value === 2) {

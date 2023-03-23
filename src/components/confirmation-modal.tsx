@@ -176,8 +176,8 @@ export const ConfirmationModal = (props: Props) => {
           onClick={props.submitButtonAction}
           size="medium"
           borderRadius="four"
-          color={Styles.primary[ui.theme.value].main}
-          hoverColor={Styles.primary[ui.theme.value].darker}
+          background={Styles.primary[ui.theme.value].main}
+          hoverBackground={Styles.primary[ui.theme.value].darker}
           style={{
             marginTop: Styles.pxAsRem.four,
             opacity: props.disableSubmit ? 0.5 : 1,
