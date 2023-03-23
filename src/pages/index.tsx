@@ -1,8 +1,13 @@
 import Head from "next/head";
 import styled from "styled-components";
+import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 import * as Components from "@/components/landing";
+import * as Constants from "@/utils/constants";
+import { GlobalState } from "@/store";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -17,13 +22,26 @@ const Main = styled.main`
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
+const userId = Cookies.get("id");
+const accessToken = Cookies.get("token");
+
 const Home = () => {
+  const router = useRouter();
+  const { user } = useSelector((state: GlobalState) => state.entities);
+
   // ↓↓↓ Starts the page back at the top when refreshing. ↓↓↓ //
   useEffect(() => {
     if (typeof window !== "undefined") {
       window.history.scrollRestoration = "manual";
     }
   }, []);
+
+  useEffect(() => {
+    if (userId && accessToken && user) {
+      if (user.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
+      else router.push(Constants.ClientRoutes.ONBOARDING);
+    }
+  }, [userId, accessToken, user]);
 
   return (
     <>
