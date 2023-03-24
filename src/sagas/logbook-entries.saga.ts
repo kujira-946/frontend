@@ -111,7 +111,9 @@ function* fetchLogbookLogbookEntries(action: LogbookLogbookEntriesAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(true));
     const endpoint = ApiRoutes.LOGBOOK_ENTRIES + `/fetch-logbook-entries`;
     const response = yield Saga.call(axios.get, endpoint, action.payload);
-    yield Saga.put(Redux.entitiesActions.setLogbookEntries(response.data.data));
+    yield Saga.put(
+      Redux.entitiesActions.updateLogbookEntries(response.data.data)
+    );
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
     console.log(error);
@@ -133,7 +135,9 @@ function* fetchLogbookEntry(action: LogbookEntryIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(true));
     const endpoint = ApiRoutes.LOGBOOK_ENTRIES + `/${logbookEntryId}`;
     const response = yield Saga.call(axios.get, endpoint);
-    yield Saga.put(Redux.entitiesActions.setLogbookEntries(response.data.data));
+    yield Saga.put(
+      Redux.entitiesActions.updateLogbookEntries(response.data.data)
+    );
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
     console.log(error);
@@ -157,7 +161,9 @@ function* createLogbookEntry(action: LogbookEntryCreateAction) {
       ApiRoutes.LOGBOOK_ENTRIES,
       action.payload
     );
-    yield Saga.put(Redux.entitiesActions.setLogbookEntries(response.data.data));
+    yield Saga.put(
+      Redux.entitiesActions.updateLogbookEntries(response.data.data)
+    );
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
     console.log(error);
@@ -179,7 +185,9 @@ function* updateLogbookEntry(action: LogbookEntryUpdateAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(true));
     const endpoint = ApiRoutes.LOGBOOK_ENTRIES + `/${logbookEntryId}`;
     const response = yield Saga.call(axios.patch, endpoint, data);
-    yield Saga.put(Redux.entitiesActions.setLogbookEntries(response.data.data));
+    yield Saga.put(
+      Redux.entitiesActions.updateLogbookEntries(response.data.data)
+    );
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
     console.log(error);

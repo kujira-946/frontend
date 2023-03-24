@@ -107,7 +107,7 @@ function* updateUser(action: UserUpdateAction) {
     yield Saga.put(Redux.uiActions.setLoadingUser(true));
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     const response = yield Saga.call(axios.patch, endpoint, data);
-    // yield Saga.put(Redux.entitiesActions.setUser(data));
+    yield Saga.put(Redux.entitiesActions.updateUser(response.data.data));
     yield Saga.put(Redux.uiActions.setLoadingUser(false));
 
     console.log("Update User Response:", response.data);

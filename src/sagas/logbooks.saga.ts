@@ -103,7 +103,7 @@ function* fetchUserLogbooks(action: UserLogbooksAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const endpoint = ApiRoutes.LOGBOOKS + `/fetch-user-logbooks`;
     const response = yield Saga.call(axios.get, endpoint, action.payload);
-    yield Saga.put(Redux.entitiesActions.setLogbooks(response.data.data));
+    yield Saga.put(Redux.entitiesActions.updateLogbooks(response.data.data));
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     console.log(error);
@@ -125,7 +125,7 @@ function* fetchLogbook(action: LogbookIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const endpoint = ApiRoutes.LOGBOOKS + `/${logbookId}`;
     const response = yield Saga.call(axios.get, endpoint);
-    yield Saga.put(Redux.entitiesActions.setLogbooks(response.data.data));
+    yield Saga.put(Redux.entitiesActions.updateLogbooks(response.data.data));
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     console.log(error);
@@ -146,7 +146,7 @@ function* createLogbook(action: LogbookCreateAction) {
     const { data } = action.payload;
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const response = yield Saga.call(axios.post, ApiRoutes.LOGBOOKS, data);
-    yield Saga.put(Redux.entitiesActions.setLogbooks(response.data.data));
+    yield Saga.put(Redux.entitiesActions.updateLogbooks(response.data.data));
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     console.log(error);
@@ -168,7 +168,7 @@ function* updateLogbook(action: LogbookUpdateAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const endpoint = ApiRoutes.LOGBOOKS + `/${logbookId}`;
     const response = yield Saga.call(axios.patch, endpoint, data);
-    yield Saga.put(Redux.entitiesActions.setLogbooks(response.data.data));
+    yield Saga.put(Redux.entitiesActions.updateLogbooks(response.data.data));
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     console.log(error);
