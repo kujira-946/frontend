@@ -11,6 +11,8 @@ import {
   OverviewUpdateData,
   OverviewGroupCreateData,
   OverviewGroupUpdateData,
+  LogbookCreateData,
+  LogbookUpdateData,
 } from "./saga";
 import { SVGProps, PxAsRem } from "./styles";
 import {
@@ -42,6 +44,8 @@ export type {
   OverviewUpdateData,
   OverviewGroupCreateData,
   OverviewGroupUpdateData,
+  LogbookCreateData,
+  LogbookUpdateData,
 
   // Styles
   SVGProps,

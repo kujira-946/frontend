@@ -77,3 +77,16 @@ export type OverviewGroupCreateData = {
 };
 
 export type OverviewGroupUpdateData = Partial<OverviewGroupCreateData>;
+
+// ========================================================================================= //
+// [ LOGBOOKS DATA ] ======================================================================= //
+// ========================================================================================= //
+
+export type LogbookCreateData = {
+  name: string;
+  ownerId: number;
+};
+
+export type LogbookUpdateData = {
+  name?: string;
+};
