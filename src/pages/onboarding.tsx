@@ -23,6 +23,11 @@ const Main = styled.main``;
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
+type Purchase = {
+  description: string;
+  cost: string;
+};
+
 const Onboarding = () => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -39,8 +44,8 @@ const Onboarding = () => {
   const disableSubmit = useSignal(false);
 
   const income = useSignal("");
-  const recurringExpenses = useSignal<Types.Purchase[]>([]);
-  const incomingPurchases = useSignal<Types.Purchase[]>([]);
+  const recurringExpenses = useSignal<Purchase[]>([]);
+  const incomingPurchases = useSignal<Purchase[]>([]);
   const savings = useSignal("");
 
   effect(() => {

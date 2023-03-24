@@ -24,17 +24,17 @@ export type User = {
 } & Dates;
 
 type Category = "need" | "planned" | "impulse" | "regret";
-type Purchase = {
+export type Purchase = {
   id: number;
   placement: number;
   category?: Category;
   description?: string;
   cost?: number;
-  overviewGroup: OverviewGroup;
-  logbookEntry: LogbookEntry;
+  overviewGroup?: OverviewGroup;
+  logbookEntry?: LogbookEntry;
 } & Dates;
 
-type Overview = {
+export type Overview = {
   id: number;
   income: number;
   savings: number;
@@ -42,7 +42,7 @@ type Overview = {
   ownerId: number;
 } & Dates;
 
-type OverviewGroup = {
+export type OverviewGroup = {
   id: number;
   name: string;
   totalCost: number;
@@ -50,14 +50,14 @@ type OverviewGroup = {
   overviewId: number;
 } & Dates;
 
-type Logbook = {
+export type Logbook = {
   id: number;
   name: string;
   entries: LogbookEntry[];
   ownerId: number;
 } & Dates;
 
-type LogbookEntry = {
+export type LogbookEntry = {
   id: number;
   date: Date;
   spent: number;

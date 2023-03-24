@@ -8,6 +8,11 @@ import * as Types from "@/utils/types";
 
 export type EntitiesState = {
   user: Types.User | null;
+  overviews: Types.Overview[] | null;
+  overviewGroups: Types.OverviewGroup[] | null;
+  logbooks: Types.Logbook[] | null;
+  logbookEntries: Types.LogbookEntry[] | null;
+  purchases: Types.Purchase[] | null;
 };
 
 // ========================================================================================= //
@@ -16,6 +21,11 @@ export type EntitiesState = {
 
 const initialState: EntitiesState = {
   user: null,
+  overviews: null,
+  overviewGroups: null,
+  logbooks: null,
+  logbookEntries: null,
+  purchases: null,
 };
 
 const entitiesSlice = createSlice({
@@ -27,6 +37,36 @@ const entitiesSlice = createSlice({
       action: PayloadAction<Types.User | null>
     ) => {
       state.user = action.payload;
+    },
+    setOverviews: (
+      state: EntitiesState,
+      action: PayloadAction<Types.Overview[] | null>
+    ) => {
+      state.overviews = action.payload;
+    },
+    setOverviewGroups: (
+      state: EntitiesState,
+      action: PayloadAction<Types.OverviewGroup[] | null>
+    ) => {
+      state.overviewGroups = action.payload;
+    },
+    setLogbooks: (
+      state: EntitiesState,
+      action: PayloadAction<Types.Logbook[] | null>
+    ) => {
+      state.logbooks = action.payload;
+    },
+    setLogbookEntries: (
+      state: EntitiesState,
+      action: PayloadAction<Types.LogbookEntry[] | null>
+    ) => {
+      state.logbookEntries = action.payload;
+    },
+    setPurchases: (
+      state: EntitiesState,
+      action: PayloadAction<Types.Purchase[] | null>
+    ) => {
+      state.purchases = action.payload;
     },
   },
 });

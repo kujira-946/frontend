@@ -4,7 +4,7 @@ import { Signal, signal } from "@preact/signals-react";
 // [ SIGNALS ] ============================================================================= //
 // ========================================================================================= //
 
-type Theme = "light" | "dark";
+export type Theme = "light" | "dark";
 
 export type UISignals = {
   theme: Signal<Theme>;

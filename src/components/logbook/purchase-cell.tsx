@@ -41,7 +41,9 @@ const CategoryButtons = styled.div`
   gap: ${Styles.pxAsRem.four};
 `;
 
-type CategoryButtonProps = { category: Types.Category };
+type Category = "Need" | "Planned" | "Impulse" | "Regret";
+
+type CategoryButtonProps = { category: Category };
 const CategoryButton = styled.button<CategoryButtonProps & ThemeProps>`
   ${Styles.clearButton};
   display: flex;
@@ -138,7 +140,7 @@ type Props = {
   costFrozen?: true;
 };
 
-const categories: Types.Category[] = ["Need", "Planned", "Impulse", "Regret"];
+const categories: Category[] = ["Need", "Planned", "Impulse", "Regret"];
 
 export const PurchaseCell = (props: Props) => {
   const { ui } = useContext(SignalsStoreContext);
@@ -210,7 +212,7 @@ export const PurchaseCell = (props: Props) => {
 
       {!props.hideCategories && (
         <CategoryButtons>
-          {categories.map((category: Types.Category) => {
+          {categories.map((category: Category) => {
             return (
               <CategoryButton
                 key={`purchase-cell-${category}`}

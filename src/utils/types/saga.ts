@@ -1,4 +1,4 @@
-import { User } from "./entities";
+import { Theme } from "@/signals/ui-signals";
 
 // ========================================================================================= //
 // [ ACTIONS ] ============================================================================= //
@@ -9,7 +9,6 @@ export type SagaAction<Payload> = {
   payload: Payload;
 };
 export type NullAction = SagaAction<null>;
-export type IdAction = SagaAction<{ id: number }>;
 
 // ========================================================================================= //
 // [ AUTH DATA ] =========================================================================== //
@@ -36,4 +35,33 @@ export type VerificationData = {
   thirtyDays?: boolean;
 };
 
-export type UpdateUserData = Partial<RegistrationData>;
+// ========================================================================================= //
+// [ USERS DATA ] ========================================================================== //
+// ========================================================================================= //
+
+export type UserUpdateData = {
+  email?: string;
+  username?: string;
+  firstName?: string;
+  lastName?: string;
+  birthday?: string;
+  currency?: string;
+  mobileNumber?: string;
+  onboarded?: string;
+  theme?: Theme;
+};
+
+// ========================================================================================= //
+// [ OVERVIEWS DATA ] ====================================================================== //
+// ========================================================================================= //
+
+export type OverviewCreateData = {
+  income: number;
+  savings?: number;
+  ownerId: number;
+};
+
+export type OverviewUpdateData = {
+  income?: number;
+  savings?: number;
+};

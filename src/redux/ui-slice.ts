@@ -11,7 +11,13 @@ export type UIState = {
   notification: UINotification;
   tempUserId: number | null;
   loginForThirtyDays: boolean;
+
   fetchingUser: boolean;
+  fetchingOverviews: boolean;
+  fetchingOverviewGroups: boolean;
+  fetchingLogbooks: boolean;
+  fetchingLogbookEntries: boolean;
+  fetchingPurchases: boolean;
 };
 
 // ========================================================================================= //
@@ -22,7 +28,13 @@ const initialState: UIState = {
   notification: Constants.initialUINotification,
   tempUserId: null,
   loginForThirtyDays: false,
+
   fetchingUser: false,
+  fetchingOverviews: false,
+  fetchingOverviewGroups: false,
+  fetchingLogbooks: false,
+  fetchingLogbookEntries: false,
+  fetchingPurchases: false,
 };
 
 const uiSlice = createSlice({
@@ -46,6 +58,27 @@ const uiSlice = createSlice({
     },
     setFetchingUser: (state: UIState, action: PayloadAction<boolean>) => {
       state.fetchingUser = action.payload;
+    },
+    setFetchingOverviews: (state: UIState, action: PayloadAction<boolean>) => {
+      state.fetchingOverviews = action.payload;
+    },
+    setFetchingOverviewGroups: (
+      state: UIState,
+      action: PayloadAction<boolean>
+    ) => {
+      state.fetchingOverviewGroups = action.payload;
+    },
+    setFetchingLogbooks: (state: UIState, action: PayloadAction<boolean>) => {
+      state.fetchingLogbooks = action.payload;
+    },
+    setFetchingLogbookEntries: (
+      state: UIState,
+      action: PayloadAction<boolean>
+    ) => {
+      state.fetchingLogbookEntries = action.payload;
+    },
+    setFetchingPurchases: (state: UIState, action: PayloadAction<boolean>) => {
+      state.fetchingPurchases = action.payload;
     },
   },
 });

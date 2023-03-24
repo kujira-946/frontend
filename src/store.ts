@@ -3,8 +3,9 @@ import createSagaMiddleware from "@redux-saga/core";
 import { configureStore } from "@reduxjs/toolkit";
 
 import * as Redux from "@/redux";
-import * as AuthSaga from "@/sagas/auth.saga";
-import * as UsersSaga from "@/sagas/users.saga";
+import { authSaga } from "./sagas/auth.saga";
+import { usersSaga } from "./sagas/users.saga";
+import { overviewsSaga } from "./sagas/overviews.saga";
 
 export type GlobalState = {
   ui: Redux.UIState;
@@ -19,7 +20,7 @@ const rootReducer = {
 };
 
 function* rootSaga() {
-  yield Saga.all([AuthSaga.authSaga(), UsersSaga.usersSaga()]);
+  yield Saga.all([authSaga(), usersSaga(), overviewsSaga()]);
 }
 const sagaMiddleware = createSagaMiddleware();
 
