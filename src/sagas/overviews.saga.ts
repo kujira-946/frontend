@@ -237,8 +237,14 @@ function* deleteOverview(action: OverviewIdAction) {
 export function* overviewsSaga() {
   yield Saga.all([
     Saga.takeEvery(OverviewsActionTypes.FETCH_OVERVIEWS, fetchOverviews),
-    Saga.takeEvery(OverviewsActionTypes.FETCH_USER_OVERVIEWS, fetchUserOverviews),
-    Saga.takeEvery(OverviewsActionTypes.BULK_FETCH_OVERVIEWS, bulkFetchOverviews),
+    Saga.takeEvery(
+      OverviewsActionTypes.FETCH_USER_OVERVIEWS,
+      fetchUserOverviews
+    ),
+    Saga.takeEvery(
+      OverviewsActionTypes.BULK_FETCH_OVERVIEWS,
+      bulkFetchOverviews
+    ),
     Saga.takeEvery(OverviewsActionTypes.FETCH_OVERVIEW, fetchOverview),
     Saga.takeEvery(OverviewsActionTypes.CREATE_OVERVIEW, createOverview),
     Saga.takeEvery(OverviewsActionTypes.UPDATE_OVERVIEW, updateOverview),

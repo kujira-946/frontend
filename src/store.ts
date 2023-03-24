@@ -6,6 +6,7 @@ import * as Redux from "@/redux";
 import { authSaga } from "./sagas/auth.saga";
 import { usersSaga } from "./sagas/users.saga";
 import { overviewsSaga } from "./sagas/overviews.saga";
+import { overviewGroupsSaga } from "./sagas/overview-groups.saga";
 
 export type GlobalState = {
   ui: Redux.UIState;
@@ -20,7 +21,12 @@ const rootReducer = {
 };
 
 function* rootSaga() {
-  yield Saga.all([authSaga(), usersSaga(), overviewsSaga()]);
+  yield Saga.all([
+    authSaga(),
+    usersSaga(),
+    overviewsSaga(),
+    overviewGroupsSaga(),
+  ]);
 }
 const sagaMiddleware = createSagaMiddleware();
 

@@ -9,6 +9,8 @@ import {
   UserUpdateData,
   OverviewCreateData,
   OverviewUpdateData,
+  OverviewGroupCreateData,
+  OverviewGroupUpdateData,
 } from "./saga";
 import { SVGProps, PxAsRem } from "./styles";
 import {
@@ -38,6 +40,8 @@ export type {
   UserUpdateData,
   OverviewCreateData,
   OverviewUpdateData,
+  OverviewGroupCreateData,
+  OverviewGroupUpdateData,
 
   // Styles
   SVGProps,

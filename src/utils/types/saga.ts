@@ -65,3 +65,15 @@ export type OverviewUpdateData = {
   income?: number;
   savings?: number;
 };
+
+// ========================================================================================= //
+// [ OVERVIEW GROUPS DATA ] ================================================================ //
+// ========================================================================================= //
+
+export type OverviewGroupCreateData = {
+  name: string;
+  totalCost?: number;
+  overviewId: number;
+};
+
+export type OverviewGroupUpdateData = Partial<OverviewGroupCreateData>;
