@@ -84,10 +84,11 @@ function* fetchUser(action: UserIdAction) {
     const { userId } = action.payload;
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     const response = yield Saga.call(axios.get, endpoint);
-    yield Saga.put(Redux.uiActions.setLoadingUser(false));
     yield Saga.put(Redux.entitiesActions.setUser(response.data.data));
+    yield Saga.put(Redux.uiActions.setLoadingUser(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingUser(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -112,6 +113,7 @@ function* updateUser(action: UserUpdateAction) {
     console.log("Update User Response:", response.data);
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingUser(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -133,6 +135,7 @@ function* deleteUser(action: UserIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingUser(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingUser(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",

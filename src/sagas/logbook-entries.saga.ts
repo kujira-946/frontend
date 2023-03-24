@@ -94,6 +94,7 @@ function* fetchLogbookEntries() {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -114,6 +115,7 @@ function* fetchLogbookLogbookEntries(action: LogbookLogbookEntriesAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -135,6 +137,7 @@ function* fetchLogbookEntry(action: LogbookEntryIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -158,6 +161,7 @@ function* createLogbookEntry(action: LogbookEntryCreateAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -179,6 +183,7 @@ function* updateLogbookEntry(action: LogbookEntryUpdateAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -199,6 +204,7 @@ function* deleteLogbookEntry(action: LogbookEntryIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",

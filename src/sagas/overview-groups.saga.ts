@@ -105,6 +105,7 @@ function* fetchOverviewGroups() {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -125,6 +126,7 @@ function* fetchOverviewOverviewGroups(action: OverviewOverviewGroupsAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -145,6 +147,7 @@ function* bulkFetchOverviewGroups(action: OverviewGroupIdsAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -166,6 +169,7 @@ function* fetchOverviewGroup(action: OverviewGroupIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -189,6 +193,7 @@ function* createOverviewGroup(action: OverviewGroupCreateAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -210,6 +215,7 @@ function* updateOverviewGroup(action: OverviewGroupUpdateAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -230,6 +236,7 @@ function* deleteOverviewGroup(action: OverviewGroupIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",

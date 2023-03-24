@@ -132,8 +132,10 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
       secure: true,
       expires: 30,
     });
+    yield Saga.put(Redux.uiActions.setLoadingUser(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingUser(false));
     yield Saga.put(
       Redux.errorsActions.setAuth(Functions.sagaResponseError(error))
     );
@@ -181,7 +183,6 @@ function* verifyLogin(action: VerifyLoginAction) {
       thirtyDays,
     });
     yield Saga.put(Redux.entitiesActions.setUser(response.data.data));
-    yield Saga.put(Redux.uiActions.setLoadingUser(false));
     yield Saga.put(Redux.uiActions.resetState());
     yield Saga.put(Redux.errorsActions.setAuth(""));
     yield Saga.put(
@@ -191,14 +192,16 @@ function* verifyLogin(action: VerifyLoginAction) {
         type: "success",
         timeout: 5000,
       })
-    );
-    Cookies.set("id", response.data.data.id, { secure: true });
-    Cookies.set("token", response.data.accessToken, {
-      secure: true,
-      expires: thirtyDays ? 30 : 7,
-    });
+      );
+      Cookies.set("id", response.data.data.id, { secure: true });
+      Cookies.set("token", response.data.accessToken, {
+        secure: true,
+        expires: thirtyDays ? 30 : 7,
+      });
+      yield Saga.put(Redux.uiActions.setLoadingUser(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingUser(false));
     yield Saga.put(
       Redux.errorsActions.setAuth(Functions.sagaResponseError(error))
     );

@@ -101,6 +101,7 @@ function* fetchOverviews() {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -121,6 +122,7 @@ function* fetchUserOverviews(action: UserOverviewsAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -141,6 +143,7 @@ function* bulkFetchOverviews(action: OverviewIdsAction) {
   try {
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -161,6 +164,7 @@ function* fetchOverview(action: OverviewIdAction) {
   try {
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -184,6 +188,7 @@ function* createOverview(action: OverviewCreateAction) {
   try {
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -205,6 +210,7 @@ function* updateOverview(action: OverviewUpdateAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -225,6 +231,7 @@ function* deleteOverview(action: OverviewIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",

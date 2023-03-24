@@ -86,6 +86,7 @@ function* fetchLogbooks() {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -106,6 +107,7 @@ function* fetchUserLogbooks(action: UserLogbooksAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -127,6 +129,7 @@ function* fetchLogbook(action: LogbookIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -147,6 +150,7 @@ function* createLogbook(action: LogbookCreateAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -168,6 +172,7 @@ function* updateLogbook(action: LogbookUpdateAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -188,6 +193,7 @@ function* deleteLogbook(action: LogbookIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
