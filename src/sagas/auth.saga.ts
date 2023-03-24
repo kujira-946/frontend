@@ -29,15 +29,15 @@ export function registerRequest(data: Types.RegistrationData): RegisterAction {
 }
 
 type VerifyRegistrationAction = Types.SagaAction<
-  { id: number } & Types.VerificationData
+  { userId: number } & Types.VerificationData
 >;
 export function verifyRegistrationRequest(
-  id: number,
+  userId: number,
   verificationCode: string
 ): VerifyRegistrationAction {
   return {
     type: AuthActionTypes.VERIFY_REGISTRATION,
-    payload: { id, verificationCode },
+    payload: { userId, verificationCode },
   };
 }
 
@@ -50,30 +50,34 @@ export function loginRequest(data: Types.LoginData): LoginAction {
 }
 
 type VerifyLoginAction = Types.SagaAction<
-  { id: number } & Types.VerificationData
+  { userId: number } & Types.VerificationData
 >;
 export function verifyLoginRequest(
-  id: number,
+  userId: number,
   verificationCode: string,
   thirtyDays?: boolean
 ): VerifyLoginAction {
   return {
     type: AuthActionTypes.VERIFY_LOGIN,
-    payload: { id, verificationCode, thirtyDays },
+    payload: { userId, verificationCode, thirtyDays },
   };
 }
 
-export function logoutRequest(id: number): Types.IdAction {
+type UserIdAction = Types.SagaAction<{ userId: number }>;
+
+export function logoutRequest(userId: number): UserIdAction {
   return {
     type: AuthActionTypes.LOGOUT,
-    payload: { id },
+    payload: { userId },
   };
 }
 
-export function requestNewVerificationCodeRequest(id: number): Types.IdAction {
+export function requestNewVerificationCodeRequest(
+  userId: number
+): UserIdAction {
   return {
     type: AuthActionTypes.REQUEST_NEW_VERIFICATION_CODE,
-    payload: { id },
+    payload: { userId },
   };
 }
 
@@ -107,8 +111,8 @@ function* register(action: RegisterAction) {
 function* verifyRegistration(action: VerifyRegistrationAction) {
   try {
     yield Saga.put(Redux.uiActions.setFetchingUser(true));
-    const { id, verificationCode } = action.payload;
-    const endpoint = ApiRoutes.AUTH + `/register/${id}/verify`;
+    const { userId, verificationCode } = action.payload;
+    const endpoint = ApiRoutes.AUTH + `/register/${userId}/verify`;
     const { data } = yield Saga.call(axios.patch, endpoint, {
       verificationCode,
     });
@@ -170,8 +174,8 @@ function* login(action: LoginAction) {
 function* verifyLogin(action: VerifyLoginAction) {
   try {
     yield Saga.put(Redux.uiActions.setFetchingUser(true));
-    const { id, verificationCode, thirtyDays } = action.payload;
-    const endpoint = ApiRoutes.AUTH + `/login/${id}/verify`;
+    const { userId, verificationCode, thirtyDays } = action.payload;
+    const endpoint = ApiRoutes.AUTH + `/login/${userId}/verify`;
     const { data } = yield Saga.call(axios.patch, endpoint, {
       verificationCode,
       thirtyDays,
@@ -209,9 +213,9 @@ function* verifyLogin(action: VerifyLoginAction) {
   }
 }
 
-function* logout(action: Types.IdAction) {
+function* logout(action: UserIdAction) {
   try {
-    const endpoint = ApiRoutes.AUTH + `/logout/${action.payload.id}`;
+    const endpoint = ApiRoutes.AUTH + `/logout/${action.payload.userId}`;
     const { data } = yield Saga.call(axios.patch, endpoint);
     yield Saga.put(Redux.errorsActions.setAuth(""));
     Cookies.remove("id");
@@ -239,10 +243,11 @@ function* logout(action: Types.IdAction) {
   }
 }
 
-function* requestNewVerificationCode(action: Types.IdAction) {
+function* requestNewVerificationCode(action: UserIdAction) {
   try {
     const endpoint =
-      ApiRoutes.AUTH + `/request-new-verification-code/${action.payload.id}`;
+      ApiRoutes.AUTH +
+      `/request-new-verification-code/${action.payload.userId}`;
     const { data } = yield Saga.call(axios.patch, endpoint);
     yield Saga.put(Redux.errorsActions.setAuth(""));
     yield Saga.put(

@@ -14,6 +14,10 @@ export function roundNumber(number: number, places: number): string {
   else return roundedNumber;
 }
 
+export function deepCopy<Arg>(arg: Arg): Arg {
+  return JSON.parse(JSON.stringify(arg));
+}
+
 export function debounce(callback: Function, delay: number = 300) {
   let timeoutId: ReturnType<typeof setTimeout>;
 

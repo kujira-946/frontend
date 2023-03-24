@@ -4,6 +4,7 @@ import { Signal } from "@preact/signals-react";
 
 import * as Global from "@/components";
 import * as Logbook from "@/components/logbook";
+import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
@@ -31,6 +32,14 @@ type Props = {
 export const RecurringExpenses = (props: Props) => {
   const { ui } = useContext(SignalsStoreContext);
 
+  function deletePurchase(purchaseIndex: number): void {
+    const recurringExpensesCopy = Functions.deepCopy(
+      props.recurringExpenses.value
+    );
+    recurringExpensesCopy.splice(purchaseIndex, 1);
+    props.recurringExpenses.value = recurringExpensesCopy;
+  }
+
   function addRecurringExpense(): void {
     props.recurringExpenses.value = [
       ...props.recurringExpenses.value,
@@ -46,6 +55,12 @@ export const RecurringExpenses = (props: Props) => {
             return (
               <Logbook.PurchaseCell
                 key={`onboarding-recurring-expenses-${purchase}-${index}`}
+                onDescriptionChange={(description: string) =>
+                  (purchase.description = description)
+                }
+                onCostChange={(cost: string) => (purchase.cost = cost)}
+                onCloseClick={() => deletePurchase(index)}
+                hideCategories
               />
             );
           }

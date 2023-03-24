@@ -35,12 +35,13 @@ const Onboarding = () => {
 
   const currentPage = useSignal(1);
   const supportingText = useSignal("");
+  const errorMessage = useSignal("");
+  const disableSubmit = useSignal(false);
+
   const income = useSignal("");
   const recurringExpenses = useSignal<Types.Purchase[]>([]);
   const incomingPurchases = useSignal<Types.Purchase[]>([]);
   const savings = useSignal("");
-  const errorMessage = useSignal("");
-  const disableSubmit = useSignal(false);
 
   effect(() => {
     if (currentPage.value === 1) {

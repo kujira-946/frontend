@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useContext } from "react";
-import { useSignal } from "@preact/signals-react";
+import { Signal, useSignal } from "@preact/signals-react";
 
 import * as Icons from "@/components/icons";
 import * as Styles from "@/utils/styles";
@@ -26,6 +26,14 @@ const DragButton = styled.div`
   justify-content: center;
   align-items: center;
   cursor: grab;
+`;
+
+const CheckButton = styled.div`
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 `;
 
 const CategoryButtons = styled.div`
@@ -63,7 +71,7 @@ const CategoryButton = styled.button<CategoryButtonProps & ThemeProps>`
 
 type InputProps = { hasValue: boolean; frozen: boolean };
 const Input = styled.input<InputProps>`
-  flex: 1;
+  width: 100%;
   padding: ${Styles.pxAsRem.four} ${Styles.pxAsRem.six};
   color: ${(props: ThemeProps) => props.theme.text};
   background-color: ${(props: InputProps & ThemeProps) => {
@@ -79,6 +87,7 @@ const Input = styled.input<InputProps>`
       : `${props.theme.backgroundFour} solid 1px`;
   }};
   border-radius: ${Styles.pxAsRem.four};
+  transition: ease-in 0.1s;
   outline: none;
 
   ::placeholder {
@@ -116,7 +125,13 @@ const CloseButton = styled.div`
 
 type Props = {
   borderRadius?: keyof typeof Styles.pxAsRem;
+
+  onCloseClick?: () => void;
+  onDescriptionChange?: (description: string) => void;
+  onCostChange?: (cost: string) => void;
+
   hideDrag?: true;
+  hideCheck?: true;
   hideCategories?: true;
   hideClose?: true;
   descriptionFrozen?: true;
@@ -129,23 +144,24 @@ export const PurchaseCell = (props: Props) => {
   const { ui } = useContext(SignalsStoreContext);
 
   const dragHovered = useSignal(false);
-  function setDragHovered(hover: boolean): void {
-    dragHovered.value = hover;
-  }
-
+  const checkboxHovered = useSignal(false);
+  const checkboxActive = useSignal(false);
   const description = useSignal("");
-  function setDescription(event: Types.Input) {
-    description.value = event.currentTarget.value;
-  }
-
   const cost = useSignal("");
-  function setCost(event: Types.Input) {
-    cost.value = event.currentTarget.value;
+  const closeHovered = useSignal(false);
+
+  function updateDescription(event: Types.Input): void {
+    description.value = event.currentTarget.value;
+    if (props.onDescriptionChange) {
+      props.onDescriptionChange(description.value);
+    }
   }
 
-  const closeHovered = useSignal(false);
-  function setCloseHovered(hover: boolean): void {
-    closeHovered.value = hover;
+  function updateCost(event: Types.Input): void {
+    cost.value = event.currentTarget.value;
+    if (props.onCostChange) {
+      props.onCostChange(cost.value);
+    }
   }
 
   return (
@@ -158,8 +174,8 @@ export const PurchaseCell = (props: Props) => {
     >
       {!props.hideDrag && (
         <DragButton
-          onMouseEnter={() => setDragHovered(true)}
-          onMouseLeave={() => setDragHovered(false)}
+          onMouseEnter={() => (dragHovered.value = true)}
+          onMouseLeave={() => (dragHovered.value = false)}
         >
           <Icons.Drag
             height={12}
@@ -168,6 +184,28 @@ export const PurchaseCell = (props: Props) => {
             hoveredFill={Styles.background[ui.theme.value].eight}
           />
         </DragButton>
+      )}
+
+      {!props.hideCheck && checkboxActive.value ? (
+        <CheckButton onClick={() => (checkboxActive.value = false)}>
+          <Icons.CheckboxActive
+            height={20}
+            fill={Styles.secondary[ui.theme.value].main}
+          />
+        </CheckButton>
+      ) : (
+        <CheckButton
+          onClick={() => (checkboxActive.value = true)}
+          onMouseEnter={() => (checkboxHovered.value = true)}
+          onMouseLeave={() => (checkboxHovered.value = false)}
+        >
+          <Icons.CheckboxInactive
+            height={20}
+            fill={Styles.background[ui.theme.value].seven}
+            hovered={checkboxHovered.value}
+            hoveredFill={Styles.text[ui.theme.value]}
+          />
+        </CheckButton>
       )}
 
       {!props.hideCategories && (
@@ -187,26 +225,27 @@ export const PurchaseCell = (props: Props) => {
 
       <Input
         key="purchase-cell-description-input"
-        onChange={setDescription}
         value={description.value}
         placeholder="Description"
+        onChange={updateDescription}
         hasValue={description.value.length > 0}
         frozen={!!props.descriptionFrozen}
       />
 
       <Input
         key="purchase-cell-cost-input"
-        onChange={setCost}
         value={cost.value}
         placeholder="Cost"
+        onChange={updateCost}
         hasValue={cost.value.length > 0}
         frozen={!!props.costFrozen}
       />
 
       {!props.hideClose && (
         <CloseButton
-          onMouseEnter={() => setCloseHovered(true)}
-          onMouseLeave={() => setCloseHovered(false)}
+          onClick={props.onCloseClick}
+          onMouseEnter={() => (closeHovered.value = true)}
+          onMouseLeave={() => (closeHovered.value = false)}
         >
           <Icons.Close
             height={12}

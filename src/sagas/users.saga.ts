@@ -6,7 +6,7 @@ import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
 
-enum UserActionTypes {
+enum UsersActionTypes {
   FETCH_USERS = "FETCH_USERS",
   FETCH_USER = "FETCH_USER",
   UPDATE_USER = "UPDATE_USER",
@@ -19,28 +19,28 @@ enum UserActionTypes {
 
 export function fetchUsersRequest(): Types.NullAction {
   return {
-    type: UserActionTypes.FETCH_USERS,
+    type: UsersActionTypes.FETCH_USERS,
     payload: null,
   };
 }
 
 export function fetchUserRequest(id: number): Types.IdAction {
   return {
-    type: UserActionTypes.FETCH_USER,
+    type: UsersActionTypes.FETCH_USER,
     payload: { id },
   };
 }
 
 export function updateUserRequest(id: number): Types.IdAction {
   return {
-    type: UserActionTypes.UPDATE_USER,
+    type: UsersActionTypes.UPDATE_USER,
     payload: { id },
   };
 }
 
 export function deleteUserRequest(id: number): Types.IdAction {
   return {
-    type: UserActionTypes.DELETE_USER,
+    type: UsersActionTypes.DELETE_USER,
     payload: { id },
   };
 }
@@ -137,9 +137,9 @@ function* deleteUser(action: Types.IdAction) {
 
 export function* usersSaga() {
   yield Saga.all([
-    Saga.takeEvery(UserActionTypes.FETCH_USERS, fetchUsers),
-    Saga.takeEvery(UserActionTypes.FETCH_USER, fetchUser),
-    Saga.takeEvery(UserActionTypes.UPDATE_USER, updateUser),
-    Saga.takeEvery(UserActionTypes.DELETE_USER, deleteUser),
+    Saga.takeEvery(UsersActionTypes.FETCH_USERS, fetchUsers),
+    Saga.takeEvery(UsersActionTypes.FETCH_USER, fetchUser),
+    Saga.takeEvery(UsersActionTypes.UPDATE_USER, updateUser),
+    Saga.takeEvery(UsersActionTypes.DELETE_USER, deleteUser),
   ]);
 }
