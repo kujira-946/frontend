@@ -306,7 +306,7 @@ export const Layout = (props: Props) => {
   const router = useRouter();
 
   const { ui } = useContext(SignalsStoreContext);
-  const { fetchingUser } = useSelector((state: GlobalState) => state.ui);
+  const { loadingUser } = useSelector((state: GlobalState) => state.ui);
 
   useEffect(() => {
     if (!jwtAccessToken || !userId) {
@@ -328,7 +328,7 @@ export const Layout = (props: Props) => {
       <GlobalStyles />
       <Notification />
 
-      {fetchingUser ? (
+      {loadingUser ? (
         <Loading text="Loading your information..." />
       ) : (
         props.children

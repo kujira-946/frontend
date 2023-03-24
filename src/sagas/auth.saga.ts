@@ -87,7 +87,7 @@ export function requestNewVerificationCodeRequest(
 
 function* register(action: RegisterAction) {
   try {
-    const endpoint = ApiRoutes.AUTH + "/register";
+    const endpoint = ApiRoutes.AUTH + `/register`;
     const response = yield Saga.call(axios.post, endpoint, action.payload);
     yield Saga.put(Redux.uiActions.setTempUserId(response.data.data));
     yield Saga.put(Redux.errorsActions.setAuth(""));
@@ -110,7 +110,7 @@ function* register(action: RegisterAction) {
 
 function* verifyRegistration(action: VerifyRegistrationAction) {
   try {
-    yield Saga.put(Redux.uiActions.setFetchingUser(true));
+    yield Saga.put(Redux.uiActions.setLoadingUser(true));
     const { userId, verificationCode } = action.payload;
     const endpoint = ApiRoutes.AUTH + `/register/${userId}/verify`;
     const response = yield Saga.call(axios.patch, endpoint, {
@@ -150,7 +150,7 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
 
 function* login(action: LoginAction) {
   try {
-    const endpoint = ApiRoutes.AUTH + "/login";
+    const endpoint = ApiRoutes.AUTH + `/login`;
     const response = yield Saga.call(axios.patch, endpoint, action.payload);
     yield Saga.put(Redux.uiActions.setTempUserId(response.data.data));
     yield Saga.put(Redux.errorsActions.setAuth(""));
@@ -173,7 +173,7 @@ function* login(action: LoginAction) {
 
 function* verifyLogin(action: VerifyLoginAction) {
   try {
-    yield Saga.put(Redux.uiActions.setFetchingUser(true));
+    yield Saga.put(Redux.uiActions.setLoadingUser(true));
     const { userId, verificationCode, thirtyDays } = action.payload;
     const endpoint = ApiRoutes.AUTH + `/login/${userId}/verify`;
     const response = yield Saga.call(axios.patch, endpoint, {
@@ -181,7 +181,7 @@ function* verifyLogin(action: VerifyLoginAction) {
       thirtyDays,
     });
     yield Saga.put(Redux.entitiesActions.setUser(response.data.data));
-    yield Saga.put(Redux.uiActions.setFetchingUser(false));
+    yield Saga.put(Redux.uiActions.setLoadingUser(false));
     yield Saga.put(Redux.uiActions.resetState());
     yield Saga.put(Redux.errorsActions.setAuth(""));
     yield Saga.put(

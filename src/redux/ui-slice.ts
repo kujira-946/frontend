@@ -12,12 +12,12 @@ export type UIState = {
   tempUserId: number | null;
   loginForThirtyDays: boolean;
 
-  fetchingUser: boolean;
-  fetchingOverviews: boolean;
-  fetchingOverviewGroups: boolean;
-  fetchingLogbooks: boolean;
-  fetchingLogbookEntries: boolean;
-  fetchingPurchases: boolean;
+  loadingUser: boolean;
+  loadingOverviews: boolean;
+  loadingOverviewGroups: boolean;
+  loadingLogbooks: boolean;
+  loadingLogbookEntries: boolean;
+  loadingPurchases: boolean;
 };
 
 // ========================================================================================= //
@@ -29,12 +29,12 @@ const initialState: UIState = {
   tempUserId: null,
   loginForThirtyDays: false,
 
-  fetchingUser: false,
-  fetchingOverviews: false,
-  fetchingOverviewGroups: false,
-  fetchingLogbooks: false,
-  fetchingLogbookEntries: false,
-  fetchingPurchases: false,
+  loadingUser: false,
+  loadingOverviews: false,
+  loadingOverviewGroups: false,
+  loadingLogbooks: false,
+  loadingLogbookEntries: false,
+  loadingPurchases: false,
 };
 
 const uiSlice = createSlice({
@@ -56,29 +56,29 @@ const uiSlice = createSlice({
     setLoginForThirtyDays: (state: UIState, action: PayloadAction<boolean>) => {
       state.loginForThirtyDays = action.payload;
     },
-    setFetchingUser: (state: UIState, action: PayloadAction<boolean>) => {
-      state.fetchingUser = action.payload;
+    setLoadingUser: (state: UIState, action: PayloadAction<boolean>) => {
+      state.loadingUser = action.payload;
     },
-    setFetchingOverviews: (state: UIState, action: PayloadAction<boolean>) => {
-      state.fetchingOverviews = action.payload;
+    setLoadingOverviews: (state: UIState, action: PayloadAction<boolean>) => {
+      state.loadingOverviews = action.payload;
     },
-    setFetchingOverviewGroups: (
+    setLoadingOverviewGroups: (
       state: UIState,
       action: PayloadAction<boolean>
     ) => {
-      state.fetchingOverviewGroups = action.payload;
+      state.loadingOverviewGroups = action.payload;
     },
-    setFetchingLogbooks: (state: UIState, action: PayloadAction<boolean>) => {
-      state.fetchingLogbooks = action.payload;
+    setLoadingLogbooks: (state: UIState, action: PayloadAction<boolean>) => {
+      state.loadingLogbooks = action.payload;
     },
-    setFetchingLogbookEntries: (
+    setLoadingLogbookEntries: (
       state: UIState,
       action: PayloadAction<boolean>
     ) => {
-      state.fetchingLogbookEntries = action.payload;
+      state.loadingLogbookEntries = action.payload;
     },
-    setFetchingPurchases: (state: UIState, action: PayloadAction<boolean>) => {
-      state.fetchingPurchases = action.payload;
+    setLoadingPurchases: (state: UIState, action: PayloadAction<boolean>) => {
+      state.loadingPurchases = action.payload;
     },
   },
 });
