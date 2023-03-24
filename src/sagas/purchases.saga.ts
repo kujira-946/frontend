@@ -100,7 +100,7 @@ type PurchaseUpdateAction = Types.SagaAction<{
   purchaseId: number;
   data: Types.PurchaseUpdateData;
 }>;
-export function updatePurchasesRequest(
+export function updatePurchaseRequest(
   purchaseId: number,
   data: Types.PurchaseUpdateData
 ): PurchaseUpdateAction {
@@ -140,12 +140,13 @@ export function deleteAllPurchasesRequest(): Types.NullAction {
 
 function* fetchPurchases() {
   try {
-    yield Saga.put(Redux.uiActions.setFetchingPurchases(true));
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const response = yield Saga.call(axios.get, ApiRoutes.PURCHASES);
     yield Saga.put(Redux.entitiesActions.setPurchases(response.data.data));
-    yield Saga.put(Redux.uiActions.setFetchingPurchases(false));
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -157,15 +158,16 @@ function* fetchPurchases() {
   }
 }
 
-function* fetchOverviewGroupPurchases() {
+function* fetchOverviewGroupPurchases(action: OverviewGroupPurchasesAction) {
   try {
-    yield Saga.put(Redux.uiActions.setFetchingPurchases(true));
-		const endpoint = ApiRoutes.PURCHASES + ``;
-    const response = yield Saga.call(axios.get, endpoint);
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
+    const endpoint = ApiRoutes.PURCHASES + `/fetch-overview-group-purchases`;
+    const response = yield Saga.call(axios.get, endpoint, action.payload);
     yield Saga.put(Redux.entitiesActions.setPurchases(response.data.data));
-    yield Saga.put(Redux.uiActions.setFetchingPurchases(false));
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -175,4 +177,232 @@ function* fetchOverviewGroupPurchases() {
       })
     );
   }
+}
+
+function* fetchLogbookEntryPurchases(action: LogbookEntryPurchasesAction) {
+  try {
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
+    const endpoint = ApiRoutes.PURCHASES + `/fetch-logbook-entry-purchases`;
+    const response = yield Saga.call(axios.get, endpoint, action.payload);
+    yield Saga.put(Redux.entitiesActions.setPurchases(response.data.data));
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+  } catch (error) {
+    console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 5000,
+      })
+    );
+  }
+}
+
+function* bulkFetchPurchases(action: PurchaseIdsAction) {
+  try {
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
+    const endpoint = ApiRoutes.PURCHASES + `/bulk-fetch`;
+    const response = yield Saga.call(axios.get, endpoint, action.payload);
+    yield Saga.put(Redux.entitiesActions.setPurchases(response.data.data));
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+  } catch (error) {
+    console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 5000,
+      })
+    );
+  }
+}
+
+function* fetchPurchase(action: PurchaseIdAction) {
+  try {
+    const { purchaseId } = action.payload;
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
+    const endpoint = ApiRoutes.PURCHASES + `/${purchaseId}`;
+    const response = yield Saga.call(axios.get, endpoint);
+    yield Saga.put(Redux.entitiesActions.setPurchases(response.data.data));
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+  } catch (error) {
+    console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 5000,
+      })
+    );
+  }
+}
+
+function* createPurchase(action: PurchaseCreateAction) {
+  try {
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
+    const response = yield Saga.call(
+      axios.post,
+      ApiRoutes.PURCHASES,
+      action.payload
+    );
+    yield Saga.put(Redux.entitiesActions.setPurchases(response.data.data));
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+  } catch (error) {
+    console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 5000,
+      })
+    );
+  }
+}
+
+function* bulkCreatePurchases(action: PurchaseBulkCreateAction) {
+  try {
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
+    const endpoint = ApiRoutes.PURCHASES + `/bulk-create-purchases`;
+    const response = yield Saga.call(axios.post, endpoint, action.payload);
+    yield Saga.put(Redux.entitiesActions.setPurchases(response.data.data));
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+  } catch (error) {
+    console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 5000,
+      })
+    );
+  }
+}
+
+function* updatePurchase(action: PurchaseUpdateAction) {
+  try {
+    const { purchaseId, data } = action.payload;
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
+    const endpoint = ApiRoutes.PURCHASES + `/${purchaseId}`;
+    const response = yield Saga.call(axios.patch, endpoint, data);
+    yield Saga.put(Redux.entitiesActions.setPurchases(response.data.data));
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+  } catch (error) {
+    console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 5000,
+      })
+    );
+  }
+}
+
+function* deletePurchase(action: PurchaseIdAction) {
+  try {
+    const { purchaseId } = action.payload;
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
+    const endpoint = ApiRoutes.PURCHASES + `/${purchaseId}`;
+    yield Saga.call(axios.delete, endpoint);
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+  } catch (error) {
+    console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 5000,
+      })
+    );
+  }
+}
+
+function* batchDeletePurchases(action: PurchaseBatchDeleteAction) {
+  try {
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
+    const endpoint = ApiRoutes.PURCHASES + `/batch-delete`;
+    const response = yield Saga.call(axios.post, endpoint, action.payload);
+    yield Saga.put(Redux.entitiesActions.setPurchases(response.data.data));
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+  } catch (error) {
+    console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 5000,
+      })
+    );
+  }
+}
+
+function* deleteAllPurchases() {
+  try {
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
+    const endpoint = ApiRoutes.PURCHASES + `/delete-all`;
+    const response = yield Saga.call(axios.post, endpoint);
+    yield Saga.put(Redux.entitiesActions.setPurchases(response.data.data));
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+  } catch (error) {
+    console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 5000,
+      })
+    );
+  }
+}
+
+export function* purchasesSaga() {
+  yield Saga.all([
+    Saga.takeEvery(PurchasesActionTypes.FETCH_PURCHASES, fetchPurchases),
+    Saga.takeEvery(
+      PurchasesActionTypes.FETCH_OVERVIEW_GROUP_PURCHASES,
+      fetchOverviewGroupPurchases
+    ),
+    Saga.takeEvery(
+      PurchasesActionTypes.FETCH_LOGBOOK_ENTRY_PURCHASES,
+      fetchLogbookEntryPurchases
+    ),
+    Saga.takeEvery(
+      PurchasesActionTypes.BULK_FETCH_PURCHASES,
+      bulkFetchPurchases
+    ),
+    Saga.takeEvery(PurchasesActionTypes.FETCH_PURCHASE, fetchPurchase),
+    Saga.takeEvery(PurchasesActionTypes.CREATE_PURCHASE, createPurchase),
+    Saga.takeEvery(
+      PurchasesActionTypes.BULK_CREATE_PURCHASES,
+      bulkCreatePurchases
+    ),
+    Saga.takeEvery(PurchasesActionTypes.UPDATE_PURCHASE, updatePurchase),
+    Saga.takeEvery(PurchasesActionTypes.DELETE_PURCHASE, deletePurchase),
+    Saga.takeEvery(
+      PurchasesActionTypes.BATCH_DELETE_PURCHASES,
+      batchDeletePurchases
+    ),
+    Saga.takeEvery(
+      PurchasesActionTypes.DELETE_ALL_PURCHASES,
+      deleteAllPurchases
+    ),
+  ]);
 }
