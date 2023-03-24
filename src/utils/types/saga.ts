@@ -1,5 +1,7 @@
 import { Theme } from "@/signals/ui-signals";
 
+import { Category } from "./entities";
+
 // ========================================================================================= //
 // [ ACTIONS ] ============================================================================= //
 // ========================================================================================= //
@@ -90,3 +92,31 @@ export type LogbookCreateData = {
 export type LogbookUpdateData = {
   name?: string;
 };
+
+// ========================================================================================= //
+// [ LOGBOOK ENTRIES DATA ] ================================================================ //
+// ========================================================================================= //
+
+export type LogbookEntryCreateData = {
+  date: Date;
+  spent?: number;
+  budget?: number;
+  logbookId: number;
+};
+
+export type LogbookEntryUpdateData = Partial<LogbookEntryCreateData>;
+
+// ========================================================================================= //
+// [ PURCHASES DATA ] ====================================================================== //
+// ========================================================================================= //
+
+export type PurchaseCreateData = {
+  placement: number;
+  category?: Category;
+  description?: string;
+  cost?: number;
+  overviewGroupId?: number;
+  logbookEntryId?: number;
+};
+
+export type PurchaseUpdateData = Partial<PurchaseCreateData>;

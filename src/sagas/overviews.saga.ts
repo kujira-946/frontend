@@ -27,8 +27,8 @@ export function fetchOverviewsRequest(): Types.NullAction {
   };
 }
 
-type UserOverviewAction = Types.SagaAction<{ ownerId: number }>;
-export function fetchUserOverviewsRequest(ownerId: number): UserOverviewAction {
+type UserOverviewsAction = Types.SagaAction<{ ownerId: number }>;
+export function fetchUserOverviewsRequest(ownerId: number): UserOverviewsAction {
   return {
     type: OverviewsActionTypes.FETCH_USER_OVERVIEWS,
     payload: { ownerId },
@@ -110,7 +110,7 @@ function* fetchOverviews() {
   }
 }
 
-function* fetchUserOverviews(action: UserOverviewAction) {
+function* fetchUserOverviews(action: UserOverviewsAction) {
   try {
     yield Saga.put(Redux.uiActions.setFetchingOverviews(true));
     const endpoint = ApiRoutes.OVERVIEWS + "/fetch-user-overviews";

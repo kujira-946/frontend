@@ -121,7 +121,7 @@ function* fetchLogbook(action: LogbookIdAction) {
   try {
     const { logbookId } = action.payload;
     yield Saga.put(Redux.uiActions.setFetchingLogbooks(true));
-    const endpoint = ApiRoutes.LOGBOOKS + `${logbookId}`;
+    const endpoint = ApiRoutes.LOGBOOKS + `/${logbookId}`;
     const response = yield Saga.call(axios.get, endpoint);
     yield Saga.put(Redux.entitiesActions.setLogbooks(response.data.data));
     yield Saga.put(Redux.uiActions.setFetchingLogbooks(false));

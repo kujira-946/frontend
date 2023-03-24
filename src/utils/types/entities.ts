@@ -23,7 +23,7 @@ export type User = {
   logbooks: Logbook[];
 } & Dates;
 
-type Category = "need" | "planned" | "impulse" | "regret";
+export type Category = "need" | "planned" | "impulse" | "regret";
 export type Purchase = {
   id: number;
   placement: number;
