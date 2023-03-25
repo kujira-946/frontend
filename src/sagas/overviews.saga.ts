@@ -264,6 +264,7 @@ function* deleteOverview(action: OverviewIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
     const endpoint = ApiRoutes.OVERVIEWS + `${overviewId}`;
     yield Saga.call(axios.delete, endpoint);
+    yield Saga.put(Redux.entitiesActions.deleteOverview(overviewId));
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
     console.log(error);
