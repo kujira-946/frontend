@@ -1,5 +1,6 @@
 import * as Saga from "redux-saga/effects";
 import axios from "axios";
+import { normalize, schema } from "normalizr";
 
 import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
@@ -9,6 +10,10 @@ import { ApiRoutes } from "@/utils/constants/routes";
 // ========================================================================================= //
 // [ SCHEMAS ] ============================================================================= //
 // ========================================================================================= //
+
+const purchasesSchema = new schema.Entity("purchases");
+const purchasesListSchema = new schema.Array(purchasesSchema);
+const purchaseSchema = new schema.Entity("purchase");
 
 // ========================================================================================= //
 // [ ACTIONS ] ============================================================================= //
@@ -146,7 +151,13 @@ function* fetchPurchases() {
   try {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const response = yield Saga.call(axios.get, ApiRoutes.PURCHASES);
-    yield Saga.put(Redux.entitiesActions.setPurchases(response.data.data));
+    const { purchases } = normalize(
+      response.data.data,
+      purchasesListSchema
+    ).entities;
+    yield Saga.put(
+      Redux.entitiesActions.setPurchases(purchases as Types.PurchasesEntity)
+    );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     console.log(error);
@@ -167,7 +178,13 @@ function* fetchOverviewGroupPurchases(action: OverviewGroupPurchasesAction) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const endpoint = ApiRoutes.PURCHASES + `/fetch-overview-group-purchases`;
     const response = yield Saga.call(axios.get, endpoint, action.payload);
-    yield Saga.put(Redux.entitiesActions.updatePurchases(response.data.data));
+    const { purchases } = normalize(
+      response.data.data,
+      purchasesListSchema
+    ).entities;
+    yield Saga.put(
+      Redux.entitiesActions.addPurchase(purchases as Types.PurchasesEntity)
+    );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     console.log(error);
@@ -188,7 +205,13 @@ function* fetchLogbookEntryPurchases(action: LogbookEntryPurchasesAction) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const endpoint = ApiRoutes.PURCHASES + `/fetch-logbook-entry-purchases`;
     const response = yield Saga.call(axios.get, endpoint, action.payload);
-    yield Saga.put(Redux.entitiesActions.updatePurchases(response.data.data));
+    const { purchases } = normalize(
+      response.data.data,
+      purchasesListSchema
+    ).entities;
+    yield Saga.put(
+      Redux.entitiesActions.addPurchase(purchases as Types.PurchasesEntity)
+    );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     console.log(error);
@@ -209,7 +232,13 @@ function* bulkFetchPurchases(action: PurchaseIdsAction) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const endpoint = ApiRoutes.PURCHASES + `/bulk-fetch`;
     const response = yield Saga.call(axios.get, endpoint, action.payload);
-    yield Saga.put(Redux.entitiesActions.updatePurchases(response.data.data));
+    const { purchases } = normalize(
+      response.data.data,
+      purchasesListSchema
+    ).entities;
+    yield Saga.put(
+      Redux.entitiesActions.addPurchase(purchases as Types.PurchasesEntity)
+    );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     console.log(error);
@@ -231,7 +260,10 @@ function* fetchPurchase(action: PurchaseIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const endpoint = ApiRoutes.PURCHASES + `/${purchaseId}`;
     const response = yield Saga.call(axios.get, endpoint);
-    yield Saga.put(Redux.entitiesActions.updatePurchases(response.data.data));
+    const { purchase } = normalize(response.data.data, purchaseSchema).entities;
+    yield Saga.put(
+      Redux.entitiesActions.addPurchase(purchase as Types.PurchasesEntity)
+    );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     console.log(error);
@@ -255,7 +287,10 @@ function* createPurchase(action: PurchaseCreateAction) {
       ApiRoutes.PURCHASES,
       action.payload
     );
-    yield Saga.put(Redux.entitiesActions.updatePurchases(response.data.data));
+    const { purchase } = normalize(response.data.data, purchaseSchema).entities;
+    yield Saga.put(
+      Redux.entitiesActions.addPurchase(purchase as Types.PurchasesEntity)
+    );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     console.log(error);
@@ -276,7 +311,13 @@ function* bulkCreatePurchases(action: PurchaseBulkCreateAction) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const endpoint = ApiRoutes.PURCHASES + `/bulk-create-purchases`;
     const response = yield Saga.call(axios.post, endpoint, action.payload);
-    yield Saga.put(Redux.entitiesActions.updatePurchases(response.data.data));
+    const { purchases } = normalize(
+      response.data.data,
+      purchasesListSchema
+    ).entities;
+    yield Saga.put(
+      Redux.entitiesActions.addPurchase(purchases as Types.PurchasesEntity)
+    );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     console.log(error);
@@ -298,7 +339,10 @@ function* updatePurchase(action: PurchaseUpdateAction) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const endpoint = ApiRoutes.PURCHASES + `/${purchaseId}`;
     const response = yield Saga.call(axios.patch, endpoint, data);
-    yield Saga.put(Redux.entitiesActions.updatePurchases(response.data.data));
+    const { purchase } = normalize(response.data.data, purchaseSchema).entities;
+    yield Saga.put(
+      Redux.entitiesActions.addPurchase(purchase as Types.PurchasesEntity)
+    );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     console.log(error);
@@ -320,6 +364,7 @@ function* deletePurchase(action: PurchaseIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const endpoint = ApiRoutes.PURCHASES + `/${purchaseId}`;
     yield Saga.call(axios.delete, endpoint);
+    yield Saga.put(Redux.entitiesActions.deletePurchase(purchaseId));
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     console.log(error);
@@ -337,10 +382,11 @@ function* deletePurchase(action: PurchaseIdAction) {
 
 function* batchDeletePurchases(action: PurchaseBatchDeleteAction) {
   try {
+    const { purchaseIds } = action.payload;
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const endpoint = ApiRoutes.PURCHASES + `/batch-delete`;
-    const response = yield Saga.call(axios.post, endpoint, action.payload);
-    yield Saga.put(Redux.entitiesActions.setPurchases(response.data.data));
+    yield Saga.call(axios.post, endpoint, { purchaseIds });
+    yield Saga.put(Redux.entitiesActions.batchDeletePurchases(purchaseIds));
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     console.log(error);
@@ -360,8 +406,8 @@ function* deleteAllPurchases() {
   try {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const endpoint = ApiRoutes.PURCHASES + `/delete-all`;
-    const response = yield Saga.call(axios.post, endpoint);
-    yield Saga.put(Redux.entitiesActions.setPurchases(response.data.data));
+    yield Saga.call(axios.post, endpoint);
+    yield Saga.put(Redux.entitiesActions.setPurchases(null));
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     console.log(error);

@@ -164,6 +164,18 @@ const entitiesSlice = createSlice({
         state.purchases = purchasesCopy;
       }
     },
+    batchDeletePurchases: (
+      state: EntitiesState,
+      action: PayloadAction<number[]>
+    ) => {
+      if (state.purchases) {
+        const purchasesCopy = deepCopy(state.purchases);
+        for (const purchaseId of action.payload) {
+          delete purchasesCopy[purchaseId];
+        }
+        state.purchases = purchasesCopy;
+      }
+    },
   },
 });
 
