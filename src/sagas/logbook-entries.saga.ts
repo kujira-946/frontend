@@ -6,6 +6,14 @@ import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
 
+// ========================================================================================= //
+// [ SCHEMAS ] ============================================================================= //
+// ========================================================================================= //
+
+// ========================================================================================= //
+// [ ACTIONS ] ============================================================================= //
+// ========================================================================================= //
+
 enum LogbookEntriesActionTypes {
   FETCH_LOGBOOK_ENTRIES = "FETCH_LOGBOOK_ENTRIES",
   FETCH_LOGBOOK_LOGBOOK_ENTRIES = "FETCH_LOGBOOK_LOGBOOK_ENTRIES",
@@ -14,10 +22,6 @@ enum LogbookEntriesActionTypes {
   UPDATE_LOGBOOK_ENTRY = "UPDATE_LOGBOOK_ENTRY",
   DELETE_LOGBOOK_ENTRY = "DELETE_LOGBOOK_ENTRY",
 }
-
-// ========================================================================================= //
-// [ ACTIONS ] ============================================================================= //
-// ========================================================================================= //
 
 export function fetchLogbookEntriesRequest(): Types.NullAction {
   return {

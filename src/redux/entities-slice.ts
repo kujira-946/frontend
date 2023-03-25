@@ -7,12 +7,12 @@ import * as Types from "@/utils/types";
 // ========================================================================================= //
 
 export type EntitiesState = {
-  user: Types.User | null;
-  overviews: Types.Overview | null;
-  overviewGroups: Types.OverviewGroup | null;
-  logbooks: Types.Logbook | null;
-  logbookEntries: Types.LogbookEntry | null;
-  purchases: Types.Purchase | null;
+  users: Types.UsersEntity | null;
+  overviews: Types.OverviewsEntity | null;
+  overviewGroups: Types.OverviewGroupsEntity | null;
+  logbooks: Types.LogbooksEntity | null;
+  logbookEntries: Types.LogbookEntriesEntity | null;
+  purchases: Types.PurchasesEntity | null;
 };
 
 // ========================================================================================= //
@@ -20,7 +20,7 @@ export type EntitiesState = {
 // ========================================================================================= //
 
 const initialState: EntitiesState = {
-  user: null,
+  users: null,
   overviews: null,
   overviewGroups: null,
   logbooks: null,
@@ -32,14 +32,17 @@ const entitiesSlice = createSlice({
   name: "entities",
   initialState,
   reducers: {
-    setUser: (
+    setUsers: (
       state: EntitiesState,
-      action: PayloadAction<Types.User | null>
+      action: PayloadAction<Types.UsersEntity | null>
     ) => {
-      state.user = action.payload;
+      state.users = action.payload;
     },
-    updateUser: (state: EntitiesState, action: PayloadAction<Types.User>) => {
-      state.user = { ...state.user, ...action.payload };
+    addUsers: (
+      state: EntitiesState,
+      action: PayloadAction<Types.UsersEntity>
+    ) => {
+      state.users = { ...state.users, ...action.payload };
     },
     // deleteUser: (state: EntitiesState, action: PayloadAction<number> => {
     //   delete state.user[action.payload];
@@ -47,65 +50,65 @@ const entitiesSlice = createSlice({
 
     setOverviews: (
       state: EntitiesState,
-      action: PayloadAction<Types.Overview | null>
+      action: PayloadAction<Types.OverviewsEntity | null>
     ) => {
       state.overviews = action.payload;
     },
-    updateOverviews: (
+    addOverviews: (
       state: EntitiesState,
-      action: PayloadAction<Types.Overview>
+      action: PayloadAction<Types.OverviewsEntity>
     ) => {
       state.overviews = { ...state.overviews, ...action.payload };
     },
 
     setOverviewGroups: (
       state: EntitiesState,
-      action: PayloadAction<Types.OverviewGroup | null>
+      action: PayloadAction<Types.OverviewGroupsEntity | null>
     ) => {
       state.overviewGroups = action.payload;
     },
-    updateOverviewGroups: (
+    addOverviewGroups: (
       state: EntitiesState,
-      action: PayloadAction<Types.OverviewGroup>
+      action: PayloadAction<Types.OverviewGroupsEntity>
     ) => {
       state.overviewGroups = { ...state.overviewGroups, ...action.payload };
     },
 
     setLogbooks: (
       state: EntitiesState,
-      action: PayloadAction<Types.Logbook | null>
+      action: PayloadAction<Types.LogbooksEntity | null>
     ) => {
       state.logbooks = action.payload;
     },
-    updateLogbooks: (
+    addLogbooks: (
       state: EntitiesState,
-      action: PayloadAction<Types.Logbook>
+      action: PayloadAction<Types.LogbooksEntity>
     ) => {
       state.logbooks = { ...state.logbooks, ...action.payload };
     },
 
     setLogbookEntries: (
       state: EntitiesState,
-      action: PayloadAction<Types.LogbookEntry | null>
+      action: PayloadAction<Types.LogbookEntriesEntity | null>
     ) => {
       state.logbookEntries = action.payload;
     },
-    updateLogbookEntries: (
+    addLogbookEntries: (
       state: EntitiesState,
-      action: PayloadAction<Types.LogbookEntry>
+      action: PayloadAction<Types.LogbookEntriesEntity>
     ) => {
       state.logbookEntries = { ...state.logbookEntries, ...action.payload };
     },
 
     setPurchases: (
       state: EntitiesState,
-      action: PayloadAction<Types.Purchase | null>
+      action: PayloadAction<Types.PurchasesEntity | null>
     ) => {
       state.purchases = action.payload;
     },
-    updatePurchases: (
+    addPurchases: (
       state: EntitiesState,
-      action: PayloadAction<Types.Purchase>
+      action: PayloadAction<Types.PurchasesEntity>
     ) => {
       state.purchases = { ...state.purchases, ...action.payload };
     },

@@ -6,6 +6,14 @@ import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
 
+// ========================================================================================= //
+// [ SCHEMAS ] ============================================================================= //
+// ========================================================================================= //
+
+// ========================================================================================= //
+// [ ACTIONS ] ============================================================================= //
+// ========================================================================================= //
+
 enum OverviewGroupsActionTypes {
   FETCH_OVERVIEW_GROUPS = "FETCH_OVERVIEW_GROUPS",
   FETCH_OVERVIEW_OVERVIEW_GROUPS = "FETCH_OVERVIEW_OVERVIEW_GROUPS",
@@ -15,10 +23,6 @@ enum OverviewGroupsActionTypes {
   UPDATE_OVERVIEW_GROUP = "UPDATE_OVERVIEW_GROUP",
   DELETE_OVERVIEW_GROUP = "DELETE_OVERVIEW_GROUP",
 }
-
-// ========================================================================================= //
-// [ ACTIONS ] ============================================================================= //
-// ========================================================================================= //
 
 export function fetchOverviewGroupsRequest(): Types.NullAction {
   return {

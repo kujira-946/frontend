@@ -5,6 +5,18 @@ import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
+import { normalize, schema } from "normalizr";
+
+// ========================================================================================= //
+// [ SCHEMAS ] ============================================================================= //
+// ========================================================================================= //
+
+const overviewsSchema = new schema.Entity("overviews");
+const overviewSchema = new schema.Entity("overview");
+
+// ========================================================================================= //
+// [ ACTIONS ] ============================================================================= //
+// ========================================================================================= //
 
 enum OverviewsActionTypes {
   FETCH_OVERVIEWS = "FETCH_OVERVIEWS",
@@ -15,10 +27,6 @@ enum OverviewsActionTypes {
   UPDATE_OVERVIEW = "UPDATE_OVERVIEW",
   DELETE_OVERVIEW = "DELETE_OVERVIEW",
 }
-
-// ========================================================================================= //
-// [ ACTIONS ] ============================================================================= //
-// ========================================================================================= //
 
 export function fetchOverviewsRequest(): Types.NullAction {
   return {
@@ -97,7 +105,10 @@ function* fetchOverviews() {
   try {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
     const response = yield Saga.call(axios.get, ApiRoutes.OVERVIEWS);
-    yield Saga.put(Redux.entitiesActions.setOverviews(response.data.data));
+    const normalizedOverviews = normalize(response.data.data, overviewsSchema);
+    yield Saga.put(
+      Redux.entitiesActions.setOverviews(normalizedOverviews.entities.overviews)
+    );
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
     console.log(error);
@@ -118,7 +129,12 @@ function* fetchUserOverviews(action: UserOverviewsAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
     const endpoint = ApiRoutes.OVERVIEWS + `/fetch-user-overviews`;
     const response = yield Saga.call(axios.get, endpoint, action.payload);
-    yield Saga.put(Redux.entitiesActions.updateOverviews(response.data.data));
+    const normalizedOverviews = normalize(response.data.data, overviewsSchema);
+    yield Saga.put(
+      Redux.entitiesActions.updateOverviews(
+        normalizedOverviews.entities.overviews
+      )
+    );
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
     console.log(error);
@@ -138,7 +154,12 @@ function* bulkFetchOverviews(action: OverviewIdsAction) {
   yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
   const endpoint = ApiRoutes.OVERVIEWS + `/bulk-fetch`;
   const response = yield Saga.call(axios.get, endpoint, action.payload);
-  yield Saga.put(Redux.entitiesActions.updateOverviews(response.data.data));
+  const normalizedOverviews = normalize(response.data.data, overviewsSchema);
+  yield Saga.put(
+    Redux.entitiesActions.updateOverviews(
+      normalizedOverviews.entities.overviews
+    )
+  );
   yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   try {
   } catch (error) {
@@ -159,7 +180,10 @@ function* fetchOverview(action: OverviewIdAction) {
   yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
   const endpoint = ApiRoutes.OVERVIEWS + `/${action.payload.overviewId}`;
   const response = yield Saga.call(axios.get, endpoint);
-  yield Saga.put(Redux.entitiesActions.updateOverviews(response.data.data));
+  const normalizedOverview = normalize(response.data.data, overviewSchema);
+  yield Saga.put(
+    Redux.entitiesActions.updateOverviews(normalizedOverview.entities.overview)
+  );
   yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   try {
   } catch (error) {
@@ -183,7 +207,10 @@ function* createOverview(action: OverviewCreateAction) {
     ApiRoutes.OVERVIEWS,
     action.payload
   );
-  yield Saga.put(Redux.entitiesActions.updateOverviews(response.data.data));
+  const normalizedOverview = normalize(response.data.data, overviewSchema);
+  yield Saga.put(
+    Redux.entitiesActions.updateOverviews(normalizedOverview.entities.overview)
+  );
   yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   try {
   } catch (error) {
@@ -206,7 +233,12 @@ function* updateOverview(action: OverviewUpdateAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
     const endpoint = ApiRoutes.OVERVIEWS + `${overviewId}`;
     const response = yield Saga.call(axios.patch, endpoint, data);
-    yield Saga.put(Redux.entitiesActions.updateOverviews(response.data.data));
+    const normalizedOverview = normalize(response.data.data, overviewSchema);
+    yield Saga.put(
+      Redux.entitiesActions.updateOverviews(
+        normalizedOverview.entities.overview
+      )
+    );
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
     console.log(error);

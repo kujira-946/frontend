@@ -1,67 +1,8 @@
-type Theme = "light" | "dark";
+import * as Types from "@/utils/types";
 
-type Dates = {
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-export type User = {
-  id: number;
-  email: string;
-  username: string;
-  firstName?: string;
-  lastName?: string;
-  birthday?: Date;
-  currency: string;
-  mobileNumber?: string;
-  theme: Theme;
-  onboarded: boolean;
-  emailVerified: boolean;
-  loggedIn: boolean;
-  signedVerificationCode?: string;
-  overview: Overview[];
-  logbooks: Logbook[];
-} & Dates;
-
-export type Category = "need" | "planned" | "impulse" | "regret";
-export type Purchase = {
-  id: number;
-  placement: number;
-  category?: Category;
-  description?: string;
-  cost?: number;
-  overviewGroup?: OverviewGroup;
-  logbookEntry?: LogbookEntry;
-} & Dates;
-
-export type Overview = {
-  id: number;
-  income: number;
-  savings: number;
-  groups: OverviewGroup[];
-  ownerId: number;
-} & Dates;
-
-export type OverviewGroup = {
-  id: number;
-  name: string;
-  totalCost: number;
-  purchases: Purchase[];
-  overviewId: number;
-} & Dates;
-
-export type Logbook = {
-  id: number;
-  name: string;
-  entries: LogbookEntry[];
-  ownerId: number;
-} & Dates;
-
-export type LogbookEntry = {
-  id: number;
-  date: Date;
-  spent: number;
-  budget?: number;
-  purchases: Purchase[];
-  logbookId: number;
-} & Dates;
+export type UsersEntity = { [key: string]: Types.User };
+export type OverviewsEntity = { [key: string]: Types.Overview };
+export type OverviewGroupsEntity = { [key: string]: Types.OverviewGroup };
+export type LogbooksEntity = { [key: string]: Types.Logbook };
+export type LogbookEntriesEntity = { [key: string]: Types.LogbookEntry };
+export type PurchasesEntity = { [key: string]: Types.Purchase };

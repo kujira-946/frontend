@@ -5,6 +5,19 @@ import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
+import { normalize, schema } from "normalizr";
+
+// ========================================================================================= //
+// [ SCHEMAS ] ============================================================================= //
+// ========================================================================================= //
+
+const usersSchema = new schema.Entity("users");
+const usersListSchema = new schema.Array(usersSchema);
+const userSchema = new schema.Entity("user");
+
+// ========================================================================================= //
+// [ ACTIONS ] ============================================================================= //
+// ========================================================================================= //
 
 enum UsersActionTypes {
   FETCH_USERS = "FETCH_USERS",
@@ -12,10 +25,6 @@ enum UsersActionTypes {
   UPDATE_USER = "UPDATE_USER",
   DELETE_USER = "DELETE_USER",
 }
-
-// ========================================================================================= //
-// [ ACTIONS ] ============================================================================= //
-// ========================================================================================= //
 
 export function fetchUsersRequest(): Types.NullAction {
   return {
@@ -61,7 +70,8 @@ export function deleteUserRequest(userId: number): UserIdAction {
 function* fetchUsers() {
   try {
     const response = yield Saga.call(axios.get, ApiRoutes.USERS);
-    yield Saga.put(Redux.entitiesActions.setUser(response.data.data));
+    const { users } = normalize(response.data.data, usersListSchema).entities;
+    yield Saga.put(Redux.entitiesActions.setUsers(users as Types.UsersEntity));
 
     // console.log("Fetch Users Response:", response.data);
   } catch (error) {
@@ -84,7 +94,8 @@ function* fetchUser(action: UserIdAction) {
     const { userId } = action.payload;
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     const response = yield Saga.call(axios.get, endpoint);
-    yield Saga.put(Redux.entitiesActions.setUser(response.data.data));
+    const { user } = normalize(response.data.data, userSchema).entities;
+    yield Saga.put(Redux.entitiesActions.addUsers(user as Types.UsersEntity));
     yield Saga.put(Redux.uiActions.setLoadingUser(false));
   } catch (error) {
     console.log(error);
@@ -107,7 +118,9 @@ function* updateUser(action: UserUpdateAction) {
     yield Saga.put(Redux.uiActions.setLoadingUser(true));
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     const response = yield Saga.call(axios.patch, endpoint, data);
-    yield Saga.put(Redux.entitiesActions.updateUser(response.data.data));
+    const { user } = normalize(response.data.data, userSchema).entities;
+    yield Saga.put(Redux.entitiesActions.addUsers(user as Types.UsersEntity));
+
     yield Saga.put(Redux.uiActions.setLoadingUser(false));
 
     console.log("Update User Response:", response.data);
@@ -131,7 +144,7 @@ function* deleteUser(action: UserIdAction) {
     const { userId } = action.payload;
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     yield Saga.call(axios.delete, endpoint);
-    yield Saga.put(Redux.entitiesActions.setUser(null));
+    yield Saga.put(Redux.entitiesActions.setUsers(null));
     yield Saga.put(Redux.uiActions.setLoadingUser(false));
   } catch (error) {
     console.log(error);

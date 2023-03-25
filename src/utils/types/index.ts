@@ -26,6 +26,14 @@ import {
   OverviewGroup,
   Logbook,
   LogbookEntry,
+} from "./models";
+import {
+  UsersEntity,
+  OverviewsEntity,
+  OverviewGroupsEntity,
+  LogbooksEntity,
+  LogbookEntriesEntity,
+  PurchasesEntity,
 } from "./entities";
 
 export type {
@@ -66,4 +74,12 @@ export type {
   OverviewGroup,
   Logbook,
   LogbookEntry,
+
+  // Normalizr
+  UsersEntity,
+  OverviewsEntity,
+  OverviewGroupsEntity,
+  LogbooksEntity,
+  LogbookEntriesEntity,
+  PurchasesEntity,
 };
