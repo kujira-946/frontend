@@ -144,7 +144,7 @@ function* deleteUser(action: UserIdAction) {
     const { userId } = action.payload;
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     yield Saga.call(axios.delete, endpoint);
-    yield Saga.put(Redux.entitiesActions.setUsers(null));
+    yield Saga.put(Redux.entitiesActions.deleteUser(userId));
     yield Saga.put(Redux.uiActions.setLoadingUser(false));
   } catch (error) {
     console.log(error);

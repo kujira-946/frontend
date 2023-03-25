@@ -33,6 +33,7 @@ const entitiesSlice = createSlice({
   name: "entities",
   initialState,
   reducers: {
+    // ↓↓↓ Users ↓↓↓ //
     setUsers: (
       state: EntitiesState,
       action: PayloadAction<Types.UsersEntity | null>
@@ -53,6 +54,7 @@ const entitiesSlice = createSlice({
       }
     },
 
+    // ↓↓↓ Overviews ↓↓↓ //
     setOverviews: (
       state: EntitiesState,
       action: PayloadAction<Types.OverviewsEntity | null>
@@ -73,6 +75,7 @@ const entitiesSlice = createSlice({
       }
     },
 
+    // ↓↓↓ Overview Groups ↓↓↓ //
     setOverviewGroups: (
       state: EntitiesState,
       action: PayloadAction<Types.OverviewGroupsEntity | null>
@@ -96,6 +99,7 @@ const entitiesSlice = createSlice({
       }
     },
 
+    // ↓↓↓ Logbooks ↓↓↓ //
     setLogbooks: (
       state: EntitiesState,
       action: PayloadAction<Types.LogbooksEntity | null>
@@ -116,6 +120,7 @@ const entitiesSlice = createSlice({
       }
     },
 
+    // ↓↓↓ Logbook Entries ↓↓↓ //
     setLogbookEntries: (
       state: EntitiesState,
       action: PayloadAction<Types.LogbookEntriesEntity | null>
@@ -139,6 +144,7 @@ const entitiesSlice = createSlice({
       }
     },
 
+    // ↓↓↓ Purchase Entries ↓↓↓ //
     setPurchases: (
       state: EntitiesState,
       action: PayloadAction<Types.PurchasesEntity | null>
