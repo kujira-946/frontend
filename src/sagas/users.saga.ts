@@ -95,7 +95,7 @@ function* fetchUser(action: UserIdAction) {
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     const response = yield Saga.call(axios.get, endpoint);
     const { user } = normalize(response.data.data, userSchema).entities;
-    yield Saga.put(Redux.entitiesActions.addUsers(user as Types.UsersEntity));
+    yield Saga.put(Redux.entitiesActions.addUser(user as Types.UsersEntity));
     yield Saga.put(Redux.uiActions.setLoadingUser(false));
   } catch (error) {
     console.log(error);
@@ -119,7 +119,7 @@ function* updateUser(action: UserUpdateAction) {
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     const response = yield Saga.call(axios.patch, endpoint, data);
     const { user } = normalize(response.data.data, userSchema).entities;
-    yield Saga.put(Redux.entitiesActions.addUsers(user as Types.UsersEntity));
+    yield Saga.put(Redux.entitiesActions.addUser(user as Types.UsersEntity));
 
     yield Saga.put(Redux.uiActions.setLoadingUser(false));
 

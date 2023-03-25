@@ -12,6 +12,7 @@ import { normalize, schema } from "normalizr";
 // ========================================================================================= //
 
 const overviewsSchema = new schema.Entity("overviews");
+const overviewsListSchema = new schema.Array(overviewsSchema);
 const overviewSchema = new schema.Entity("overview");
 
 // ========================================================================================= //
@@ -105,9 +106,12 @@ function* fetchOverviews() {
   try {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
     const response = yield Saga.call(axios.get, ApiRoutes.OVERVIEWS);
-    const normalizedOverviews = normalize(response.data.data, overviewsSchema);
+    const { overviews } = normalize(
+      response.data.data,
+      overviewsListSchema
+    ).entities;
     yield Saga.put(
-      Redux.entitiesActions.setOverviews(normalizedOverviews.entities.overviews)
+      Redux.entitiesActions.setOverviews(overviews as Types.OverviewsEntity)
     );
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
@@ -129,11 +133,12 @@ function* fetchUserOverviews(action: UserOverviewsAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
     const endpoint = ApiRoutes.OVERVIEWS + `/fetch-user-overviews`;
     const response = yield Saga.call(axios.get, endpoint, action.payload);
-    const normalizedOverviews = normalize(response.data.data, overviewsSchema);
+    const { overviews } = normalize(
+      response.data.data,
+      overviewsListSchema
+    ).entities;
     yield Saga.put(
-      Redux.entitiesActions.updateOverviews(
-        normalizedOverviews.entities.overviews
-      )
+      Redux.entitiesActions.addOverview(overviews as Types.OverviewsEntity)
     );
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
@@ -154,11 +159,12 @@ function* bulkFetchOverviews(action: OverviewIdsAction) {
   yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
   const endpoint = ApiRoutes.OVERVIEWS + `/bulk-fetch`;
   const response = yield Saga.call(axios.get, endpoint, action.payload);
-  const normalizedOverviews = normalize(response.data.data, overviewsSchema);
+  const { overviews } = normalize(
+    response.data.data,
+    overviewsListSchema
+  ).entities;
   yield Saga.put(
-    Redux.entitiesActions.updateOverviews(
-      normalizedOverviews.entities.overviews
-    )
+    Redux.entitiesActions.addOverview(overviews as Types.OverviewsEntity)
   );
   yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   try {
@@ -180,9 +186,9 @@ function* fetchOverview(action: OverviewIdAction) {
   yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
   const endpoint = ApiRoutes.OVERVIEWS + `/${action.payload.overviewId}`;
   const response = yield Saga.call(axios.get, endpoint);
-  const normalizedOverview = normalize(response.data.data, overviewSchema);
+  const { overview } = normalize(response.data.data, overviewSchema).entities;
   yield Saga.put(
-    Redux.entitiesActions.updateOverviews(normalizedOverview.entities.overview)
+    Redux.entitiesActions.addOverview(overview as Types.OverviewsEntity)
   );
   yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   try {
@@ -207,9 +213,9 @@ function* createOverview(action: OverviewCreateAction) {
     ApiRoutes.OVERVIEWS,
     action.payload
   );
-  const normalizedOverview = normalize(response.data.data, overviewSchema);
+  const { overview } = normalize(response.data.data, overviewSchema).entities;
   yield Saga.put(
-    Redux.entitiesActions.updateOverviews(normalizedOverview.entities.overview)
+    Redux.entitiesActions.addOverview(overview as Types.OverviewsEntity)
   );
   yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   try {
@@ -233,11 +239,9 @@ function* updateOverview(action: OverviewUpdateAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
     const endpoint = ApiRoutes.OVERVIEWS + `${overviewId}`;
     const response = yield Saga.call(axios.patch, endpoint, data);
-    const normalizedOverview = normalize(response.data.data, overviewSchema);
+    const { overview } = normalize(response.data.data, overviewSchema).entities;
     yield Saga.put(
-      Redux.entitiesActions.updateOverviews(
-        normalizedOverview.entities.overview
-      )
+      Redux.entitiesActions.addOverview(overview as Types.OverviewsEntity)
     );
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {

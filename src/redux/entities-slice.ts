@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import * as Types from "@/utils/types";
+import { deepCopy } from "@/utils/functions";
 
 // ========================================================================================= //
 // [ TYPES ] =============================================================================== //
@@ -38,15 +39,19 @@ const entitiesSlice = createSlice({
     ) => {
       state.users = action.payload;
     },
-    addUsers: (
+    addUser: (
       state: EntitiesState,
       action: PayloadAction<Types.UsersEntity>
     ) => {
       state.users = { ...state.users, ...action.payload };
     },
-    // deleteUser: (state: EntitiesState, action: PayloadAction<number> => {
-    //   delete state.user[action.payload];
-    // })
+    deleteUser: (state: EntitiesState, action: PayloadAction<number>) => {
+      if (state.users) {
+        const usersCopy = deepCopy(state.users);
+        delete usersCopy[action.payload];
+        state.users = usersCopy;
+      }
+    },
 
     setOverviews: (
       state: EntitiesState,
@@ -54,11 +59,18 @@ const entitiesSlice = createSlice({
     ) => {
       state.overviews = action.payload;
     },
-    addOverviews: (
+    addOverview: (
       state: EntitiesState,
       action: PayloadAction<Types.OverviewsEntity>
     ) => {
       state.overviews = { ...state.overviews, ...action.payload };
+    },
+    deleteOverview: (state: EntitiesState, action: PayloadAction<number>) => {
+      if (state.overviews) {
+        const overviewsCopy = deepCopy(state.overviews);
+        delete overviewsCopy[action.payload];
+        state.overviews = overviewsCopy;
+      }
     },
 
     setOverviewGroups: (
@@ -67,11 +79,21 @@ const entitiesSlice = createSlice({
     ) => {
       state.overviewGroups = action.payload;
     },
-    addOverviewGroups: (
+    addOverviewGroup: (
       state: EntitiesState,
       action: PayloadAction<Types.OverviewGroupsEntity>
     ) => {
       state.overviewGroups = { ...state.overviewGroups, ...action.payload };
+    },
+    deleteOverviewGroup: (
+      state: EntitiesState,
+      action: PayloadAction<number>
+    ) => {
+      if (state.overviewGroups) {
+        const overviewsCopy = deepCopy(state.overviewGroups);
+        delete overviewsCopy[action.payload];
+        state.overviewGroups = overviewsCopy;
+      }
     },
 
     setLogbooks: (
@@ -80,11 +102,18 @@ const entitiesSlice = createSlice({
     ) => {
       state.logbooks = action.payload;
     },
-    addLogbooks: (
+    addLogbook: (
       state: EntitiesState,
       action: PayloadAction<Types.LogbooksEntity>
     ) => {
       state.logbooks = { ...state.logbooks, ...action.payload };
+    },
+    deleteLogbook: (state: EntitiesState, action: PayloadAction<number>) => {
+      if (state.logbooks) {
+        const logbooksCopy = deepCopy(state.logbooks);
+        delete logbooksCopy[action.payload];
+        state.logbooks = logbooksCopy;
+      }
     },
 
     setLogbookEntries: (
@@ -99,6 +128,16 @@ const entitiesSlice = createSlice({
     ) => {
       state.logbookEntries = { ...state.logbookEntries, ...action.payload };
     },
+    deleteLogbookEntries: (
+      state: EntitiesState,
+      action: PayloadAction<number>
+    ) => {
+      if (state.logbookEntries) {
+        const logbookEntriesCopy = deepCopy(state.logbookEntries);
+        delete logbookEntriesCopy[action.payload];
+        state.logbookEntries = logbookEntriesCopy;
+      }
+    },
 
     setPurchases: (
       state: EntitiesState,
@@ -106,11 +145,18 @@ const entitiesSlice = createSlice({
     ) => {
       state.purchases = action.payload;
     },
-    addPurchases: (
+    addPurchase: (
       state: EntitiesState,
       action: PayloadAction<Types.PurchasesEntity>
     ) => {
       state.purchases = { ...state.purchases, ...action.payload };
+    },
+    deletePurchase: (state: EntitiesState, action: PayloadAction<number>) => {
+      if (state.purchases) {
+        const purchasesCopy = deepCopy(state.purchases);
+        delete purchasesCopy[action.payload];
+        state.purchases = purchasesCopy;
+      }
     },
   },
 });
