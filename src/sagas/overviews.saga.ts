@@ -1,11 +1,11 @@
 import * as Saga from "redux-saga/effects";
 import axios from "axios";
+import { normalize, schema } from "normalizr";
 
 import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
-import { normalize, schema } from "normalizr";
 
 // ========================================================================================= //
 // [ SCHEMAS ] ============================================================================= //

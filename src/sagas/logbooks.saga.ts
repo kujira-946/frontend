@@ -1,5 +1,6 @@
 import * as Saga from "redux-saga/effects";
 import axios from "axios";
+import { normalize, schema } from "normalizr";
 
 import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
@@ -9,6 +10,10 @@ import { ApiRoutes } from "@/utils/constants/routes";
 // ========================================================================================= //
 // [ SCHEMAS ] ============================================================================= //
 // ========================================================================================= //
+
+const logbooksSchema = new schema.Entity("logbooks");
+const logbooksListSchema = new schema.Array(logbooksSchema);
+const logbookSchema = new schema.Entity("logbook");
 
 // ========================================================================================= //
 // [ ACTIONS ] ============================================================================= //
@@ -86,7 +91,13 @@ function* fetchLogbooks() {
   try {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const response = yield Saga.call(axios.get, ApiRoutes.LOGBOOKS);
-    yield Saga.put(Redux.entitiesActions.setLogbooks(response.data.data));
+    const { logbooks } = normalize(
+      response.data.data,
+      logbooksListSchema
+    ).entities;
+    yield Saga.put(
+      Redux.entitiesActions.setLogbooks(logbooks as Types.LogbooksEntity)
+    );
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     console.log(error);
@@ -107,7 +118,13 @@ function* fetchUserLogbooks(action: UserLogbooksAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const endpoint = ApiRoutes.LOGBOOKS + `/fetch-user-logbooks`;
     const response = yield Saga.call(axios.get, endpoint, action.payload);
-    yield Saga.put(Redux.entitiesActions.updateLogbooks(response.data.data));
+    const { logbooks } = normalize(
+      response.data.data,
+      logbooksListSchema
+    ).entities;
+    yield Saga.put(
+      Redux.entitiesActions.addLogbook(logbooks as Types.LogbooksEntity)
+    );
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     console.log(error);
@@ -129,7 +146,10 @@ function* fetchLogbook(action: LogbookIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const endpoint = ApiRoutes.LOGBOOKS + `/${logbookId}`;
     const response = yield Saga.call(axios.get, endpoint);
-    yield Saga.put(Redux.entitiesActions.updateLogbooks(response.data.data));
+    const { logbook } = normalize(response.data.data, logbookSchema).entities;
+    yield Saga.put(
+      Redux.entitiesActions.addLogbook(logbook as Types.LogbooksEntity)
+    );
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     console.log(error);
@@ -150,7 +170,10 @@ function* createLogbook(action: LogbookCreateAction) {
     const { data } = action.payload;
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const response = yield Saga.call(axios.post, ApiRoutes.LOGBOOKS, data);
-    yield Saga.put(Redux.entitiesActions.updateLogbooks(response.data.data));
+    const { logbook } = normalize(response.data.data, logbookSchema).entities;
+    yield Saga.put(
+      Redux.entitiesActions.addLogbook(logbook as Types.LogbooksEntity)
+    );
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     console.log(error);
@@ -172,7 +195,10 @@ function* updateLogbook(action: LogbookUpdateAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const endpoint = ApiRoutes.LOGBOOKS + `/${logbookId}`;
     const response = yield Saga.call(axios.patch, endpoint, data);
-    yield Saga.put(Redux.entitiesActions.updateLogbooks(response.data.data));
+    const { logbook } = normalize(response.data.data, logbookSchema).entities;
+    yield Saga.put(
+      Redux.entitiesActions.addLogbook(logbook as Types.LogbooksEntity)
+    );
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     console.log(error);
@@ -194,6 +220,7 @@ function* deleteLogbook(action: LogbookIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const endpoint = ApiRoutes.LOGBOOKS + `/${logbookId}`;
     yield Saga.call(axios.delete, endpoint);
+    yield Saga.put(Redux.entitiesActions.deleteLogbook(logbookId));
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     console.log(error);
