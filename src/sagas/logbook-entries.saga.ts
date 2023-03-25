@@ -1,5 +1,6 @@
 import * as Saga from "redux-saga/effects";
 import axios from "axios";
+import { normalize, schema } from "normalizr";
 
 import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
@@ -9,6 +10,10 @@ import { ApiRoutes } from "@/utils/constants/routes";
 // ========================================================================================= //
 // [ SCHEMAS ] ============================================================================= //
 // ========================================================================================= //
+
+const logbookEntriesSchema = new schema.Entity("logbookEntries");
+const logbookEntriesListSchema = new schema.Array(logbookEntriesSchema);
+const logbookEntrySchema = new schema.Entity("logbookEntry");
 
 // ========================================================================================= //
 // [ ACTIONS ] ============================================================================= //
@@ -94,7 +99,15 @@ function* fetchLogbookEntries() {
   try {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(true));
     const response = yield Saga.call(axios.get, ApiRoutes.LOGBOOK_ENTRIES);
-    yield Saga.put(Redux.entitiesActions.setLogbookEntries(response.data.data));
+    const { logbookEntries } = normalize(
+      response.data.data,
+      logbookEntriesListSchema
+    ).entities;
+    yield Saga.put(
+      Redux.entitiesActions.setLogbookEntries(
+        logbookEntries as Types.LogbookEntriesEntity
+      )
+    );
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
     console.log(error);
@@ -115,8 +128,14 @@ function* fetchLogbookLogbookEntries(action: LogbookLogbookEntriesAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(true));
     const endpoint = ApiRoutes.LOGBOOK_ENTRIES + `/fetch-logbook-entries`;
     const response = yield Saga.call(axios.get, endpoint, action.payload);
+    const { logbookEntries } = normalize(
+      response.data.data,
+      logbookEntriesListSchema
+    ).entities;
     yield Saga.put(
-      Redux.entitiesActions.updateLogbookEntries(response.data.data)
+      Redux.entitiesActions.addLogbookEntries(
+        logbookEntries as Types.LogbookEntriesEntity
+      )
     );
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
@@ -139,8 +158,14 @@ function* fetchLogbookEntry(action: LogbookEntryIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(true));
     const endpoint = ApiRoutes.LOGBOOK_ENTRIES + `/${logbookEntryId}`;
     const response = yield Saga.call(axios.get, endpoint);
+    const { logbookEntry } = normalize(
+      response.data.data,
+      logbookEntrySchema
+    ).entities;
     yield Saga.put(
-      Redux.entitiesActions.updateLogbookEntries(response.data.data)
+      Redux.entitiesActions.addLogbookEntries(
+        logbookEntry as Types.LogbookEntriesEntity
+      )
     );
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
@@ -165,8 +190,14 @@ function* createLogbookEntry(action: LogbookEntryCreateAction) {
       ApiRoutes.LOGBOOK_ENTRIES,
       action.payload
     );
+    const { logbookEntry } = normalize(
+      response.data.data,
+      logbookEntrySchema
+    ).entities;
     yield Saga.put(
-      Redux.entitiesActions.updateLogbookEntries(response.data.data)
+      Redux.entitiesActions.addLogbookEntries(
+        logbookEntry as Types.LogbookEntriesEntity
+      )
     );
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
@@ -189,8 +220,14 @@ function* updateLogbookEntry(action: LogbookEntryUpdateAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(true));
     const endpoint = ApiRoutes.LOGBOOK_ENTRIES + `/${logbookEntryId}`;
     const response = yield Saga.call(axios.patch, endpoint, data);
+    const { logbookEntry } = normalize(
+      response.data.data,
+      logbookEntrySchema
+    ).entities;
     yield Saga.put(
-      Redux.entitiesActions.updateLogbookEntries(response.data.data)
+      Redux.entitiesActions.addLogbookEntries(
+        logbookEntry as Types.LogbookEntriesEntity
+      )
     );
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
@@ -213,6 +250,7 @@ function* deleteLogbookEntry(action: LogbookEntryIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(true));
     const endpoint = ApiRoutes.LOGBOOK_ENTRIES + `/${logbookEntryId}`;
     yield Saga.call(axios.delete, endpoint);
+    yield Saga.put(Redux.entitiesActions.deleteLogbookEntry(logbookEntryId));
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
     console.log(error);

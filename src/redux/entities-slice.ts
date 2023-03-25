@@ -133,7 +133,7 @@ const entitiesSlice = createSlice({
     ) => {
       state.logbookEntries = { ...state.logbookEntries, ...action.payload };
     },
-    deleteLogbookEntries: (
+    deleteLogbookEntry: (
       state: EntitiesState,
       action: PayloadAction<number>
     ) => {
