@@ -3,7 +3,6 @@ import { useContext } from "react";
 import { Signal } from "@preact/signals-react";
 
 import * as Global from "@/components";
-import * as Logbook from "@/components/logbook";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
@@ -53,7 +52,7 @@ export const RecurringExpenses = (props: Props) => {
         {props.recurringExpenses.value.map(
           (purchase: Types.Purchase, index: number) => {
             return (
-              <Logbook.PurchaseCell
+              <Global.PurchaseCell
                 key={`onboarding-recurring-expenses-${purchase}-${index}`}
                 onDescriptionChange={(description: string) =>
                   (purchase.description = description)

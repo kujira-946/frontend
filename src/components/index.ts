@@ -5,6 +5,7 @@ import { Input } from "./input";
 import { Button } from "./button";
 import { Notification } from "./notification";
 import { Loading } from "./loading";
+import { PurchaseCell } from "./purchase-cell";
 
 export {
   LazyLoad,
@@ -14,4 +15,5 @@ export {
   Button,
   Notification,
   Loading,
+  PurchaseCell,
 };
