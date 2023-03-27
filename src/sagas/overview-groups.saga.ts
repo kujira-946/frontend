@@ -12,7 +12,6 @@ import { ApiRoutes } from "@/utils/constants/routes";
 // ========================================================================================= //
 
 const overviewGroupsSchema = new schema.Entity("overviewGroups");
-const overviewGroupsListSchema = new schema.Array(overviewGroupsSchema);
 const overviewGroupSchema = new schema.Entity("overviewGroup");
 
 // ========================================================================================= //
@@ -110,10 +109,9 @@ function* fetchOverviewGroups() {
   try {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(true));
     const response = yield Saga.call(axios.get, ApiRoutes.OVERVIEW_GROUPS);
-    const { overviewGroups } = normalize(
-      response.data.data,
-      overviewGroupsListSchema
-    ).entities;
+    const { overviewGroups } = normalize(response.data.data, [
+      overviewGroupsSchema,
+    ]).entities;
     yield Saga.put(
       Redux.entitiesActions.setOverviewGroups(
         overviewGroups as Types.OverviewGroupsEntity
@@ -139,10 +137,9 @@ function* fetchOverviewOverviewGroups(action: OverviewOverviewGroupsAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(true));
     const endpoint = ApiRoutes.OVERVIEW_GROUPS + `/fetch-overview-groups`;
     const response = yield Saga.call(axios.get, endpoint, action.payload);
-    const { overviewGroups } = normalize(
-      response.data.data,
-      overviewGroupsListSchema
-    ).entities;
+    const { overviewGroups } = normalize(response.data.data, [
+      overviewGroupsSchema,
+    ]).entities;
     yield Saga.put(
       Redux.entitiesActions.addOverviewGroup(
         overviewGroups as Types.OverviewGroupsEntity
@@ -168,10 +165,9 @@ function* bulkFetchOverviewGroups(action: OverviewGroupIdsAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(true));
     const endpoint = ApiRoutes.OVERVIEW_GROUPS + `/bulk-fetch`;
     const response = yield Saga.call(axios.get, endpoint, action.payload);
-    const { overviewGroups } = normalize(
-      response.data.data,
-      overviewGroupsListSchema
-    ).entities;
+    const { overviewGroups } = normalize(response.data.data, [
+      overviewGroupsSchema,
+    ]).entities;
     yield Saga.put(
       Redux.entitiesActions.addOverviewGroup(
         overviewGroups as Types.OverviewGroupsEntity

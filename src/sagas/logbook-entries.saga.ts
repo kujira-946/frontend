@@ -12,7 +12,6 @@ import { ApiRoutes } from "@/utils/constants/routes";
 // ========================================================================================= //
 
 const logbookEntriesSchema = new schema.Entity("logbookEntries");
-const logbookEntriesListSchema = new schema.Array(logbookEntriesSchema);
 const logbookEntrySchema = new schema.Entity("logbookEntry");
 
 // ========================================================================================= //
@@ -99,10 +98,9 @@ function* fetchLogbookEntries() {
   try {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(true));
     const response = yield Saga.call(axios.get, ApiRoutes.LOGBOOK_ENTRIES);
-    const { logbookEntries } = normalize(
-      response.data.data,
-      logbookEntriesListSchema
-    ).entities;
+    const { logbookEntries } = normalize(response.data.data, [
+      logbookEntriesSchema,
+    ]).entities;
     yield Saga.put(
       Redux.entitiesActions.setLogbookEntries(
         logbookEntries as Types.LogbookEntriesEntity
@@ -128,10 +126,9 @@ function* fetchLogbookLogbookEntries(action: LogbookLogbookEntriesAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(true));
     const endpoint = ApiRoutes.LOGBOOK_ENTRIES + `/fetch-logbook-entries`;
     const response = yield Saga.call(axios.get, endpoint, action.payload);
-    const { logbookEntries } = normalize(
-      response.data.data,
-      logbookEntriesListSchema
-    ).entities;
+    const { logbookEntries } = normalize(response.data.data, [
+      logbookEntriesSchema,
+    ]).entities;
     yield Saga.put(
       Redux.entitiesActions.addLogbookEntries(
         logbookEntries as Types.LogbookEntriesEntity

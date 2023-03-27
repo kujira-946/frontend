@@ -12,7 +12,6 @@ import { ApiRoutes } from "@/utils/constants/routes";
 // ========================================================================================= //
 
 const usersSchema = new schema.Entity("users");
-const usersListSchema = new schema.Array(usersSchema);
 const userSchema = new schema.Entity("user");
 
 // ========================================================================================= //
@@ -78,7 +77,7 @@ export function deleteUserRequest(userId: number): UserIdAction {
 function* fetchUsers() {
   try {
     const response = yield Saga.call(axios.get, ApiRoutes.USERS);
-    const { users } = normalize(response.data.data, usersListSchema).entities;
+    const { users } = normalize(response.data.data, [usersSchema]).entities;
     yield Saga.put(Redux.entitiesActions.setUsers(users as Types.UsersEntity));
 
     // console.log("Fetch Users Response:", response.data);

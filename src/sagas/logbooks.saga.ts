@@ -12,7 +12,6 @@ import { ApiRoutes } from "@/utils/constants/routes";
 // ========================================================================================= //
 
 const logbooksSchema = new schema.Entity("logbooks");
-const logbooksListSchema = new schema.Array(logbooksSchema);
 const logbookSchema = new schema.Entity("logbook");
 
 // ========================================================================================= //
@@ -91,10 +90,9 @@ function* fetchLogbooks() {
   try {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const response = yield Saga.call(axios.get, ApiRoutes.LOGBOOKS);
-    const { logbooks } = normalize(
-      response.data.data,
-      logbooksListSchema
-    ).entities;
+    const { logbooks } = normalize(response.data.data, [
+      logbooksSchema,
+    ]).entities;
     yield Saga.put(
       Redux.entitiesActions.setLogbooks(logbooks as Types.LogbooksEntity)
     );
@@ -118,10 +116,9 @@ function* fetchUserLogbooks(action: UserLogbooksAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const endpoint = ApiRoutes.LOGBOOKS + `/fetch-user-logbooks`;
     const response = yield Saga.call(axios.get, endpoint, action.payload);
-    const { logbooks } = normalize(
-      response.data.data,
-      logbooksListSchema
-    ).entities;
+    const { logbooks } = normalize(response.data.data, [
+      logbooksSchema,
+    ]).entities;
     yield Saga.put(
       Redux.entitiesActions.addLogbook(logbooks as Types.LogbooksEntity)
     );

@@ -12,7 +12,6 @@ import { ApiRoutes } from "@/utils/constants/routes";
 // ========================================================================================= //
 
 const overviewsSchema = new schema.Entity("overviews");
-const overviewsListSchema = new schema.Array(overviewsSchema);
 const overviewSchema = new schema.Entity("overview");
 
 // ========================================================================================= //
@@ -106,10 +105,9 @@ function* fetchOverviews() {
   try {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
     const response = yield Saga.call(axios.get, ApiRoutes.OVERVIEWS);
-    const { overviews } = normalize(
-      response.data.data,
-      overviewsListSchema
-    ).entities;
+    const { overviews } = normalize(response.data.data, [
+      overviewsSchema,
+    ]).entities;
     yield Saga.put(
       Redux.entitiesActions.setOverviews(overviews as Types.OverviewsEntity)
     );
@@ -133,10 +131,9 @@ function* fetchUserOverviews(action: UserOverviewsAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
     const endpoint = ApiRoutes.OVERVIEWS + `/fetch-user-overviews`;
     const response = yield Saga.call(axios.get, endpoint, action.payload);
-    const { overviews } = normalize(
-      response.data.data,
-      overviewsListSchema
-    ).entities;
+    const { overviews } = normalize(response.data.data, [
+      overviewsSchema,
+    ]).entities;
     yield Saga.put(
       Redux.entitiesActions.addOverview(overviews as Types.OverviewsEntity)
     );
@@ -159,10 +156,9 @@ function* bulkFetchOverviews(action: OverviewIdsAction) {
   yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
   const endpoint = ApiRoutes.OVERVIEWS + `/bulk-fetch`;
   const response = yield Saga.call(axios.get, endpoint, action.payload);
-  const { overviews } = normalize(
-    response.data.data,
-    overviewsListSchema
-  ).entities;
+  const { overviews } = normalize(response.data.data, [
+    overviewsSchema,
+  ]).entities;
   yield Saga.put(
     Redux.entitiesActions.addOverview(overviews as Types.OverviewsEntity)
   );
