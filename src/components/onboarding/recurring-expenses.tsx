@@ -1,24 +1,17 @@
 import styled from "styled-components";
-import { useContext } from "react";
 import { Signal } from "@preact/signals-react";
 
 import * as Global from "@/components";
 import * as Functions from "@/utils/functions";
-import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { SignalsStoreContext } from "@/pages/_app";
+
+import { Dropdown } from "./dropdown";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
 const Container = styled.section``;
-
-const PurchaseCells = styled.article`
-  display: flex;
-  flex-direction: column;
-  gap: ${Styles.pxAsRem.eight};
-`;
 
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
@@ -29,8 +22,6 @@ type Props = {
 };
 
 export const RecurringExpenses = (props: Props) => {
-  const { ui } = useContext(SignalsStoreContext);
-
   function deletePurchase(purchaseIndex: number): void {
     const recurringExpensesCopy = Functions.deepCopy(
       props.recurringExpenses.value
@@ -48,7 +39,7 @@ export const RecurringExpenses = (props: Props) => {
 
   return (
     <Container>
-      <PurchaseCells>
+      <Dropdown title="Recurring" total={5400} addAction={addRecurringExpense}>
         {props.recurringExpenses.value.map(
           (purchase: Types.Purchase, index: number) => {
             return (
@@ -64,21 +55,7 @@ export const RecurringExpenses = (props: Props) => {
             );
           }
         )}
-      </PurchaseCells>
-
-      <Global.Button
-        type="button"
-        onClick={addRecurringExpense}
-        size="medium"
-        borderRadius="four"
-        background={Styles.background[ui.theme.value].three}
-        hoverBackground={Styles.background[ui.theme.value].five}
-        style={{
-          marginTop: Styles.pxAsRem.sixteen,
-        }}
-      >
-        Add
-      </Global.Button>
+      </Dropdown>
     </Container>
   );
 };

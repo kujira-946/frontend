@@ -39,8 +39,12 @@ const Onboarding = () => {
   const disableSubmit = useSignal(false);
 
   const income = useSignal("");
-  const recurringExpenses = useSignal<Purchase[]>([]);
-  const incomingPurchases = useSignal<Purchase[]>([]);
+  const recurringExpenses = useSignal<Purchase[]>([
+    { description: "", cost: "" },
+  ]);
+  const incomingPurchases = useSignal<Purchase[]>([
+    { description: "", cost: "" },
+  ]);
   const savings = useSignal("");
 
   effect(() => {
