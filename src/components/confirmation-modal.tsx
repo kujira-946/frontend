@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import * as Icons from "@/components/icons";
 import * as Constants from "@/utils/constants";
 import * as Styles from "@/utils/styles";
+import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "./layout";
 import { Button } from "./button";
@@ -15,7 +16,7 @@ import { Button } from "./button";
 
 type SharedProps = { overlay?: true };
 
-const Parent = styled.div<SharedProps>`
+const Parent = styled.form<SharedProps>`
   position: fixed;
   top: 0;
   right: 0;
@@ -113,9 +114,7 @@ type Props = {
   title: string;
   cornerText: string;
   closeButtonAction?: () => void;
-
   supportingText?: string;
-
   bodyTexts?: string[];
 
   submitButtonAction: () => void;
@@ -127,8 +126,13 @@ type Props = {
 export const ConfirmationModal = (props: Props) => {
   const { ui } = useContext(SignalsStoreContext);
 
+  function submit(event: Types.Submit) {
+    event.preventDefault();
+    props.submitButtonAction();
+  }
+
   return (
-    <Parent overlay={props.overlay}>
+    <Parent onSubmit={submit} overlay={props.overlay}>
       <Child
         initial={Constants.landingMotion.initial}
         animate={Constants.landingMotion.animate}
@@ -137,7 +141,7 @@ export const ConfirmationModal = (props: Props) => {
       >
         <Header>
           {props.showBackButton && props.backButtonAction && (
-            <HeaderButton onClick={props.backButtonAction}>
+            <HeaderButton type="button" onClick={props.backButtonAction}>
               <Icons.ChevronLeft
                 height={14}
                 fill={Styles.background[ui.theme.value].eight}
@@ -147,7 +151,7 @@ export const ConfirmationModal = (props: Props) => {
           <Title>{props.title}</Title>
           <CornerText>{props.cornerText}</CornerText>
           {props.closeButtonAction && (
-            <HeaderButton onClick={props.closeButtonAction}>
+            <HeaderButton type="button" onClick={props.closeButtonAction}>
               <Icons.Close
                 height={14}
                 fill={Styles.background[ui.theme.value].eight}
@@ -172,8 +176,8 @@ export const ConfirmationModal = (props: Props) => {
         {props.children}
 
         <Button
+          type="submit"
           disabled={props.disableSubmit}
-          onClick={props.submitButtonAction}
           size="medium"
           borderRadius="four"
           background={Styles.primary[ui.theme.value].main}

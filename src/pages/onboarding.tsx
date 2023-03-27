@@ -13,12 +13,6 @@ import * as Selectors from "@/utils/selectors";
 import * as Functions from "@/utils/functions";
 
 // ========================================================================================= //
-// [ STYLED COMPONENTS ] =================================================================== //
-// ========================================================================================= //
-
-const Main = styled.main``;
-
-// ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
@@ -137,43 +131,37 @@ const Onboarding = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Main>
-        <Globals.ConfirmationModal
-          backButtonAction={toPreviousPage}
-          supportingText={supportingText.value}
-          title={Constants.onboardingCopies[currentPage.value - 1].title}
-          cornerText={`${currentPage.value}/${Constants.onboardingCopies.length}`}
-          bodyTexts={
-            Constants.onboardingCopies[currentPage.value - 1].bodyTexts
-          }
-          submitButtonAction={toNextPage}
-          submitButtonText={
-            Constants.onboardingCopies[currentPage.value - 1].submitButtonText
-          }
-          disableSubmit={disableSubmit.value}
-          showBackButton={currentPage.value === 1 ? false : true}
-          showSubmitArrow
-        >
-          {currentPage.value === 2 ? (
-            <Components.Income
-              income={income}
-              errorMessage={errorMessage}
-              disableSubmit={disableSubmit}
-            />
-          ) : currentPage.value === 3 ? (
-            <Components.RecurringExpenses
-              recurringExpenses={recurringExpenses}
-            />
-          ) : currentPage.value === 5 ? (
-            <Components.Savings
-              income={Number(income.value)}
-              savings={savings}
-              errorMessage={errorMessage}
-              disableSubmit={disableSubmit}
-            />
-          ) : null}
-        </Globals.ConfirmationModal>
-      </Main>
+      <Globals.ConfirmationModal
+        backButtonAction={toPreviousPage}
+        supportingText={supportingText.value}
+        title={Constants.onboardingCopies[currentPage.value - 1].title}
+        cornerText={`${currentPage.value}/${Constants.onboardingCopies.length}`}
+        bodyTexts={Constants.onboardingCopies[currentPage.value - 1].bodyTexts}
+        submitButtonAction={toNextPage}
+        submitButtonText={
+          Constants.onboardingCopies[currentPage.value - 1].submitButtonText
+        }
+        disableSubmit={disableSubmit.value}
+        showBackButton={currentPage.value === 1 ? false : true}
+        showSubmitArrow
+      >
+        {currentPage.value === 2 ? (
+          <Components.Income
+            income={income}
+            errorMessage={errorMessage}
+            disableSubmit={disableSubmit}
+          />
+        ) : currentPage.value === 3 ? (
+          <Components.RecurringExpenses recurringExpenses={recurringExpenses} />
+        ) : currentPage.value === 5 ? (
+          <Components.Savings
+            income={Number(income.value)}
+            savings={savings}
+            errorMessage={errorMessage}
+            disableSubmit={disableSubmit}
+          />
+        ) : null}
+      </Globals.ConfirmationModal>
     </>
   );
 };

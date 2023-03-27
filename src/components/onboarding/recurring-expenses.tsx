@@ -67,6 +67,7 @@ export const RecurringExpenses = (props: Props) => {
       </PurchaseCells>
 
       <Global.Button
+        type="button"
         onClick={addRecurringExpense}
         size="medium"
         borderRadius="four"

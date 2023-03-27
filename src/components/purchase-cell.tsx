@@ -98,9 +98,6 @@ const Input = styled.input<InputProps>`
 
   @media (hover: hover) {
     :hover {
-      background-color: ${(props: InputProps & ThemeProps) => {
-        return !props.frozen && props.theme.backgroundThree;
-      }};
       border: ${(props: InputProps & ThemeProps) => {
         return !props.frozen && `${props.theme.backgroundSix} solid 1px`;
       }};
