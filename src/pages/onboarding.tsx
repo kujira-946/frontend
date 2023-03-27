@@ -2,16 +2,15 @@ import Head from "next/head";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { effect, useSignal } from "@preact/signals-react";
 
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
 import * as Components from "@/components/onboarding";
 import * as Constants from "@/utils/constants";
+import * as Selectors from "@/utils/selectors";
 import * as Functions from "@/utils/functions";
-import * as Types from "@/utils/types";
-import { GlobalState } from "@/store";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -32,11 +31,13 @@ const Onboarding = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const { user } = useSelector((state: GlobalState) => state.entities);
+  const { currentUser } = Selectors.useEntitiesSlice();
 
   useEffect(() => {
-    if (user && user.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
-  }, [user]);
+    if (currentUser && currentUser.onboarded) {
+      router.push(Constants.ClientRoutes.LOGBOOKS);
+    }
+  }, [currentUser]);
 
   const currentPage = useSignal(1);
   const supportingText = useSignal("");
@@ -87,7 +88,7 @@ const Onboarding = () => {
 
   function toNextPage(): void {
     if (currentPage.value === 6) {
-      if (user) {
+      if (currentUser) {
         submitOnboarding();
       } else {
         dispatch(
@@ -118,7 +119,7 @@ const Onboarding = () => {
       const overviewData = {
         income: Number(roundedIncome),
         savings: Number(roundedSavings),
-        ownerId: user?.id,
+        ownerId: currentUser?.id,
       };
       const recurringOverviewGroupData = {};
       const incomingOverviewGroupData = {};

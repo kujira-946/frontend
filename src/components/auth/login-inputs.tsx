@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Signal, useSignal } from "@preact/signals-react";
 
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
+import * as Selectors from "@/utils/selectors";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { GlobalState } from "@/store";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -32,7 +32,7 @@ type Props = {
 
 export const LoginInputs = (props: Props) => {
   const dispatch = useDispatch();
-  const { errors } = useSelector((state: GlobalState) => state);
+  const { auth } = Selectors.useErrorsSlice();
 
   const hidden = useSignal(true);
 
@@ -42,15 +42,11 @@ export const LoginInputs = (props: Props) => {
       <Globals.Input
         borderRadius="four"
         title="Email"
-        errorMessage={
-          errors.auth.includes("register")
-            ? errors.auth
-            : props.emailError.value
-        }
+        errorMessage={auth.includes("register") ? auth : props.emailError.value}
         userInput={props.email.value}
         setUserInput={(event: Types.Input) => {
           props.email.value = event.currentTarget.value;
-          if (errors.auth.length > 0) {
+          if (auth.length > 0) {
             dispatch(Redux.errorsActions.setAuth(""));
           }
         }}
@@ -61,9 +57,7 @@ export const LoginInputs = (props: Props) => {
         borderRadius="four"
         title="Password"
         errorMessage={
-          errors.auth.includes("password")
-            ? errors.auth
-            : props.passwordError.value
+          auth.includes("password") ? auth : props.passwordError.value
         }
         userInput={props.password.value}
         setUserInput={(event: Types.Input) =>

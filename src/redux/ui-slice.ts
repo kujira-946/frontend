@@ -12,7 +12,8 @@ export type UIState = {
   tempUserId: number | null;
   loginForThirtyDays: boolean;
 
-  loadingUser: boolean;
+  loadingCurrentUser: boolean;
+  loadingUsers: boolean;
   loadingOverviews: boolean;
   loadingOverviewGroups: boolean;
   loadingLogbooks: boolean;
@@ -29,7 +30,8 @@ const initialState: UIState = {
   tempUserId: null,
   loginForThirtyDays: false,
 
-  loadingUser: false,
+  loadingCurrentUser: false,
+  loadingUsers: false,
   loadingOverviews: false,
   loadingOverviewGroups: false,
   loadingLogbooks: false,
@@ -56,8 +58,11 @@ const uiSlice = createSlice({
     setLoginForThirtyDays: (state: UIState, action: PayloadAction<boolean>) => {
       state.loginForThirtyDays = action.payload;
     },
-    setLoadingUser: (state: UIState, action: PayloadAction<boolean>) => {
-      state.loadingUser = action.payload;
+    setLoadingCurrentUser: (state: UIState, action: PayloadAction<boolean>) => {
+      state.loadingCurrentUser = action.payload;
+    },
+    setLoadingUsers: (state: UIState, action: PayloadAction<boolean>) => {
+      state.loadingUsers = action.payload;
     },
     setLoadingOverviews: (state: UIState, action: PayloadAction<boolean>) => {
       state.loadingOverviews = action.payload;

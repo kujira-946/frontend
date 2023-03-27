@@ -1,15 +1,15 @@
 import Image from "next/image";
 import styled from "styled-components";
 import { useContext } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { effect, useSignal } from "@preact/signals-react";
 
 import * as AuthActions from "@/sagas/auth.saga";
 import * as Globals from "@/components";
+import * as Selectors from "@/utils/selectors";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
-import { GlobalState } from "@/store";
 import { ThemeProps } from "@/components/layout";
 
 // ========================================================================================= //
@@ -88,10 +88,8 @@ type Props = {
 export const Verification = (props: Props) => {
   const dispatch = useDispatch();
   const { ui } = useContext(SignalsStoreContext);
-  const { errors } = useSelector((state: GlobalState) => state);
-  const { tempUserId, loginForThirtyDays } = useSelector(
-    (state: GlobalState) => state.ui
-  );
+  const { auth } = Selectors.useErrorsSlice();
+  const { tempUserId, loginForThirtyDays } = Selectors.useUiSlice();
 
   const verificationCode = useSignal("");
   const verificationCodeError = useSignal("");
@@ -110,8 +108,8 @@ export const Verification = (props: Props) => {
 
   function submitVerificationCode(event: Types.Submit): void {
     event.preventDefault();
-    if (errors.auth) {
-      verificationCodeError.value = errors.auth;
+    if (auth) {
+      verificationCodeError.value = auth;
     } else if (!tempUserId) {
       verificationCodeError.value =
         "There was an error locating the account. Please try logging in.";

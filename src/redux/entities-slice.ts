@@ -8,6 +8,7 @@ import { deepCopy } from "@/utils/functions";
 // ========================================================================================= //
 
 export type EntitiesState = {
+  currentUser: Types.User | null;
   users: Types.UsersEntity | null;
   overviews: Types.OverviewsEntity | null;
   overviewGroups: Types.OverviewGroupsEntity | null;
@@ -21,6 +22,7 @@ export type EntitiesState = {
 // ========================================================================================= //
 
 const initialState: EntitiesState = {
+  currentUser: null,
   users: null,
   overviews: null,
   overviewGroups: null,
@@ -33,6 +35,20 @@ const entitiesSlice = createSlice({
   name: "entities",
   initialState,
   reducers: {
+    // ↓↓↓ Current User ↓↓↓ //
+    setCurrentUser: (
+      state: EntitiesState,
+      action: PayloadAction<Types.User | null>
+    ) => {
+      state.currentUser = action.payload;
+      if (action.payload) {
+        const normalizedCurrentUser: Types.UsersEntity = {
+          [action.payload.id]: action.payload,
+        };
+        state.users = { ...state.users, ...normalizedCurrentUser };
+      }
+    },
+
     // ↓↓↓ Users ↓↓↓ //
     setUsers: (
       state: EntitiesState,

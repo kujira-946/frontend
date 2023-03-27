@@ -1,23 +1,22 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 
 import * as Components from "@/components/auth";
 import * as Constants from "@/utils/constants";
-import { GlobalState } from "@/store";
+import * as Selectors from "@/utils/selectors";
 
 const Register = () => {
-  const { user } = useSelector((state: GlobalState) => state.entities);
-  const { tempUserId } = useSelector((state: GlobalState) => state.ui);
+  const { currentUser } = Selectors.useEntitiesSlice();
+  const { tempUserId } = Selectors.useUiSlice();
 
   const router = useRouter();
   useEffect(() => {
-    if (user) {
-      if (user.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
+    if (currentUser) {
+      if (currentUser.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
       else router.push(Constants.ClientRoutes.ONBOARDING);
     }
-  }, [user]);
+  }, [currentUser]);
 
   return (
     <>

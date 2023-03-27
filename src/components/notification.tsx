@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { AnimatePresence, motion } from "framer-motion";
 
 import * as Constants from "@/utils/constants";
+import * as Selectors from "@/utils/selectors";
 import * as Styles from "@/utils/styles";
-import { GlobalState } from "@/store";
 import { uiActions } from "@/redux";
 import { ThemeProps } from "@/components/layout";
 import { NotificationType } from "@/utils/types";
@@ -61,7 +61,7 @@ const Footnote = styled.p`
 
 export const Notification = () => {
   const dispatch = useDispatch();
-  const { notification } = useSelector((state: GlobalState) => state.ui);
+  const { notification } = Selectors.useUiSlice();
 
   useEffect(() => {
     const timer = setTimeout(() => {

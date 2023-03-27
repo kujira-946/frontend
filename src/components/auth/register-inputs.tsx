@@ -1,13 +1,13 @@
 import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { effect, Signal, useSignal } from "@preact/signals-react";
 
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
+import * as Selectors from "@/utils/selectors";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { GlobalState } from "@/store";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -37,7 +37,7 @@ type Props = {
 
 export const RegisterInputs = (props: Props) => {
   const dispatch = useDispatch();
-  const { errors } = useSelector((state: GlobalState) => state);
+  const { auth } = Selectors.useErrorsSlice();
 
   const hidden = useSignal(true);
 
@@ -74,13 +74,11 @@ export const RegisterInputs = (props: Props) => {
       <Globals.Input
         borderRadius="four"
         title="Email"
-        errorMessage={
-          errors.auth.includes("email") ? errors.auth : props.emailError.value
-        }
+        errorMessage={auth.includes("email") ? auth : props.emailError.value}
         userInput={props.email.value}
         setUserInput={(event: Types.Input) => {
           props.email.value = event.currentTarget.value;
-          if (errors.auth.length > 0) {
+          if (auth.length > 0) {
             dispatch(Redux.errorsActions.setAuth(""));
           }
         }}
@@ -91,14 +89,12 @@ export const RegisterInputs = (props: Props) => {
         borderRadius="four"
         title="Username"
         errorMessage={
-          errors.auth.includes("username")
-            ? errors.auth
-            : props.usernameError.value
+          auth.includes("username") ? auth : props.usernameError.value
         }
         userInput={props.username.value}
         setUserInput={(event: Types.Input) => {
           props.username.value = event.currentTarget.value;
-          if (errors.auth.length > 0) {
+          if (auth.length > 0) {
             dispatch(Redux.errorsActions.setAuth(""));
           }
         }}

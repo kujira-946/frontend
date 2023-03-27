@@ -110,7 +110,7 @@ function* register(action: RegisterAction) {
 
 function* verifyRegistration(action: VerifyRegistrationAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingUser(true));
+    yield Saga.put(Redux.uiActions.setLoadingUsers(true));
     const { userId, verificationCode } = action.payload;
     const endpoint = ApiRoutes.AUTH + `/register/${userId}/verify`;
     const response = yield Saga.call(axios.patch, endpoint, {
@@ -132,10 +132,10 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
       secure: true,
       expires: 30,
     });
-    yield Saga.put(Redux.uiActions.setLoadingUser(false));
+    yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
     console.log(error);
-    yield Saga.put(Redux.uiActions.setLoadingUser(false));
+    yield Saga.put(Redux.uiActions.setLoadingUsers(false));
     yield Saga.put(
       Redux.errorsActions.setAuth(Functions.sagaResponseError(error))
     );
@@ -175,7 +175,7 @@ function* login(action: LoginAction) {
 
 function* verifyLogin(action: VerifyLoginAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingUser(true));
+    yield Saga.put(Redux.uiActions.setLoadingUsers(true));
     const { userId, verificationCode, thirtyDays } = action.payload;
     const endpoint = ApiRoutes.AUTH + `/login/${userId}/verify`;
     const response = yield Saga.call(axios.patch, endpoint, {
@@ -198,10 +198,10 @@ function* verifyLogin(action: VerifyLoginAction) {
       secure: true,
       expires: thirtyDays ? 30 : 7,
     });
-    yield Saga.put(Redux.uiActions.setLoadingUser(false));
+    yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
     console.log(error);
-    yield Saga.put(Redux.uiActions.setLoadingUser(false));
+    yield Saga.put(Redux.uiActions.setLoadingUsers(false));
     yield Saga.put(
       Redux.errorsActions.setAuth(Functions.sagaResponseError(error))
     );

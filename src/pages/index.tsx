@@ -3,11 +3,10 @@ import styled from "styled-components";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 
 import * as Components from "@/components/landing";
 import * as Constants from "@/utils/constants";
-import { GlobalState } from "@/store";
+import * as Selectors from "@/utils/selectors";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -27,7 +26,7 @@ const accessToken = Cookies.get("token");
 
 const Home = () => {
   const router = useRouter();
-  const { user } = useSelector((state: GlobalState) => state.entities);
+  const { currentUser } = Selectors.useEntitiesSlice();
 
   // ↓↓↓ Starts the page back at the top when refreshing. ↓↓↓ //
   useEffect(() => {
@@ -37,11 +36,11 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    if (userId && accessToken && user) {
-      if (user.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
+    if (userId && accessToken && currentUser) {
+      if (currentUser.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
       else router.push(Constants.ClientRoutes.ONBOARDING);
     }
-  }, [userId, accessToken, user]);
+  }, [userId, accessToken, currentUser]);
 
   return (
     <>
