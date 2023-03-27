@@ -2,10 +2,9 @@ import styled from "styled-components";
 import { Signal } from "@preact/signals-react";
 
 import * as Global from "@/components";
+import * as Overview from "@/components/overview";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
-
-import { Dropdown } from "./dropdown";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -39,7 +38,11 @@ export const RecurringExpenses = (props: Props) => {
 
   return (
     <Container>
-      <Dropdown title="Recurring" total={5400} addAction={addRecurringExpense}>
+      <Overview.Dropdown
+        title="Recurring"
+        total={5400}
+        addAction={addRecurringExpense}
+      >
         {props.recurringExpenses.value.map(
           (purchase: Types.Purchase, index: number) => {
             return (
@@ -55,7 +58,7 @@ export const RecurringExpenses = (props: Props) => {
             );
           }
         )}
-      </Dropdown>
+      </Overview.Dropdown>
     </Container>
   );
 };
