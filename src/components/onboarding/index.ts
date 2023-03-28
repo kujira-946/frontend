@@ -1,5 +1,5 @@
 import { Income } from "./income";
-import { RecurringExpenses } from "./recurring-expenses";
+import { ExpensesPartial } from "./expenses-partial";
 import { Savings } from "./savings";
 
-export { Income, RecurringExpenses, Savings };
+export { Income, ExpensesPartial, Savings };

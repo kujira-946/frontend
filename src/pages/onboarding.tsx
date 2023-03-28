@@ -1,51 +1,45 @@
 import Head from "next/head";
-import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { effect, useSignal } from "@preact/signals-react";
 
-import * as Redux from "@/redux";
 import * as Globals from "@/components";
 import * as Components from "@/components/onboarding";
 import * as Constants from "@/utils/constants";
-import * as Selectors from "@/utils/selectors";
 import * as Functions from "@/utils/functions";
+import * as Selectors from "@/utils/selectors";
+import * as Types from "@/utils/types";
 
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-type Purchase = {
-  description: string;
-  cost: string;
-};
-
 const Onboarding = () => {
-  const dispatch = useDispatch();
   const router = useRouter();
 
   const { currentUser } = Selectors.useEntitiesSlice();
+
+  const currentPage = useSignal(1);
+  const recurringExpensesTotal = useSignal(0);
+  const incomingExpensesTotal = useSignal(0);
+  const supportingText = useSignal("");
+  const errorMessage = useSignal("");
+  const disableSubmit = useSignal(false);
+
+  const income = useSignal("");
+  const recurringExpenses = useSignal<Types.BarePurchase[]>([
+    { selected: false, description: "", cost: "" },
+  ]);
+  const incomingPurchases = useSignal<Types.BarePurchase[]>([
+    { selected: false, description: "", cost: "" },
+  ]);
+  const savings = useSignal("");
 
   useEffect(() => {
     if (currentUser && currentUser.onboarded) {
       router.push(Constants.ClientRoutes.LOGBOOKS);
     }
   }, [currentUser]);
-
-  const currentPage = useSignal(1);
-  const supportingText = useSignal("");
-  const errorMessage = useSignal("");
-  const disableSubmit = useSignal(false);
-
-  const income = useSignal("");
-  const recurringExpenses = useSignal<Purchase[]>([
-    { description: "", cost: "" },
-  ]);
-  const incomingPurchases = useSignal<Purchase[]>([
-    { description: "", cost: "" },
-  ]);
-  const savings = useSignal("");
 
   effect(() => {
     if (currentPage.value === 1) {
@@ -69,7 +63,21 @@ const Onboarding = () => {
       }
     } else if (income.value !== "") {
       if (Number(income.value)) {
-        const roundedIncome = Functions.roundNumber(Number(income.value), 2);
+        let roundedIncome = Functions.roundNumber(Number(income.value), 2);
+
+        if (recurringExpensesTotal.value > 0) {
+          roundedIncome = Functions.roundNumber(
+            Number(income.value) + recurringExpensesTotal.value,
+            2
+          );
+        }
+
+        if (incomingExpensesTotal.value > 0) {
+          roundedIncome = Functions.roundNumber(
+            Number(income.value) + incomingExpensesTotal.value,
+            2
+          );
+        }
         supportingText.value = `$${roundedIncome} remaining`;
       } else {
         supportingText.value = "";
@@ -85,20 +93,10 @@ const Onboarding = () => {
   }
 
   function toNextPage(): void {
-    if (currentPage.value === 6) {
-      if (currentUser) {
-        submitOnboarding();
-      } else {
-        dispatch(
-          Redux.uiActions.setNotification({
-            title: "Failure",
-            body: "Please make sure all previous fields were filled in properly.",
-            type: "failure",
-            timeout: 10000,
-          })
-        );
-      }
-    } else if (currentPage.value + 1 <= Constants.onboardingCopies.length) {
+    // if (currentPage.value === Constants.onboardingCopies.length) {
+    //   submitOnboarding();
+    // }
+    if (currentPage.value + 1 <= Constants.onboardingCopies.length) {
       currentPage.value += 1;
     } else {
       currentPage.value = Constants.onboardingCopies.length;
@@ -107,8 +105,8 @@ const Onboarding = () => {
 
   function submitOnboarding(): void {
     // 1. Create overview.
-    // 2. Use new overview id to create recurring and income overview groups.
-    // 3. Set the user's `onboarded` status to `true`.
+    // 2. (if Redux overview is not `null`) Use new overview id to create recurring and income overview groups and set state.
+    // 3. (if Redux recurring & income overviews are not `null`) Set the user's `onboarded` status to `true`.
 
     if (Number(income.value) && Number(savings.value)) {
       const roundedIncome = Functions.roundNumber(Number(income.value), 2);
@@ -156,7 +154,21 @@ const Onboarding = () => {
             disableSubmit={disableSubmit}
           />
         ) : currentPage.value === 3 ? (
-          <Components.RecurringExpenses recurringExpenses={recurringExpenses} />
+          <Components.ExpensesPartial
+            key="onboarding-page-recurring-expenses"
+            title="Recurring"
+            total={recurringExpensesTotal}
+            expenses={recurringExpenses}
+            disableSubmit={disableSubmit}
+          />
+        ) : currentPage.value === 4 ? (
+          <Components.ExpensesPartial
+            key="onboarding-page-incoming-purchases"
+            title="Incoming"
+            total={incomingExpensesTotal}
+            expenses={incomingPurchases}
+            disableSubmit={disableSubmit}
+          />
         ) : currentPage.value === 5 ? (
           <Components.Savings
             income={Number(income.value)}

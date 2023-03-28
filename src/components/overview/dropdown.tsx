@@ -89,10 +89,13 @@ const PurchaseCells = styled.div`
 // ========================================================================================= //
 
 type Props = {
+  children: React.ReactNode;
   borderRadius?: Types.PxAsRem;
   title: string;
-  total: number;
-  children: React.ReactNode;
+  total: string;
+  purchaseCellsSelected: boolean;
+  deleteSelectedAction: () => void;
+  deleteAllAction: () => void;
   addAction: () => void;
 };
 
@@ -119,6 +122,38 @@ export const Dropdown = (props: Props) => {
             transition={{ duration: 0.1, delay: 0 }}
           >
             <PurchaseCells>{props.children}</PurchaseCells>
+
+            {props.purchaseCellsSelected && (
+              <Global.Button
+                type="button"
+                onClick={props.deleteSelectedAction}
+                size="medium"
+                borderRadius="four"
+                color={Styles.background[ui.theme.value].seven}
+                hoverColor={Styles.background[ui.theme.value].eight}
+                background={Styles.background[ui.theme.value].one}
+                hoverBackground={Styles.background[ui.theme.value].three}
+                border={Styles.background[ui.theme.value].seven}
+                hoverBorder={Styles.background[ui.theme.value].eight}
+              >
+                Delete Selected
+              </Global.Button>
+            )}
+
+            <Global.Button
+              type="button"
+              onClick={props.deleteAllAction}
+              size="medium"
+              borderRadius="four"
+              color={Styles.background[ui.theme.value].seven}
+              hoverColor={Styles.background[ui.theme.value].eight}
+              background={Styles.background[ui.theme.value].one}
+              hoverBackground={Styles.background[ui.theme.value].three}
+              border={Styles.background[ui.theme.value].seven}
+              hoverBorder={Styles.background[ui.theme.value].eight}
+            >
+              Delete All
+            </Global.Button>
 
             <Global.Button
               type="button"

@@ -83,3 +83,9 @@ export type {
   LogbookEntriesEntity,
   PurchasesEntity,
 };
+
+export type BarePurchase = {
+  selected: boolean;
+  description: string;
+  cost: string;
+};
