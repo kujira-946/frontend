@@ -47,6 +47,8 @@ const Onboarding = () => {
   effect(() => {
     if (currentPage.value === 1) {
       disableSubmit.value = false;
+    } else if (currentPage.value === Constants.onboardingCopies.length) {
+      completeOnboarding();
     } else if (Number(income.value)) {
       let remainingBudget = Number(income.value);
       remainingBudget -= recurringExpensesTotal.value;
@@ -65,9 +67,6 @@ const Onboarding = () => {
   }
 
   function toNextPage(): void {
-    // if (currentPage.value === Constants.onboardingCopies.length) {
-    //   submitOnboarding();
-    // }
     if (currentPage.value + 1 <= Constants.onboardingCopies.length) {
       currentPage.value += 1;
     } else {
@@ -75,7 +74,7 @@ const Onboarding = () => {
     }
   }
 
-  function submitOnboarding(): void {
+  function completeOnboarding(): void {
     // 1. Create overview.
     // 2. (if Redux overview is not `null`) Use new overview id to create recurring and income overview groups and set state.
     // 3. (if Redux recurring & income overviews are not `null`) Set the user's `onboarded` status to `true`.
