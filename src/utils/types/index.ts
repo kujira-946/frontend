@@ -85,7 +85,6 @@ export type {
 };
 
 export type BarePurchase = {
-  selected: boolean;
   description: string;
   cost: string;
 };

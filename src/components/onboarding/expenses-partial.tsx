@@ -46,7 +46,7 @@ export const ExpensesPartial = (props: Props) => {
 
   function addExpense(): void {
     const updatedExpenses = Functions.deepCopy(props.expenses.value);
-    updatedExpenses.push({ selected: false, description: "", cost: "" });
+    updatedExpenses.push({ description: "", cost: "" });
     props.expenses.value = updatedExpenses;
   }
 

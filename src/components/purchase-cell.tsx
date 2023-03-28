@@ -199,7 +199,6 @@ export const PurchaseCell = (props: Props) => {
 
   useEffect(() => {
     const expense: Types.BarePurchase = {
-      selected: checkboxActive.value,
       description: description.value,
       cost: cost.value,
     };

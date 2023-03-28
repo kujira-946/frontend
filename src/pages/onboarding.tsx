@@ -30,10 +30,10 @@ const Onboarding = () => {
   // ↓↓↓ Submission Data ↓↓↓ //
   const income = useSignal("");
   const recurringExpenses = useSignal<Types.BarePurchase[]>([
-    { selected: false, description: "", cost: "" },
+    { description: "", cost: "" },
   ]);
   const incomingPurchases = useSignal<Types.BarePurchase[]>([
-    { selected: false, description: "", cost: "" },
+    { description: "", cost: "" },
   ]);
   const savings = useSignal("");
 
@@ -47,16 +47,13 @@ const Onboarding = () => {
   effect(() => {
     if (currentPage.value === 1) {
       disableSubmit.value = false;
-    } else if (Number(income.value) && Number(savings.value)) {
-      const savedIncome = Number(income.value) * (Number(savings.value) / 100);
-      let remainingBudget = Number(income.value) - savedIncome;
-      remainingBudget -=
-        recurringExpensesTotal.value + incomingPurchasesTotal.value;
+    } else if (Number(income.value)) {
+      let remainingBudget = Number(income.value);
+      remainingBudget -= recurringExpensesTotal.value;
+      remainingBudget -= incomingPurchasesTotal.value;
+      if (Number(savings.value)) remainingBudget -= Number(savings.value);
       const roundedRemainingBudget = Functions.roundNumber(remainingBudget, 2);
       supportingText.value = `$${roundedRemainingBudget} remaining`;
-    } else if (Number(income.value)) {
-      const roundedIncome = Functions.roundNumber(Number(income.value), 2);
-      supportingText.value = `$${roundedIncome} remaining`;
     } else {
       supportingText.value = "";
     }
