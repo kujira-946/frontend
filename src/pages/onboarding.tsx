@@ -47,13 +47,23 @@ const Onboarding = () => {
   effect(() => {
     if (currentPage.value === 1) {
       disableSubmit.value = false;
+    } else if (recurringExpensesTotal.value < 0) {
+      recurringExpensesTotal.value = 0;
+    } else if (incomingPurchasesTotal.value < 0) {
+      incomingPurchasesTotal.value = 0;
     } else if (currentPage.value === Constants.onboardingCopies.length) {
-      completeOnboarding();
+      // NOTE : The function below should be invoked when clicking on the submit button on the last page, rather
+      //        than being automatically invoked.
+      // completeOnboarding();
     } else if (Number(income.value)) {
       let remainingBudget = Number(income.value);
       remainingBudget -= recurringExpensesTotal.value;
       remainingBudget -= incomingPurchasesTotal.value;
-      if (Number(savings.value)) remainingBudget -= Number(savings.value);
+      if (Number(savings.value)) {
+        const savedIncome =
+          Number(income.value) * (Number(savings.value) / 100);
+        remainingBudget -= savedIncome;
+      }
       const roundedRemainingBudget = Functions.roundNumber(remainingBudget, 2);
       supportingText.value = `$${roundedRemainingBudget} remaining`;
     } else {
