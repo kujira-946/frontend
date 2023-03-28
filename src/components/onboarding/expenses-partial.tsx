@@ -18,7 +18,6 @@ type Props = {
 };
 
 export const ExpensesPartial = (props: Props) => {
-  // const purchasesTotal = useSignal(0);
   const selectedPurchaseCells = useSignal<number[]>([]);
 
   useEffect(() => {

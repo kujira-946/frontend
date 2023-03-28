@@ -19,13 +19,15 @@ const Onboarding = () => {
 
   const { currentUser } = Selectors.useEntitiesSlice();
 
+  // ↓↓↓ Onboarding Page Data ↓↓↓ //
   const currentPage = useSignal(1);
   const recurringExpensesTotal = useSignal(0);
-  const incomingExpensesTotal = useSignal(0);
+  const incomingPurchasesTotal = useSignal(0);
   const supportingText = useSignal("");
   const errorMessage = useSignal("");
   const disableSubmit = useSignal(false);
 
+  // ↓↓↓ Submission Data ↓↓↓ //
   const income = useSignal("");
   const recurringExpenses = useSignal<Types.BarePurchase[]>([
     { selected: false, description: "", cost: "" },
@@ -41,47 +43,20 @@ const Onboarding = () => {
     }
   }, [currentUser]);
 
+  // ↓↓↓ Handling Supporting Text Value ↓↓↓ //
   effect(() => {
     if (currentPage.value === 1) {
       disableSubmit.value = false;
-    } else if (income.value !== "" && savings.value !== "") {
-      if (Number(income.value) && Number(savings.value)) {
-        const roundedIncome = Functions.roundNumber(Number(income.value), 2);
-        const savedIncome =
-          Number(roundedIncome) * (Number(savings.value) / 100);
-        const roundedSavedIncome = Functions.roundNumber(
-          Number(savedIncome),
-          2
-        );
-        const remainingBudget = Functions.roundNumber(
-          Number(roundedIncome) - Number(roundedSavedIncome),
-          2
-        );
-        supportingText.value = `$${remainingBudget} remaining`;
-      } else {
-        supportingText.value = "";
-      }
-    } else if (income.value !== "") {
-      if (Number(income.value)) {
-        let roundedIncome = Functions.roundNumber(Number(income.value), 2);
-
-        if (recurringExpensesTotal.value > 0) {
-          roundedIncome = Functions.roundNumber(
-            Number(income.value) + recurringExpensesTotal.value,
-            2
-          );
-        }
-
-        if (incomingExpensesTotal.value > 0) {
-          roundedIncome = Functions.roundNumber(
-            Number(income.value) + incomingExpensesTotal.value,
-            2
-          );
-        }
-        supportingText.value = `$${roundedIncome} remaining`;
-      } else {
-        supportingText.value = "";
-      }
+    } else if (Number(income.value) && Number(savings.value)) {
+      const savedIncome = Number(income.value) * (Number(savings.value) / 100);
+      let remainingBudget = Number(income.value) - savedIncome;
+      remainingBudget -=
+        recurringExpensesTotal.value + incomingPurchasesTotal.value;
+      const roundedRemainingBudget = Functions.roundNumber(remainingBudget, 2);
+      supportingText.value = `$${roundedRemainingBudget} remaining`;
+    } else if (Number(income.value)) {
+      const roundedIncome = Functions.roundNumber(Number(income.value), 2);
+      supportingText.value = `$${roundedIncome} remaining`;
     } else {
       supportingText.value = "";
     }
@@ -165,7 +140,7 @@ const Onboarding = () => {
           <Components.ExpensesPartial
             key="onboarding-page-incoming-purchases"
             title="Incoming"
-            total={incomingExpensesTotal}
+            total={incomingPurchasesTotal}
             expenses={incomingPurchases}
             disableSubmit={disableSubmit}
           />
