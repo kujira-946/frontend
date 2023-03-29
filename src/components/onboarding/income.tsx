@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { effect, Signal, useSignal } from "@preact/signals-react";
+import { effect, Signal } from "@preact/signals-react";
 
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
@@ -22,8 +22,6 @@ type Props = {
 };
 
 export const Income = (props: Props) => {
-  const userInput = useSignal(props.income.value);
-
   effect(() => {
     if (props.income.value.length === 0) {
       props.errorMessage.value = "";
