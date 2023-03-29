@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useContext, useEffect } from "react";
-import { Signal, useSignal } from "@preact/signals-react";
+import { effect, Signal, useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
@@ -114,7 +114,7 @@ export const PurchaseCell = (props: Props) => {
   const checkboxActive = useSignal(false);
   const description = useSignal(props.description);
   const cost = useSignal(props.cost);
-  const costError = useSignal(false);
+  const costError = useSignal("");
   const closeHovered = useSignal(false);
 
   function updateDescription(event: Types.Input): void {
@@ -123,12 +123,10 @@ export const PurchaseCell = (props: Props) => {
 
   function updateCost(event: Types.Input): void {
     cost.value = event.currentTarget.value;
-    if (!Number(cost.value)) costError.value = true;
-    else costError.value = false;
   }
 
-  function roundCost(): void {
-    if (!costError.value) {
+  function onCostBlur(): void {
+    if (!costError.value && cost.value !== "") {
       cost.value = Functions.roundNumber(Number(cost.value), 2);
     }
   }
@@ -156,8 +154,20 @@ export const PurchaseCell = (props: Props) => {
   }, [description.value, cost.value]);
 
   useEffect(() => {
-    props.disableSubmit.value = costError.value;
+    props.disableSubmit.value = !!costError.value;
   }, [costError.value]);
+
+  effect(() => {
+    if (cost.value !== "") {
+      if (!Number(cost.value)) {
+        costError.value = "Must be a number.";
+      } else if (Number(cost.value) < 0) {
+        costError.value = "Must be greater than 0.";
+      } else {
+        costError.value = "";
+      }
+    }
+  });
 
   return (
     <Container
@@ -228,10 +238,11 @@ export const PurchaseCell = (props: Props) => {
 
       <Globals.InputMini
         placeholder="Cost"
+        errorMessage={costError.value}
         forwardText={props.cost === "" ? "" : "$"}
         userInput={props.cost}
         setUserInput={updateCost}
-        onBlur={roundCost}
+        onBlur={onCostBlur}
         hasValue={props.cost !== ""}
         frozen={!!props.costFrozen}
       />

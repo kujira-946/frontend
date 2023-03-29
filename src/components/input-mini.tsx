@@ -19,7 +19,8 @@ type ContainerProps = {
 
 const Container = styled.article<ContainerProps>`
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
   width: 100%;
   padding: 0 ${Styles.pxAsRem.six};
   color: ${(props: ThemeProps) => props.theme.text};
@@ -39,6 +40,8 @@ const Container = styled.article<ContainerProps>`
       ? `${props.theme.backgroundTwo} solid 1px`
       : `${props.theme.backgroundFour} solid 1px`;
   }};
+  font-size: ${Styles.pxAsRem.twelve};
+  font-weight: ${Styles.fontWeights.medium};
   cursor: ${(props) => (props.focused ? "default" : "pointer")};
 
   @media (hover: hover) {
@@ -50,6 +53,19 @@ const Container = styled.article<ContainerProps>`
   }
 
   ${(props) => props.frozen && Styles.preventUserInteraction};
+`;
+
+const ErrorMessage = styled.span`
+  display: block;
+  margin: ${Styles.pxAsRem.four} 0 0;
+  color: ${(props: ThemeProps) => props.theme.failure};
+  font-size: ${Styles.pxAsRem.ten};
+  font-weight: ${Styles.fontWeights.semiBold};
+`;
+
+const Body = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const ForwardText = styled.span`
@@ -121,17 +137,21 @@ export const InputMini = (props: Props) => {
       onClick={focusInputField}
       style={{ borderRadius: props.borderRadius || Styles.pxAsRem.six }}
     >
-      {props.forwardText && <ForwardText>{props.forwardText}</ForwardText>}
+      {props.errorMessage && <ErrorMessage>{props.errorMessage}</ErrorMessage>}
 
-      <Input
-        placeholder={props.placeholder}
-        value={props.userInput}
-        ref={inputFieldRef}
-        onChange={props.setUserInput}
-        onBlur={onBlur}
-        onFocus={onFocus}
-        error={!!props.errorMessage}
-      />
+      <Body>
+        {props.forwardText && <ForwardText>{props.forwardText}</ForwardText>}
+
+        <Input
+          placeholder={props.placeholder}
+          value={props.userInput}
+          ref={inputFieldRef}
+          onChange={props.setUserInput}
+          onBlur={onBlur}
+          onFocus={onFocus}
+          error={!!props.errorMessage}
+        />
+      </Body>
     </Container>
   );
 };
