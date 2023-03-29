@@ -253,28 +253,6 @@ export const PurchaseCell = (props: Props) => {
         </CheckButton>
       )}
 
-      {/* {!props.hideCheck && props.selected ? (
-        <CheckButton onClick={() => updateCheckboxActive(false)}>
-          <Icons.CheckboxActive
-            height={20}
-            fill={Styles.secondary[ui.theme.value].main}
-          />
-        </CheckButton>
-      ) : (
-        <CheckButton
-          onClick={() => updateCheckboxActive(true)}
-          onMouseEnter={() => (checkboxHovered.value = true)}
-          onMouseLeave={() => (checkboxHovered.value = false)}
-        >
-          <Icons.CheckboxInactive
-            height={20}
-            fill={Styles.background[ui.theme.value].seven}
-            hovered={checkboxHovered.value}
-            hoveredFill={Styles.text[ui.theme.value]}
-          />
-        </CheckButton>
-      )} */}
-
       {!props.hideCategories && (
         <CategoryButtons>
           {categories.map((category: Category) => {
