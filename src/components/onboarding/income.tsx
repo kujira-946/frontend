@@ -44,11 +44,11 @@ export const Income = (props: Props) => {
   return (
     <Globals.Input
       title="Income ($)"
-      forwardText={props.income.value === "" ? "" : "$"}
       userInput={props.income.value}
       setUserInput={setUserInput}
       errorMessage={props.errorMessage.value}
       onBlur={onBlur}
+      isCost
     />
   );
 };

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { memo, useCallback, useContext, useEffect } from "react";
+import { memo, useContext, useEffect } from "react";
 import { effect, Signal, useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
@@ -107,8 +107,6 @@ type Props = {
 const categories: Category[] = ["Need", "Planned", "Impulse", "Regret"];
 
 const ExportedComponent = (props: Props) => {
-  console.log("Purchase Cell Loaded");
-
   const { ui } = useContext(SignalsStoreContext);
 
   const dragHovered = useSignal(false);
@@ -235,7 +233,7 @@ const ExportedComponent = (props: Props) => {
         placeholder="Description"
         userInput={props.description}
         setUserInput={updateDescription}
-        hasValue={props.description !== ""}
+        hasValue={!!props.description}
         frozen={!!props.descriptionFrozen}
       />
 
@@ -243,12 +241,12 @@ const ExportedComponent = (props: Props) => {
         borderRadius={props.borderRadius}
         placeholder="Cost"
         errorMessage={costError.value}
-        forwardText={props.cost === "" ? "" : "$"}
         userInput={props.cost}
         setUserInput={updateCost}
         onBlur={onCostBlur}
-        hasValue={props.cost !== ""}
+        hasValue={!!props.cost}
         frozen={!!props.costFrozen}
+        isCost
       />
 
       {!props.hideClose && (

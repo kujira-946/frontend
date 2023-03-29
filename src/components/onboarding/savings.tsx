@@ -1,14 +1,7 @@
-import styled from "styled-components";
 import { effect, Signal } from "@preact/signals-react";
 
 import * as Types from "@/utils/types";
 import { Input } from "../input";
-
-// ========================================================================================= //
-// [ STYLED COMPONENTS ] =================================================================== //
-// ========================================================================================= //
-
-const Container = styled.section``;
 
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
@@ -55,13 +48,11 @@ export const Savings = (props: Props) => {
   }
 
   return (
-    <Container>
-      <Input
-        title={`Savings (%) ${calculateIncomeSaved()}`}
-        userInput={props.savings.value}
-        setUserInput={setUserInput}
-        errorMessage={props.errorMessage.value}
-      />
-    </Container>
+    <Input
+      title={`Savings (%) ${calculateIncomeSaved()}`}
+      userInput={props.savings.value}
+      setUserInput={setUserInput}
+      errorMessage={props.errorMessage.value}
+    />
   );
 };

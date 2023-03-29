@@ -69,7 +69,7 @@ const InputFieldContainer = styled.div`
   font-weight: ${Styles.fontWeights.medium};
 `;
 
-const InputFieldForwardText = styled.span`
+const ForwardText = styled.span`
   display: block;
 `;
 
@@ -106,7 +106,6 @@ type Props = {
 
   title: string;
   errorMessage?: string;
-  forwardText?: string;
 
   userInput: string;
   setUserInput: (event: Types.Input) => void;
@@ -117,6 +116,7 @@ type Props = {
 
   onFocus?: () => void;
   onBlur?: () => void;
+  isCost?: true;
 };
 
 export const Input = (props: Props) => {
@@ -161,8 +161,8 @@ export const Input = (props: Props) => {
 
       <Body>
         <InputFieldContainer>
-          {props.forwardText && (
-            <InputFieldForwardText>{props.forwardText}</InputFieldForwardText>
+          {props.isCost && props.userInput !== "" && !props.errorMessage && (
+            <ForwardText>$</ForwardText>
           )}
           <InputField
             type={props.hidden ? "password" : "text"}
@@ -175,6 +175,7 @@ export const Input = (props: Props) => {
             focused={focused.value}
           />
         </InputFieldContainer>
+
         {props.password &&
           (props.hidden ? (
             <IconContainer

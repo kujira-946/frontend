@@ -1,5 +1,5 @@
-import { memo, useCallback, useEffect, useMemo } from "react";
-import { Signal, useSignal } from "@preact/signals-react";
+import { memo, useCallback, useEffect } from "react";
+import { Signal } from "@preact/signals-react";
 
 import * as Global from "@/components";
 import * as Overview from "@/components/overview";
@@ -18,8 +18,6 @@ type Props = {
 };
 
 const ExportedComponent = (props: Props) => {
-  console.log(props.title, "Page Loaded");
-
   useEffect(() => {
     if (!props.disableSubmit.value) {
       props.total.value = 0;
@@ -41,7 +39,7 @@ const ExportedComponent = (props: Props) => {
     props.expenses.value = updatedExpenses;
   }
 
-  const deleteExpense = useCallback((purchaseIndex: number) => {
+  const deleteExpense = useCallback((purchaseIndex: number): void => {
     const updatedExpenses = Functions.deepCopy(props.expenses.value);
     updatedExpenses.splice(purchaseIndex, 1);
     props.expenses.value = updatedExpenses;
@@ -58,7 +56,7 @@ const ExportedComponent = (props: Props) => {
         (expense: Types.BarePurchase, index: number) => {
           return (
             <Global.PurchaseCell
-              key={`onboarding-recurring-expenses-${expense.description}-${index}`}
+              key={`onboarding-recurring-expenses-${index}`}
               borderRadius="four"
               index={index}
               expenses={props.expenses}
@@ -77,10 +75,3 @@ const ExportedComponent = (props: Props) => {
 };
 
 export const ExpensesPartial = memo(ExportedComponent);
-
-// TODO : YOU WERE WORKING ON OPTIMIZING THE RE-RENDERING OF THE DROPDOWN AND PURCHASE CELL COMPONENTS.
-// TODO : THE LAST THING YOU DID WAS STORE THE PURCHASE CELLS INSIDE OF A MEMOIZED USEMEMO CONSTANT.
-// TODO : IT DIDN'T WORK.
-//
-// TODO : CHANCES ARE, THE REASON AS TO WHY USECALLBACK IS NOT WORKING FOR DELETEEXPENSE() IS BECAUSE
-// TODO : WE'RE NOT PASSING THAT FUNCTION ITSELF DIRECTLY INTO THE ONCLOSECLICK CALLBACK. WE'RE PASSING IN A DIFFERENT FUNCTION THAT RETURNS THAT FUNCTION, SO WE'RE GOING TO HAVE TO MEMOIZE THAT FUNCTION SOMEHOW. OR JUST THAT LOGIC.

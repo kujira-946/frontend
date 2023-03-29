@@ -1,5 +1,5 @@
-import { memo, useRef } from "react";
 import styled from "styled-components";
+import { memo, useRef } from "react";
 import { useSignal } from "@preact/signals-react";
 
 import * as Styles from "@/utils/styles";
@@ -98,7 +98,6 @@ type Props = {
   borderRadius?: Types.PxAsRem;
 
   errorMessage?: string;
-  forwardText?: string;
   placeholder: string;
   userInput: string;
   setUserInput: (event: Types.Input) => void;
@@ -107,6 +106,7 @@ type Props = {
 
   hasValue?: boolean;
   frozen?: boolean;
+  isCost?: true;
 };
 
 const ExportedComponent = (props: Props) => {
@@ -144,7 +144,9 @@ const ExportedComponent = (props: Props) => {
       {props.errorMessage && <ErrorMessage>{props.errorMessage}</ErrorMessage>}
 
       <Body>
-        {props.forwardText && <ForwardText>{props.forwardText}</ForwardText>}
+        {props.isCost && props.userInput !== "" && !props.errorMessage && (
+          <ForwardText>$</ForwardText>
+        )}
 
         <Input
           placeholder={props.placeholder}

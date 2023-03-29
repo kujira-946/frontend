@@ -100,8 +100,6 @@ type Props = {
 };
 
 export const Dropdown = (props: Props) => {
-  console.log("Dropdown Loaded");
-  
   const { ui } = useContext(SignalsStoreContext);
   const opened = useSignal(true);
 
