@@ -76,11 +76,11 @@ const InputFieldForwardText = styled.span`
 const InputField = styled.input<SharedProps>`
   flex: 1;
   width: 100%;
-  color: ${(props: ThemeProps) => props.theme.text};
+  color: inherit;
   background-color: transparent;
   border: none;
-  font-size: ${Styles.pxAsRem.fourteen};
-  font-weight: ${Styles.fontWeights.medium};
+  font-size: inherit;
+  font-weight: inherit;
   outline: none;
   cursor: text;
 

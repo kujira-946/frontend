@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useContext, useEffect } from "react";
 import { Signal, useSignal } from "@preact/signals-react";
 
+import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
@@ -70,57 +71,6 @@ const CategoryButton = styled.button<CategoryButtonProps & ThemeProps>`
       border: ${(props: ThemeProps) => props.theme.backgroundSix} solid 1px;
     }
   }
-`;
-
-type InputProps = {
-  hasValue: boolean;
-  frozen: boolean;
-  error?: boolean;
-};
-
-const Input = styled.input<InputProps>`
-  width: 100%;
-  padding: ${Styles.pxAsRem.four} ${Styles.pxAsRem.six};
-  color: ${(props: ThemeProps) => props.theme.text};
-  background-color: ${(props: InputProps & ThemeProps) => {
-    return props.hasValue
-      ? props.theme.backgroundTwo
-      : props.theme.backgroundOne;
-  }};
-  border: ${(props: InputProps & ThemeProps) => {
-    return props.error
-      ? `${props.theme.failure} solid 1px`
-      : props.frozen
-      ? `${props.theme.backgroundOne} solid 1px`
-      : props.hasValue
-      ? `${props.theme.backgroundTwo} solid 1px`
-      : `${props.theme.backgroundFour} solid 1px`;
-  }};
-  border-radius: ${Styles.pxAsRem.four};
-  transition: ease-in 0.1s;
-  outline: none;
-
-  ::placeholder {
-    ${(props: ThemeProps) => props.theme.backgroundSeven};
-  }
-
-  :focus {
-    border: ${(props: ThemeProps & InputProps) => {
-      return props.error
-        ? `${props.theme.failure} solid 1px`
-        : `${props.theme.backgroundSix} solid 1px`;
-    }};
-  }
-
-  @media (hover: hover) {
-    :hover {
-      border: ${(props: InputProps & ThemeProps) => {
-        return !props.frozen && `${props.theme.backgroundSix} solid 1px`;
-      }};
-    }
-  }
-
-  ${(props) => props.frozen && Styles.preventUserInteraction};
 `;
 
 const CloseButton = styled.div`
@@ -268,24 +218,22 @@ export const PurchaseCell = (props: Props) => {
         </CategoryButtons>
       )}
 
-      <Input
-        key="purchase-cell-description-input"
-        value={props.description}
+      <Globals.InputMini
         placeholder="Description"
-        onChange={updateDescription}
-        hasValue={props.description.length > 0}
+        userInput={props.description}
+        setUserInput={updateDescription}
+        hasValue={props.description !== ""}
         frozen={!!props.descriptionFrozen}
       />
 
-      <Input
-        key="purchase-cell-cost-input"
-        value={props.cost}
+      <Globals.InputMini
         placeholder="Cost"
-        onChange={updateCost}
+        forwardText={props.cost === "" ? "" : "$"}
+        userInput={props.cost}
+        setUserInput={updateCost}
         onBlur={roundCost}
-        hasValue={props.cost.length > 0}
+        hasValue={props.cost !== ""}
         frozen={!!props.costFrozen}
-        error={costError.value}
       />
 
       {!props.hideClose && props.onCloseClick && (
