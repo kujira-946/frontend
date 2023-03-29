@@ -66,8 +66,8 @@ const Onboarding = () => {
           Number(income.value) * (Number(savings.value) / 100);
         remainingBudget -= savedIncome;
       }
-      const roundedRemainingBudget = Functions.roundNumber(remainingBudget, 2);
-      supportingText.value = `$${roundedRemainingBudget} remaining`;
+      const formattedBudget = Functions.formattedNumber(remainingBudget);
+      supportingText.value = `$${formattedBudget} remaining`;
     } else {
       supportingText.value = "";
     }

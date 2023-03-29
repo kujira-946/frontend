@@ -160,6 +160,7 @@ export const Dropdown = (props: Props) => {
               onClick={props.addAction}
               size="medium"
               borderRadius="four"
+              color={Styles.background[ui.theme.value].eight}
               background={Styles.background[ui.theme.value].three}
               hoverBackground={Styles.background[ui.theme.value].five}
             >

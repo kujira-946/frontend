@@ -41,7 +41,6 @@ export const onboardingCopies: Copy[] = [
       "You never know when you’re going to have a rainy period in your life, so it’s important to set aside a part of your cash into your savings so that you can rely on it when that time comes.",
       "Enter the portion of your take-home income you’d like to save every month as a percentage in the input field below.",
       "If you’re not sure how much you want to save, a common percentage-based budget is the 50/30/20 rule, where 50% of your income goes to your needs, 30% goes to your wants, and 20% goes to your savings. If you want to start with that, enter “20” (without the quotes) below and proceed to the next step.",
-      "You are currently saving: ",
     ],
     submitButtonText: "Final Step",
   },

@@ -14,6 +14,14 @@ export function roundNumber(number: number, places: number): string {
   else return roundedNumber;
 }
 
+export function formattedNumber(number: number): string {
+  const roundedNumber = roundNumber(number, 2);
+  const numberToFormat = roundedNumber.slice(0, roundedNumber.length - 3);
+  const roundedDecimals = roundedNumber.slice(roundedNumber.length - 3);
+  const formattedNumber = Number(numberToFormat).toLocaleString("en-US");
+  return formattedNumber + roundedDecimals;
+}
+
 export function deepCopy<Arg>(arg: Arg): Arg {
   return JSON.parse(JSON.stringify(arg));
 }

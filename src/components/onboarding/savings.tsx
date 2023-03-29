@@ -1,5 +1,6 @@
 import { effect, Signal } from "@preact/signals-react";
 
+import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { Input } from "../input";
 
@@ -37,7 +38,8 @@ export const Savings = (props: Props) => {
   function calculateIncomeSaved(): string {
     if (props.errorMessage.value.length === 0 && Number(props.savings.value)) {
       const incomeSaved = props.income * (Number(props.savings.value) / 100);
-      return `: ${incomeSaved}`;
+      const formattedIncomeSaved = Functions.formattedNumber(incomeSaved);
+      return `: $${formattedIncomeSaved}`;
     } else {
       return "";
     }
