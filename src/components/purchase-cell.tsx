@@ -94,7 +94,7 @@ type Props = {
   cost: string;
   onCheckActive?: () => void;
   onCheckInactive?: () => void;
-  onCloseClick?: () => void;
+  deleteAction?: (index: number) => void;
 
   hideDrag?: true;
   hideCheck?: true;
@@ -106,7 +106,7 @@ type Props = {
 
 const categories: Category[] = ["Need", "Planned", "Impulse", "Regret"];
 
-const Component = (props: Props) => {
+const ExportedComponent = (props: Props) => {
   console.log("Purchase Cell Loaded");
 
   const { ui } = useContext(SignalsStoreContext);
@@ -119,9 +119,9 @@ const Component = (props: Props) => {
   const costError = useSignal("");
   const closeHovered = useSignal(false);
 
-  const updateDescription = useCallback(function (event: Types.Input): void {
+  function updateDescription(event: Types.Input): void {
     description.value = event.currentTarget.value;
-  }, []);
+  }
 
   function updateCost(event: Types.Input): void {
     cost.value = event.currentTarget.value;
@@ -251,9 +251,9 @@ const Component = (props: Props) => {
         frozen={!!props.costFrozen}
       />
 
-      {!props.hideClose && props.onCloseClick && (
+      {!props.hideClose && (
         <CloseButton
-          onClick={props.onCloseClick}
+          onClick={() => props.deleteAction && props.deleteAction(props.index)}
           onMouseEnter={() => (closeHovered.value = true)}
           onMouseLeave={() => (closeHovered.value = false)}
         >
@@ -269,4 +269,4 @@ const Component = (props: Props) => {
   );
 };
 
-export const PurchaseCell = memo(Component);
+export const PurchaseCell = memo(ExportedComponent);

@@ -93,13 +93,15 @@ type Props = {
   borderRadius?: Types.PxAsRem;
   title: string;
   total: string;
-  purchaseCellsSelected: boolean;
-  deleteSelectedAction: () => void;
+  purchaseCellsSelected?: boolean;
+  deleteSelectedAction?: () => void;
   deleteAllAction: () => void;
   addAction: () => void;
 };
 
 export const Dropdown = (props: Props) => {
+  console.log("Dropdown Loaded");
+  
   const { ui } = useContext(SignalsStoreContext);
   const opened = useSignal(true);
 
