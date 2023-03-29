@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useContext, useEffect } from "react";
+import { memo, useCallback, useContext, useEffect } from "react";
 import { effect, Signal, useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
@@ -85,6 +85,7 @@ const CloseButton = styled.div`
 // ========================================================================================= //
 
 type Props = {
+  borderRadius?: keyof typeof Styles.pxAsRem;
   index: number;
   expenses: Signal<Types.BarePurchase[]>;
   disableSubmit: Signal<boolean>;
@@ -95,7 +96,6 @@ type Props = {
   onCheckInactive?: () => void;
   onCloseClick?: () => void;
 
-  borderRadius?: keyof typeof Styles.pxAsRem;
   hideDrag?: true;
   hideCheck?: true;
   hideCategories?: true;
@@ -106,7 +106,9 @@ type Props = {
 
 const categories: Category[] = ["Need", "Planned", "Impulse", "Regret"];
 
-export const PurchaseCell = (props: Props) => {
+const Component = (props: Props) => {
+  console.log("Purchase Cell Loaded");
+
   const { ui } = useContext(SignalsStoreContext);
 
   const dragHovered = useSignal(false);
@@ -117,9 +119,9 @@ export const PurchaseCell = (props: Props) => {
   const costError = useSignal("");
   const closeHovered = useSignal(false);
 
-  function updateDescription(event: Types.Input): void {
+  const updateDescription = useCallback(function (event: Types.Input): void {
     description.value = event.currentTarget.value;
-  }
+  }, []);
 
   function updateCost(event: Types.Input): void {
     cost.value = event.currentTarget.value;
@@ -266,3 +268,5 @@ export const PurchaseCell = (props: Props) => {
     </Container>
   );
 };
+
+export const PurchaseCell = memo(Component);

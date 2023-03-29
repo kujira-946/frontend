@@ -1,10 +1,10 @@
+import { memo, useRef } from "react";
 import styled from "styled-components";
+import { useSignal } from "@preact/signals-react";
 
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { ThemeProps } from "./layout";
-import { useSignal } from "@preact/signals-react";
-import { useRef } from "react";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -109,7 +109,7 @@ type Props = {
   frozen?: boolean;
 };
 
-export const InputMini = (props: Props) => {
+const ExportedComponent = (props: Props) => {
   const inputFieldRef = useRef<any>(null);
   const focused = useSignal(false);
 
@@ -159,3 +159,5 @@ export const InputMini = (props: Props) => {
     </Container>
   );
 };
+
+export const InputMini = memo(ExportedComponent);

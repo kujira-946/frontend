@@ -18,6 +18,8 @@ type Props = {
 };
 
 export const ExpensesPartial = (props: Props) => {
+  console.log(props.title, "Page Loaded");
+
   const selectedPurchaseCells = useSignal<number[]>([]);
 
   useEffect(() => {
@@ -85,6 +87,7 @@ export const ExpensesPartial = (props: Props) => {
           return (
             <Global.PurchaseCell
               key={`onboarding-recurring-expenses-${expense}-${index}`}
+              borderRadius="four"
               index={index}
               expenses={props.expenses}
               disableSubmit={props.disableSubmit}
