@@ -50,14 +50,16 @@ export const Savings = (props: Props) => {
     }
   }
 
+  function setUserInput(event: Types.Input): void {
+    props.savings.value = event.currentTarget.value;
+  }
+
   return (
     <Container>
       <Input
         title={`Savings (%) ${calculateIncomeSaved()}`}
         userInput={props.savings.value}
-        setUserInput={(event: Types.Input) =>
-          (props.savings.value = event.currentTarget.value)
-        }
+        setUserInput={setUserInput}
         errorMessage={props.errorMessage.value}
       />
     </Container>
