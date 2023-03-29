@@ -306,6 +306,7 @@ export const Layout = (props: Props) => {
   const router = useRouter();
 
   const { ui } = useContext(SignalsStoreContext);
+  const { currentUser } = Selectors.useEntitiesSlice();
   const { loadingCurrentUser } = Selectors.useUiSlice();
 
   useEffect(() => {
@@ -315,13 +316,15 @@ export const Layout = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    if (userId) dispatch(fetchCurrentUserRequest(Number(userId)));
+    if (userId && !currentUser) {
+      dispatch(fetchCurrentUserRequest(Number(userId)));
+    }
 
     if (!jwtAccessToken && userId) {
       dispatch(logoutRequest(Number(userId)));
       Cookies.remove("id");
     }
-  }, [userId, jwtAccessToken]);
+  }, [userId, currentUser, jwtAccessToken]);
 
   return (
     <ThemeProvider theme={themes[ui.theme.value]}>

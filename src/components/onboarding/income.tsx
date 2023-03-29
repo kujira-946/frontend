@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { effect, Signal } from "@preact/signals-react";
+import { effect, Signal, useSignal } from "@preact/signals-react";
 
+import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { Input } from "../input";
 
@@ -21,6 +22,8 @@ type Props = {
 };
 
 export const Income = (props: Props) => {
+  const userInput = useSignal(props.income.value);
+
   effect(() => {
     if (props.income.value.length === 0) {
       props.errorMessage.value = "";
@@ -37,15 +40,23 @@ export const Income = (props: Props) => {
     }
   });
 
+  function onBlur(): void {
+    if (props.errorMessage.value === "") {
+      props.income.value = Functions.roundNumber(Number(props.income.value), 2);
+    }
+  }
+
   return (
     <Container>
       <Input
         title="Income ($)"
+        forwardText={props.income.value === "" ? "" : "$"}
         userInput={props.income.value}
         setUserInput={(event: Types.Input) =>
           (props.income.value = event.currentTarget.value)
         }
         errorMessage={props.errorMessage.value}
+        onBlur={onBlur}
       />
     </Container>
   );

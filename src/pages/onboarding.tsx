@@ -101,7 +101,9 @@ const Onboarding = () => {
       const recurringOverviewGroupData = {};
       const incomingOverviewGroupData = {};
 
-      console.log(overviewData);
+      console.log("overviewData:", overviewData);
+      console.log("recurringOverviewGroupData:", recurringOverviewGroupData);
+      console.log("incomingOverviewGroupData:", incomingOverviewGroupData);
     }
   }
 

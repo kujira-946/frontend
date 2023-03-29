@@ -53,10 +53,24 @@ const ErrorMessage = styled(motion.span)`
   font-weight: ${Styles.fontWeights.semiBold};
 `;
 
-const InputFieldAndIcon = styled.div`
+const Body = styled.div`
   display: flex;
   align-items: center;
   gap: ${Styles.pxAsRem.twelve};
+`;
+
+const InputFieldContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  color: ${(props: ThemeProps) => props.theme.text};
+  font-size: ${Styles.pxAsRem.fourteen};
+  font-weight: ${Styles.fontWeights.medium};
+`;
+
+const InputFieldForwardText = styled.span`
+  display: block;
 `;
 
 const InputField = styled.input<SharedProps>`
@@ -92,6 +106,7 @@ type Props = {
 
   title: string;
   errorMessage?: string;
+  forwardText?: string;
 
   userInput: string;
   setUserInput: (event: Types.Input) => void;
@@ -99,6 +114,9 @@ type Props = {
   hidden?: boolean;
   toggleHidden?: () => void;
   password?: true;
+
+  onFocus?: () => void;
+  onBlur?: () => void;
 };
 
 export const Input = (props: Props) => {
@@ -111,6 +129,16 @@ export const Input = (props: Props) => {
   function focusInputField(): void {
     inputFieldRef.current && inputFieldRef.current.focus();
     focused.value = true;
+  }
+
+  function onBlur(): void {
+    focused.value = false;
+    if (props.onBlur) props.onBlur();
+  }
+
+  function onFocus(): void {
+    focused.value = true;
+    if (props.onFocus) props.onFocus();
   }
 
   return (
@@ -131,17 +159,22 @@ export const Input = (props: Props) => {
 
       {props.errorMessage && <ErrorMessage>{props.errorMessage}</ErrorMessage>}
 
-      <InputFieldAndIcon>
-        <InputField
-          type={props.hidden ? "password" : "text"}
-          value={props.userInput}
-          placeholder={props.title}
-          ref={inputFieldRef}
-          onChange={props.setUserInput}
-          onBlur={() => (focused.value = false)}
-          onFocus={() => (focused.value = true)}
-          focused={focused.value}
-        />
+      <Body>
+        <InputFieldContainer>
+          {props.forwardText && (
+            <InputFieldForwardText>{props.forwardText}</InputFieldForwardText>
+          )}
+          <InputField
+            type={props.hidden ? "password" : "text"}
+            value={props.userInput}
+            placeholder={props.title}
+            ref={inputFieldRef}
+            onChange={props.setUserInput}
+            onBlur={onBlur}
+            onFocus={onFocus}
+            focused={focused.value}
+          />
+        </InputFieldContainer>
         {props.password &&
           (props.hidden ? (
             <IconContainer
@@ -170,7 +203,7 @@ export const Input = (props: Props) => {
               />
             </IconContainer>
           ))}
-      </InputFieldAndIcon>
+      </Body>
     </Container>
   );
 };
