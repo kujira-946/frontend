@@ -1,15 +1,8 @@
-import styled from "styled-components";
 import { effect, Signal } from "@preact/signals-react";
 
+import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
-import { Input } from "../input";
-
-// ========================================================================================= //
-// [ STYLED COMPONENTS ] =================================================================== //
-// ========================================================================================= //
-
-const Container = styled.section``;
 
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
@@ -38,24 +31,24 @@ export const Income = (props: Props) => {
     }
   });
 
+  const setUserInput = function (event: Types.Input): void {
+    props.income.value = event.currentTarget.value;
+  };
+
   function onBlur(): void {
-    if (props.errorMessage.value === "") {
+    if (props.errorMessage.value === "" && props.income.value !== "") {
       props.income.value = Functions.roundNumber(Number(props.income.value), 2);
     }
   }
 
   return (
-    <Container>
-      <Input
-        title="Income ($)"
-        forwardText={props.income.value === "" ? "" : "$"}
-        userInput={props.income.value}
-        setUserInput={(event: Types.Input) =>
-          (props.income.value = event.currentTarget.value)
-        }
-        errorMessage={props.errorMessage.value}
-        onBlur={onBlur}
-      />
-    </Container>
+    <Globals.Input
+      title="Income ($)"
+      forwardText={props.income.value === "" ? "" : "$"}
+      userInput={props.income.value}
+      setUserInput={setUserInput}
+      errorMessage={props.errorMessage.value}
+      onBlur={onBlur}
+    />
   );
 };

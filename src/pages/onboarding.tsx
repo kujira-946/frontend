@@ -47,6 +47,8 @@ const Onboarding = () => {
   effect(() => {
     if (currentPage.value === 1) {
       disableSubmit.value = false;
+    } else if (disableSubmit.value) {
+      supportingText.value = "";
     } else if (recurringExpensesTotal.value < 0) {
       recurringExpensesTotal.value = 0;
     } else if (incomingPurchasesTotal.value < 0) {
