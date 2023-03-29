@@ -135,7 +135,11 @@ export const InputMini = (props: Props) => {
       frozen={props.frozen}
       error={!!props.errorMessage}
       onClick={focusInputField}
-      style={{ borderRadius: props.borderRadius || Styles.pxAsRem.six }}
+      style={{
+        borderRadius: props.borderRadius
+          ? Styles.pxAsRem[props.borderRadius]
+          : Styles.pxAsRem.six,
+      }}
     >
       {props.errorMessage && <ErrorMessage>{props.errorMessage}</ErrorMessage>}
 

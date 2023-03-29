@@ -229,6 +229,7 @@ export const PurchaseCell = (props: Props) => {
       )}
 
       <Globals.InputMini
+        borderRadius={props.borderRadius}
         placeholder="Description"
         userInput={props.description}
         setUserInput={updateDescription}
@@ -237,6 +238,7 @@ export const PurchaseCell = (props: Props) => {
       />
 
       <Globals.InputMini
+        borderRadius={props.borderRadius}
         placeholder="Cost"
         errorMessage={costError.value}
         forwardText={props.cost === "" ? "" : "$"}
