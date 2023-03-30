@@ -30,6 +30,8 @@ const Parent = styled.form<SharedProps>`
   background-color: ${(props) => {
     return props.overlay ? Styles.overlay : "transparent";
   }};
+
+  ${Styles.setMediaPaddings()};
 `;
 
 const Child = styled(motion.main)<SharedProps>`
@@ -39,6 +41,7 @@ const Child = styled(motion.main)<SharedProps>`
   padding: ${Styles.pxAsRem.sixteen};
   width: 100%;
   max-width: 600px;
+  max-height: 90%;
   border-radius: ${Styles.pxAsRem.six};
 
   ${(props: SharedProps & ThemeProps) => {

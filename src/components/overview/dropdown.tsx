@@ -25,7 +25,7 @@ const Container = styled.section<ContainerProps>`
       : `${props.theme.backgroundFour} solid 1px`;
   }};
   border-radius: ${(props) => props.borderRadius || Styles.pxAsRem.six};
-  overflow: hidden;
+  overflow-y: auto;
 
   @media (hover: hover) {
     :hover {
@@ -39,6 +39,10 @@ const Container = styled.section<ContainerProps>`
 type HeaderProps = { opened: boolean };
 
 const Header = styled.header<HeaderProps>`
+  position: sticky;
+  top: 0;
+  right: 0;
+  left: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -121,7 +125,7 @@ export const Dropdown = (props: Props) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.1, delay: 0 }}
+            transition={{ duration: 0, delay: 0 }}
           >
             <PurchaseCells>{props.children}</PurchaseCells>
 

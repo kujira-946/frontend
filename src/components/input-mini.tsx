@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import TextareaAutosize from "react-textarea-autosize";
 import { memo, useRef } from "react";
 import { useSignal } from "@preact/signals-react";
 
@@ -20,7 +21,7 @@ type ContainerProps = {
 const Container = styled.article<ContainerProps>`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
   padding: 0 ${Styles.pxAsRem.six};
   color: ${(props: ThemeProps) => props.theme.text};
@@ -72,10 +73,11 @@ const ForwardText = styled.span`
   display: block;
 `;
 
-type InputProps = { error?: boolean };
+type TextareaProps = { error?: boolean };
 
-const Input = styled.input<InputProps>`
+const Textarea = styled(TextareaAutosize)<TextareaProps>`
   width: 100%;
+  height: 100%;
   padding: ${Styles.pxAsRem.four} 0;
   color: inherit;
   background-color: transparent;
@@ -83,6 +85,7 @@ const Input = styled.input<InputProps>`
   font-size: inherit;
   font-weight: inherit;
   outline: none;
+  resize: none;
   cursor: text;
 
   ::placeholder {
@@ -148,13 +151,14 @@ const ExportedComponent = (props: Props) => {
           <ForwardText>$</ForwardText>
         )}
 
-        <Input
+        <Textarea
           placeholder={props.placeholder}
           value={props.userInput}
           ref={inputFieldRef}
           onChange={props.setUserInput}
           onBlur={onBlur}
           onFocus={onFocus}
+          minRows={1}
           error={!!props.errorMessage}
         />
       </Body>

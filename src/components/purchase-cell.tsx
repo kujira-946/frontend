@@ -73,6 +73,12 @@ const CategoryButton = styled.button<CategoryButtonProps & ThemeProps>`
   }
 `;
 
+const Inputs = styled.div`
+  display: flex;
+  gap: ${Styles.pxAsRem.eight};
+  width: 100%;
+`;
+
 const DeleteButton = styled.div`
   display: flex;
   justify-content: center;
@@ -226,28 +232,30 @@ const ExportedComponent = (props: Props) => {
         </CategoryButtons>
       )}
 
-      <Globals.InputMini
-        key={`purchase-cell-description-input-${props.selectionValue}`}
-        borderRadius={props.borderRadius}
-        placeholder="Description"
-        userInput={props.description}
-        setUserInput={updateDescription}
-        hasValue={!!props.description}
-        frozen={!!props.descriptionFrozen}
-      />
+      <Inputs>
+        <Globals.InputMini
+          key={`purchase-cell-description-input-${props.selectionValue}`}
+          borderRadius={props.borderRadius}
+          placeholder="Description"
+          userInput={props.description}
+          setUserInput={updateDescription}
+          hasValue={!!props.description}
+          frozen={!!props.descriptionFrozen}
+        />
 
-      <Globals.InputMini
-        key={`purchase-cell-cost-input-${props.selectionValue}`}
-        borderRadius={props.borderRadius}
-        placeholder="Cost"
-        errorMessage={costError.value}
-        userInput={props.cost}
-        setUserInput={updateCost}
-        onBlur={onCostBlur}
-        hasValue={!!props.cost}
-        frozen={!!props.costFrozen}
-        isCost
-      />
+        <Globals.InputMini
+          key={`purchase-cell-cost-input-${props.selectionValue}`}
+          borderRadius={props.borderRadius}
+          placeholder="Cost"
+          errorMessage={costError.value}
+          userInput={props.cost}
+          setUserInput={updateCost}
+          onBlur={onCostBlur}
+          hasValue={!!props.cost}
+          frozen={!!props.costFrozen}
+          isCost
+        />
+      </Inputs>
 
       {!props.hideClose && (
         <DeleteButton
