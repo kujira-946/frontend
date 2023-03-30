@@ -73,9 +73,10 @@ const Onboarding = () => {
   function createPurchases(): void {
     if (overviewGroups) {
       const recurringPurchasesData = recurringPurchases.value.filter(
-        (purchase: Types.OnboardingPurchase) => {
+        (purchase: Types.OnboardingPurchase, index: number) => {
           if (purchase.description) {
             return {
+              placement: index + 1,
               description: purchase.description,
               cost: Number(purchase.cost),
             };
@@ -83,9 +84,10 @@ const Onboarding = () => {
         }
       );
       const incomingPurchasesData = incomingPurchases.value.filter(
-        (purchase: Types.OnboardingPurchase) => {
+        (purchase: Types.OnboardingPurchase, index: number) => {
           if (purchase.description) {
             return {
+              placement: index + 1,
               description: purchase.description,
               cost: Number(purchase.cost),
             };
