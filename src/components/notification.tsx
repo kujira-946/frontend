@@ -14,7 +14,9 @@ import { NotificationType } from "@/utils/types";
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
-const Container = styled(motion.main)`
+type ContainerProps = { type: NotificationType };
+
+const Container = styled(motion.main)<ContainerProps>`
   position: fixed;
   top: 20px;
   left: 50%;
@@ -28,7 +30,7 @@ const Container = styled(motion.main)`
   max-width: 25rem;
   padding: ${Styles.pxAsRem.twelve};
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
-  border: ${(props: ThemeProps & { type: NotificationType }) => {
+  border: ${(props: ThemeProps & ContainerProps) => {
     return `${props.theme[props.type]} solid 2px`;
   }};
   border-radius: ${Styles.pxAsRem.six};
@@ -86,7 +88,7 @@ export const Notification = () => {
           }}
           exit={{ opacity: 0, transform: "translateX(-50%) translateY(-8px)" }}
           transition={{ duration: 0.3, delay: 0.4 }}
-          type={notification.type}
+          type={notification.type || "pending"}
         >
           <Title>{notification.title}</Title>
           <Body>{notification.body}</Body>

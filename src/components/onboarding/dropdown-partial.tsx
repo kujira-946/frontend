@@ -1,3 +1,4 @@
+import * as Drag from "react-beautiful-dnd";
 import { memo, useCallback, useEffect } from "react";
 import { Signal } from "@preact/signals-react";
 
@@ -68,18 +69,36 @@ const ExportedComponent = (props: Props) => {
       {props.purchases.value.map(
         (purchase: Types.OnboardingPurchase, index: number) => {
           return (
-            <Global.PurchaseCell
+            <Drag.Draggable
               key={`onboarding-${props.title}-purchases-${index}`}
-              borderRadius="four"
-              selectionValue={index}
-              disableSubmit={props.disableSubmit}
-              description={purchase.description}
-              cost={purchase.cost}
-              updatePurchase={updatePurchase}
-              deleteAction={deletePurchase}
-              hideCheck
-              hideCategories
-            />
+              draggableId={index.toString()}
+              index={index}
+            >
+              {(
+                provided: Drag.DraggableProvided,
+                snapshot: Drag.DraggableStateSnapshot
+              ) => {
+                return (
+                  <div
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    ref={provided.innerRef}
+                  >
+                    <Global.PurchaseCell
+                      borderRadius="four"
+                      selectionValue={index}
+                      disableSubmit={props.disableSubmit}
+                      description={purchase.description}
+                      cost={purchase.cost}
+                      updatePurchase={updatePurchase}
+                      deleteAction={deletePurchase}
+                      hideCheck
+                      hideCategories
+                    />
+                  </div>
+                );
+              }}
+            </Drag.Draggable>
           );
         }
       )}

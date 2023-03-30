@@ -81,14 +81,14 @@ export function fetchPurchaseRequest(purchaseId: number): PurchaseIdAction {
 }
 
 type PurchaseCreateAction = Types.SagaAction<{
-  data: Types.PurchaseCreateData;
+  createData: Types.PurchaseCreateData;
 }>;
 export function createPurchaseRequest(
-  data: Types.PurchaseCreateData
+  createData: Types.PurchaseCreateData
 ): PurchaseCreateAction {
   return {
     type: PurchasesActionTypes.CREATE_PURCHASE,
-    payload: { data },
+    payload: { createData },
   };
 }
 
@@ -106,15 +106,15 @@ export function bulkCreatePurchasesRequest(
 
 type PurchaseUpdateAction = Types.SagaAction<{
   purchaseId: number;
-  data: Types.PurchaseUpdateData;
+  updateData: Types.PurchaseUpdateData;
 }>;
 export function updatePurchaseRequest(
   purchaseId: number,
-  data: Types.PurchaseUpdateData
+  updateData: Types.PurchaseUpdateData
 ): PurchaseUpdateAction {
   return {
     type: PurchasesActionTypes.UPDATE_PURCHASE,
-    payload: { purchaseId, data },
+    payload: { purchaseId, updateData },
   };
 }
 
@@ -149,10 +149,8 @@ export function deleteAllPurchasesRequest(): Types.NullAction {
 function* fetchPurchases() {
   try {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
-    const response = yield Saga.call(axios.get, ApiRoutes.PURCHASES);
-    const { purchases } = normalize(response.data.data, [
-      purchasesSchema,
-    ]).entities;
+    const { data } = yield Saga.call(axios.get, ApiRoutes.PURCHASES);
+    const { purchases } = normalize(data.data, [purchasesSchema]).entities;
     yield Saga.put(
       Redux.entitiesActions.setPurchases(purchases as Types.PurchasesEntity)
     );
@@ -175,10 +173,12 @@ function* fetchOverviewGroupPurchases(action: OverviewGroupPurchasesAction) {
   try {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const endpoint = ApiRoutes.PURCHASES + `/fetch-overview-group-purchases`;
-    const response = yield Saga.call(axios.get, endpoint, action.payload);
-    const { purchases } = normalize(response.data.data, [
-      purchasesSchema,
-    ]).entities;
+    const { data } = yield Saga.call(
+      axios.get,
+      endpoint,
+      action.payload as any
+    );
+    const { purchases } = normalize(data.data, [purchasesSchema]).entities;
     yield Saga.put(
       Redux.entitiesActions.addPurchase(purchases as Types.PurchasesEntity)
     );
@@ -201,10 +201,12 @@ function* fetchLogbookEntryPurchases(action: LogbookEntryPurchasesAction) {
   try {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const endpoint = ApiRoutes.PURCHASES + `/fetch-logbook-entry-purchases`;
-    const response = yield Saga.call(axios.get, endpoint, action.payload);
-    const { purchases } = normalize(response.data.data, [
-      purchasesSchema,
-    ]).entities;
+    const { data } = yield Saga.call(
+      axios.get,
+      endpoint,
+      action.payload as any
+    );
+    const { purchases } = normalize(data.data, [purchasesSchema]).entities;
     yield Saga.put(
       Redux.entitiesActions.addPurchase(purchases as Types.PurchasesEntity)
     );
@@ -227,10 +229,12 @@ function* bulkFetchPurchases(action: PurchaseIdsAction) {
   try {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const endpoint = ApiRoutes.PURCHASES + `/bulk-fetch`;
-    const response = yield Saga.call(axios.get, endpoint, action.payload);
-    const { purchases } = normalize(response.data.data, [
-      purchasesSchema,
-    ]).entities;
+    const { data } = yield Saga.call(
+      axios.get,
+      endpoint,
+      action.payload as any
+    );
+    const { purchases } = normalize(data.data, [purchasesSchema]).entities;
     yield Saga.put(
       Redux.entitiesActions.addPurchase(purchases as Types.PurchasesEntity)
     );
@@ -254,8 +258,8 @@ function* fetchPurchase(action: PurchaseIdAction) {
     const { purchaseId } = action.payload;
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const endpoint = ApiRoutes.PURCHASES + `/${purchaseId}`;
-    const response = yield Saga.call(axios.get, endpoint);
-    const { purchase } = normalize(response.data.data, purchaseSchema).entities;
+    const { data } = yield Saga.call(axios.get, endpoint);
+    const { purchase } = normalize(data.data, purchaseSchema).entities;
     yield Saga.put(
       Redux.entitiesActions.addPurchase(purchase as Types.PurchasesEntity)
     );
@@ -277,12 +281,12 @@ function* fetchPurchase(action: PurchaseIdAction) {
 function* createPurchase(action: PurchaseCreateAction) {
   try {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
-    const response = yield Saga.call(
+    const { data } = yield Saga.call(
       axios.post,
       ApiRoutes.PURCHASES,
       action.payload
     );
-    const { purchase } = normalize(response.data.data, purchaseSchema).entities;
+    const { purchase } = normalize(data.data, purchaseSchema).entities;
     yield Saga.put(
       Redux.entitiesActions.addPurchase(purchase as Types.PurchasesEntity)
     );
@@ -305,10 +309,8 @@ function* bulkCreatePurchases(action: PurchaseBulkCreateAction) {
   try {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const endpoint = ApiRoutes.PURCHASES + `/bulk-create-purchases`;
-    const response = yield Saga.call(axios.post, endpoint, action.payload);
-    const { purchases } = normalize(response.data.data, [
-      purchasesSchema,
-    ]).entities;
+    const { data } = yield Saga.call(axios.post, endpoint, action.payload);
+    const { purchases } = normalize(data.data, [purchasesSchema]).entities;
     yield Saga.put(
       Redux.entitiesActions.addPurchase(purchases as Types.PurchasesEntity)
     );
@@ -329,11 +331,11 @@ function* bulkCreatePurchases(action: PurchaseBulkCreateAction) {
 
 function* updatePurchase(action: PurchaseUpdateAction) {
   try {
-    const { purchaseId, data } = action.payload;
+    const { purchaseId, updateData } = action.payload;
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const endpoint = ApiRoutes.PURCHASES + `/${purchaseId}`;
-    const response = yield Saga.call(axios.patch, endpoint, data);
-    const { purchase } = normalize(response.data.data, purchaseSchema).entities;
+    const { data } = yield Saga.call(axios.patch, endpoint, updateData);
+    const { purchase } = normalize(data.data, purchaseSchema).entities;
     yield Saga.put(
       Redux.entitiesActions.addPurchase(purchase as Types.PurchasesEntity)
     );

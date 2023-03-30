@@ -1,3 +1,4 @@
+import * as Drag from "react-beautiful-dnd";
 import styled from "styled-components";
 import { useContext } from "react";
 import { Signal, useSignal } from "@preact/signals-react";
@@ -107,57 +108,77 @@ export const Dropdown = (props: Props) => {
 
   const opened = useSignal(true);
 
+  function onDragEnd(): void {
+    console.log("On Drag End");
+  }
+
   return (
     <Container borderRadius={props.borderRadius} opened={opened.value}>
-      <Header
-        onClick={() => (opened.value = !opened.value)}
-        opened={opened.value}
-      >
-        <Title>
-          {props.title} ({props.purchases.value.length})
-        </Title>
-        <Total>${props.totalCost}</Total>
-      </Header>
+      <Drag.DragDropContext onDragEnd={onDragEnd}>
+        <Header
+          onClick={() => (opened.value = !opened.value)}
+          opened={opened.value}
+        >
+          <Title>
+            {props.title} ({props.purchases.value.length})
+          </Title>
+          <Total>${props.totalCost}</Total>
+        </Header>
 
-      <AnimatePresence>
-        {opened.value && (
-          <Body
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0, delay: 0 }}
-          >
-            <PurchaseCells>{props.children}</PurchaseCells>
-
-            <Global.Button
-              type="button"
-              onClick={props.deleteAllPurchases}
-              size="medium"
-              borderRadius="four"
-              color={Styles.background[ui.theme.value].seven}
-              hoverColor={Styles.background[ui.theme.value].eight}
-              background={Styles.background[ui.theme.value].one}
-              hoverBackground={Styles.background[ui.theme.value].three}
-              border={Styles.background[ui.theme.value].seven}
-              hoverBorder={Styles.background[ui.theme.value].eight}
+        <AnimatePresence>
+          {opened.value && (
+            <Body
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0, delay: 0 }}
             >
-              Delete All
-            </Global.Button>
+              <Drag.Droppable droppableId={Styles.overviewDropdownDroppableId}>
+                {(
+                  provided: Drag.DroppableProvided,
+                  snapshot: Drag.DroppableStateSnapshot
+                ) => {
+                  return (
+                    <PurchaseCells
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      {props.children}
+                    </PurchaseCells>
+                  );
+                }}
+              </Drag.Droppable>
 
-            <Global.Button
-              type="button"
-              onClick={props.addPurchase}
-              size="medium"
-              borderRadius="four"
-              color={Styles.background[ui.theme.value].eight}
-              background={Styles.background[ui.theme.value].three}
-              hoverBackground={Styles.background[ui.theme.value].five}
-            >
-              Add
-            </Global.Button>
-          </Body>
-        )}
-      </AnimatePresence>
+              <Global.Button
+                type="button"
+                onClick={props.deleteAllPurchases}
+                size="medium"
+                borderRadius="four"
+                color={Styles.background[ui.theme.value].seven}
+                hoverColor={Styles.background[ui.theme.value].eight}
+                background={Styles.background[ui.theme.value].one}
+                hoverBackground={Styles.background[ui.theme.value].three}
+                border={Styles.background[ui.theme.value].seven}
+                hoverBorder={Styles.background[ui.theme.value].eight}
+              >
+                Delete All
+              </Global.Button>
+
+              <Global.Button
+                type="button"
+                onClick={props.addPurchase}
+                size="medium"
+                borderRadius="four"
+                color={Styles.background[ui.theme.value].eight}
+                background={Styles.background[ui.theme.value].three}
+                hoverBackground={Styles.background[ui.theme.value].five}
+              >
+                Add
+              </Global.Button>
+            </Body>
+          )}
+        </AnimatePresence>
+      </Drag.DragDropContext>
     </Container>
   );
 };

@@ -51,27 +51,29 @@ export function fetchLogbookRequest(logbookId: number): LogbookIdAction {
   };
 }
 
-type LogbookCreateAction = Types.SagaAction<{ data: Types.LogbookCreateData }>;
+type LogbookCreateAction = Types.SagaAction<{
+  createData: Types.LogbookCreateData;
+}>;
 export function createLogbookRequest(
-  data: Types.LogbookCreateData
+  createData: Types.LogbookCreateData
 ): LogbookCreateAction {
   return {
     type: LogbooksActionTypes.CREATE_LOGBOOK,
-    payload: { data },
+    payload: { createData },
   };
 }
 
 type LogbookUpdateAction = Types.SagaAction<{
   logbookId: number;
-  data: Types.LogbookUpdateData;
+  updateData: Types.LogbookUpdateData;
 }>;
 export function updateLogbookRequest(
   logbookId: number,
-  data: Types.LogbookUpdateData
+  updateData: Types.LogbookUpdateData
 ): LogbookUpdateAction {
   return {
     type: LogbooksActionTypes.UPDATE_LOGBOOK,
-    payload: { logbookId, data },
+    payload: { logbookId, updateData },
   };
 }
 
@@ -89,10 +91,8 @@ export function deleteLogbookRequest(logbookId: number): LogbookIdAction {
 function* fetchLogbooks() {
   try {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
-    const response = yield Saga.call(axios.get, ApiRoutes.LOGBOOKS);
-    const { logbooks } = normalize(response.data.data, [
-      logbooksSchema,
-    ]).entities;
+    const { data } = yield Saga.call(axios.get, ApiRoutes.LOGBOOKS);
+    const { logbooks } = normalize(data.data, [logbooksSchema]).entities;
     yield Saga.put(
       Redux.entitiesActions.setLogbooks(logbooks as Types.LogbooksEntity)
     );
@@ -115,10 +115,12 @@ function* fetchUserLogbooks(action: UserLogbooksAction) {
   try {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const endpoint = ApiRoutes.LOGBOOKS + `/fetch-user-logbooks`;
-    const response = yield Saga.call(axios.get, endpoint, action.payload);
-    const { logbooks } = normalize(response.data.data, [
-      logbooksSchema,
-    ]).entities;
+    const { data } = yield Saga.call(
+      axios.get,
+      endpoint,
+      action.payload as any
+    );
+    const { logbooks } = normalize(data.data, [logbooksSchema]).entities;
     yield Saga.put(
       Redux.entitiesActions.addLogbook(logbooks as Types.LogbooksEntity)
     );
@@ -142,8 +144,8 @@ function* fetchLogbook(action: LogbookIdAction) {
     const { logbookId } = action.payload;
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const endpoint = ApiRoutes.LOGBOOKS + `/${logbookId}`;
-    const response = yield Saga.call(axios.get, endpoint);
-    const { logbook } = normalize(response.data.data, logbookSchema).entities;
+    const { data } = yield Saga.call(axios.get, endpoint);
+    const { logbook } = normalize(data.data, logbookSchema).entities;
     yield Saga.put(
       Redux.entitiesActions.addLogbook(logbook as Types.LogbooksEntity)
     );
@@ -164,10 +166,14 @@ function* fetchLogbook(action: LogbookIdAction) {
 
 function* createLogbook(action: LogbookCreateAction) {
   try {
-    const { data } = action.payload;
+    const { createData } = action.payload;
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
-    const response = yield Saga.call(axios.post, ApiRoutes.LOGBOOKS, data);
-    const { logbook } = normalize(response.data.data, logbookSchema).entities;
+    const { data } = yield Saga.call(
+      axios.post,
+      ApiRoutes.LOGBOOKS,
+      createData
+    );
+    const { logbook } = normalize(data.data, logbookSchema).entities;
     yield Saga.put(
       Redux.entitiesActions.addLogbook(logbook as Types.LogbooksEntity)
     );
@@ -188,11 +194,11 @@ function* createLogbook(action: LogbookCreateAction) {
 
 function* updateLogbook(action: LogbookUpdateAction) {
   try {
-    const { logbookId, data } = action.payload;
+    const { logbookId, updateData } = action.payload;
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const endpoint = ApiRoutes.LOGBOOKS + `/${logbookId}`;
-    const response = yield Saga.call(axios.patch, endpoint, data);
-    const { logbook } = normalize(response.data.data, logbookSchema).entities;
+    const { data } = yield Saga.call(axios.patch, endpoint, updateData);
+    const { logbook } = normalize(data.data, logbookSchema).entities;
     yield Saga.put(
       Redux.entitiesActions.addLogbook(logbook as Types.LogbooksEntity)
     );
