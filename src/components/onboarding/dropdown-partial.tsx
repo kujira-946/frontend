@@ -79,10 +79,9 @@ const ExportedComponent = (props: Props) => {
                 snapshot: Drag.DraggableStateSnapshot
               ) => {
                 return (
-                  <div
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    ref={provided.innerRef}
+                  <Global.DraggablePortalItem
+                    provided={provided}
+                    snapshot={snapshot}
                   >
                     <Global.PurchaseCell
                       borderRadius="four"
@@ -95,7 +94,7 @@ const ExportedComponent = (props: Props) => {
                       hideCheck
                       hideCategories
                     />
-                  </div>
+                  </Global.DraggablePortalItem>
                 );
               }}
             </Drag.Draggable>

@@ -1,10 +1,10 @@
 import localFont from "@next/font/local";
 import axios from "axios";
 import Cookies from "js-cookie";
+import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { ThemeProvider, createGlobalStyle } from "styled-components";
 
 import * as Constants from "@/utils/constants";
 import * as Selectors from "@/utils/selectors";
@@ -187,6 +187,8 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
+const Portal = styled.div``;
+
 type ThemeContents = {
   text: string;
   backgroundOne: string;
@@ -329,6 +331,7 @@ export const Layout = (props: Props) => {
   return (
     <ThemeProvider theme={themes[ui.theme.value]}>
       <GlobalStyles />
+      <Portal id="app-portal" />
       <Notification />
 
       {loadingCurrentUser ? (
