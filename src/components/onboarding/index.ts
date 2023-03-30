@@ -1,5 +1,5 @@
 import { Income } from "./income";
-import { ExpensesPartial } from "./expenses-partial";
+import { DropdownPartial } from "./dropdown-partial";
 import { Savings } from "./savings";
 
-export { Income, ExpensesPartial, Savings };
+export { Income, DropdownPartial, Savings };

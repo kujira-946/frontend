@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useContext } from "react";
-import { useSignal } from "@preact/signals-react";
+import { Signal, useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import * as Global from "@/components";
@@ -91,16 +91,16 @@ const PurchaseCells = styled.div`
 type Props = {
   children: React.ReactNode;
   borderRadius?: Types.PxAsRem;
-  title: string;
-  total: string;
-  purchaseCellsSelected?: boolean;
-  deleteSelectedAction?: () => void;
-  deleteAllAction: () => void;
-  addAction: () => void;
+  title: "Recurring" | "Incoming" | string;
+  totalCost: string;
+  purchases: Signal<Types.BarePurchase[]>;
+  deleteAllPurchases: () => void;
+  addPurchase: () => void;
 };
 
 export const Dropdown = (props: Props) => {
   const { ui } = useContext(SignalsStoreContext);
+
   const opened = useSignal(true);
 
   return (
@@ -109,8 +109,10 @@ export const Dropdown = (props: Props) => {
         onClick={() => (opened.value = !opened.value)}
         opened={opened.value}
       >
-        <Title>{props.title}</Title>
-        <Total>${props.total}</Total>
+        <Title>
+          {props.title} ({props.purchases.value.length})
+        </Title>
+        <Total>${props.totalCost}</Total>
       </Header>
 
       <AnimatePresence>
@@ -123,26 +125,9 @@ export const Dropdown = (props: Props) => {
           >
             <PurchaseCells>{props.children}</PurchaseCells>
 
-            {props.purchaseCellsSelected && (
-              <Global.Button
-                type="button"
-                onClick={props.deleteSelectedAction}
-                size="medium"
-                borderRadius="four"
-                color={Styles.background[ui.theme.value].seven}
-                hoverColor={Styles.background[ui.theme.value].eight}
-                background={Styles.background[ui.theme.value].one}
-                hoverBackground={Styles.background[ui.theme.value].three}
-                border={Styles.background[ui.theme.value].seven}
-                hoverBorder={Styles.background[ui.theme.value].eight}
-              >
-                Delete Selected
-              </Global.Button>
-            )}
-
             <Global.Button
               type="button"
-              onClick={props.deleteAllAction}
+              onClick={props.deleteAllPurchases}
               size="medium"
               borderRadius="four"
               color={Styles.background[ui.theme.value].seven}
@@ -157,7 +142,7 @@ export const Dropdown = (props: Props) => {
 
             <Global.Button
               type="button"
-              onClick={props.addAction}
+              onClick={props.addPurchase}
               size="medium"
               borderRadius="four"
               color={Styles.background[ui.theme.value].eight}

@@ -73,7 +73,7 @@ const CategoryButton = styled.button<CategoryButtonProps & ThemeProps>`
   }
 `;
 
-const CloseButton = styled.div`
+const DeleteButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -86,15 +86,19 @@ const CloseButton = styled.div`
 
 type Props = {
   borderRadius?: keyof typeof Styles.pxAsRem;
-  index: number;
-  expenses: Signal<Types.BarePurchase[]>;
-  disableSubmit: Signal<boolean>;
+  selectionValue: number;
+  disableSubmit?: Signal<boolean>;
 
   description: string;
   cost: string;
+  updatePurchase?: (
+    selectionValue: number,
+    description: string,
+    cost: string
+  ) => void;
   onCheckActive?: () => void;
   onCheckInactive?: () => void;
-  deleteAction?: (index: number) => void;
+  deleteAction?: (deletePosition: number) => void;
 
   hideDrag?: true;
   hideCheck?: true;
@@ -131,12 +135,6 @@ const ExportedComponent = (props: Props) => {
     }
   }
 
-  function updateExpenses(expense: Types.BarePurchase): void {
-    const updatedExpenses = Functions.deepCopy(props.expenses.value);
-    updatedExpenses[props.index] = expense;
-    props.expenses.value = updatedExpenses;
-  }
-
   useEffect(() => {
     if (checkboxActive.value && props.onCheckActive) {
       props.onCheckActive();
@@ -146,15 +144,15 @@ const ExportedComponent = (props: Props) => {
   }, [checkboxActive.value, props.onCheckActive, props.onCheckInactive]);
 
   useEffect(() => {
-    const expense: Types.BarePurchase = {
-      description: description.value,
-      cost: cost.value,
-    };
-    updateExpenses(expense);
+    if (props.updatePurchase) {
+      props.updatePurchase(props.selectionValue, description.value, cost.value);
+    }
   }, [description.value, cost.value]);
 
   useEffect(() => {
-    props.disableSubmit.value = !!costError.value;
+    if (props.disableSubmit) {
+      props.disableSubmit.value = !!costError.value;
+    }
   }, [costError.value]);
 
   effect(() => {
@@ -250,8 +248,10 @@ const ExportedComponent = (props: Props) => {
       />
 
       {!props.hideClose && (
-        <CloseButton
-          onClick={() => props.deleteAction && props.deleteAction(props.index)}
+        <DeleteButton
+          onClick={() =>
+            props.deleteAction && props.deleteAction(props.selectionValue)
+          }
           onMouseEnter={() => (closeHovered.value = true)}
           onMouseLeave={() => (closeHovered.value = false)}
         >
@@ -261,7 +261,7 @@ const ExportedComponent = (props: Props) => {
             hovered={closeHovered.value}
             hoveredFill={Styles.background[ui.theme.value].eight}
           />
-        </CloseButton>
+        </DeleteButton>
       )}
     </Container>
   );

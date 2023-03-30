@@ -14,76 +14,29 @@ import * as Types from "@/utils/types";
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
+const initialPurchases: Types.BarePurchase[] = [{ description: "", cost: "" }];
+
 const Onboarding = () => {
   const router = useRouter();
 
   const { currentUser } = Selectors.useEntitiesSlice();
 
-  // ↓↓↓ Onboarding Page Data ↓↓↓ //
+  // ↓↓↓ Confirmation Modal Component Data ↓↓↓ //
   const currentPage = useSignal(1);
-  const recurringExpensesTotal = useSignal(0);
+  const recurringPurchasesTotal = useSignal(0);
   const incomingPurchasesTotal = useSignal(0);
   const supportingText = useSignal("");
-  const errorMessage = useSignal("");
   const disableSubmit = useSignal(false);
 
   // ↓↓↓ Submission Data ↓↓↓ //
   const income = useSignal("");
-  const recurringExpenses = useSignal<Types.BarePurchase[]>([
-    { description: "", cost: "" },
-  ]);
-  const incomingPurchases = useSignal<Types.BarePurchase[]>([
-    { description: "", cost: "" },
-  ]);
+  const recurringPurchases = useSignal<Types.BarePurchase[]>(initialPurchases);
+  const incomingPurchases = useSignal<Types.BarePurchase[]>(initialPurchases);
   const savings = useSignal("");
-
-  useEffect(() => {
-    if (currentUser && currentUser.onboarded) {
-      router.push(Constants.ClientRoutes.LOGBOOKS);
-    }
-  }, [currentUser]);
-
-  // ↓↓↓ Handling Supporting Text Value ↓↓↓ //
-  effect(() => {
-    if (currentPage.value === 1) {
-      disableSubmit.value = false;
-    } else if (disableSubmit.value) {
-      supportingText.value = "";
-    } else if (recurringExpensesTotal.value < 0) {
-      recurringExpensesTotal.value = 0;
-    } else if (incomingPurchasesTotal.value < 0) {
-      incomingPurchasesTotal.value = 0;
-    } else if (currentPage.value === Constants.onboardingCopies.length) {
-      // NOTE : The function below should be invoked when clicking on the submit button on the last page, rather
-      //        than being automatically invoked.
-      // completeOnboarding();
-    } else if (Number(income.value)) {
-      let remainingBudget = Number(income.value);
-      remainingBudget -= recurringExpensesTotal.value;
-      remainingBudget -= incomingPurchasesTotal.value;
-      if (Number(savings.value)) {
-        const savedIncome =
-          Number(income.value) * (Number(savings.value) / 100);
-        remainingBudget -= savedIncome;
-      }
-      const formattedBudget = Functions.formattedNumber(remainingBudget);
-      supportingText.value = `$${formattedBudget} remaining`;
-    } else {
-      supportingText.value = "";
-    }
-  });
 
   function toPreviousPage(): void {
     if (currentPage.value - 1 > 0) currentPage.value -= 1;
     else currentPage.value = 1;
-  }
-
-  function toNextPage(): void {
-    if (currentPage.value + 1 <= Constants.onboardingCopies.length) {
-      currentPage.value += 1;
-    } else {
-      currentPage.value = Constants.onboardingCopies.length;
-    }
   }
 
   function completeOnboarding(): void {
@@ -109,6 +62,85 @@ const Onboarding = () => {
     }
   }
 
+  function toNextPage(): void {
+    if (currentPage.value + 1 <= Constants.onboardingCopies.length) {
+      currentPage.value += 1;
+    } else {
+      completeOnboarding();
+    }
+  }
+
+  function renderPage() {
+    switch (currentPage.value) {
+      case 2:
+        return (
+          <Components.Income income={income} disableSubmit={disableSubmit} />
+        );
+      case 3:
+        return (
+          <Components.DropdownPartial
+            key="onboarding-page-recurring-purchases"
+            title="Recurring"
+            totalCost={recurringPurchasesTotal}
+            purchases={recurringPurchases}
+            disableSubmit={disableSubmit}
+          />
+        );
+      case 4:
+        return (
+          <Components.DropdownPartial
+            key="onboarding-page-incoming-purchases"
+            title="Incoming"
+            totalCost={incomingPurchasesTotal}
+            purchases={incomingPurchases}
+            disableSubmit={disableSubmit}
+          />
+        );
+      case 5:
+        return (
+          <Components.Savings
+            income={Number(income.value)}
+            savings={savings}
+            disableSubmit={disableSubmit}
+          />
+        );
+      default:
+        return null;
+    }
+  }
+
+  useEffect(() => {
+    if (currentUser && currentUser.onboarded) {
+      router.push(Constants.ClientRoutes.LOGBOOKS);
+    }
+  }, [currentUser]);
+
+  // ↓↓↓ Handling Supporting Text Value ↓↓↓ //
+  effect(() => {
+    if (currentPage.value === 1) {
+      disableSubmit.value = false;
+    } else if (disableSubmit.value) {
+      supportingText.value = "";
+    } else if (recurringPurchasesTotal.value < 0) {
+      recurringPurchasesTotal.value = 0;
+    } else if (incomingPurchasesTotal.value < 0) {
+      incomingPurchasesTotal.value = 0;
+    } else if (Number(income.value)) {
+      let remainingBudget = Number(income.value);
+      remainingBudget -= recurringPurchasesTotal.value;
+      remainingBudget -= incomingPurchasesTotal.value;
+      if (Number(savings.value)) {
+        const savedIncome =
+          Number(income.value) * (Number(savings.value) / 100);
+        remainingBudget -= savedIncome;
+      }
+      const formattedBudget = Functions.formattedNumber(remainingBudget);
+      supportingText.value = `$${formattedBudget} remaining`;
+    } else {
+      supportingText.value = "";
+    }
+  });
+
   return (
     <>
       <Head>
@@ -132,36 +164,7 @@ const Onboarding = () => {
         showBackButton={currentPage.value === 1 ? false : true}
         showSubmitArrow
       >
-        {currentPage.value === 2 ? (
-          <Components.Income
-            income={income}
-            errorMessage={errorMessage}
-            disableSubmit={disableSubmit}
-          />
-        ) : currentPage.value === 3 ? (
-          <Components.ExpensesPartial
-            key="onboarding-page-recurring-expenses"
-            title="Recurring"
-            total={recurringExpensesTotal}
-            expenses={recurringExpenses}
-            disableSubmit={disableSubmit}
-          />
-        ) : currentPage.value === 4 ? (
-          <Components.ExpensesPartial
-            key="onboarding-page-incoming-purchases"
-            title="Incoming"
-            total={incomingPurchasesTotal}
-            expenses={incomingPurchases}
-            disableSubmit={disableSubmit}
-          />
-        ) : currentPage.value === 5 ? (
-          <Components.Savings
-            income={Number(income.value)}
-            savings={savings}
-            errorMessage={errorMessage}
-            disableSubmit={disableSubmit}
-          />
-        ) : null}
+        {renderPage()}
       </Globals.ConfirmationModal>
     </>
   );

@@ -22,7 +22,7 @@ export const onboardingCopies: Copy[] = [
     submitButtonText: "Monthly Recurring Expenses",
   },
   {
-    title: "Your monthly recurring expenses.",
+    title: "Your monthly recurring purchases.",
     bodyTexts: [
       "Most people have required monthly expenses that can be calculated and/or grouped into monthly segments, such as rent, grocery budget, gas, public transportation, subscription services, etc. If you have any expenses that occur on or can be grouped into consistent monthly payments, enter them all below.",
     ],
