@@ -34,7 +34,8 @@ import {
   LogbooksEntity,
   LogbookEntriesEntity,
   PurchasesEntity,
-} from "./entities";
+} from "./normalizr";
+import { OnboardingPurchase, OnboardingOverviewGroup } from "./onboarding";
 
 export type {
   // React
@@ -67,7 +68,7 @@ export type {
   SVGProps,
   PxAsRem,
 
-  // Entities
+  // Models
   User,
   Purchase,
   Overview,
@@ -82,9 +83,8 @@ export type {
   LogbooksEntity,
   LogbookEntriesEntity,
   PurchasesEntity,
-};
 
-export type BarePurchase = {
-  description: string;
-  cost: string;
+  // Onboarding
+  OnboardingPurchase,
+  OnboardingOverviewGroup,
 };

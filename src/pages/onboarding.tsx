@@ -14,12 +14,11 @@ import * as Types from "@/utils/types";
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-const initialPurchases: Types.BarePurchase[] = [{ description: "", cost: "" }];
-
 const Onboarding = () => {
   const router = useRouter();
 
-  const { currentUser } = Selectors.useEntitiesSlice();
+  const { currentUser, overviews, overviewGroups } =
+    Selectors.useEntitiesSlice();
 
   // ↓↓↓ Confirmation Modal Component Data ↓↓↓ //
   const currentPage = useSignal(1);
@@ -30,13 +29,77 @@ const Onboarding = () => {
 
   // ↓↓↓ Submission Data ↓↓↓ //
   const income = useSignal("");
-  const recurringPurchases = useSignal<Types.BarePurchase[]>(initialPurchases);
-  const incomingPurchases = useSignal<Types.BarePurchase[]>(initialPurchases);
+  const recurringPurchases = useSignal<Types.OnboardingPurchase[]>([
+    { description: "", cost: "" },
+  ]);
+  const incomingPurchases = useSignal<Types.OnboardingPurchase[]>([
+    { description: "", cost: "" },
+  ]);
   const savings = useSignal("");
 
   function toPreviousPage(): void {
     if (currentPage.value - 1 > 0) currentPage.value -= 1;
     else currentPage.value = 1;
+  }
+
+  function createOverview(): void {
+    const roundedIncome = Functions.roundNumber(Number(income.value), 2);
+    const roundedSavings = Functions.roundNumber(Number(savings.value), 2);
+    const overviewData = {
+      income: Number(roundedIncome),
+      savings: Number(roundedSavings),
+      ownerId: currentUser?.id,
+    };
+
+    console.log("Overview Data:", overviewData);
+  }
+
+  function createOverviewGroups(): void {
+    if (overviews) {
+      const recurringOverviewGroupData: Types.OnboardingOverviewGroup = {
+        name: "Recurring",
+        totalCost: recurringPurchasesTotal.value,
+      };
+      const incomingOverviewGroupData: Types.OnboardingOverviewGroup = {
+        name: "Incoming",
+        totalCost: incomingPurchasesTotal.value,
+      };
+
+      console.log("Recurring Overview Group Data:", recurringOverviewGroupData);
+      console.log("Incoming Overview Group Data:", incomingOverviewGroupData);
+    }
+  }
+
+  function createPurchases(): void {
+    if (overviewGroups) {
+      const recurringPurchasesData = recurringPurchases.value.filter(
+        (purchase: Types.OnboardingPurchase) => {
+          if (purchase.description) {
+            return {
+              description: purchase.description,
+              cost: Number(purchase.cost),
+            };
+          }
+        }
+      );
+      const incomingPurchasesData = incomingPurchases.value.filter(
+        (purchase: Types.OnboardingPurchase) => {
+          if (purchase.description) {
+            return {
+              description: purchase.description,
+              cost: Number(purchase.cost),
+            };
+          }
+        }
+      );
+
+      if (recurringPurchasesData.length > 0) {
+        console.log("Recurring Purchases:", recurringPurchasesData);
+      }
+      if (incomingPurchasesData.length > 0) {
+        console.log("Incoming Purchases:", incomingPurchasesData);
+      }
+    }
   }
 
   function completeOnboarding(): void {
@@ -45,20 +108,9 @@ const Onboarding = () => {
     // 3. (if Redux recurring & income overviews are not `null`) Set the user's `onboarded` status to `true`.
 
     if (Number(income.value) && Number(savings.value)) {
-      const roundedIncome = Functions.roundNumber(Number(income.value), 2);
-      const roundedSavings = Functions.roundNumber(Number(savings.value), 2);
-
-      const overviewData = {
-        income: Number(roundedIncome),
-        savings: Number(roundedSavings),
-        ownerId: currentUser?.id,
-      };
-      const recurringOverviewGroupData = {};
-      const incomingOverviewGroupData = {};
-
-      console.log("overviewData:", overviewData);
-      console.log("recurringOverviewGroupData:", recurringOverviewGroupData);
-      console.log("incomingOverviewGroupData:", incomingOverviewGroupData);
+      createOverview();
+      createOverviewGroups();
+      createPurchases();
     }
   }
 

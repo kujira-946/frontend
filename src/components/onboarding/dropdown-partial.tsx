@@ -13,7 +13,7 @@ import * as Types from "@/utils/types";
 type Props = {
   title: "Recurring" | "Incoming";
   totalCost: Signal<number>;
-  purchases: Signal<Types.BarePurchase[]>;
+  purchases: Signal<Types.OnboardingPurchase[]>;
   disableSubmit: Signal<boolean>;
 };
 
@@ -34,7 +34,7 @@ const ExportedComponent = (props: Props) => {
       updatedPurchases[purchaseIndex] = {
         description: description,
         cost: cost,
-      } as Types.BarePurchase;
+      } as Types.OnboardingPurchase;
       props.purchases.value = updatedPurchases;
     },
     []
@@ -49,7 +49,7 @@ const ExportedComponent = (props: Props) => {
   useEffect(() => {
     if (!props.disableSubmit.value) {
       props.totalCost.value = 0;
-      props.purchases.value.forEach((purchase: Types.BarePurchase) => {
+      props.purchases.value.forEach((purchase: Types.OnboardingPurchase) => {
         props.totalCost.value += Number(purchase.cost);
       });
     } else {
@@ -66,7 +66,7 @@ const ExportedComponent = (props: Props) => {
       addPurchase={addPurchase}
     >
       {props.purchases.value.map(
-        (purchase: Types.BarePurchase, index: number) => {
+        (purchase: Types.OnboardingPurchase, index: number) => {
           return (
             <Global.PurchaseCell
               key={`onboarding-${props.title}-purchases-${index}`}

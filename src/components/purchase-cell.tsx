@@ -160,7 +160,7 @@ const ExportedComponent = (props: Props) => {
       if (!Number(cost.value)) {
         costError.value = "Must be a number.";
       } else if (Number(cost.value) < 0) {
-        costError.value = "Must be greater than 0.";
+        costError.value = "Please use positive values.";
       } else {
         costError.value = "";
       }
@@ -227,6 +227,7 @@ const ExportedComponent = (props: Props) => {
       )}
 
       <Globals.InputMini
+        key={`purchase-cell-description-input-${props.selectionValue}`}
         borderRadius={props.borderRadius}
         placeholder="Description"
         userInput={props.description}
@@ -236,6 +237,7 @@ const ExportedComponent = (props: Props) => {
       />
 
       <Globals.InputMini
+        key={`purchase-cell-cost-input-${props.selectionValue}`}
         borderRadius={props.borderRadius}
         placeholder="Cost"
         errorMessage={costError.value}

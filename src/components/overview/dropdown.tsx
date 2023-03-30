@@ -93,7 +93,7 @@ type Props = {
   borderRadius?: Types.PxAsRem;
   title: "Recurring" | "Incoming" | string;
   totalCost: string;
-  purchases: Signal<Types.BarePurchase[]>;
+  purchases: Signal<Types.OnboardingPurchase[]>;
   deleteAllPurchases: () => void;
   addPurchase: () => void;
 };
