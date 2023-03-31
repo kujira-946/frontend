@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, current, PayloadAction } from "@reduxjs/toolkit";
 
 import * as Types from "@/utils/types";
 import { deepCopy } from "@/utils/functions";
@@ -51,10 +51,16 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.currentUser) {
         const { relationalField, ids } = action.payload;
+        console.log("Ids:", ids);
         const currentUserCopy = deepCopy(state.currentUser);
         const relationalIds = currentUserCopy[relationalField];
-        currentUserCopy[relationalField] = [...relationalIds, ...ids];
-        state.currentUser = currentUserCopy;
+        if (relationalIds) {
+          currentUserCopy[relationalField] = [...relationalIds, ...ids];
+          state.currentUser = currentUserCopy;
+        } else {
+          currentUserCopy.overviewIds = [...ids];
+          state.currentUser = currentUserCopy;
+        }
       }
     },
 
@@ -101,11 +107,16 @@ const entitiesSlice = createSlice({
         const overviewsCopy = deepCopy(state.overviews);
         const currentOverview = overviewsCopy[overviewId];
         const relationalIds = currentOverview.overviewGroupIds;
-        currentOverview.overviewGroupIds = [
-          ...relationalIds,
-          ...overviewGroupIds,
-        ];
-        state.overviews = overviewsCopy;
+        if (relationalIds) {
+          currentOverview.overviewGroupIds = [
+            ...relationalIds,
+            ...overviewGroupIds,
+          ];
+          state.overviews = overviewsCopy;
+        } else {
+          currentOverview.overviewGroupIds = [...overviewGroupIds];
+          state.overviews = overviewsCopy;
+        }
       }
     },
     deleteOverview: (state: EntitiesState, action: PayloadAction<number>) => {

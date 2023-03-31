@@ -82,13 +82,16 @@ const Onboarding = () => {
     }
   }
 
-  function createOverviewGroups(overviewId: number): void {
+  function createRecurringOverviewGroup(overviewId: number): void {
     const recurringOverviewGroupData: Types.OverviewGroupCreateData = {
       name: "Recurring",
       totalCost: recurringPurchasesTotal.value,
       overviewId,
     };
     dispatch(createOverviewGroupRequest(recurringOverviewGroupData));
+  }
+
+  function createIncomingOverviewGroup(overviewId: number): void {
     const incomingOverviewGroupData: Types.OverviewGroupCreateData = {
       name: "Incoming",
       totalCost: incomingPurchasesTotal.value,
@@ -190,11 +193,15 @@ const Onboarding = () => {
 
   useEffect(() => {
     if (currentUser) {
-      if (overviews && !overviewGroups) {
+      if (currentUser.overviewIds && overviews && !overviewGroups) {
         const { overviewIds } = currentUser;
         const overview = overviews[overviewIds[0]];
-        createOverviewGroups(overview.id);
+        [null, null].forEach((_: any, index: number) => {
+          if (index === 0) createRecurringOverviewGroup(overview.id);
+          else createIncomingOverviewGroup(overview.id);
+        });
       } else if (overviews && overviewGroups && !purchases) {
+        console.log("Create overview group purchases");
         // if (the recurring overview group exists) {
         //   createRecurringPurchases(recurring overview group id)
         // }
@@ -202,6 +209,7 @@ const Onboarding = () => {
         //   createIncomingPurchases(incoming overview group id)
         // }
       } else if (overviews && overviewGroups && purchases) {
+        console.log("Set user as onboarded.");
         // setUserAsOnboarded(currentUser.id);
       }
     }

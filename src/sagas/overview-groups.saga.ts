@@ -228,11 +228,12 @@ function* fetchOverviewGroup(action: OverviewGroupIdAction) {
 
 function* createOverviewGroup(action: OverviewGroupCreateAction) {
   try {
+    const { createData } = action.payload;
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(true));
     const { data } = yield Saga.call(
       axios.post,
       ApiRoutes.OVERVIEW_GROUPS,
-      action.payload
+      createData
     );
     const normalizedData = normalize(data.data, overviewGroupSchema);
     const { overviewGroup } = normalizedData.entities;
@@ -244,7 +245,7 @@ function* createOverviewGroup(action: OverviewGroupCreateAction) {
     yield Saga.put(
       Redux.entitiesActions.addRelationalIdsToOverview({
         overviewId: action.payload.createData.overviewId,
-        overviewGroupIds: normalizedData.result,
+        overviewGroupIds: [normalizedData.result],
       })
     );
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));

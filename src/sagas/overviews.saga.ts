@@ -220,7 +220,7 @@ function* createOverview(action: OverviewCreateAction) {
   yield Saga.put(
     Redux.entitiesActions.addRelationalIdsToCurrentUser({
       relationalField: "overviewIds",
-      ids: normalizedData.result,
+      ids: [normalizedData.result],
     })
   );
   yield Saga.put(Redux.uiActions.setLoadingOverviews(false));

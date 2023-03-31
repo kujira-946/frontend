@@ -187,6 +187,7 @@ const ExportedComponent = (props: Props) => {
         <DragButton
           onMouseEnter={() => (dragHovered.value = true)}
           onMouseLeave={() => (dragHovered.value = false)}
+          tabIndex={-1}
           {...props.provided.dragHandleProps}
         >
           <Icons.Drag
