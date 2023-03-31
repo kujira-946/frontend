@@ -1,5 +1,4 @@
 export type OnboardingPurchase = {
-  placement?: number;
   description: string;
   cost: string;
 };

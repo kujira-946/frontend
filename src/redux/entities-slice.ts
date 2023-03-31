@@ -62,6 +62,21 @@ const entitiesSlice = createSlice({
     ) => {
       state.users = { ...state.users, ...action.payload };
     },
+    addRelationalIdsToUser: (
+      state: EntitiesState,
+      action: PayloadAction<{
+        userId: number;
+        relationalField: "overviewIds" | "logbookIds";
+        ids: number[];
+      }>
+    ) => {
+      if (state.users) {
+        const { userId, relationalField, ids } = action.payload;
+        const usersCopy = deepCopy(state.users);
+        usersCopy[userId][relationalField] = ids;
+        state.users = usersCopy;
+      }
+    },
     deleteUser: (state: EntitiesState, action: PayloadAction<number>) => {
       if (state.users) {
         const usersCopy = deepCopy(state.users);
@@ -82,6 +97,17 @@ const entitiesSlice = createSlice({
       action: PayloadAction<Types.OverviewsEntity>
     ) => {
       state.overviews = { ...state.overviews, ...action.payload };
+    },
+    addRelationalIdsToOverview: (
+      state: EntitiesState,
+      action: PayloadAction<{ overviewId: number; overviewGroupIds: number[] }>
+    ) => {
+      if (state.overviews) {
+        const { overviewId, overviewGroupIds } = action.payload;
+        const overviewsCopy = deepCopy(state.overviews);
+        overviewsCopy[overviewId].overviewGroupIds = overviewGroupIds;
+        state.overviews = overviewsCopy;
+      }
     },
     deleteOverview: (state: EntitiesState, action: PayloadAction<number>) => {
       if (state.overviews) {
@@ -104,14 +130,25 @@ const entitiesSlice = createSlice({
     ) => {
       state.overviewGroups = { ...state.overviewGroups, ...action.payload };
     },
+    addRelationalIdsToOverviewGroup: (
+      state: EntitiesState,
+      action: PayloadAction<{ overviewGroupId: number; purchaseIds: number[] }>
+    ) => {
+      if (state.overviewGroups) {
+        const { overviewGroupId, purchaseIds } = action.payload;
+        const overviewGroupsCopy = deepCopy(state.overviewGroups);
+        overviewGroupsCopy[overviewGroupId].purchaseIds = purchaseIds;
+        state.overviewGroups = overviewGroupsCopy;
+      }
+    },
     deleteOverviewGroup: (
       state: EntitiesState,
       action: PayloadAction<number>
     ) => {
       if (state.overviewGroups) {
-        const overviewsCopy = deepCopy(state.overviewGroups);
-        delete overviewsCopy[action.payload];
-        state.overviewGroups = overviewsCopy;
+        const overviewGroupsCopy = deepCopy(state.overviewGroups);
+        delete overviewGroupsCopy[action.payload];
+        state.overviewGroups = overviewGroupsCopy;
       }
     },
 
@@ -127,6 +164,17 @@ const entitiesSlice = createSlice({
       action: PayloadAction<Types.LogbooksEntity>
     ) => {
       state.logbooks = { ...state.logbooks, ...action.payload };
+    },
+    addRelationalIdsToLogbook: (
+      state: EntitiesState,
+      action: PayloadAction<{ logbookId: number; logbookEntryIds: number[] }>
+    ) => {
+      if (state.logbooks) {
+        const { logbookId, logbookEntryIds } = action.payload;
+        const logbooksCopy = deepCopy(state.logbooks);
+        logbooksCopy[logbookId].logbookEntryIds = logbookEntryIds;
+        state.logbooks = logbooksCopy;
+      }
     },
     deleteLogbook: (state: EntitiesState, action: PayloadAction<number>) => {
       if (state.logbooks) {
@@ -148,6 +196,17 @@ const entitiesSlice = createSlice({
       action: PayloadAction<Types.LogbookEntriesEntity>
     ) => {
       state.logbookEntries = { ...state.logbookEntries, ...action.payload };
+    },
+    addRelationalIdsToLogbookEntry: (
+      state: EntitiesState,
+      action: PayloadAction<{ logbookEntryId: number; purchaseIds: number[] }>
+    ) => {
+      if (state.logbookEntries) {
+        const { logbookEntryId, purchaseIds } = action.payload;
+        const logbookEntriesCopy = deepCopy(state.logbookEntries);
+        logbookEntriesCopy[logbookEntryId].purchaseIds = purchaseIds;
+        state.logbookEntries = logbookEntriesCopy;
+      }
     },
     deleteLogbookEntry: (
       state: EntitiesState,

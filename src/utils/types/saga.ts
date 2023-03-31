@@ -49,7 +49,7 @@ export type UserUpdateData = {
   birthday?: string;
   currency?: string;
   mobileNumber?: string;
-  onboarded?: string;
+  onboarded?: boolean;
   theme?: Theme;
 };
 

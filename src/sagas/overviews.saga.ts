@@ -133,10 +133,18 @@ function* fetchUserOverviews(action: UserOverviewsAction) {
       endpoint,
       action.payload as any
     );
-    const { overviews } = normalize(data.data, [overviewsSchema]).entities;
+    const normalizedData = normalize(data.data, [overviewsSchema]);
+    const { overviews } = normalizedData.entities;
     yield Saga.put(
       Redux.entitiesActions.addOverview(overviews as Types.OverviewsEntity)
     );
+    // yield Saga.put(
+    //   Redux.entitiesActions.addRelationalIdsToUser({
+    //     userId: action.payload.ownerId,
+    //     relationalField: "overviewIds",
+    //     ids: normalizedData.result,
+    //   })
+    // );
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
     console.log(error);
@@ -201,15 +209,20 @@ function* fetchOverview(action: OverviewIdAction) {
 }
 
 function* createOverview(action: OverviewCreateAction) {
+  const { createData } = action.payload;
   yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
-  const { data } = yield Saga.call(
-    axios.post,
-    ApiRoutes.OVERVIEWS,
-    action.payload
-  );
-  const { overview } = normalize(data.data, overviewSchema).entities;
+  const { data } = yield Saga.call(axios.post, ApiRoutes.OVERVIEWS, createData);
+  const normalizedData = normalize(data.data, overviewSchema);
+  const { overview } = normalizedData.entities;
   yield Saga.put(
     Redux.entitiesActions.addOverview(overview as Types.OverviewsEntity)
+  );
+  yield Saga.put(
+    Redux.entitiesActions.addRelationalIdsToUser({
+      userId: action.payload.createData.ownerId,
+      relationalField: "overviewIds",
+      ids: normalizedData.result,
+    })
   );
   yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   try {

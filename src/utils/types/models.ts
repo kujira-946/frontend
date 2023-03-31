@@ -19,8 +19,8 @@ export type User = {
   emailVerified: boolean;
   loggedIn: boolean;
   signedVerificationCode?: string;
-  overview: Overview[];
-  logbooks: Logbook[];
+  overviewIds: number[]; // has many overviews
+  logbookIds: number[]; // has many logbooks
 } & Dates;
 
 export type Category = "need" | "planned" | "impulse" | "regret";
@@ -30,31 +30,31 @@ export type Purchase = {
   category?: Category;
   description?: string;
   cost?: number;
-  overviewGroup?: OverviewGroup;
-  logbookEntry?: LogbookEntry;
+  overviewGroupId?: number; // belongs to an overview group
+  logbookEntryId?: number; // belongs to a logbook entry
 } & Dates;
 
 export type Overview = {
   id: number;
   income: number;
   savings: number;
-  groups: OverviewGroup[];
-  ownerId: number;
+  overviewGroupIds: number[]; // has many overview groups
+  ownerId: number; // belongs to a user
 } & Dates;
 
 export type OverviewGroup = {
   id: number;
   name: string;
   totalCost: number;
-  purchases: Purchase[];
-  overviewId: number;
+  purchaseIds: number[]; // has many purchases
+  overviewId: number; // belongs to an overview
 } & Dates;
 
 export type Logbook = {
   id: number;
   name: string;
-  entries: LogbookEntry[];
-  ownerId: number;
+  logbookEntryIds: number[]; // has many logbook entries
+  ownerId: number; // belongs to a user
 } & Dates;
 
 export type LogbookEntry = {
@@ -62,6 +62,6 @@ export type LogbookEntry = {
   date: Date;
   spent: number;
   budget?: number;
-  purchases: Purchase[];
-  logbookId: number;
+  purchaseIds: number[]; // has many purchases
+  logbookId: number; // belongs to a logbook
 } & Dates;
