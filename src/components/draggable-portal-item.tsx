@@ -13,19 +13,20 @@ if (typeof window !== "undefined") {
 type Props = {
   provided: Drag.DraggableProvided;
   snapshot: Drag.DraggableStateSnapshot;
+  preventEntireElementDrag?: true;
   children: React.ReactNode;
 };
 
 export const DraggablePortalItem = (props: Props) => {
   const inPortal = props.snapshot.isDragging;
 
+  let dragProps = { ...props.provided.draggableProps };
+  if (!props.preventEntireElementDrag) {
+    dragProps = { ...dragProps, ...props.provided.dragHandleProps };
+  }
+
   const child = (
-    <div
-      {...props.provided.draggableProps}
-      {...props.provided.dragHandleProps}
-      ref={props.provided.innerRef}
-      tabIndex={-1}
-    >
+    <div {...dragProps} ref={props.provided.innerRef} tabIndex={-1}>
       {props.children}
     </div>
   );

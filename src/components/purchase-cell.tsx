@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { memo, useContext, useEffect } from "react";
 import { effect, Signal, useSignal } from "@preact/signals-react";
+import { DraggableProvided } from "react-beautiful-dnd";
 
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
@@ -92,6 +93,7 @@ const DeleteButton = styled.div`
 
 type Props = {
   borderRadius?: keyof typeof Styles.pxAsRem;
+  provided: DraggableProvided;
   selectionValue: number;
   disableSubmit?: Signal<boolean>;
 
@@ -185,6 +187,7 @@ const ExportedComponent = (props: Props) => {
         <DragButton
           onMouseEnter={() => (dragHovered.value = true)}
           onMouseLeave={() => (dragHovered.value = false)}
+          {...props.provided.dragHandleProps}
         >
           <Icons.Drag
             height={12}

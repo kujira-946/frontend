@@ -95,9 +95,11 @@ const ExportedComponent = (props: Props) => {
                   <Global.DraggablePortalItem
                     provided={provided}
                     snapshot={snapshot}
+                    preventEntireElementDrag
                   >
                     <Global.PurchaseCell
                       borderRadius="four"
+                      provided={provided}
                       selectionValue={index}
                       disableSubmit={props.disableSubmit}
                       description={purchase.description}
