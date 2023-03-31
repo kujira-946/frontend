@@ -14,6 +14,7 @@ import * as Types from "@/utils/types";
 import { updateUserRequest } from "@/sagas/users.saga";
 import { createOverviewRequest } from "@/sagas/overviews.saga";
 import { createOverviewGroupRequest } from "@/sagas/overview-groups.saga";
+import { bulkCreatePurchasesRequest } from "@/sagas/purchases.saga";
 
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
@@ -101,37 +102,39 @@ const Onboarding = () => {
   }
 
   function createRecurringPurchases(overviewGroupId: number): void {
-    const recurringPurchasesData: Types.PurchaseCreateData[] =
-      recurringPurchases.value.filter(
-        (purchase: Types.OnboardingPurchase, index: number) => {
-          if (purchase.description) {
-            const purchaseData: Types.PurchaseCreateData = {
-              placement: index + 1,
-              description: purchase.description,
-              cost: Number(purchase.cost),
-              overviewGroupId,
-            };
-            return purchaseData;
-          }
+    const recurringPurchasesData: Types.PurchaseCreateData[] = [];
+    recurringPurchases.value.forEach(
+      (purchase: Types.OnboardingPurchase, index: number) => {
+        if (purchase.description) {
+          const recurringPurchaseData: Types.PurchaseCreateData = {
+            placement: index + 1,
+            description: purchase.description,
+            cost: Number(purchase.cost),
+            overviewGroupId,
+          };
+          recurringPurchasesData.push(recurringPurchaseData);
         }
-      );
+      }
+    );
+    dispatch(bulkCreatePurchasesRequest(recurringPurchasesData));
   }
 
   function createIncomingPurchases(overviewGroupId: number): void {
-    const incomingPurchasesData: Types.PurchaseCreateData[] =
-      incomingPurchases.value.filter(
-        (purchase: Types.OnboardingPurchase, index: number) => {
-          if (purchase.description) {
-            const purchaseData: Types.PurchaseCreateData = {
-              placement: index + 1,
-              description: purchase.description,
-              cost: Number(purchase.cost),
-              overviewGroupId,
-            };
-            return purchaseData;
-          }
+    const incomingPurchasesData: Types.PurchaseCreateData[] = [];
+    incomingPurchases.value.forEach(
+      (purchase: Types.OnboardingPurchase, index: number) => {
+        if (purchase.description) {
+          const recurringPurchaseData: Types.PurchaseCreateData = {
+            placement: index + 1,
+            description: purchase.description,
+            cost: Number(purchase.cost),
+            overviewGroupId,
+          };
+          incomingPurchasesData.push(recurringPurchaseData);
         }
-      );
+      }
+    );
+    dispatch(bulkCreatePurchasesRequest(incomingPurchasesData));
   }
 
   function setUserAsOnboarded(currentUserId: number): void {
@@ -200,14 +203,22 @@ const Onboarding = () => {
           if (index === 0) createRecurringOverviewGroup(overview.id);
           else createIncomingOverviewGroup(overview.id);
         });
-      } else if (overviews && overviewGroups && !purchases) {
-        console.log("Create overview group purchases");
-        // if (the recurring overview group exists) {
-        //   createRecurringPurchases(recurring overview group id)
-        // }
-        // if (the incoming overview group exists) {
-        //   createIncomingPurchases(incoming overview group id)
-        // }
+      } else if (
+        currentUser.overviewIds &&
+        overviews &&
+        overviewGroups &&
+        !purchases
+      ) {
+        const { overviewIds } = currentUser;
+        const { overviewGroupIds } = overviews[overviewIds[0]];
+        overviewGroupIds.forEach((overviewGroupId: number) => {
+          const currentOverviewGroup = overviewGroups[overviewGroupId];
+          if (currentOverviewGroup.name === "Recurring") {
+            createRecurringPurchases(currentOverviewGroup.id);
+          } else if (currentOverviewGroup.name === "Incoming") {
+            createIncomingPurchases(currentOverviewGroup.id);
+          }
+        });
       } else if (overviews && overviewGroups && purchases) {
         console.log("Set user as onboarded.");
         // setUserAsOnboarded(currentUser.id);

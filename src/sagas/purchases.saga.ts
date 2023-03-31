@@ -280,16 +280,33 @@ function* fetchPurchase(action: PurchaseIdAction) {
 
 function* createPurchase(action: PurchaseCreateAction) {
   try {
+    const { createData } = action.payload;
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const { data } = yield Saga.call(
       axios.post,
       ApiRoutes.PURCHASES,
-      action.payload
+      createData
     );
-    const { purchase } = normalize(data.data, purchaseSchema).entities;
+    const normalizedData = normalize(data.data, purchaseSchema);
+    const { purchase } = normalizedData.entities;
     yield Saga.put(
       Redux.entitiesActions.addPurchase(purchase as Types.PurchasesEntity)
     );
+    if (createData.overviewGroupId) {
+      yield Saga.put(
+        Redux.entitiesActions.addRelationalIdsToOverviewGroup({
+          overviewGroupId: createData.overviewGroupId,
+          purchaseIds: [normalizedData.result],
+        })
+      );
+    } else if (createData.logbookEntryId) {
+      yield Saga.put(
+        Redux.entitiesActions.addRelationalIdsToLogbookEntry({
+          logbookEntryId: createData.logbookEntryId,
+          purchaseIds: [normalizedData.result],
+        })
+      );
+    }
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     console.log(error);
@@ -307,13 +324,30 @@ function* createPurchase(action: PurchaseCreateAction) {
 
 function* bulkCreatePurchases(action: PurchaseBulkCreateAction) {
   try {
+    const { purchasesData } = action.payload;
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const endpoint = ApiRoutes.PURCHASES + `/bulk-create-purchases`;
-    const { data } = yield Saga.call(axios.post, endpoint, action.payload);
-    const { purchases } = normalize(data.data, [purchasesSchema]).entities;
+    const { data } = yield Saga.call(axios.post, endpoint, { purchasesData });
+    const normalizedData = normalize(data.data, [purchasesSchema]);
+    const { purchases } = normalizedData.entities;
     yield Saga.put(
       Redux.entitiesActions.addPurchase(purchases as Types.PurchasesEntity)
     );
+    if (purchasesData[0].overviewGroupId) {
+      yield Saga.put(
+        Redux.entitiesActions.addRelationalIdsToOverviewGroup({
+          overviewGroupId: purchasesData[0].overviewGroupId,
+          purchaseIds: normalizedData.result,
+        })
+      );
+    } else if (purchasesData[0].logbookEntryId) {
+      yield Saga.put(
+        Redux.entitiesActions.addRelationalIdsToLogbookEntry({
+          logbookEntryId: purchasesData[0].logbookEntryId,
+          purchaseIds: normalizedData.result,
+        })
+      );
+    }
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     console.log(error);

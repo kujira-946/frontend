@@ -1,7 +1,7 @@
-import { createSlice, current, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import * as Types from "@/utils/types";
-import { deepCopy } from "@/utils/functions";
+import { deepCopy, removeDuplicatesFromArray } from "@/utils/functions";
 
 // ========================================================================================= //
 // [ TYPES ] =============================================================================== //
@@ -51,14 +51,16 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.currentUser) {
         const { relationalField, ids } = action.payload;
-        console.log("Ids:", ids);
         const currentUserCopy = deepCopy(state.currentUser);
         const relationalIds = currentUserCopy[relationalField];
         if (relationalIds) {
-          currentUserCopy[relationalField] = [...relationalIds, ...ids];
+          currentUserCopy[relationalField] = removeDuplicatesFromArray([
+            ...relationalIds,
+            ...ids,
+          ]);
           state.currentUser = currentUserCopy;
         } else {
-          currentUserCopy.overviewIds = [...ids];
+          currentUserCopy.overviewIds = removeDuplicatesFromArray([...ids]);
           state.currentUser = currentUserCopy;
         }
       }
@@ -108,13 +110,15 @@ const entitiesSlice = createSlice({
         const currentOverview = overviewsCopy[overviewId];
         const relationalIds = currentOverview.overviewGroupIds;
         if (relationalIds) {
-          currentOverview.overviewGroupIds = [
+          currentOverview.overviewGroupIds = removeDuplicatesFromArray([
             ...relationalIds,
             ...overviewGroupIds,
-          ];
+          ]);
           state.overviews = overviewsCopy;
         } else {
-          currentOverview.overviewGroupIds = [...overviewGroupIds];
+          currentOverview.overviewGroupIds = removeDuplicatesFromArray([
+            ...overviewGroupIds,
+          ]);
           state.overviews = overviewsCopy;
         }
       }
@@ -149,8 +153,18 @@ const entitiesSlice = createSlice({
         const overviewGroupsCopy = deepCopy(state.overviewGroups);
         const currentOverviewGroup = overviewGroupsCopy[overviewGroupId];
         const relationalIds = currentOverviewGroup.purchaseIds;
-        currentOverviewGroup.purchaseIds = [...relationalIds, ...purchaseIds];
-        state.overviewGroups = overviewGroupsCopy;
+        if (relationalIds) {
+          currentOverviewGroup.purchaseIds = removeDuplicatesFromArray([
+            ...relationalIds,
+            ...purchaseIds,
+          ]);
+          state.overviewGroups = overviewGroupsCopy;
+        } else {
+          currentOverviewGroup.purchaseIds = removeDuplicatesFromArray([
+            ...purchaseIds,
+          ]);
+          state.overviewGroups = overviewGroupsCopy;
+        }
       }
     },
     deleteOverviewGroup: (
@@ -186,8 +200,18 @@ const entitiesSlice = createSlice({
         const logbooksCopy = deepCopy(state.logbooks);
         const currentLogbook = logbooksCopy[logbookId];
         const relationalIds = currentLogbook.logbookEntryIds;
-        currentLogbook.logbookEntryIds = [...relationalIds, ...logbookEntryIds];
-        state.logbooks = logbooksCopy;
+        if (relationalIds) {
+          currentLogbook.logbookEntryIds = removeDuplicatesFromArray([
+            ...relationalIds,
+            ...logbookEntryIds,
+          ]);
+          state.logbooks = logbooksCopy;
+        } else {
+          currentLogbook.logbookEntryIds = removeDuplicatesFromArray([
+            ...logbookEntryIds,
+          ]);
+          state.logbooks = logbooksCopy;
+        }
       }
     },
     deleteLogbook: (state: EntitiesState, action: PayloadAction<number>) => {
@@ -220,8 +244,18 @@ const entitiesSlice = createSlice({
         const logbookEntriesCopy = deepCopy(state.logbookEntries);
         const currentLogbookEntry = logbookEntriesCopy[logbookEntryId];
         const relationalIds = currentLogbookEntry.purchaseIds;
-        currentLogbookEntry.purchaseIds = [...relationalIds, ...purchaseIds];
-        state.logbookEntries = logbookEntriesCopy;
+        if (relationalIds) {
+          currentLogbookEntry.purchaseIds = removeDuplicatesFromArray([
+            ...relationalIds,
+            ...purchaseIds,
+          ]);
+          state.logbookEntries = logbookEntriesCopy;
+        } else {
+          currentLogbookEntry.purchaseIds = removeDuplicatesFromArray([
+            ...purchaseIds,
+          ]);
+          state.logbookEntries = logbookEntriesCopy;
+        }
       }
     },
     deleteLogbookEntry: (
