@@ -19,6 +19,18 @@ type Props = {
 };
 
 const ExportedComponent = (props: Props) => {
+  function onDragEnd(
+    result: Drag.DropResult,
+    provided: Drag.ResponderProvided
+  ): void {
+    const updatedPurchases = Functions.deepCopy(props.purchases.value);
+    const draggedElement = updatedPurchases.splice(result.source.index, 1);
+    if (result.destination) {
+      updatedPurchases.splice(result.destination.index, 0, ...draggedElement);
+      props.purchases.value = updatedPurchases;
+    }
+  }
+
   function deleteAllPurchases(): void {
     props.purchases.value = [];
   }
@@ -63,6 +75,7 @@ const ExportedComponent = (props: Props) => {
       title={props.title}
       totalCost={Functions.roundNumber(props.totalCost.value, 2)}
       purchases={props.purchases}
+      onDragEnd={onDragEnd}
       deleteAllPurchases={deleteAllPurchases}
       addPurchase={addPurchase}
     >

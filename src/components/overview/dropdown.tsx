@@ -99,6 +99,10 @@ type Props = {
   title: "Recurring" | "Incoming" | string;
   totalCost: string;
   purchases: Signal<Types.OnboardingPurchase[]>;
+  onDragEnd: (
+    result: Drag.DropResult,
+    provided: Drag.ResponderProvided
+  ) => void;
   deleteAllPurchases: () => void;
   addPurchase: () => void;
 };
@@ -108,13 +112,9 @@ export const Dropdown = (props: Props) => {
 
   const opened = useSignal(true);
 
-  function onDragEnd(): void {
-    console.log("On Drag End");
-  }
-
   return (
     <Container borderRadius={props.borderRadius} opened={opened.value}>
-      <Drag.DragDropContext onDragEnd={onDragEnd}>
+      <Drag.DragDropContext onDragEnd={props.onDragEnd}>
         <Header
           onClick={() => (opened.value = !opened.value)}
           opened={opened.value}
