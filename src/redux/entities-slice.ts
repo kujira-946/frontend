@@ -41,11 +41,27 @@ const entitiesSlice = createSlice({
       action: PayloadAction<Types.User | null>
     ) => {
       state.currentUser = action.payload;
-      if (action.payload) {
-        const normalizedCurrentUser: Types.UsersEntity = {
-          [action.payload.id]: action.payload,
-        };
-        state.users = { ...state.users, ...normalizedCurrentUser };
+      // There currently is no reason to have a list of users, but that might be a thing
+      // later down the line, so... yeah, that's what this part is for.
+      // if (action.payload) {
+      //   const normalizedCurrentUser: Types.UsersEntity = {
+      //     [action.payload.id]: action.payload,
+      //   };
+      //   state.users = { ...state.users, ...normalizedCurrentUser };
+      // }
+    },
+    addRelationalIdsToCurrentUser: (
+      state: EntitiesState,
+      action: PayloadAction<{
+        relationalField: "overviewIds" | "logbookIds";
+        ids: number[];
+      }>
+    ) => {
+      if (state.currentUser) {
+        const { relationalField, ids } = action.payload;
+        const currentUserCopy = deepCopy(state.currentUser);
+        currentUserCopy[relationalField] = ids;
+        state.currentUser = currentUserCopy;
       }
     },
 
@@ -61,21 +77,6 @@ const entitiesSlice = createSlice({
       action: PayloadAction<Types.UsersEntity>
     ) => {
       state.users = { ...state.users, ...action.payload };
-    },
-    addRelationalIdsToUser: (
-      state: EntitiesState,
-      action: PayloadAction<{
-        userId: number;
-        relationalField: "overviewIds" | "logbookIds";
-        ids: number[];
-      }>
-    ) => {
-      if (state.users) {
-        const { userId, relationalField, ids } = action.payload;
-        const usersCopy = deepCopy(state.users);
-        usersCopy[userId][relationalField] = ids;
-        state.users = usersCopy;
-      }
     },
     deleteUser: (state: EntitiesState, action: PayloadAction<number>) => {
       if (state.users) {

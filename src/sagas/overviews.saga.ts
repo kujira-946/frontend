@@ -139,7 +139,7 @@ function* fetchUserOverviews(action: UserOverviewsAction) {
       Redux.entitiesActions.addOverview(overviews as Types.OverviewsEntity)
     );
     // yield Saga.put(
-    //   Redux.entitiesActions.addRelationalIdsToUser({
+    //   Redux.entitiesActions.addRelationalIdsToCurrentUser({
     //     userId: action.payload.ownerId,
     //     relationalField: "overviewIds",
     //     ids: normalizedData.result,
@@ -218,8 +218,7 @@ function* createOverview(action: OverviewCreateAction) {
     Redux.entitiesActions.addOverview(overview as Types.OverviewsEntity)
   );
   yield Saga.put(
-    Redux.entitiesActions.addRelationalIdsToUser({
-      userId: action.payload.createData.ownerId,
+    Redux.entitiesActions.addRelationalIdsToCurrentUser({
       relationalField: "overviewIds",
       ids: normalizedData.result,
     })
