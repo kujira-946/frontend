@@ -24,6 +24,7 @@ export const DraggablePortalItem = (props: Props) => {
       {...props.provided.draggableProps}
       {...props.provided.dragHandleProps}
       ref={props.provided.innerRef}
+      tabIndex={-1}
     >
       {props.children}
     </div>
