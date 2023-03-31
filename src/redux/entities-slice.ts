@@ -41,14 +41,6 @@ const entitiesSlice = createSlice({
       action: PayloadAction<Types.User | null>
     ) => {
       state.currentUser = action.payload;
-      // There currently is no reason to have a list of users, but that might be a thing
-      // later down the line, so... yeah, that's what this part is for.
-      // if (action.payload) {
-      //   const normalizedCurrentUser: Types.UsersEntity = {
-      //     [action.payload.id]: action.payload,
-      //   };
-      //   state.users = { ...state.users, ...normalizedCurrentUser };
-      // }
     },
     addRelationalIdsToCurrentUser: (
       state: EntitiesState,
@@ -60,7 +52,8 @@ const entitiesSlice = createSlice({
       if (state.currentUser) {
         const { relationalField, ids } = action.payload;
         const currentUserCopy = deepCopy(state.currentUser);
-        currentUserCopy[relationalField] = ids;
+        const relationalIds = currentUserCopy[relationalField];
+        currentUserCopy[relationalField] = [...relationalIds, ...ids];
         state.currentUser = currentUserCopy;
       }
     },
@@ -106,7 +99,12 @@ const entitiesSlice = createSlice({
       if (state.overviews) {
         const { overviewId, overviewGroupIds } = action.payload;
         const overviewsCopy = deepCopy(state.overviews);
-        overviewsCopy[overviewId].overviewGroupIds = overviewGroupIds;
+        const currentOverview = overviewsCopy[overviewId];
+        const relationalIds = currentOverview.overviewGroupIds;
+        currentOverview.overviewGroupIds = [
+          ...relationalIds,
+          ...overviewGroupIds,
+        ];
         state.overviews = overviewsCopy;
       }
     },
@@ -138,7 +136,9 @@ const entitiesSlice = createSlice({
       if (state.overviewGroups) {
         const { overviewGroupId, purchaseIds } = action.payload;
         const overviewGroupsCopy = deepCopy(state.overviewGroups);
-        overviewGroupsCopy[overviewGroupId].purchaseIds = purchaseIds;
+        const currentOverviewGroup = overviewGroupsCopy[overviewGroupId];
+        const relationalIds = currentOverviewGroup.purchaseIds;
+        currentOverviewGroup.purchaseIds = [...relationalIds, ...purchaseIds];
         state.overviewGroups = overviewGroupsCopy;
       }
     },
@@ -173,7 +173,9 @@ const entitiesSlice = createSlice({
       if (state.logbooks) {
         const { logbookId, logbookEntryIds } = action.payload;
         const logbooksCopy = deepCopy(state.logbooks);
-        logbooksCopy[logbookId].logbookEntryIds = logbookEntryIds;
+        const currentLogbook = logbooksCopy[logbookId];
+        const relationalIds = currentLogbook.logbookEntryIds;
+        currentLogbook.logbookEntryIds = [...relationalIds, ...logbookEntryIds];
         state.logbooks = logbooksCopy;
       }
     },
@@ -205,7 +207,9 @@ const entitiesSlice = createSlice({
       if (state.logbookEntries) {
         const { logbookEntryId, purchaseIds } = action.payload;
         const logbookEntriesCopy = deepCopy(state.logbookEntries);
-        logbookEntriesCopy[logbookEntryId].purchaseIds = purchaseIds;
+        const currentLogbookEntry = logbookEntriesCopy[logbookEntryId];
+        const relationalIds = currentLogbookEntry.purchaseIds;
+        currentLogbookEntry.purchaseIds = [...relationalIds, ...purchaseIds];
         state.logbookEntries = logbookEntriesCopy;
       }
     },

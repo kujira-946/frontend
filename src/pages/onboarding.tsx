@@ -191,7 +191,9 @@ const Onboarding = () => {
   useEffect(() => {
     if (currentUser) {
       if (overviews && !overviewGroups) {
-        // createOverviewGroups(overviews[0].id);
+        const { overviewIds } = currentUser;
+        const overview = overviews[overviewIds[0]];
+        createOverviewGroups(overview.id);
       } else if (overviews && overviewGroups && !purchases) {
         // if (the recurring overview group exists) {
         //   createRecurringPurchases(recurring overview group id)
