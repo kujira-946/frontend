@@ -1,16 +1,16 @@
-import { motion } from "framer-motion";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
-import { ThemeProps } from "@/components/layout"; 
+import { ThemeProps } from "@/components/layout";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
 const Container = styled(motion.article)`
-	position: absolute;
-	right: 0;
-	transform: translateY(-20%);
+  position: absolute;
+  right: 0;
+  transform: translateY(-20%);
   display: flex;
   flex-direction: column;
   width: 280px;

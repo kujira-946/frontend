@@ -4,7 +4,7 @@ import { Signal } from "@preact/signals-react";
 
 import * as Global from "@/components";
 import * as Overview from "@/components/overview";
-import * as Functions from "@/utils/functions/functions";
+import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 
 // ========================================================================================= //

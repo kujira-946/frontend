@@ -4,7 +4,7 @@ import { effect, Signal, useSignal } from "@preact/signals-react";
 
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
-import * as Functions from "@/utils/functions/functions";
+import * as Functions from "@/utils/functions";
 import * as Selectors from "@/utils/selectors";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";

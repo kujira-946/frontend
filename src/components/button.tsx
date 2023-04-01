@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { ThemeProps } from "./layout";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //

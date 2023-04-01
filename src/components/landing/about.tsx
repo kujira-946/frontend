@@ -4,6 +4,7 @@ import * as Globals from "@/components";
 import * as Constants from "@/utils/constants";
 import * as Styles from "@/utils/styles";
 import { ThemeProps } from "@/components/layout";
+
 import { AboutCopy } from "./about-copy";
 
 // ========================================================================================= //
