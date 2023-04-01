@@ -3,7 +3,7 @@ import axios from "axios";
 import { normalize, schema } from "normalizr";
 
 import * as Redux from "@/redux";
-import * as Functions from "@/utils/functions";
+import * as Functions from "@/utils/functions/functions";
 import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
 
@@ -104,6 +104,14 @@ function* fetchCurrentUser(action: UserIdAction) {
   }
 }
 
+function* updateCurrentUser(action: UserIdAction) {
+  try {
+    
+  } catch (error) {
+    
+  }
+}
+
 function* fetchUsers() {
   try {
     const { data } = yield Saga.call(axios.get, ApiRoutes.USERS);
@@ -180,6 +188,7 @@ function* deleteUser(action: UserIdAction) {
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     yield Saga.call(axios.delete, endpoint);
     yield Saga.put(Redux.entitiesActions.setCurrentUser(null));
+    // ↓↓↓ Bring this back whenever there comes a need to fetch multiple users. ↓↓↓ //
     // yield Saga.put(Redux.entitiesActions.deleteUser(userId));
     yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
   } catch (error) {

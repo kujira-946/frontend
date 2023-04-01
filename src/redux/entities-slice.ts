@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
-import { deepCopy, removeDuplicatesFromArray } from "@/utils/functions";
 
 export type EntitiesState = {
   currentUser: Types.User | null;
@@ -60,11 +60,13 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.currentUser) {
         const { relationalField, ids } = action.payload;
-        const currentUserCopy = deepCopy(state.currentUser);
+        const currentUserCopy = Functions.Functions.deepCopy(state.currentUser);
         const relationalIds = currentUserCopy[relationalField];
-        currentUserCopy[relationalField] = removeDuplicatesFromArray(ids);
+        currentUserCopy[relationalField] =
+          Functions.removeDuplicatesFromArray(ids);
         if (relationalIds) {
-          const uniqueRelationalIds = removeDuplicatesFromArray(relationalIds);
+          const uniqueRelationalIds =
+            Functions.removeDuplicatesFromArray(relationalIds);
           currentUserCopy[relationalField].concat(uniqueRelationalIds);
         }
         state.currentUser = currentUserCopy;
@@ -93,7 +95,7 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.users) {
         const { userId, user } = action.payload;
-        const updatedUsers = deepCopy(state.users);
+        const updatedUsers = Functions.deepCopy(state.users);
         updatedUsers[userId] = user;
         state.users = updatedUsers;
       }
@@ -104,12 +106,14 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.users) {
         const { userId, relationalField, ids } = action.payload;
-        const usersCopy = deepCopy(state.users);
+        const usersCopy = Functions.deepCopy(state.users);
         const selectedUser = usersCopy[userId];
         const relationalIds = selectedUser[relationalField];
-        selectedUser[relationalField] = removeDuplicatesFromArray(ids);
+        selectedUser[relationalField] =
+          Functions.removeDuplicatesFromArray(ids);
         if (relationalIds) {
-          const uniqueRelationalIds = removeDuplicatesFromArray(relationalIds);
+          const uniqueRelationalIds =
+            Functions.removeDuplicatesFromArray(relationalIds);
           selectedUser[relationalField].concat(uniqueRelationalIds);
         }
         state.users = usersCopy;
@@ -117,7 +121,7 @@ const entitiesSlice = createSlice({
     },
     deleteUser: (state: EntitiesState, action: PayloadAction<number>) => {
       if (state.users) {
-        const usersCopy = deepCopy(state.users);
+        const usersCopy = Functions.deepCopy(state.users);
         delete usersCopy[action.payload];
         state.users = usersCopy;
       }
@@ -145,13 +149,14 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.overviews) {
         const { overviewId, overviewGroupIds } = action.payload;
-        const overviewsCopy = deepCopy(state.overviews);
+        const overviewsCopy = Functions.deepCopy(state.overviews);
         const currentOverview = overviewsCopy[overviewId];
         const relationalIds = currentOverview.overviewGroupIds;
         currentOverview.overviewGroupIds =
-          removeDuplicatesFromArray(overviewGroupIds);
+          Functions.removeDuplicatesFromArray(overviewGroupIds);
         if (relationalIds) {
-          const uniqueRelationalIds = removeDuplicatesFromArray(relationalIds);
+          const uniqueRelationalIds =
+            Functions.removeDuplicatesFromArray(relationalIds);
           currentOverview.overviewGroupIds.concat(uniqueRelationalIds);
         }
         state.overviews = overviewsCopy;
@@ -159,7 +164,7 @@ const entitiesSlice = createSlice({
     },
     deleteOverview: (state: EntitiesState, action: PayloadAction<number>) => {
       if (state.overviews) {
-        const overviewsCopy = deepCopy(state.overviews);
+        const overviewsCopy = Functions.deepCopy(state.overviews);
         delete overviewsCopy[action.payload];
         state.overviews = overviewsCopy;
       }
@@ -187,13 +192,14 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.overviewGroups) {
         const { overviewGroupId, purchaseIds } = action.payload;
-        const overviewGroupsCopy = deepCopy(state.overviewGroups);
+        const overviewGroupsCopy = Functions.deepCopy(state.overviewGroups);
         const currentOverviewGroup = overviewGroupsCopy[overviewGroupId];
         const relationalIds = currentOverviewGroup.purchaseIds;
         currentOverviewGroup.purchaseIds =
-          removeDuplicatesFromArray(purchaseIds);
+          Functions.removeDuplicatesFromArray(purchaseIds);
         if (relationalIds) {
-          const uniqueRelationalIds = removeDuplicatesFromArray(relationalIds);
+          const uniqueRelationalIds =
+            Functions.removeDuplicatesFromArray(relationalIds);
           currentOverviewGroup.purchaseIds.concat(uniqueRelationalIds);
         }
         state.overviewGroups = overviewGroupsCopy;
@@ -204,7 +210,7 @@ const entitiesSlice = createSlice({
       action: PayloadAction<number>
     ) => {
       if (state.overviewGroups) {
-        const overviewGroupsCopy = deepCopy(state.overviewGroups);
+        const overviewGroupsCopy = Functions.deepCopy(state.overviewGroups);
         delete overviewGroupsCopy[action.payload];
         state.overviewGroups = overviewGroupsCopy;
       }
@@ -232,13 +238,14 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.logbooks) {
         const { logbookId, logbookEntryIds } = action.payload;
-        const logbooksCopy = deepCopy(state.logbooks);
+        const logbooksCopy = Functions.deepCopy(state.logbooks);
         const currentLogbook = logbooksCopy[logbookId];
         const relationalIds = currentLogbook.logbookEntryIds;
         currentLogbook.logbookEntryIds =
-          removeDuplicatesFromArray(logbookEntryIds);
+          Functions.removeDuplicatesFromArray(logbookEntryIds);
         if (relationalIds) {
-          const uniqueRelationalIds = removeDuplicatesFromArray(relationalIds);
+          const uniqueRelationalIds =
+            Functions.removeDuplicatesFromArray(relationalIds);
           currentLogbook.logbookEntryIds.concat(uniqueRelationalIds);
         }
         state.logbooks = logbooksCopy;
@@ -246,7 +253,7 @@ const entitiesSlice = createSlice({
     },
     deleteLogbook: (state: EntitiesState, action: PayloadAction<number>) => {
       if (state.logbooks) {
-        const logbooksCopy = deepCopy(state.logbooks);
+        const logbooksCopy = Functions.deepCopy(state.logbooks);
         delete logbooksCopy[action.payload];
         state.logbooks = logbooksCopy;
       }
@@ -274,13 +281,14 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.logbookEntries) {
         const { logbookEntryId, purchaseIds } = action.payload;
-        const logbookEntriesCopy = deepCopy(state.logbookEntries);
+        const logbookEntriesCopy = Functions.deepCopy(state.logbookEntries);
         const currentLogbookEntry = logbookEntriesCopy[logbookEntryId];
         const relationalIds = currentLogbookEntry.purchaseIds;
         currentLogbookEntry.purchaseIds =
-          removeDuplicatesFromArray(purchaseIds);
+          Functions.removeDuplicatesFromArray(purchaseIds);
         if (relationalIds) {
-          const uniqueRelationalIds = removeDuplicatesFromArray(relationalIds);
+          const uniqueRelationalIds =
+            Functions.removeDuplicatesFromArray(relationalIds);
           currentLogbookEntry.purchaseIds.concat(uniqueRelationalIds);
         }
         state.logbookEntries = logbookEntriesCopy;
@@ -291,7 +299,7 @@ const entitiesSlice = createSlice({
       action: PayloadAction<number>
     ) => {
       if (state.logbookEntries) {
-        const logbookEntriesCopy = deepCopy(state.logbookEntries);
+        const logbookEntriesCopy = Functions.deepCopy(state.logbookEntries);
         delete logbookEntriesCopy[action.payload];
         state.logbookEntries = logbookEntriesCopy;
       }
@@ -315,7 +323,7 @@ const entitiesSlice = createSlice({
     },
     deletePurchase: (state: EntitiesState, action: PayloadAction<number>) => {
       if (state.purchases) {
-        const purchasesCopy = deepCopy(state.purchases);
+        const purchasesCopy = Functions.deepCopy(state.purchases);
         delete purchasesCopy[action.payload];
         state.purchases = purchasesCopy;
       }
@@ -325,7 +333,7 @@ const entitiesSlice = createSlice({
       action: PayloadAction<number[]>
     ) => {
       if (state.purchases) {
-        const purchasesCopy = deepCopy(state.purchases);
+        const purchasesCopy = Functions.deepCopy(state.purchases);
         for (const purchaseId of action.payload) {
           delete purchasesCopy[purchaseId];
         }

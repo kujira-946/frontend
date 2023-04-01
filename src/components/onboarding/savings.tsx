@@ -1,6 +1,6 @@
 import { effect, Signal, useSignal } from "@preact/signals-react";
 
-import * as Functions from "@/utils/functions";
+import * as Functions from "@/utils/functions/functions";
 import * as Types from "@/utils/types";
 import { Input } from "../input";
 

@@ -8,7 +8,7 @@ import * as Redux from "@/redux";
 import * as Globals from "@/components";
 import * as Components from "@/components/onboarding";
 import * as Constants from "@/utils/constants";
-import * as Functions from "@/utils/functions";
+import * as Functions from "@/utils/functions/functions";
 import * as Selectors from "@/utils/selectors";
 import * as Types from "@/utils/types";
 import { updateUserRequest } from "@/sagas/users.saga";

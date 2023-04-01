@@ -5,7 +5,7 @@ import { DraggableProvided } from "react-beautiful-dnd";
 
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
-import * as Functions from "@/utils/functions";
+import * as Functions from "@/utils/functions/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
