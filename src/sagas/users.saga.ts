@@ -77,10 +77,9 @@ export function deleteUserRequest(userId: number): UserIdAction {
 function* fetchUsers() {
   try {
     const { data } = yield Saga.call(axios.get, ApiRoutes.USERS);
-    const { users } = normalize(data.data, [usersSchema]).entities;
+    const normalizedData = normalize(data.data, [usersSchema]);
+    const { users } = normalizedData.entities;
     yield Saga.put(Redux.entitiesActions.setUsers(users as Types.UsersEntity));
-
-    // console.log("Fetch Users Response:", data);
   } catch (error) {
     console.log(error);
     yield Saga.put(
@@ -104,6 +103,7 @@ function* fetchCurrentUser(action: UserIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
   } catch (error) {
     console.log(error);
+    yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -121,7 +121,8 @@ function* fetchUser(action: UserIdAction) {
     const { userId } = action.payload;
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     const { data } = yield Saga.call(axios.get, endpoint);
-    const { user } = normalize(data.data, userSchema).entities;
+    const normalizedData = normalize(data.data, userSchema);
+    const { user } = normalizedData.entities;
     yield Saga.put(Redux.entitiesActions.addUser(user as Types.UsersEntity));
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
@@ -140,19 +141,19 @@ function* fetchUser(action: UserIdAction) {
 
 function* updateUser(action: UserUpdateAction) {
   try {
+    yield Saga.put(Redux.uiActions.setLoadingCurrentUser(true));
     const { userId, updateData } = action.payload;
-    yield Saga.put(Redux.uiActions.setLoadingUsers(true));
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     const { data } = yield Saga.call(axios.patch, endpoint, updateData);
-    const { user } = normalize(data.data, userSchema).entities;
+    const normalizedData = normalize(data.data, userSchema);
+    const { user } = normalizedData.entities;
     yield Saga.put(Redux.entitiesActions.addUser(user as Types.UsersEntity));
-
-    yield Saga.put(Redux.uiActions.setLoadingUsers(false));
-
-    console.log("Update User Response:", data);
+    // This will only update current user for now.
+    yield Saga.put(Redux.entitiesActions.updateCurrentUser(data.data));
+    yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
   } catch (error) {
     console.log(error);
-    yield Saga.put(Redux.uiActions.setLoadingUsers(false));
+    yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
@@ -166,15 +167,16 @@ function* updateUser(action: UserUpdateAction) {
 
 function* deleteUser(action: UserIdAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingUsers(true));
+    yield Saga.put(Redux.uiActions.setLoadingCurrentUser(true));
     const { userId } = action.payload;
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     yield Saga.call(axios.delete, endpoint);
-    yield Saga.put(Redux.entitiesActions.deleteUser(userId));
-    yield Saga.put(Redux.uiActions.setLoadingUsers(false));
+    yield Saga.put(Redux.entitiesActions.setCurrentUser(null));
+    // yield Saga.put(Redux.entitiesActions.deleteUser(userId));
+    yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
   } catch (error) {
     console.log(error);
-    yield Saga.put(Redux.uiActions.setLoadingUsers(false));
+    yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",

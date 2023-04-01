@@ -3,10 +3,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import * as Types from "@/utils/types";
 import { deepCopy, removeDuplicatesFromArray } from "@/utils/functions";
 
-// ========================================================================================= //
-// [ TYPES ] =============================================================================== //
-// ========================================================================================= //
-
 export type EntitiesState = {
   currentUser: Types.User | null;
   users: Types.UsersEntity | null;
@@ -16,10 +12,6 @@ export type EntitiesState = {
   logbookEntries: Types.LogbookEntriesEntity | null;
   purchases: Types.PurchasesEntity | null;
 };
-
-// ========================================================================================= //
-// [ SLICE ] =============================================================================== //
-// ========================================================================================= //
 
 const initialState: EntitiesState = {
   currentUser: null,
@@ -35,12 +27,27 @@ const entitiesSlice = createSlice({
   name: "entities",
   initialState,
   reducers: {
-    // ↓↓↓ Current User ↓↓↓ //
+    // ========================================================================================= //
+    // [ CURRENT USER ] ======================================================================== //
+    // ========================================================================================= //
+
     setCurrentUser: (
       state: EntitiesState,
       action: PayloadAction<Types.User | null>
     ) => {
       state.currentUser = action.payload;
+    },
+    updateCurrentUser: (
+      state: EntitiesState,
+      action: PayloadAction<Types.User>
+    ) => {
+      if (state.currentUser) {
+        const { overviewIds, logbookIds } = state.currentUser;
+        const updatedUser = action.payload;
+        if (overviewIds) updatedUser["overviewIds"] = overviewIds;
+        if (logbookIds) updatedUser["logbookIds"] = logbookIds;
+        state.currentUser = updatedUser;
+      }
     },
     addRelationalIdsToCurrentUser: (
       state: EntitiesState,
@@ -53,20 +60,20 @@ const entitiesSlice = createSlice({
         const { relationalField, ids } = action.payload;
         const currentUserCopy = deepCopy(state.currentUser);
         const relationalIds = currentUserCopy[relationalField];
+        currentUserCopy[relationalField] = removeDuplicatesFromArray([...ids]);
         if (relationalIds) {
-          currentUserCopy[relationalField] = removeDuplicatesFromArray([
-            ...relationalIds,
-            ...ids,
-          ]);
-          state.currentUser = currentUserCopy;
-        } else {
-          currentUserCopy.overviewIds = removeDuplicatesFromArray([...ids]);
+          const uniqueRelationalIds = removeDuplicatesFromArray(relationalIds);
+          currentUserCopy[relationalField].concat(uniqueRelationalIds);
           state.currentUser = currentUserCopy;
         }
+        state.currentUser = currentUserCopy;
       }
     },
 
-    // ↓↓↓ Users ↓↓↓ //
+    // ========================================================================================= //
+    // [ USERS ] =============================================================================== //
+    // ========================================================================================= //
+
     setUsers: (
       state: EntitiesState,
       action: PayloadAction<Types.UsersEntity | null>
@@ -79,6 +86,17 @@ const entitiesSlice = createSlice({
     ) => {
       state.users = { ...state.users, ...action.payload };
     },
+    updateUser: (
+      state: EntitiesState,
+      action: PayloadAction<{ userId: number; user: Types.User }>
+    ) => {
+      if (state.users) {
+        const { userId, user } = action.payload;
+        const updatedUsers = deepCopy(state.users);
+        updatedUsers[userId] = user;
+        state.users = updatedUsers;
+      }
+    },
     deleteUser: (state: EntitiesState, action: PayloadAction<number>) => {
       if (state.users) {
         const usersCopy = deepCopy(state.users);
@@ -87,7 +105,10 @@ const entitiesSlice = createSlice({
       }
     },
 
-    // ↓↓↓ Overviews ↓↓↓ //
+    // ========================================================================================= //
+    // [ OVERVIEWS ] =========================================================================== //
+    // ========================================================================================= //
+
     setOverviews: (
       state: EntitiesState,
       action: PayloadAction<Types.OverviewsEntity | null>
@@ -131,7 +152,10 @@ const entitiesSlice = createSlice({
       }
     },
 
-    // ↓↓↓ Overview Groups ↓↓↓ //
+    // ========================================================================================= //
+    // [ OVERVIEW GROUPS ] ===================================================================== //
+    // ========================================================================================= //
+
     setOverviewGroups: (
       state: EntitiesState,
       action: PayloadAction<Types.OverviewGroupsEntity | null>
@@ -178,7 +202,10 @@ const entitiesSlice = createSlice({
       }
     },
 
-    // ↓↓↓ Logbooks ↓↓↓ //
+    // ========================================================================================= //
+    // [ LOGBOOKS ] ============================================================================ //
+    // ========================================================================================= //
+
     setLogbooks: (
       state: EntitiesState,
       action: PayloadAction<Types.LogbooksEntity | null>
@@ -222,7 +249,10 @@ const entitiesSlice = createSlice({
       }
     },
 
-    // ↓↓↓ Logbook Entries ↓↓↓ //
+    // ========================================================================================= //
+    // [ LOGBOOK ENTRIES ] ===================================================================== //
+    // ========================================================================================= //
+
     setLogbookEntries: (
       state: EntitiesState,
       action: PayloadAction<Types.LogbookEntriesEntity | null>
@@ -269,7 +299,10 @@ const entitiesSlice = createSlice({
       }
     },
 
-    // ↓↓↓ Purchase Entries ↓↓↓ //
+    // ========================================================================================= //
+    // [ PURCHASES ] =========================================================================== //
+    // ========================================================================================= //
+
     setPurchases: (
       state: EntitiesState,
       action: PayloadAction<Types.PurchasesEntity | null>
