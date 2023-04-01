@@ -3,7 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 import * as Redux from "@/redux";
-import * as Functions from "@/utils/functions/functions";
+import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
 
@@ -100,15 +100,7 @@ function* register(action: RegisterAction) {
       })
     );
   } catch (error) {
-    console.log(error);
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 10000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -137,16 +129,8 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
     });
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 10000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -165,15 +149,7 @@ function* login(action: LoginAction) {
       })
     );
   } catch (error) {
-    console.log(error);
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 10000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -203,16 +179,8 @@ function* verifyLogin(action: VerifyLoginAction) {
     });
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 10000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -231,15 +199,7 @@ function* logout(action: UserIdAction) {
       })
     );
   } catch (error) {
-    console.log(error);
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 10000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -260,15 +220,7 @@ function* requestNewVerificationCode(action: UserIdAction) {
     Cookies.remove("id");
     Cookies.remove("token");
   } catch (error) {
-    console.log(error);
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 10000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
