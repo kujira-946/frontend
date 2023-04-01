@@ -60,7 +60,7 @@ const entitiesSlice = createSlice({
         const { relationalField, ids } = action.payload;
         const currentUserCopy = deepCopy(state.currentUser);
         const relationalIds = currentUserCopy[relationalField];
-        currentUserCopy[relationalField] = removeDuplicatesFromArray([...ids]);
+        currentUserCopy[relationalField] = removeDuplicatesFromArray(ids);
         if (relationalIds) {
           const uniqueRelationalIds = removeDuplicatesFromArray(relationalIds);
           currentUserCopy[relationalField].concat(uniqueRelationalIds);
@@ -129,9 +129,8 @@ const entitiesSlice = createSlice({
         const overviewsCopy = deepCopy(state.overviews);
         const currentOverview = overviewsCopy[overviewId];
         const relationalIds = currentOverview.overviewGroupIds;
-        currentOverview.overviewGroupIds = removeDuplicatesFromArray([
-          ...overviewGroupIds,
-        ]);
+        currentOverview.overviewGroupIds =
+          removeDuplicatesFromArray(overviewGroupIds);
         if (relationalIds) {
           const uniqueRelationalIds = removeDuplicatesFromArray(relationalIds);
           currentOverview.overviewGroupIds.concat(uniqueRelationalIds);
@@ -172,18 +171,13 @@ const entitiesSlice = createSlice({
         const overviewGroupsCopy = deepCopy(state.overviewGroups);
         const currentOverviewGroup = overviewGroupsCopy[overviewGroupId];
         const relationalIds = currentOverviewGroup.purchaseIds;
+        currentOverviewGroup.purchaseIds =
+          removeDuplicatesFromArray(purchaseIds);
         if (relationalIds) {
-          currentOverviewGroup.purchaseIds = removeDuplicatesFromArray([
-            ...relationalIds,
-            ...purchaseIds,
-          ]);
-          state.overviewGroups = overviewGroupsCopy;
-        } else {
-          currentOverviewGroup.purchaseIds = removeDuplicatesFromArray([
-            ...purchaseIds,
-          ]);
-          state.overviewGroups = overviewGroupsCopy;
+          const uniqueRelationalIds = removeDuplicatesFromArray(relationalIds);
+          currentOverviewGroup.purchaseIds.concat(uniqueRelationalIds);
         }
+        state.overviewGroups = overviewGroupsCopy;
       }
     },
     deleteOverviewGroup: (
@@ -222,18 +216,13 @@ const entitiesSlice = createSlice({
         const logbooksCopy = deepCopy(state.logbooks);
         const currentLogbook = logbooksCopy[logbookId];
         const relationalIds = currentLogbook.logbookEntryIds;
+        currentLogbook.logbookEntryIds =
+          removeDuplicatesFromArray(logbookEntryIds);
         if (relationalIds) {
-          currentLogbook.logbookEntryIds = removeDuplicatesFromArray([
-            ...relationalIds,
-            ...logbookEntryIds,
-          ]);
-          state.logbooks = logbooksCopy;
-        } else {
-          currentLogbook.logbookEntryIds = removeDuplicatesFromArray([
-            ...logbookEntryIds,
-          ]);
-          state.logbooks = logbooksCopy;
+          const uniqueRelationalIds = removeDuplicatesFromArray(relationalIds);
+          currentLogbook.logbookEntryIds.concat(uniqueRelationalIds);
         }
+        state.logbooks = logbooksCopy;
       }
     },
     deleteLogbook: (state: EntitiesState, action: PayloadAction<number>) => {
