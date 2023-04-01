@@ -3,7 +3,7 @@ import axios from "axios";
 import { normalize, schema } from "normalizr";
 
 import * as Redux from "@/redux";
-import * as Functions from "@/utils/functions/functions";
+import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
 
@@ -111,16 +111,8 @@ function* fetchOverviews() {
     );
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -147,16 +139,8 @@ function* fetchUserOverviews(action: UserOverviewsAction) {
     // );
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -171,16 +155,8 @@ function* bulkFetchOverviews(action: OverviewIdsAction) {
   yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   try {
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -195,16 +171,8 @@ function* fetchOverview(action: OverviewIdAction) {
   yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   try {
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -226,16 +194,8 @@ function* createOverview(action: OverviewCreateAction) {
   yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   try {
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -251,16 +211,8 @@ function* updateOverview(action: OverviewUpdateAction) {
     );
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -273,16 +225,8 @@ function* deleteOverview(action: OverviewIdAction) {
     yield Saga.put(Redux.entitiesActions.deleteOverview(overviewId));
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
