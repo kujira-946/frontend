@@ -119,16 +119,8 @@ function* fetchOverviewGroups() {
     );
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -151,16 +143,8 @@ function* fetchOverviewOverviewGroups(action: OverviewOverviewGroupsAction) {
     );
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -183,16 +167,8 @@ function* bulkFetchOverviewGroups(action: OverviewGroupIdsAction) {
     );
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -213,16 +189,8 @@ function* fetchOverviewGroup(action: OverviewGroupIdAction) {
     );
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -250,16 +218,8 @@ function* createOverviewGroup(action: OverviewGroupCreateAction) {
     );
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -280,16 +240,8 @@ function* updateOverviewGroup(action: OverviewGroupUpdateAction) {
     );
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -302,16 +254,8 @@ function* deleteOverviewGroup(action: OverviewGroupIdAction) {
     yield Saga.put(Redux.entitiesActions.deleteOverviewGroup(overviewGroupId));
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
