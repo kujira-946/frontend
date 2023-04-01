@@ -64,7 +64,6 @@ const entitiesSlice = createSlice({
         if (relationalIds) {
           const uniqueRelationalIds = removeDuplicatesFromArray(relationalIds);
           currentUserCopy[relationalField].concat(uniqueRelationalIds);
-          state.currentUser = currentUserCopy;
         }
         state.currentUser = currentUserCopy;
       }
@@ -130,18 +129,14 @@ const entitiesSlice = createSlice({
         const overviewsCopy = deepCopy(state.overviews);
         const currentOverview = overviewsCopy[overviewId];
         const relationalIds = currentOverview.overviewGroupIds;
+        currentOverview.overviewGroupIds = removeDuplicatesFromArray([
+          ...overviewGroupIds,
+        ]);
         if (relationalIds) {
-          currentOverview.overviewGroupIds = removeDuplicatesFromArray([
-            ...relationalIds,
-            ...overviewGroupIds,
-          ]);
-          state.overviews = overviewsCopy;
-        } else {
-          currentOverview.overviewGroupIds = removeDuplicatesFromArray([
-            ...overviewGroupIds,
-          ]);
-          state.overviews = overviewsCopy;
+          const uniqueRelationalIds = removeDuplicatesFromArray(relationalIds);
+          currentOverview.overviewGroupIds.concat(uniqueRelationalIds);
         }
+        state.overviews = overviewsCopy;
       }
     },
     deleteOverview: (state: EntitiesState, action: PayloadAction<number>) => {
