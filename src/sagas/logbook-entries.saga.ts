@@ -120,10 +120,18 @@ function* fetchLogbookLogbookEntries(action: LogbookLogbookEntriesAction) {
     const { data } = yield Saga.call(axios.get, endpoint, logbookId as any);
     const normalizedData = normalize(data.data, [logbookEntriesSchema]);
     const { logbookEntries } = normalizedData.entities;
+    const logbookEntryIds = normalizedData.result;
     yield Saga.put(
       Redux.entitiesActions.addLogbookEntries(
         logbookEntries as Types.LogbookEntriesEntity
       )
+    );
+    yield Saga.put(
+      Redux.entitiesActions.updateLogbookRelations({
+        logbookId,
+        logbookEntryIds:
+          logbookEntryIds.length > 0 ? logbookEntryIds : [logbookEntryIds],
+      })
     );
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
@@ -144,6 +152,12 @@ function* fetchLogbookEntry(action: LogbookEntryIdAction) {
       Redux.entitiesActions.addLogbookEntries(
         logbookEntry as Types.LogbookEntriesEntity
       )
+    );
+    yield Saga.put(
+      Redux.entitiesActions.updateLogbookRelations({
+        logbookId: data.data.logbookId,
+        logbookEntryIds: [normalizedData.result],
+      })
     );
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
@@ -168,6 +182,12 @@ function* createLogbookEntry(action: LogbookEntryCreateAction) {
         logbookEntry as Types.LogbookEntriesEntity
       )
     );
+    yield Saga.put(
+      Redux.entitiesActions.updateLogbookRelations({
+        logbookId: createData.logbookId,
+        logbookEntryIds: [normalizedData.result],
+      })
+    );
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
@@ -181,12 +201,11 @@ function* updateLogbookEntry(action: LogbookEntryUpdateAction) {
     const { logbookEntryId, updateData } = action.payload;
     const endpoint = ApiRoutes.LOGBOOK_ENTRIES + `/${logbookEntryId}`;
     const { data } = yield Saga.call(axios.patch, endpoint, updateData);
-    const normalizedData = normalize(data.data, logbookEntrySchema);
-    const { logbookEntry } = normalizedData.entities;
     yield Saga.put(
-      Redux.entitiesActions.addLogbookEntries(
-        logbookEntry as Types.LogbookEntriesEntity
-      )
+      Redux.entitiesActions.updateLogbookEntry({
+        logbookEntryId,
+        logbookEntry: data.data,
+      })
     );
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {

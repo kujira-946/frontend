@@ -92,15 +92,21 @@ export function createPurchaseRequest(
   };
 }
 
+type PurchaseBulkCreationActionRelation = {
+  type: "overview group" | "logbook entry";
+  relationalId: number;
+};
 type PurchaseBulkCreateAction = Types.SagaAction<{
   purchasesData: Types.PurchaseCreateData[];
+  relation?: PurchaseBulkCreationActionRelation;
 }>;
 export function bulkCreatePurchasesRequest(
-  purchasesData: Types.PurchaseCreateData[]
+  purchasesData: Types.PurchaseCreateData[],
+  relation?: PurchaseBulkCreationActionRelation
 ): PurchaseBulkCreateAction {
   return {
     type: PurchasesActionTypes.BULK_CREATE_PURCHASES,
-    payload: { purchasesData },
+    payload: { purchasesData, relation },
   };
 }
 
@@ -173,9 +179,16 @@ function* fetchOverviewGroupPurchases(action: OverviewGroupPurchasesAction) {
       overviewGroupId as any
     );
     const normalizedData = normalize(data.data, [purchasesSchema]);
+    const purchaseIds = normalizedData.result;
     const { purchases } = normalizedData.entities;
     yield Saga.put(
       Redux.entitiesActions.addPurchase(purchases as Types.PurchasesEntity)
+    );
+    yield Saga.put(
+      Redux.entitiesActions.updateOverviewGroupRelations({
+        overviewGroupId,
+        purchaseIds: purchaseIds.length > 0 ? purchaseIds : [purchaseIds],
+      })
     );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
@@ -196,8 +209,15 @@ function* fetchLogbookEntryPurchases(action: LogbookEntryPurchasesAction) {
     );
     const normalizedData = normalize(data.data, [purchasesSchema]);
     const { purchases } = normalizedData.entities;
+    const purchaseIds = normalizedData.result;
     yield Saga.put(
       Redux.entitiesActions.addPurchase(purchases as Types.PurchasesEntity)
+    );
+    yield Saga.put(
+      Redux.entitiesActions.updateLogbookEntryRelations({
+        logbookEntryId,
+        purchaseIds: purchaseIds.length > 0 ? purchaseIds : [purchaseIds],
+      })
     );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
@@ -258,14 +278,14 @@ function* createPurchase(action: PurchaseCreateAction) {
     );
     if (createData.overviewGroupId) {
       yield Saga.put(
-        Redux.entitiesActions.addRelationalIdsToOverviewGroup({
+        Redux.entitiesActions.updateOverviewGroupRelations({
           overviewGroupId: createData.overviewGroupId,
           purchaseIds: [normalizedData.result],
         })
       );
     } else if (createData.logbookEntryId) {
       yield Saga.put(
-        Redux.entitiesActions.addRelationalIdsToLogbookEntry({
+        Redux.entitiesActions.updateLogbookEntryRelations({
           logbookEntryId: createData.logbookEntryId,
           purchaseIds: [normalizedData.result],
         })
@@ -281,28 +301,31 @@ function* createPurchase(action: PurchaseCreateAction) {
 function* bulkCreatePurchases(action: PurchaseBulkCreateAction) {
   try {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
-    const { purchasesData } = action.payload;
+    const { purchasesData, relation } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/bulk-create-purchases`;
     const { data } = yield Saga.call(axios.post, endpoint, { purchasesData });
     const normalizedData = normalize(data.data, [purchasesSchema]);
     const { purchases } = normalizedData.entities;
+    const purchaseIds = normalizedData.result;
     yield Saga.put(
       Redux.entitiesActions.addPurchase(purchases as Types.PurchasesEntity)
     );
-    if (purchasesData[0].overviewGroupId) {
-      yield Saga.put(
-        Redux.entitiesActions.addRelationalIdsToOverviewGroup({
-          overviewGroupId: purchasesData[0].overviewGroupId,
-          purchaseIds: normalizedData.result,
-        })
-      );
-    } else if (purchasesData[0].logbookEntryId) {
-      yield Saga.put(
-        Redux.entitiesActions.addRelationalIdsToLogbookEntry({
-          logbookEntryId: purchasesData[0].logbookEntryId,
-          purchaseIds: normalizedData.result,
-        })
-      );
+    if (relation) {
+      if (relation.type === "overview group") {
+        yield Saga.put(
+          Redux.entitiesActions.updateOverviewGroupRelations({
+            overviewGroupId: relation.relationalId,
+            purchaseIds: purchaseIds.length > 0 ? purchaseIds : [purchaseIds],
+          })
+        );
+      } else {
+        yield Saga.put(
+          Redux.entitiesActions.updateLogbookEntryRelations({
+            logbookEntryId: relation.relationalId,
+            purchaseIds: purchaseIds.length > 0 ? purchaseIds : [purchaseIds],
+          })
+        );
+      }
     }
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
@@ -317,10 +340,8 @@ function* updatePurchase(action: PurchaseUpdateAction) {
     const { purchaseId, updateData } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/${purchaseId}`;
     const { data } = yield Saga.call(axios.patch, endpoint, updateData);
-    const normalizedData = normalize(data.data, purchaseSchema);
-    const { purchase } = normalizedData.entities;
     yield Saga.put(
-      Redux.entitiesActions.addPurchase(purchase as Types.PurchasesEntity)
+      Redux.entitiesActions.updatePurchase({ purchaseId, purchase: data.data })
     );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
@@ -345,8 +366,8 @@ function* deletePurchase(action: PurchaseIdAction) {
 
 function* batchDeletePurchases(action: PurchaseBatchDeleteAction) {
   try {
-    const { purchaseIds } = action.payload;
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
+    const { purchaseIds } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/batch-delete`;
     yield Saga.call(axios.post, endpoint, { purchaseIds });
     yield Saga.put(Redux.entitiesActions.batchDeletePurchases(purchaseIds));

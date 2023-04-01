@@ -131,10 +131,18 @@ function* fetchOverviewOverviewGroups(action: OverviewOverviewGroupsAction) {
     const { data } = yield Saga.call(axios.get, endpoint, overviewId as any);
     const normalizedData = normalize(data.data, [overviewGroupsSchema]);
     const { overviewGroups } = normalizedData.entities;
+    const overviewGroupIds = normalizedData.result;
     yield Saga.put(
       Redux.entitiesActions.addOverviewGroup(
         overviewGroups as Types.OverviewGroupsEntity
       )
+    );
+    yield Saga.put(
+      Redux.entitiesActions.updateOverviewRelations({
+        overviewId,
+        overviewGroupIds:
+          overviewGroupIds.length > 0 ? overviewGroupIds : [overviewGroupIds],
+      })
     );
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
@@ -222,12 +230,11 @@ function* updateOverviewGroup(action: OverviewGroupUpdateAction) {
     const { overviewGroupId, updateData } = action.payload;
     const endpoint = ApiRoutes.OVERVIEW_GROUPS + `/${overviewGroupId}`;
     const { data } = yield Saga.call(axios.patch, endpoint, updateData);
-    const normalizedData = normalize(data.data, overviewGroupSchema);
-    const { overviewGroup } = normalizedData.entities;
     yield Saga.put(
-      Redux.entitiesActions.addOverviewGroup(
-        overviewGroup as Types.OverviewGroupsEntity
-      )
+      Redux.entitiesActions.updateOverviewGroup({
+        overviewGroupId,
+        overviewGroup: data.data,
+      })
     );
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {

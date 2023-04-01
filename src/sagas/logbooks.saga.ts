@@ -34,11 +34,17 @@ export function fetchLogbooksRequest(): Types.NullAction {
   };
 }
 
-type UserLogbooksAction = Types.SagaAction<{ ownerId: number }>;
-export function fetchUserLogbooksRequest(ownerId: number): UserLogbooksAction {
+type UserLogbooksAction = Types.SagaAction<{
+  ownerId: number;
+  forCurrentUser: boolean;
+}>;
+export function fetchUserLogbooksRequest(
+  ownerId: number,
+  forCurrentUser: boolean = true
+): UserLogbooksAction {
   return {
     type: LogbooksActionTypes.FETCH_USER_LOGBOOKS,
-    payload: { ownerId },
+    payload: { ownerId, forCurrentUser },
   };
 }
 
@@ -53,13 +59,15 @@ export function fetchLogbookRequest(logbookId: number): LogbookIdAction {
 
 type LogbookCreateAction = Types.SagaAction<{
   createData: Types.LogbookCreateData;
+  forCurrentUser: boolean;
 }>;
 export function createLogbookRequest(
-  createData: Types.LogbookCreateData
+  createData: Types.LogbookCreateData,
+  forCurrentUser: boolean = true
 ): LogbookCreateAction {
   return {
     type: LogbooksActionTypes.CREATE_LOGBOOK,
-    payload: { createData },
+    payload: { createData, forCurrentUser },
   };
 }
 
@@ -107,13 +115,29 @@ function* fetchLogbooks() {
 function* fetchUserLogbooks(action: UserLogbooksAction) {
   try {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
-    const { ownerId } = action.payload;
+    const { ownerId, forCurrentUser } = action.payload;
     const endpoint = ApiRoutes.LOGBOOKS + `/fetch-user-logbooks`;
     const { data } = yield Saga.call(axios.get, endpoint, ownerId as any);
     const normalizedData = normalize(data.data, [logbooksSchema]);
     const { logbooks } = normalizedData.entities;
+    const logbookIds = normalizedData.result;
     yield Saga.put(
       Redux.entitiesActions.addLogbook(logbooks as Types.LogbooksEntity)
+    );
+    if (forCurrentUser) {
+      yield Saga.put(
+        Redux.entitiesActions.updateCurrentUserRelations({
+          relationalField: "logbookIds",
+          ids: logbookIds.length > 0 ? logbookIds : [logbookIds],
+        })
+      );
+    }
+    yield Saga.put(
+      Redux.entitiesActions.updateUserRelations({
+        userId: ownerId,
+        relationalField: "logbookIds",
+        ids: logbookIds.length > 0 ? logbookIds : [logbookIds],
+      })
     );
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
@@ -143,7 +167,7 @@ function* fetchLogbook(action: LogbookIdAction) {
 function* createLogbook(action: LogbookCreateAction) {
   try {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
-    const { createData } = action.payload;
+    const { createData, forCurrentUser } = action.payload;
     const { data } = yield Saga.call(
       axios.post,
       ApiRoutes.LOGBOOKS,
@@ -153,6 +177,21 @@ function* createLogbook(action: LogbookCreateAction) {
     const { logbook } = normalizedData.entities;
     yield Saga.put(
       Redux.entitiesActions.addLogbook(logbook as Types.LogbooksEntity)
+    );
+    if (forCurrentUser) {
+      yield Saga.put(
+        Redux.entitiesActions.updateCurrentUserRelations({
+          relationalField: "logbookIds",
+          ids: [normalizedData.result],
+        })
+      );
+    }
+    yield Saga.put(
+      Redux.entitiesActions.updateUserRelations({
+        userId: createData.ownerId,
+        relationalField: "logbookIds",
+        ids: [normalizedData.result],
+      })
     );
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
@@ -167,10 +206,8 @@ function* updateLogbook(action: LogbookUpdateAction) {
     const { logbookId, updateData } = action.payload;
     const endpoint = ApiRoutes.LOGBOOKS + `/${logbookId}`;
     const { data } = yield Saga.call(axios.patch, endpoint, updateData);
-    const normalizedData = normalize(data.data, logbookSchema);
-    const { logbook } = normalizedData.entities;
     yield Saga.put(
-      Redux.entitiesActions.addLogbook(logbook as Types.LogbooksEntity)
+      Redux.entitiesActions.updateLogbook({ logbookId, logbook: data.data })
     );
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
