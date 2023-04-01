@@ -60,7 +60,7 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.currentUser) {
         const { relationalField, ids } = action.payload;
-        const currentUserCopy = Functions.Functions.deepCopy(state.currentUser);
+        const currentUserCopy = Functions.deepCopy(state.currentUser);
         const relationalIds = currentUserCopy[relationalField];
         currentUserCopy[relationalField] =
           Functions.removeDuplicatesFromArray(ids);
