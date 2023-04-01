@@ -37,11 +37,6 @@ export function fetchCurrentUserRequest(userId: number): UserIdAction {
   };
 }
 
-type UserUpdateAction = Types.SagaAction<{
-  userId: number;
-  updateData: Types.UserUpdateData;
-}>;
-
 export function updateCurrentUserRequest(
   userId: number,
   updateData: Types.UserUpdateData
@@ -73,6 +68,11 @@ export function fetchUserRequest(userId: number): UserIdAction {
   };
 }
 
+type UserUpdateAction = Types.SagaAction<{
+  userId: number;
+  updateData: Types.UserUpdateData;
+  
+}>;
 export function updateUserRequest(
   userId: number,
   updateData: Types.UserUpdateData

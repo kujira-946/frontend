@@ -37,11 +37,11 @@ export function fetchOverviewsRequest(): Types.NullAction {
 
 type UserOverviewsAction = Types.SagaAction<{
   ownerId: number;
-  forCurrentUser?: boolean;
+  forCurrentUser: boolean;
 }>;
 export function fetchUserOverviewsRequest(
   ownerId: number,
-  forCurrentUser?: boolean
+  forCurrentUser: boolean = true
 ): UserOverviewsAction {
   return {
     type: OverviewsActionTypes.FETCH_USER_OVERVIEWS,
@@ -70,11 +70,11 @@ export function fetchOverviewRequest(overviewId: number): OverviewIdAction {
 
 type OverviewCreateAction = Types.SagaAction<{
   createData: Types.OverviewCreateData;
-  forCurrentUser?: boolean;
+  forCurrentUser: boolean;
 }>;
 export function createOverviewRequest(
   createData: Types.OverviewCreateData,
-  forCurrentUser?: boolean
+  forCurrentUser: boolean = true
 ): OverviewCreateAction {
   return {
     type: OverviewsActionTypes.CREATE_OVERVIEW,
@@ -111,7 +111,8 @@ function* fetchOverviews() {
   try {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
     const { data } = yield Saga.call(axios.get, ApiRoutes.OVERVIEWS);
-    const { overviews } = normalize(data.data, [overviewsSchema]).entities;
+    const normalizedData = normalize(data.data, [overviewsSchema]);
+    const { overviews } = normalizedData.entities;
     yield Saga.put(
       Redux.entitiesActions.setOverviews(overviews as Types.OverviewsEntity)
     );
@@ -158,9 +159,11 @@ function* fetchUserOverviews(action: UserOverviewsAction) {
 
 function* bulkFetchOverviews(action: OverviewIdsAction) {
   yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
+  const { overviewIds } = action.payload;
   const endpoint = ApiRoutes.OVERVIEWS + `/bulk-fetch`;
-  const { data } = yield Saga.call(axios.get, endpoint, action.payload as any);
-  const { overviews } = normalize(data.data, [overviewsSchema]).entities;
+  const { data } = yield Saga.call(axios.get, endpoint, overviewIds as any);
+  const normalizedData = normalize(data.data, [overviewsSchema]);
+  const { overviews } = normalizedData.entities;
   yield Saga.put(
     Redux.entitiesActions.addOverview(overviews as Types.OverviewsEntity)
   );
