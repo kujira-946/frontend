@@ -1,3 +1,15 @@
-export function sagaResponseError(error: any): string {
-  return error.response.data.body;
+import * as Saga from "redux-saga/effects";
+
+import * as Redux from "@/redux";
+
+export function* sagaError(error: any) {
+  console.log(error);
+  yield Saga.put(
+    Redux.uiActions.setNotification({
+      title: "Failure",
+      body: error.response.data.body,
+      type: "failure",
+      timeout: 10000,
+    })
+  );
 }

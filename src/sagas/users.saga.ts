@@ -3,7 +3,7 @@ import axios from "axios";
 import { normalize, schema } from "normalizr";
 
 import * as Redux from "@/redux";
-import * as Functions from "@/utils/functions/functions";
+import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
 
@@ -91,43 +91,27 @@ function* fetchCurrentUser(action: UserIdAction) {
     yield Saga.put(Redux.entitiesActions.setCurrentUser(data.data));
     yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
 function* updateCurrentUser(action: UserIdAction) {
   try {
-    
-  } catch (error) {
-    
-  }
+  } catch (error) {}
 }
 
 function* fetchUsers() {
   try {
+    yield Saga.put(Redux.uiActions.setLoadingUsers(true));
     const { data } = yield Saga.call(axios.get, ApiRoutes.USERS);
     const normalizedData = normalize(data.data, [usersSchema]);
     const { users } = normalizedData.entities;
     yield Saga.put(Redux.entitiesActions.setUsers(users as Types.UsersEntity));
+    yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
-    console.log(error);
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    yield Saga.put(Redux.uiActions.setLoadingUsers(false));
+    Functions.sagaError(error);
   }
 }
 
@@ -142,16 +126,8 @@ function* fetchUser(action: UserIdAction) {
     yield Saga.put(Redux.entitiesActions.addUser(user as Types.UsersEntity));
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -168,16 +144,8 @@ function* updateUser(action: UserUpdateAction) {
     yield Saga.put(Redux.entitiesActions.updateCurrentUser(data.data));
     yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -192,16 +160,8 @@ function* deleteUser(action: UserIdAction) {
     // yield Saga.put(Redux.entitiesActions.deleteUser(userId));
     yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
