@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, current, PayloadAction } from "@reduxjs/toolkit";
 
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
@@ -96,7 +96,11 @@ const entitiesSlice = createSlice({
       if (state.users) {
         const { userId, user } = action.payload;
         const updatedUsers = Functions.deepCopy(state.users);
-        updatedUsers[userId] = user;
+        let updatedUser = updatedUsers[userId];
+        const { overviewIds, logbookIds } = updatedUser;
+        updatedUser = user;
+        if (overviewIds) updatedUser["overviewIds"] = overviewIds;
+        if (logbookIds) updatedUser["logbookIds"] = logbookIds;
         state.users = updatedUsers;
       }
     },
