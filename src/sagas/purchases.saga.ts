@@ -3,7 +3,7 @@ import axios from "axios";
 import { normalize, schema } from "normalizr";
 
 import * as Redux from "@/redux";
-import * as Functions from "@/utils/functions/functions";
+import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
 
@@ -156,16 +156,8 @@ function* fetchPurchases() {
     );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -184,16 +176,8 @@ function* fetchOverviewGroupPurchases(action: OverviewGroupPurchasesAction) {
     );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -212,16 +196,8 @@ function* fetchLogbookEntryPurchases(action: LogbookEntryPurchasesAction) {
     );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -240,16 +216,8 @@ function* bulkFetchPurchases(action: PurchaseIdsAction) {
     );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -265,16 +233,8 @@ function* fetchPurchase(action: PurchaseIdAction) {
     );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -309,16 +269,8 @@ function* createPurchase(action: PurchaseCreateAction) {
     }
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -350,16 +302,8 @@ function* bulkCreatePurchases(action: PurchaseBulkCreateAction) {
     }
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -375,16 +319,8 @@ function* updatePurchase(action: PurchaseUpdateAction) {
     );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -397,16 +333,8 @@ function* deletePurchase(action: PurchaseIdAction) {
     yield Saga.put(Redux.entitiesActions.deletePurchase(purchaseId));
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -419,16 +347,8 @@ function* batchDeletePurchases(action: PurchaseBatchDeleteAction) {
     yield Saga.put(Redux.entitiesActions.batchDeletePurchases(purchaseIds));
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -440,16 +360,8 @@ function* deleteAllPurchases() {
     yield Saga.put(Redux.entitiesActions.setPurchases(null));
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
