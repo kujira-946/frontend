@@ -3,7 +3,7 @@ import axios from "axios";
 import { normalize, schema } from "normalizr";
 
 import * as Redux from "@/redux";
-import * as Functions from "@/utils/functions/functions";
+import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
 
@@ -108,16 +108,8 @@ function* fetchLogbookEntries() {
     );
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -140,16 +132,8 @@ function* fetchLogbookLogbookEntries(action: LogbookLogbookEntriesAction) {
     );
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -167,16 +151,8 @@ function* fetchLogbookEntry(action: LogbookEntryIdAction) {
     );
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -196,16 +172,8 @@ function* createLogbookEntry(action: LogbookEntryCreateAction) {
     );
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -223,16 +191,8 @@ function* updateLogbookEntry(action: LogbookEntryUpdateAction) {
     );
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
@@ -245,16 +205,8 @@ function* deleteLogbookEntry(action: LogbookEntryIdAction) {
     yield Saga.put(Redux.entitiesActions.deleteLogbookEntry(logbookEntryId));
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
-    console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
+    Functions.sagaError(error);
   }
 }
 
