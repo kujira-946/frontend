@@ -3,10 +3,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import * as Constants from "@/utils/constants";
 import { UINotification } from "@/utils/types";
 
-// ========================================================================================= //
-// [ TYPES ] =============================================================================== //
-// ========================================================================================= //
-
 export type UIState = {
   notification: UINotification;
   tempUserId: number | null;
@@ -20,10 +16,6 @@ export type UIState = {
   loadingLogbookEntries: boolean;
   loadingPurchases: boolean;
 };
-
-// ========================================================================================= //
-// [ SLICE ] =============================================================================== //
-// ========================================================================================= //
 
 const initialState: UIState = {
   notification: Constants.initialUINotification,
@@ -46,6 +38,7 @@ const uiSlice = createSlice({
     resetState: (state: UIState) => {
       state = initialState;
     },
+    
     setNotification: (
       state: UIState,
       action: PayloadAction<UINotification>
@@ -58,6 +51,11 @@ const uiSlice = createSlice({
     setLoginForThirtyDays: (state: UIState, action: PayloadAction<boolean>) => {
       state.loginForThirtyDays = action.payload;
     },
+
+    // ========================================================================================= //
+    // [ LOADING STATES ] ====================================================================== //
+    // ========================================================================================= //
+
     setLoadingCurrentUser: (state: UIState, action: PayloadAction<boolean>) => {
       state.loadingCurrentUser = action.payload;
     },

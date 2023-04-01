@@ -90,7 +90,6 @@ function* register(action: RegisterAction) {
     const endpoint = ApiRoutes.AUTH + `/register`;
     const { data } = yield Saga.call(axios.post, endpoint, action.payload);
     yield Saga.put(Redux.uiActions.setTempUserId(data.data));
-    yield Saga.put(Redux.errorsActions.setAuth(""));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: data.title,
@@ -103,7 +102,12 @@ function* register(action: RegisterAction) {
   } catch (error) {
     console.log(error);
     yield Saga.put(
-      Redux.errorsActions.setAuth(Functions.sagaResponseError(error))
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 10000,
+      })
     );
   }
 }
@@ -118,7 +122,6 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
     });
     yield Saga.put(Redux.entitiesActions.addUser(data.data));
     yield Saga.put(Redux.uiActions.resetState());
-    yield Saga.put(Redux.errorsActions.setAuth(""));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Verified!",
@@ -137,9 +140,6 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
     console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
     yield Saga.put(
-      Redux.errorsActions.setAuth(Functions.sagaResponseError(error))
-    );
-    yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
         body: Functions.sagaResponseError(error),
@@ -155,7 +155,6 @@ function* login(action: LoginAction) {
     const endpoint = ApiRoutes.AUTH + `/login`;
     const { data } = yield Saga.call(axios.patch, endpoint, action.payload);
     yield Saga.put(Redux.uiActions.setTempUserId(data.data));
-    yield Saga.put(Redux.errorsActions.setAuth(""));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Login Successful",
@@ -168,7 +167,12 @@ function* login(action: LoginAction) {
   } catch (error) {
     console.log(error);
     yield Saga.put(
-      Redux.errorsActions.setAuth(Functions.sagaResponseError(error))
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 10000,
+      })
     );
   }
 }
@@ -184,7 +188,6 @@ function* verifyLogin(action: VerifyLoginAction) {
     });
     yield Saga.put(Redux.entitiesActions.addUser(data.data));
     yield Saga.put(Redux.uiActions.resetState());
-    yield Saga.put(Redux.errorsActions.setAuth(""));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Verified!",
@@ -203,9 +206,6 @@ function* verifyLogin(action: VerifyLoginAction) {
     console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
     yield Saga.put(
-      Redux.errorsActions.setAuth(Functions.sagaResponseError(error))
-    );
-    yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",
         body: Functions.sagaResponseError(error),
@@ -220,7 +220,6 @@ function* logout(action: UserIdAction) {
   try {
     const endpoint = ApiRoutes.AUTH + `/logout/${action.payload.userId}`;
     const { data } = yield Saga.call(axios.patch, endpoint);
-    yield Saga.put(Redux.errorsActions.setAuth(""));
     Cookies.remove("id");
     Cookies.remove("token");
     yield Saga.put(
@@ -231,8 +230,6 @@ function* logout(action: UserIdAction) {
         timeout: 5000,
       })
     );
-
-    console.log("Logout Response:", data);
   } catch (error) {
     console.log(error);
     yield Saga.put(
@@ -252,7 +249,6 @@ function* requestNewVerificationCode(action: UserIdAction) {
       ApiRoutes.AUTH +
       `/request-new-verification-code/${action.payload.userId}`;
     const { data } = yield Saga.call(axios.patch, endpoint);
-    yield Saga.put(Redux.errorsActions.setAuth(""));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "New Verification Code Request",
@@ -263,8 +259,6 @@ function* requestNewVerificationCode(action: UserIdAction) {
     );
     Cookies.remove("id");
     Cookies.remove("token");
-
-    console.log("Request New Verification Code Response:", data);
   } catch (error) {
     console.log(error);
     yield Saga.put(
