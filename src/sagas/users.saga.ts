@@ -20,17 +20,11 @@ const userSchema = new schema.Entity("user");
 
 enum UsersActionTypes {
   FETCH_CURRENT_USER = "FETCH_CURRENT_USER",
+  UPDATE_CURRENT_USER = "UPDATE_CURRENT_USER",
   FETCH_USERS = "FETCH_USERS",
   FETCH_USER = "FETCH_USER",
   UPDATE_USER = "UPDATE_USER",
   DELETE_USER = "DELETE_USER",
-}
-
-export function fetchUsersRequest(): Types.NullAction {
-  return {
-    type: UsersActionTypes.FETCH_USERS,
-    payload: null,
-  };
 }
 
 type UserIdAction = Types.SagaAction<{ userId: number }>;
@@ -39,6 +33,20 @@ export function fetchCurrentUserRequest(userId: number): UserIdAction {
   return {
     type: UsersActionTypes.FETCH_CURRENT_USER,
     payload: { userId },
+  };
+}
+
+export function updateCurrentUserRequest(userId: number): UserIdAction {
+  return {
+    type: UsersActionTypes.UPDATE_CURRENT_USER,
+    payload: { userId },
+  };
+}
+
+export function fetchUsersRequest(): Types.NullAction {
+  return {
+    type: UsersActionTypes.FETCH_USERS,
+    payload: null,
   };
 }
 
@@ -74,25 +82,6 @@ export function deleteUserRequest(userId: number): UserIdAction {
 // [ SAGAS ] =============================================================================== //
 // ========================================================================================= //
 
-function* fetchUsers() {
-  try {
-    const { data } = yield Saga.call(axios.get, ApiRoutes.USERS);
-    const normalizedData = normalize(data.data, [usersSchema]);
-    const { users } = normalizedData.entities;
-    yield Saga.put(Redux.entitiesActions.setUsers(users as Types.UsersEntity));
-  } catch (error) {
-    console.log(error);
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Failure",
-        body: Functions.sagaResponseError(error),
-        type: "failure",
-        timeout: 5000,
-      })
-    );
-  }
-}
-
 function* fetchCurrentUser(action: UserIdAction) {
   try {
     yield Saga.put(Redux.uiActions.setLoadingCurrentUser(true));
@@ -104,6 +93,25 @@ function* fetchCurrentUser(action: UserIdAction) {
   } catch (error) {
     console.log(error);
     yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Failure",
+        body: Functions.sagaResponseError(error),
+        type: "failure",
+        timeout: 5000,
+      })
+    );
+  }
+}
+
+function* fetchUsers() {
+  try {
+    const { data } = yield Saga.call(axios.get, ApiRoutes.USERS);
+    const normalizedData = normalize(data.data, [usersSchema]);
+    const { users } = normalizedData.entities;
+    yield Saga.put(Redux.entitiesActions.setUsers(users as Types.UsersEntity));
+  } catch (error) {
+    console.log(error);
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Failure",

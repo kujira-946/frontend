@@ -23,6 +23,11 @@ const initialState: EntitiesState = {
   purchases: null,
 };
 
+type UserRelations = {
+  relationalField: "overviewIds" | "logbookIds";
+  ids: number[];
+};
+
 const entitiesSlice = createSlice({
   name: "entities",
   initialState,
@@ -49,12 +54,9 @@ const entitiesSlice = createSlice({
         state.currentUser = updatedUser;
       }
     },
-    addRelationalIdsToCurrentUser: (
+    updateCurrentUserRelations: (
       state: EntitiesState,
-      action: PayloadAction<{
-        relationalField: "overviewIds" | "logbookIds";
-        ids: number[];
-      }>
+      action: PayloadAction<UserRelations>
     ) => {
       if (state.currentUser) {
         const { relationalField, ids } = action.payload;
@@ -94,6 +96,23 @@ const entitiesSlice = createSlice({
         const updatedUsers = deepCopy(state.users);
         updatedUsers[userId] = user;
         state.users = updatedUsers;
+      }
+    },
+    updateUserRelations: (
+      state: EntitiesState,
+      action: PayloadAction<{ userId: number } & UserRelations>
+    ) => {
+      if (state.users) {
+        const { userId, relationalField, ids } = action.payload;
+        const usersCopy = deepCopy(state.users);
+        const selectedUser = usersCopy[userId];
+        const relationalIds = selectedUser[relationalField];
+        selectedUser[relationalField] = removeDuplicatesFromArray(ids);
+        if (relationalIds) {
+          const uniqueRelationalIds = removeDuplicatesFromArray(relationalIds);
+          selectedUser[relationalField].concat(uniqueRelationalIds);
+        }
+        state.users = usersCopy;
       }
     },
     deleteUser: (state: EntitiesState, action: PayloadAction<number>) => {
