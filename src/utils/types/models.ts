@@ -23,17 +23,6 @@ export type User = {
   logbookIds: number[]; // has many logbooks
 } & Dates;
 
-export type Category = "need" | "planned" | "impulse" | "regret";
-export type Purchase = {
-  id: number;
-  placement: number;
-  category?: Category;
-  description?: string;
-  cost?: number;
-  overviewGroupId?: number; // belongs to an overview group
-  logbookEntryId?: number; // belongs to a logbook entry
-} & Dates;
-
 export type Overview = {
   id: number;
   income: number;
@@ -64,4 +53,15 @@ export type LogbookEntry = {
   budget?: number;
   purchaseIds: number[]; // has many purchases
   logbookId: number; // belongs to a logbook
+} & Dates;
+
+export type Category = "need" | "planned" | "impulse" | "regret";
+export type Purchase = {
+  id: number;
+  placement: number;
+  category?: Category;
+  description?: string;
+  cost?: number;
+  overviewGroupId?: number; // belongs to an overview group
+  logbookEntryId?: number; // belongs to a logbook entry
 } & Dates;

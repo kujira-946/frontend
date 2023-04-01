@@ -151,6 +151,22 @@ const entitiesSlice = createSlice({
     ) => {
       state.overviews = { ...state.overviews, ...action.payload };
     },
+    updateOverview: (
+      state: EntitiesState,
+      action: PayloadAction<{ overviewId: number; overview: Types.Overview }>
+    ) => {
+      if (state.overviews) {
+        const { overviewId, overview } = action.payload;
+        const updatedOverviews = Functions.deepCopy(state.overviews);
+        let updatedOverview = updatedOverviews[overviewId];
+        const { overviewGroupIds } = updatedOverview;
+        updatedOverview = overview;
+        if (overviewGroupIds) {
+          updatedOverview["overviewGroupIds"] = overviewGroupIds;
+        }
+        state.overviews = updatedOverviews;
+      }
+    },
     updateOverviewRelations: (
       state: EntitiesState,
       action: PayloadAction<{ overviewId: number; overviewGroupIds: number[] }>
@@ -178,6 +194,7 @@ const entitiesSlice = createSlice({
     },
     deleteOverview: (state: EntitiesState, action: PayloadAction<number>) => {
       if (state.overviews) {
+        const {} = action.payload;
         const overviewsCopy = Functions.deepCopy(state.overviews);
         delete overviewsCopy[action.payload];
         state.overviews = overviewsCopy;
@@ -199,6 +216,25 @@ const entitiesSlice = createSlice({
       action: PayloadAction<Types.OverviewGroupsEntity>
     ) => {
       state.overviewGroups = { ...state.overviewGroups, ...action.payload };
+    },
+    updateOverviewGroup: (
+      state: EntitiesState,
+      action: PayloadAction<{
+        overviewGroupId: number;
+        overviewGroup: Types.OverviewGroup;
+      }>
+    ) => {
+      if (state.overviewGroups) {
+        const { overviewGroupId, overviewGroup } = action.payload;
+        const updatedOverviewGroups = Functions.deepCopy(state.overviewGroups);
+        let updatedOverviewGroup = updatedOverviewGroups[overviewGroupId];
+        const { purchaseIds } = updatedOverviewGroup;
+        updatedOverviewGroup = overviewGroup;
+        if (purchaseIds) {
+          updatedOverviewGroup["purchaseIds"] = purchaseIds;
+        }
+        state.overviewGroups = updatedOverviewGroups;
+      }
     },
     updateOverviewGroupRelations: (
       state: EntitiesState,
@@ -251,6 +287,22 @@ const entitiesSlice = createSlice({
     ) => {
       state.logbooks = { ...state.logbooks, ...action.payload };
     },
+    updateLogbook: (
+      state: EntitiesState,
+      action: PayloadAction<{ logbookId: number; logbook: Types.Logbook }>
+    ) => {
+      if (state.logbooks) {
+        const { logbookId, logbook } = action.payload;
+        const updatedLogbooks = Functions.deepCopy(state.logbooks);
+        let updatedLogbook = updatedLogbooks[logbookId];
+        const { logbookEntryIds } = updatedLogbook;
+        updatedLogbook = logbook;
+        if (logbookEntryIds) {
+          updatedLogbook["logbookEntryIds"] = logbookEntryIds;
+        }
+        state.logbooks = updatedLogbooks;
+      }
+    },
     updateLogbookRelations: (
       state: EntitiesState,
       action: PayloadAction<{ logbookId: number; logbookEntryIds: number[] }>
@@ -298,6 +350,25 @@ const entitiesSlice = createSlice({
       action: PayloadAction<Types.LogbookEntriesEntity>
     ) => {
       state.logbookEntries = { ...state.logbookEntries, ...action.payload };
+    },
+    updateLogbookEntry: (
+      state: EntitiesState,
+      action: PayloadAction<{
+        logbookEntryId: number;
+        logbookEntry: Types.LogbookEntry;
+      }>
+    ) => {
+      if (state.logbookEntries) {
+        const { logbookEntryId, logbookEntry } = action.payload;
+        const updatedLogbookEntry = Functions.deepCopy(state.logbookEntries);
+        let updatedOverview = updatedLogbookEntry[logbookEntryId];
+        const { purchaseIds } = updatedOverview;
+        updatedOverview = logbookEntry;
+        if (purchaseIds) {
+          updatedOverview["purchaseIds"] = purchaseIds;
+        }
+        state.logbookEntries = updatedLogbookEntry;
+      }
     },
     updateLogbookEntryRelations: (
       state: EntitiesState,
@@ -349,6 +420,17 @@ const entitiesSlice = createSlice({
       action: PayloadAction<Types.PurchasesEntity>
     ) => {
       state.purchases = { ...state.purchases, ...action.payload };
+    },
+    updatePurchase: (
+      state: EntitiesState,
+      action: PayloadAction<{ purchaseId: number; purchase: Types.Purchase }>
+    ) => {
+      if (state.purchases) {
+        const { purchaseId, purchase } = action.payload;
+        const updatedPurchases = Functions.deepCopy(state.purchases);
+        updatedPurchases[purchaseId] = purchase;
+        state.purchases = updatedPurchases;
+      }
     },
     deletePurchase: (state: EntitiesState, action: PayloadAction<number>) => {
       if (state.purchases) {
