@@ -211,7 +211,7 @@ function* createOverviewGroup(action: OverviewGroupCreateAction) {
       )
     );
     yield Saga.put(
-      Redux.entitiesActions.addRelationalIdsToOverview({
+      Redux.entitiesActions.updateOverviewRelations({
         overviewId: createData.overviewId,
         overviewGroupIds: [normalizedData.result],
       })
