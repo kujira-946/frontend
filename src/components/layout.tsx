@@ -10,8 +10,8 @@ import * as Constants from "@/utils/constants";
 import * as Selectors from "@/utils/selectors";
 import * as Styles from "@/utils/styles";
 import { SignalsStoreContext } from "@/pages/_app";
+import { fetchUserRequest } from "@/sagas/users.saga";
 import { logoutRequest } from "@/sagas/auth.saga";
-import { fetchCurrentUserRequest } from "@/sagas/users.saga";
 
 import { Notification } from "./notification";
 import { Loading } from "./loading";
@@ -309,7 +309,7 @@ export const Layout = (props: Props) => {
 
   const { ui } = useContext(SignalsStoreContext);
   const { currentUser } = Selectors.useEntitiesSlice();
-  const { loadingCurrentUser } = Selectors.useUiSlice();
+  const { loadingUsers } = Selectors.useUiSlice();
 
   useEffect(() => {
     if (!jwtAccessToken || !userId) {
@@ -319,7 +319,7 @@ export const Layout = (props: Props) => {
 
   useEffect(() => {
     if (userId && !currentUser) {
-      dispatch(fetchCurrentUserRequest(Number(userId)));
+      dispatch(fetchUserRequest(Number(userId)));
     }
 
     if (!jwtAccessToken && userId) {
@@ -334,7 +334,7 @@ export const Layout = (props: Props) => {
       <Portal id="app-portal" />
       <Notification />
 
-      {loadingCurrentUser ? (
+      {loadingUsers ? (
         <Loading text="Loading your information..." />
       ) : (
         props.children

@@ -19,39 +19,10 @@ const userSchema = new schema.Entity("user");
 // ========================================================================================= //
 
 enum UsersActionTypes {
-  FETCH_CURRENT_USER = "FETCH_CURRENT_USER",
-  UPDATE_CURRENT_USER = "UPDATE_CURRENT_USER",
-  DELETE_ACCOUNT = "DELETE_ACCOUNT",
   FETCH_USERS = "FETCH_USERS",
   FETCH_USER = "FETCH_USER",
   UPDATE_USER = "UPDATE_USER",
   DELETE_USER = "DELETE_USER",
-}
-
-type UserIdAction = Types.SagaAction<{ userId: number }>;
-
-export function fetchCurrentUserRequest(userId: number): UserIdAction {
-  return {
-    type: UsersActionTypes.FETCH_CURRENT_USER,
-    payload: { userId },
-  };
-}
-
-export function updateCurrentUserRequest(
-  userId: number,
-  updateData: Types.UserUpdateData
-): UserUpdateAction {
-  return {
-    type: UsersActionTypes.UPDATE_CURRENT_USER,
-    payload: { userId, updateData },
-  };
-}
-
-export function deleteAccountRequest(userId: number): UserIdAction {
-  return {
-    type: UsersActionTypes.DELETE_ACCOUNT,
-    payload: { userId },
-  };
 }
 
 export function fetchUsersRequest(): Types.NullAction {
@@ -61,80 +32,50 @@ export function fetchUsersRequest(): Types.NullAction {
   };
 }
 
-export function fetchUserRequest(userId: number): UserIdAction {
+type UserIdAction = Types.SagaAction<{
+  userId: number;
+  forCurrentUser: boolean;
+}>;
+
+export function fetchUserRequest(
+  userId: number,
+  forCurrentUser: boolean = true
+): UserIdAction {
   return {
     type: UsersActionTypes.FETCH_USER,
-    payload: { userId },
+    payload: { userId, forCurrentUser },
   };
 }
 
 type UserUpdateAction = Types.SagaAction<{
   userId: number;
   updateData: Types.UserUpdateData;
-  
+  forCurrentUser: boolean;
 }>;
 export function updateUserRequest(
   userId: number,
-  updateData: Types.UserUpdateData
+  updateData: Types.UserUpdateData,
+  forCurrentUser: boolean = true
 ): UserUpdateAction {
   return {
     type: UsersActionTypes.UPDATE_USER,
-    payload: { userId, updateData },
+    payload: { userId, updateData, forCurrentUser },
   };
 }
 
-export function deleteUserRequest(userId: number): UserIdAction {
+export function deleteUserRequest(
+  userId: number,
+  forCurrentUser: boolean = true
+): UserIdAction {
   return {
     type: UsersActionTypes.DELETE_USER,
-    payload: { userId },
+    payload: { userId, forCurrentUser },
   };
 }
 
 // ========================================================================================= //
 // [ SAGAS ] =============================================================================== //
 // ========================================================================================= //
-
-function* fetchCurrentUser(action: UserIdAction) {
-  try {
-    yield Saga.put(Redux.uiActions.setLoadingCurrentUser(true));
-    const { userId } = action.payload;
-    const endpoint = ApiRoutes.USERS + `/${userId}`;
-    const { data } = yield Saga.call(axios.get, endpoint);
-    yield Saga.put(Redux.entitiesActions.setCurrentUser(data.data));
-    yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
-  } catch (error) {
-    yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
-    Functions.sagaError(error);
-  }
-}
-
-function* updateCurrentUser(action: UserUpdateAction) {
-  try {
-    yield Saga.put(Redux.uiActions.setLoadingCurrentUser(true));
-    const { userId, updateData } = action.payload;
-    const endpoint = ApiRoutes.USERS + `/${userId}`;
-    const { data } = yield Saga.call(axios.patch, endpoint, updateData);
-    yield Saga.put(Redux.entitiesActions.updateCurrentUser(data.data));
-    yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
-  } catch (error) {
-    yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
-    Functions.sagaError(error);
-  }
-}
-
-function* deleteAccount(action: UserIdAction) {
-  try {
-    yield Saga.put(Redux.uiActions.setLoadingCurrentUser(true));
-    const { userId } = action.payload;
-    const endpoint = ApiRoutes.USERS + `/${userId}`;
-    yield Saga.call(axios.delete, endpoint);
-    yield Saga.put(Redux.entitiesActions.setCurrentUser(null));
-    yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
-  } catch (error) {
-    yield Saga.put(Redux.uiActions.setLoadingCurrentUser(false));
-    Functions.sagaError(error);
-  }
-}
 
 function* fetchUsers() {
   try {
@@ -153,12 +94,15 @@ function* fetchUsers() {
 function* fetchUser(action: UserIdAction) {
   try {
     yield Saga.put(Redux.uiActions.setLoadingUsers(true));
-    const { userId } = action.payload;
+    const { userId, forCurrentUser } = action.payload;
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     const { data } = yield Saga.call(axios.get, endpoint);
     const normalizedData = normalize(data.data, userSchema);
     const { user } = normalizedData.entities;
-    yield Saga.put(Redux.entitiesActions.addUser(user as Types.UsersEntity));
+    if (forCurrentUser) {
+      yield Saga.put(Redux.entitiesActions.setCurrentUser(data.data));
+    }
+    // yield Saga.put(Redux.entitiesActions.addUser(user as Types.UsersEntity));
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
@@ -169,12 +113,14 @@ function* fetchUser(action: UserIdAction) {
 function* updateUser(action: UserUpdateAction) {
   try {
     yield Saga.put(Redux.uiActions.setLoadingUsers(true));
-    const { userId, updateData } = action.payload;
+    const { userId, updateData, forCurrentUser } = action.payload;
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     const { data } = yield Saga.call(axios.patch, endpoint, updateData);
     const normalizedData = normalize(data.data, userSchema);
     const { user } = normalizedData.entities;
-    yield Saga.put(Redux.entitiesActions.addUser(user as Types.UsersEntity));
+    if (forCurrentUser) {
+      yield Saga.put(Redux.entitiesActions.updateCurrentUser(data.data));
+    }
     yield Saga.put(
       Redux.entitiesActions.updateUser({ userId, user: data.data })
     );
@@ -188,9 +134,12 @@ function* updateUser(action: UserUpdateAction) {
 function* deleteUser(action: UserIdAction) {
   try {
     yield Saga.put(Redux.uiActions.setLoadingUsers(true));
-    const { userId } = action.payload;
+    const { userId, forCurrentUser } = action.payload;
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     yield Saga.call(axios.delete, endpoint);
+    if (forCurrentUser) {
+      yield Saga.put(Redux.entitiesActions.setCurrentUser(null));
+    }
     yield Saga.put(Redux.entitiesActions.deleteUser(userId));
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
@@ -202,9 +151,6 @@ function* deleteUser(action: UserIdAction) {
 export function* usersSaga() {
   yield Saga.all([
     Saga.takeEvery(UsersActionTypes.FETCH_USERS, fetchUsers),
-    Saga.takeEvery(UsersActionTypes.FETCH_CURRENT_USER, fetchCurrentUser),
-    Saga.takeEvery(UsersActionTypes.UPDATE_CURRENT_USER, updateCurrentUser),
-    Saga.takeEvery(UsersActionTypes.DELETE_ACCOUNT, deleteAccount),
     Saga.takeEvery(UsersActionTypes.FETCH_USER, fetchUser),
     Saga.takeEvery(UsersActionTypes.UPDATE_USER, updateUser),
     Saga.takeEvery(UsersActionTypes.DELETE_USER, deleteUser),
