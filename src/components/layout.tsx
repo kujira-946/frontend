@@ -293,7 +293,11 @@ const themes: Themes = {
 export type ThemeProps = { theme: ThemeContents };
 
 // ↓↓↓ Global Axios Defaults ↓↓↓ //
-axios.defaults.baseURL = "https://kuijra-backend.up.railway.app";
+if (process.env.NODE_ENV === "production") {
+  axios.defaults.baseURL = "https://kuijra-backend.up.railway.app";
+} else {
+  axios.defaults.baseURL = "https://localhost:8000";
+}
 const userId = Cookies.get("id");
 const jwtAccessToken = Cookies.get("token");
 if (jwtAccessToken) {
