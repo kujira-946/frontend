@@ -1,7 +1,8 @@
 import { pxAsRem } from "../styles";
 
 export type SVGProps = {
-  height: number;
+  width: number | string;
+  height: number | string;
   fill: string;
   hovered?: boolean;
   hoveredFill?: string;

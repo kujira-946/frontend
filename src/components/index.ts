@@ -7,6 +7,7 @@ import { InputMini } from "./input-mini";
 import { Button } from "./button";
 import { Notification } from "./notification";
 import { Loading } from "./loading";
+import { Shimmer } from "./shimmer";
 import { PurchaseCell } from "./purchase-cell";
 
 export {
@@ -19,5 +20,6 @@ export {
   Button,
   Notification,
   Loading,
+  Shimmer,
   PurchaseCell,
 };
