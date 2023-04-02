@@ -1,11 +1,9 @@
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
 import { effect, Signal, useSignal } from "@preact/signals-react";
 
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
-import * as Selectors from "@/utils/selectors";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 
@@ -36,8 +34,8 @@ type Props = {
 };
 
 export const RegisterInputs = (props: Props) => {
-  const dispatch = useDispatch();
-  const { auth } = Selectors.useErrorsSlice();
+  const dispatch = Functions.useAppDispatch();
+  const { auth } = Functions.useErrorsSlice();
 
   const hidden = useSignal(true);
 

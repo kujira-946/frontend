@@ -4,10 +4,9 @@ import Cookies from "js-cookie";
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
-import { useDispatch } from "react-redux";
 
 import * as Constants from "@/utils/constants";
-import * as Selectors from "@/utils/selectors";
+import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { SignalsStoreContext } from "@/pages/_app";
 import { fetchUserRequest } from "@/sagas/users.saga";
@@ -304,12 +303,12 @@ if (jwtAccessToken) {
 type Props = { children: React.ReactNode };
 
 export const Layout = (props: Props) => {
-  const dispatch = useDispatch();
+  const dispatch = Functions.useAppDispatch();
   const router = useRouter();
 
   const { ui } = useContext(SignalsStoreContext);
-  const { currentUser } = Selectors.useEntitiesSlice();
-  const { loadingUsers } = Selectors.useUiSlice();
+  const { currentUser } = Functions.useEntitiesSlice();
+  const { loadingUsers } = Functions.useUiSlice();
 
   useEffect(() => {
     if (!jwtAccessToken || !userId) {

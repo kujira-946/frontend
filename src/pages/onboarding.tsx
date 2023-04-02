@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { effect, useSignal } from "@preact/signals-react";
 
 import * as Redux from "@/redux";
@@ -9,7 +8,6 @@ import * as Globals from "@/components";
 import * as Components from "@/components/onboarding";
 import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
-import * as Selectors from "@/utils/selectors";
 import * as Types from "@/utils/types";
 import { updateUserRequest } from "@/sagas/users.saga";
 import { createOverviewRequest } from "@/sagas/overviews.saga";
@@ -21,11 +19,11 @@ import { bulkCreatePurchasesRequest } from "@/sagas/purchases.saga";
 // ========================================================================================= //
 
 const Onboarding = () => {
-  const dispatch = useDispatch();
+  const dispatch = Functions.useAppDispatch();
   const router = useRouter();
 
   const { currentUser, overviews, overviewGroups, purchases } =
-    Selectors.useEntitiesSlice();
+    Functions.useEntitiesSlice();
 
   // ↓↓↓ Confirmation Modal Component Data ↓↓↓ //
   const currentPage = useSignal(1);

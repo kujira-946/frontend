@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 import * as Components from "@/components/landing";
 import * as Constants from "@/utils/constants";
-import * as Selectors from "@/utils/selectors";
+import * as Functions from "@/utils/functions";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -26,7 +26,7 @@ const accessToken = Cookies.get("token");
 
 const Home = () => {
   const router = useRouter();
-  const { currentUser } = Selectors.useEntitiesSlice();
+  const { currentUser } = Functions.useEntitiesSlice();
 
   // ↓↓↓ Starts the page back at the top when refreshing. ↓↓↓ //
   useEffect(() => {

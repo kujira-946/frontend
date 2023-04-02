@@ -1,12 +1,11 @@
 import Image from "next/image";
 import styled from "styled-components";
 import { useContext } from "react";
-import { useDispatch } from "react-redux";
 import { effect, useSignal } from "@preact/signals-react";
 
 import * as AuthActions from "@/sagas/auth.saga";
 import * as Globals from "@/components";
-import * as Selectors from "@/utils/selectors";
+import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
@@ -86,10 +85,10 @@ type Props = {
 };
 
 export const Verification = (props: Props) => {
-  const dispatch = useDispatch();
+  const dispatch = Functions.useAppDispatch();
   const { ui } = useContext(SignalsStoreContext);
-  const { auth } = Selectors.useErrorsSlice();
-  const { tempUserId, loginForThirtyDays } = Selectors.useUiSlice();
+  const { auth } = Functions.useErrorsSlice();
+  const { tempUserId, loginForThirtyDays } = Functions.useUiSlice();
 
   const verificationCode = useSignal("");
   const verificationCodeError = useSignal("");

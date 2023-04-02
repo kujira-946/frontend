@@ -4,11 +4,11 @@ import { useEffect } from "react";
 
 import * as Components from "@/components/auth";
 import * as Constants from "@/utils/constants";
-import * as Selectors from "@/utils/selectors";
+import * as Functions from "@/utils/functions";
 
 const Register = () => {
-  const { currentUser } = Selectors.useEntitiesSlice();
-  const { tempUserId } = Selectors.useUiSlice();
+  const { currentUser } = Functions.useEntitiesSlice();
+  const { tempUserId } = Functions.useUiSlice();
 
   const router = useRouter();
   useEffect(() => {

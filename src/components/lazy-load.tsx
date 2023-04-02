@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-import { useDetectInView } from "@/utils/hooks";
+import { useDetectInView } from "@/utils/functions/hooks";
 
 type Animation = { [key: string]: string | number };
 

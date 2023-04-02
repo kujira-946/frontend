@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
 import { Signal, useSignal } from "@preact/signals-react";
 
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
-import * as Selectors from "@/utils/selectors";
+import * as Selectors from "@/utils/functions/selectors";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
+import { useAppDispatch } from "@/utils/functions/hooks";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -31,7 +31,7 @@ type Props = {
 };
 
 export const LoginInputs = (props: Props) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { auth } = Selectors.useErrorsSlice();
 
   const hidden = useSignal(true);

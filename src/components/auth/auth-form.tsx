@@ -2,12 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 import { useContext, useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { effect, useSignal } from "@preact/signals-react";
 
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
 import * as AuthActions from "@/sagas/auth.saga";
+import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { SignalsStoreContext } from "@/pages/_app";
@@ -89,7 +89,7 @@ type Props = {
 };
 
 export const AuthForm = (props: Props) => {
-  const dispatch = useDispatch();
+  const dispatch = Functions.useAppDispatch();
   const { ui } = useContext(SignalsStoreContext);
 
   const email = useSignal("");
