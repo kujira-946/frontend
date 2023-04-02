@@ -147,7 +147,6 @@ export const ConfirmationModal = (props: Props) => {
           {props.showBackButton && props.backButtonAction && (
             <HeaderButton type="button" onClick={props.backButtonAction}>
               <Icons.ChevronLeft
-                width="auto"
                 height={14}
                 fill={Styles.background[ui.theme.value].eight}
               />
@@ -158,7 +157,6 @@ export const ConfirmationModal = (props: Props) => {
           {props.closeButtonAction && (
             <HeaderButton type="button" onClick={props.closeButtonAction}>
               <Icons.Close
-                width="auto"
                 height={14}
                 fill={Styles.background[ui.theme.value].eight}
               />
@@ -196,11 +194,7 @@ export const ConfirmationModal = (props: Props) => {
           {props.submitButtonText}
           {props.showSubmitArrow && (
             <ArrowIconContainer>
-              <Icons.ArrowRight
-                width="auto"
-                height={12}
-                fill={Styles.text.button}
-              />
+              <Icons.ArrowRight height={12} fill={Styles.text.button} />
             </ArrowIconContainer>
           )}
         </Button>

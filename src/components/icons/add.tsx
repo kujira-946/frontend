@@ -3,7 +3,7 @@ import { SVGProps } from "@/utils/types";
 export const Add = (props: SVGProps) => {
   return (
     <svg
-      width={props.width || "auto"}
+      width={props.width || "100%"}
       height={props.height}
       viewBox="0 0 100 100"
       fill="none"
