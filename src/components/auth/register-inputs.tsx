@@ -71,6 +71,7 @@ export const RegisterInputs = (props: Props) => {
       {/* Email */}
       <Globals.Input
         borderRadius="four"
+        type="email"
         title="Email"
         errorMessage={auth.includes("email") ? auth : props.emailError.value}
         userInput={props.email.value}
@@ -80,6 +81,7 @@ export const RegisterInputs = (props: Props) => {
             dispatch(Redux.errorsActions.setAuth(""));
           }
         }}
+        required
       />
 
       {/* Username */}
@@ -96,11 +98,13 @@ export const RegisterInputs = (props: Props) => {
             dispatch(Redux.errorsActions.setAuth(""));
           }
         }}
+        required
       />
 
       {/* Password */}
       <Globals.Input
         borderRadius="four"
+        type={hidden.value ? "password" : "text"}
         title="Password"
         errorMessage={props.passwordError.value}
         userInput={props.password.value}
@@ -110,11 +114,13 @@ export const RegisterInputs = (props: Props) => {
         hidden={hidden.value}
         toggleHidden={() => (hidden.value = !hidden.value)}
         password
+        required
       />
 
       {/* Confirm Password */}
       <Globals.Input
         borderRadius="four"
+        type={hidden.value ? "password" : "text"}
         title="Confirm Password"
         errorMessage={props.confirmPasswordError.value}
         userInput={props.confirmPassword.value}
@@ -124,6 +130,7 @@ export const RegisterInputs = (props: Props) => {
         hidden={hidden.value}
         toggleHidden={() => (hidden.value = !hidden.value)}
         password
+        required
       />
     </Container>
   );

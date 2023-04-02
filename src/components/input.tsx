@@ -117,6 +117,8 @@ type Props = {
   onFocus?: () => void;
   onBlur?: () => void;
   isCost?: true;
+  type?: "email" | "password" | "text";
+  required?: true;
 };
 
 export const Input = (props: Props) => {
@@ -165,7 +167,7 @@ export const Input = (props: Props) => {
             <ForwardText>$</ForwardText>
           )}
           <InputField
-            type={props.hidden ? "password" : "text"}
+            type={props.type || "text"}
             value={props.userInput}
             placeholder={props.title}
             ref={inputFieldRef}
@@ -173,6 +175,7 @@ export const Input = (props: Props) => {
             onBlur={onBlur}
             onFocus={onFocus}
             focused={focused.value}
+            required={props.required}
           />
         </InputFieldContainer>
 

@@ -41,6 +41,7 @@ export const LoginInputs = (props: Props) => {
       {/* Email */}
       <Globals.Input
         borderRadius="four"
+        type="email"
         title="Email"
         errorMessage={auth.includes("register") ? auth : props.emailError.value}
         userInput={props.email.value}
@@ -50,11 +51,13 @@ export const LoginInputs = (props: Props) => {
             dispatch(Redux.errorsActions.setAuth(""));
           }
         }}
+        required
       />
 
       {/* Password */}
       <Globals.Input
         borderRadius="four"
+        type={hidden.value ? "password" : "text"}
         title="Password"
         errorMessage={
           auth.includes("password") ? auth : props.passwordError.value
@@ -66,6 +69,7 @@ export const LoginInputs = (props: Props) => {
         hidden={hidden.value}
         toggleHidden={() => (hidden.value = !hidden.value)}
         password
+        required
       />
     </Container>
   );
