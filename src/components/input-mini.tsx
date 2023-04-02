@@ -14,7 +14,7 @@ import { ThemeProps } from "./layout";
 type ContainerProps = {
   focused: boolean;
   hasValue: boolean;
-  error?: boolean;
+  error: boolean;
   frozen?: boolean;
 };
 
@@ -73,9 +73,7 @@ const ForwardText = styled.span`
   display: block;
 `;
 
-type TextareaProps = { error?: boolean };
-
-const Textarea = styled(TextareaAutosize)<TextareaProps>`
+const Textarea = styled(TextareaAutosize)`
   width: 100%;
   height: 100%;
   padding: ${Styles.pxAsRem.four} 0;
@@ -164,7 +162,6 @@ const ExportedComponent = (props: Props) => {
           onFocus={onFocus}
           onKeyPress={preventEnterKey}
           minRows={1}
-          error={!!props.errorMessage}
         />
       </Body>
     </Container>

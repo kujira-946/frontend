@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { effect, Signal, useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
@@ -26,21 +27,23 @@ export const Income = (props: Props) => {
     }
   }
 
-  effect(() => {
-    if (props.income.value.length === 0) {
-      errorMessage.value = "";
-      props.disableSubmit.value = true;
-    } else if (Number(props.income.value) < 0 || props.income.value === "0") {
-      errorMessage.value = "You must enter a number greater than 0.";
-      props.disableSubmit.value = true;
-    } else if (!Number(props.income.value)) {
-      errorMessage.value = "You must enter a number.";
-      props.disableSubmit.value = true;
-    } else {
-      errorMessage.value = "";
-      props.disableSubmit.value = false;
-    }
-  });
+  useEffect(() => {
+    effect(() => {
+      if (props.income.value.length === 0) {
+        errorMessage.value = "";
+        props.disableSubmit.value = true;
+      } else if (Number(props.income.value) < 0 || props.income.value === "0") {
+        errorMessage.value = "You must enter a number greater than 0.";
+        props.disableSubmit.value = true;
+      } else if (!Number(props.income.value)) {
+        errorMessage.value = "You must enter a number.";
+        props.disableSubmit.value = true;
+      } else {
+        errorMessage.value = "";
+        props.disableSubmit.value = false;
+      }
+    });
+  }, [props.income, props.disableSubmit]);
 
   return (
     <Globals.Input

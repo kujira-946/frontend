@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { effect, Signal, useSignal } from "@preact/signals-react";
 
 import * as Functions from "@/utils/functions";
@@ -31,24 +32,26 @@ export const Savings = (props: Props) => {
     props.savings.value = event.currentTarget.value;
   }
 
-  effect(() => {
-    if (props.savings.value.length === 0) {
-      errorMessage.value = "";
-      props.disableSubmit.value = true;
-    } else if (!Number(props.savings.value) && props.savings.value !== "0") {
-      errorMessage.value = "You must enter a number.";
-      props.disableSubmit.value = true;
-    } else if (Number(props.savings.value) < 0) {
-      errorMessage.value = "Minimum 0%";
-      props.disableSubmit.value = true;
-    } else if (Number(props.savings.value) > 100) {
-      errorMessage.value = "Maximum 100%";
-      props.disableSubmit.value = true;
-    } else {
-      errorMessage.value = "";
-      props.disableSubmit.value = false;
-    }
-  });
+  useEffect(() => {
+    effect(() => {
+      if (props.savings.value.length === 0) {
+        errorMessage.value = "";
+        props.disableSubmit.value = true;
+      } else if (!Number(props.savings.value) && props.savings.value !== "0") {
+        errorMessage.value = "You must enter a number.";
+        props.disableSubmit.value = true;
+      } else if (Number(props.savings.value) < 0) {
+        errorMessage.value = "Minimum 0%";
+        props.disableSubmit.value = true;
+      } else if (Number(props.savings.value) > 100) {
+        errorMessage.value = "Maximum 100%";
+        props.disableSubmit.value = true;
+      } else {
+        errorMessage.value = "";
+        props.disableSubmit.value = false;
+      }
+    });
+  }, [props.savings, props.disableSubmit]);
 
   return (
     <Input
