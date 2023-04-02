@@ -131,6 +131,10 @@ const ExportedComponent = (props: Props) => {
     if (props.onFocus) props.onFocus();
   }
 
+  function preventEnterKey(event: Types.KeyPress): void {
+    if (event.key === "Enter") event.preventDefault();
+  }
+
   return (
     <Container
       focused={focused.value}
@@ -158,6 +162,7 @@ const ExportedComponent = (props: Props) => {
           onChange={props.setUserInput}
           onBlur={onBlur}
           onFocus={onFocus}
+          onKeyPress={preventEnterKey}
           minRows={1}
           error={!!props.errorMessage}
         />
