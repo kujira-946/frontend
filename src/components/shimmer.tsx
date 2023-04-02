@@ -1,27 +1,33 @@
 import styled, { keyframes } from "styled-components";
 
+import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-
-const effect = keyframes`
-	0% { background-position: -1200px 0 }
-	100% { background-position: 1200px 0 }
-`;
+import { ThemeProps } from "./layout";
 
 type Props = {
-  width?: Types.PxAsRem;
-  height?: Types.PxAsRem;
+  width?: number;
+  height?: number;
   borderRadius?: Types.PxAsRem;
 };
 
-export const Shimmer = styled.div<Props>`
-  width: ${(props) => props.width || "100%"};
-  height: ${(props) => props.height || "100%"};
-  border-radius: ${(props) => props.borderRadius || "0px"};
-  animation: ${effect} 2.2s linear infinite;
-  background: linear-gradient(to right, #f6f6f6 8%, #f0f0f0 18%, #f6f6f6 33%);
-  background-color: #ddd;
-  background-size: ${(props) => props.height} 100%;
-  /* background-size: 1200px 100%; */
+const effect = keyframes`
+  from { background-position: -1200px 0 };
+  to { background-position: 1200px 0 };
+`;
 
-  border: red solid 1px;
+export const Shimmer = styled.div<Props>`
+  width: ${(props) => `${props.width}px` || "100%"};
+  height: ${(props) => `${props.height}px` || "100%"};
+  background: ${(props: ThemeProps) => {
+    return `linear-gradient(
+			to right,
+			${props.theme.backgroundThree} 8%,
+			${props.theme.backgroundFour} 18%,
+			${props.theme.backgroundThree} 33%)`;
+  }};
+  background-size: 1200px 100%;
+  border-radius: ${(props) => {
+    return props.borderRadius ? Styles.pxAsRem[props.borderRadius] : "0px";
+  }};
+  animation: ${effect} 2.2s linear infinite;
 `;
