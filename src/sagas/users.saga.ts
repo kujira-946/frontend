@@ -87,7 +87,7 @@ function* fetchUsers() {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -106,7 +106,7 @@ function* fetchUser(action: UserIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -127,7 +127,7 @@ function* updateUser(action: UserUpdateAction) {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -144,7 +144,7 @@ function* deleteUser(action: UserIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 

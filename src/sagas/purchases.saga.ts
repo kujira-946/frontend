@@ -164,7 +164,7 @@ function* fetchPurchases() {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -193,7 +193,7 @@ function* fetchOverviewGroupPurchases(action: OverviewGroupPurchasesAction) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -222,7 +222,7 @@ function* fetchLogbookEntryPurchases(action: LogbookEntryPurchasesAction) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -240,7 +240,7 @@ function* bulkFetchPurchases(action: PurchaseIdsAction) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -258,7 +258,7 @@ function* fetchPurchase(action: PurchaseIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -294,7 +294,7 @@ function* createPurchase(action: PurchaseCreateAction) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -330,7 +330,7 @@ function* bulkCreatePurchases(action: PurchaseBulkCreateAction) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -346,7 +346,7 @@ function* updatePurchase(action: PurchaseUpdateAction) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -360,7 +360,7 @@ function* deletePurchase(action: PurchaseIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -374,7 +374,7 @@ function* batchDeletePurchases(action: PurchaseBatchDeleteAction) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -387,7 +387,7 @@ function* deleteAllPurchases() {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 

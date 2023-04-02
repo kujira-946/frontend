@@ -100,7 +100,7 @@ function* register(action: RegisterAction) {
       })
     );
   } catch (error) {
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -131,7 +131,7 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -149,8 +149,8 @@ function* login(action: LoginAction) {
         timeout: 10000,
       })
     );
-  } catch (error) {
-    Functions.sagaError(error);
+  } catch (error: any) {
+    yield Functions.sagaError(error);
   }
 }
 
@@ -182,7 +182,7 @@ function* verifyLogin(action: VerifyLoginAction) {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -203,7 +203,7 @@ function* logout(action: UserIdAction) {
       })
     );
   } catch (error) {
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -224,7 +224,7 @@ function* requestNewVerificationCode(action: UserIdAction) {
       })
     );
   } catch (error) {
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 

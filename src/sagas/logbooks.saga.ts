@@ -108,7 +108,7 @@ function* fetchLogbooks() {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -142,7 +142,7 @@ function* fetchUserLogbooks(action: UserLogbooksAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -160,7 +160,7 @@ function* fetchLogbook(action: LogbookIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -196,7 +196,7 @@ function* createLogbook(action: LogbookCreateAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -212,7 +212,7 @@ function* updateLogbook(action: LogbookUpdateAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -226,7 +226,7 @@ function* deleteLogbook(action: LogbookIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 

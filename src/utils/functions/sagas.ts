@@ -2,9 +2,9 @@ import * as Saga from "redux-saga/effects";
 
 import * as Redux from "@/redux";
 
-export function* sagaError(error: any) {
+export function sagaError(error: any) {
   console.log(error);
-  yield Saga.put(
+  return Saga.put(
     Redux.uiActions.setNotification({
       title: "Failure",
       body: error.response.data.body,

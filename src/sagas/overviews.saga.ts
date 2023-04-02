@@ -119,7 +119,7 @@ function* fetchOverviews() {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -153,7 +153,7 @@ function* fetchUserOverviews(action: UserOverviewsAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -171,7 +171,7 @@ function* bulkFetchOverviews(action: OverviewIdsAction) {
   try {
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -196,7 +196,7 @@ function* fetchOverview(action: OverviewIdAction) {
   try {
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -228,7 +228,7 @@ function* createOverview(action: OverviewCreateAction) {
   try {
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -244,7 +244,7 @@ function* updateOverview(action: OverviewUpdateAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -258,7 +258,7 @@ function* deleteOverview(action: OverviewIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 

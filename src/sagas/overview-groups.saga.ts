@@ -119,7 +119,7 @@ function* fetchOverviewGroups() {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -147,7 +147,7 @@ function* fetchOverviewOverviewGroups(action: OverviewOverviewGroupsAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -171,7 +171,7 @@ function* bulkFetchOverviewGroups(action: OverviewGroupIdsAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -191,7 +191,7 @@ function* fetchOverviewGroup(action: OverviewGroupIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -220,7 +220,7 @@ function* createOverviewGroup(action: OverviewGroupCreateAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -239,7 +239,7 @@ function* updateOverviewGroup(action: OverviewGroupUpdateAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -253,7 +253,7 @@ function* deleteOverviewGroup(action: OverviewGroupIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 

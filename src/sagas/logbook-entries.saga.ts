@@ -108,7 +108,7 @@ function* fetchLogbookEntries() {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -136,7 +136,7 @@ function* fetchLogbookLogbookEntries(action: LogbookLogbookEntriesAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -162,7 +162,7 @@ function* fetchLogbookEntry(action: LogbookEntryIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -191,7 +191,7 @@ function* createLogbookEntry(action: LogbookEntryCreateAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -210,7 +210,7 @@ function* updateLogbookEntry(action: LogbookEntryUpdateAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
@@ -224,7 +224,7 @@ function* deleteLogbookEntry(action: LogbookEntryIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));
-    Functions.sagaError(error);
+    yield Functions.sagaError(error);
   }
 }
 
