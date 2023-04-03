@@ -41,11 +41,11 @@ export function fetchUserDataRequest(userId: number): FetchUserDataAction {
 
 function* fetchUserData(action: FetchUserDataAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingUsers(true));
+    // yield Saga.put(Redux.uiActions.setLoadingUsers(true));
     const { userId } = action.payload;
 
     console.log("Fetching User Overviews");
-    yield Saga.put(fetchUserOverviewsRequest(userId));
+    // yield Saga.put(fetchUserOverviewsRequest(userId));
 
     // console.log("Fetching Overview Groups");
     // const { overviews } = yield Saga.select(
@@ -60,7 +60,7 @@ function* fetchUserData(action: FetchUserDataAction) {
 
     // console.log("Fetching User Logbooks");
     // yield Saga.put(fetchUserLogbooksRequest(userId));
-    yield Saga.put(Redux.uiActions.setLoadingUsers(false));
+    // yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
     yield Functions.sagaError(error);
   }
