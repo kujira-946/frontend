@@ -10,6 +10,7 @@ import { overviewGroupsSaga } from "./sagas/overview-groups.saga";
 import { logbooksSaga } from "./sagas/logbooks.saga";
 import { logbookEntriesSaga } from "./sagas/logbook-entries.saga";
 import { purchasesSaga } from "./sagas/purchases.saga";
+import { onboardingSaga } from "./sagas/onboarding.saga";
 
 export type GlobalState = {
   ui: Redux.UIState;
@@ -32,6 +33,7 @@ function* rootSaga() {
     logbooksSaga(),
     logbookEntriesSaga(),
     purchasesSaga(),
+    onboardingSaga(),
   ]);
 }
 const sagaMiddleware = createSagaMiddleware();

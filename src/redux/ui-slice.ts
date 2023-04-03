@@ -3,10 +3,19 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import * as Constants from "@/utils/constants";
 import { UINotification } from "@/utils/types";
 
+type OnboardingFlow =
+  | "Overview Created"
+  | "Recurring Overview Group Created"
+  | "Recurring Purchases Created"
+  | "Incoming Overview Group Created"
+  | "Incoming Purchases Created"
+  | "";
+
 export type UIState = {
   notification: UINotification;
   tempUserId: number | null;
   loginForThirtyDays: boolean;
+  onboardingFlow: OnboardingFlow;
 
   loadingUsers: boolean;
   loadingOverviews: boolean;
@@ -20,6 +29,7 @@ const initialState: UIState = {
   notification: Constants.initialUINotification,
   tempUserId: null,
   loginForThirtyDays: false,
+  onboardingFlow: "",
 
   loadingUsers: false,
   loadingOverviews: false,
@@ -48,6 +58,12 @@ const uiSlice = createSlice({
     },
     setLoginForThirtyDays: (state: UIState, action: PayloadAction<boolean>) => {
       state.loginForThirtyDays = action.payload;
+    },
+    setOnboardingFlow: (
+      state: UIState,
+      action: PayloadAction<OnboardingFlow>
+    ) => {
+      state.onboardingFlow = action.payload;
     },
 
     // ========================================================================================= //

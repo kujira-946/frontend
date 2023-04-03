@@ -3,16 +3,12 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { effect, useSignal } from "@preact/signals-react";
 
-import * as Redux from "@/redux";
 import * as Globals from "@/components";
 import * as Components from "@/components/onboarding";
 import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
-import { updateUserRequest } from "@/sagas/users.saga";
-import { createOverviewRequest } from "@/sagas/overviews.saga";
-import { createOverviewGroupRequest } from "@/sagas/overview-groups.saga";
-import { bulkCreatePurchasesRequest } from "@/sagas/purchases.saga";
+import { onboardNewUserRequest } from "@/sagas/onboarding.saga";
 
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
@@ -24,6 +20,7 @@ const Onboarding = () => {
 
   const { currentUser, overviews, overviewGroups, purchases } =
     Functions.useEntitiesSlice();
+  const { onboardingFlow } = Functions.useUiSlice();
 
   // ↓↓↓ Confirmation Modal Component Data ↓↓↓ //
   const currentPage = useSignal(1);
@@ -47,103 +44,19 @@ const Onboarding = () => {
     else currentPage.value = 1;
   }
 
-  function createOverview(
-    income: number,
-    savings: number,
-    ownerId: number
-  ): void {
-    const roundedIncome = Functions.roundNumber(income, 2);
-    const roundedSavings = Functions.roundNumber(savings, 2);
-    const overviewData: Types.OverviewCreateData = {
-      income: Number(roundedIncome),
-      savings: Number(roundedSavings),
-      ownerId,
-    };
-    dispatch(createOverviewRequest(overviewData));
-  }
-
-  function startOnboardingCompletion(): void {
-    if (Number(income.value) && Number(savings.value) && currentUser) {
-      createOverview(
-        Number(income.value),
-        Number(savings.value),
-        currentUser.id
-      );
-    } else {
-      dispatch(
-        Redux.uiActions.setNotification({
-          title: "Failure",
-          body: "Failed to complete onboarding. Please make sure all fields were filled in properly.",
-          type: "failure",
-          timeout: 10000,
-        })
-      );
-    }
-  }
-
-  function createRecurringOverviewGroup(overviewId: number): void {
-    const recurringOverviewGroupData: Types.OverviewGroupCreateData = {
-      name: "Recurring",
-      totalCost: recurringPurchasesTotal.value,
-      overviewId,
-    };
-    dispatch(createOverviewGroupRequest(recurringOverviewGroupData));
-  }
-
-  function createIncomingOverviewGroup(overviewId: number): void {
-    const incomingOverviewGroupData: Types.OverviewGroupCreateData = {
-      name: "Incoming",
-      totalCost: incomingPurchasesTotal.value,
-      overviewId,
-    };
-    dispatch(createOverviewGroupRequest(incomingOverviewGroupData));
-  }
-
-  function createRecurringPurchases(overviewGroupId: number): void {
-    const recurringPurchasesData: Types.PurchaseCreateData[] = [];
-    recurringPurchases.value.forEach(
-      (purchase: Types.OnboardingPurchase, index: number) => {
-        if (purchase.description) {
-          const recurringPurchaseData: Types.PurchaseCreateData = {
-            placement: index + 1,
-            description: purchase.description,
-            cost: Number(purchase.cost),
-            overviewGroupId,
-          };
-          recurringPurchasesData.push(recurringPurchaseData);
-        }
-      }
-    );
-    dispatch(bulkCreatePurchasesRequest(recurringPurchasesData));
-  }
-
-  function createIncomingPurchases(overviewGroupId: number): void {
-    const incomingPurchasesData: Types.PurchaseCreateData[] = [];
-    incomingPurchases.value.forEach(
-      (purchase: Types.OnboardingPurchase, index: number) => {
-        if (purchase.description) {
-          const recurringPurchaseData: Types.PurchaseCreateData = {
-            placement: index + 1,
-            description: purchase.description,
-            cost: Number(purchase.cost),
-            overviewGroupId,
-          };
-          incomingPurchasesData.push(recurringPurchaseData);
-        }
-      }
-    );
-    dispatch(bulkCreatePurchasesRequest(incomingPurchasesData));
-  }
-
-  function setUserAsOnboarded(currentUserId: number): void {
-    dispatch(updateUserRequest(currentUserId, { onboarded: true }));
-  }
-
   function toNextPage(): void {
     if (currentPage.value + 1 <= Constants.onboardingCopies.length) {
       currentPage.value += 1;
     } else {
-      startOnboardingCompletion();
+      dispatch(
+        onboardNewUserRequest(
+          { income: Number(income.value), savings: Number(savings.value) },
+          { name: "Recurring", totalCost: recurringPurchasesTotal.value },
+          recurringPurchases,
+          { name: "Incoming", totalCost: incomingPurchasesTotal.value },
+          recurringPurchases
+        )
+      );
     }
   }
 
@@ -191,38 +104,6 @@ const Onboarding = () => {
       router.push(Constants.ClientRoutes.LOGBOOKS);
     }
   }, [currentUser]);
-
-  useEffect(() => {
-    if (currentUser) {
-      if (currentUser.overviewIds && overviews && !overviewGroups) {
-        const { overviewIds } = currentUser;
-        const overview = overviews[overviewIds[0]];
-        [null, null].forEach((_: any, index: number) => {
-          if (index === 0) createRecurringOverviewGroup(overview.id);
-          else createIncomingOverviewGroup(overview.id);
-        });
-      } else if (
-        currentUser.overviewIds &&
-        overviews &&
-        overviewGroups &&
-        !purchases
-      ) {
-        const { overviewIds } = currentUser;
-        const { overviewGroupIds } = overviews[overviewIds[0]];
-        overviewGroupIds.forEach((overviewGroupId: number) => {
-          const currentOverviewGroup = overviewGroups[overviewGroupId];
-          if (currentOverviewGroup.name === "Recurring") {
-            createRecurringPurchases(currentOverviewGroup.id);
-          } else if (currentOverviewGroup.name === "Incoming") {
-            createIncomingPurchases(currentOverviewGroup.id);
-          }
-        });
-      } else if (overviews && overviewGroups && purchases) {
-        console.log("Set user as onboarded.");
-        // setUserAsOnboarded(currentUser.id);
-      }
-    }
-  }, [currentUser, overviews, overviewGroups, purchases]);
 
   // ↓↓↓ Handling Supporting Text Value ↓↓↓ //
   effect(() => {
