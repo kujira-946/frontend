@@ -16,13 +16,13 @@ const Logbooks = () => {
   return (
     <>
       <Head>
-        <title>Kujira | Logbooks</title>
+        <title>Kujira | Settings</title>
         <meta name="description" content="Kujira app" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <>Logbooks Page</>
+      <>Settings Page</>
     </>
   );
 };

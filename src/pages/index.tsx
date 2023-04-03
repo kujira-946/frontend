@@ -37,8 +37,11 @@ const Home = () => {
 
   useEffect(() => {
     if (userId && accessToken && currentUser) {
-      if (currentUser.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
-      else router.push(Constants.ClientRoutes.ONBOARDING);
+      if (!currentUser.onboarded) {
+        router.push(Constants.ClientRoutes.ONBOARDING);
+      } else {
+        router.push(Constants.ClientRoutes.LOGBOOKS);
+      }
     }
   }, [userId, accessToken, currentUser]);
 
