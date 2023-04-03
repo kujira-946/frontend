@@ -38,6 +38,35 @@ export type VerificationData = {
 };
 
 // ========================================================================================= //
+// [ ONBOARDING DATA ] ===================================================================== //
+// ========================================================================================= //
+
+export type OnboardingOverviewCreateData = {
+  income: number;
+  savings: number;
+  ownerId: number;
+};
+
+export type OnboardingOverviewGroupCreateData = {
+  name: "Recurring" | "Incoming";
+  totalCost: number;
+};
+
+export type OnboardingPurchaseCreateData = {
+  placement: number;
+  description: string;
+  cost: number;
+};
+
+export type OnboardingCreateData = {
+  overview: OnboardingOverviewCreateData;
+  recurringOverviewGroup: OnboardingOverviewGroupCreateData;
+  incomingOverviewGroup: OnboardingOverviewGroupCreateData;
+  recurringPurchases: OnboardingPurchaseCreateData[];
+  incomingPurchases: OnboardingPurchaseCreateData[];
+};
+
+// ========================================================================================= //
 // [ USERS DATA ] ========================================================================== //
 // ========================================================================================= //
 

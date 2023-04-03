@@ -8,6 +8,7 @@ import * as Styles from "@/utils/styles";
 import { uiActions } from "@/redux";
 import { ThemeProps } from "@/components/layout";
 import { NotificationType } from "@/utils/types";
+import { useRouter } from "next/router";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -62,9 +63,12 @@ const Footnote = styled.p`
 
 export const Notification = () => {
   const dispatch = Functions.useAppDispatch();
+  const router = useRouter();
   const { notification } = Functions.useUiSlice();
 
   useEffect(() => {
+    if (notification.redirect) router.push(notification.redirect);
+
     const timer = setTimeout(() => {
       dispatch(uiActions.setNotification(Constants.initialUINotification));
     }, notification.timeout || 5000);

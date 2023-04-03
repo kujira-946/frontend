@@ -6,4 +6,5 @@ export const initialUINotification: UINotification = {
   footnote: "",
   type: "success",
   timeout: 1000,
+  redirect: "",
 };

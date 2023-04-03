@@ -4,13 +4,13 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import * as Redux from "@/redux";
 import { authSaga } from "./sagas/auth.saga";
+import { onboardingSaga } from "./sagas/onboarding.saga";
 import { usersSaga } from "./sagas/users.saga";
 import { overviewsSaga } from "./sagas/overviews.saga";
 import { overviewGroupsSaga } from "./sagas/overview-groups.saga";
 import { logbooksSaga } from "./sagas/logbooks.saga";
 import { logbookEntriesSaga } from "./sagas/logbook-entries.saga";
 import { purchasesSaga } from "./sagas/purchases.saga";
-import { onboardingSaga } from "./sagas/onboarding.saga";
 
 export type GlobalState = {
   ui: Redux.UIState;
@@ -27,13 +27,13 @@ const rootReducer = {
 function* rootSaga() {
   yield Saga.all([
     authSaga(),
+    onboardingSaga(),
     usersSaga(),
     overviewsSaga(),
     overviewGroupsSaga(),
     logbooksSaga(),
     logbookEntriesSaga(),
     purchasesSaga(),
-    onboardingSaga(),
   ]);
 }
 const sagaMiddleware = createSagaMiddleware();

@@ -6,4 +6,5 @@ export type UINotification = {
   footnote?: string;
   type?: NotificationType;
   timeout?: number;
+  redirect?: string;
 };

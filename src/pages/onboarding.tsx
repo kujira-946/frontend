@@ -20,7 +20,7 @@ const Onboarding = () => {
 
   const { currentUser, overviews, overviewGroups, purchases } =
     Functions.useEntitiesSlice();
-  const { onboardingFlow } = Functions.useUiSlice();
+  const { loadingOnboarding } = Functions.useUiSlice();
 
   // ↓↓↓ Confirmation Modal Component Data ↓↓↓ //
   const currentPage = useSignal(1);
@@ -39,6 +39,66 @@ const Onboarding = () => {
   ]);
   const savings = useSignal("");
 
+  function onboardNewUser(): void {
+    if (currentUser) {
+      const overviewData: Types.OnboardingOverviewCreateData = {
+        income: Number(income.value),
+        savings: Number(savings.value),
+        ownerId: currentUser.id,
+      };
+
+      const recurringOverviewGroupData: Types.OnboardingOverviewGroupCreateData =
+        {
+          name: "Recurring",
+          totalCost: recurringPurchasesTotal.value,
+        };
+
+      const incomingOverviewGroupData: Types.OnboardingOverviewGroupCreateData =
+        {
+          name: "Incoming",
+          totalCost: incomingPurchasesTotal.value,
+        };
+
+      const recurringPurchasesData: Types.OnboardingPurchaseCreateData[] = [];
+      recurringPurchases.value.forEach(
+        (purchase: Types.OnboardingPurchase, index: number) => {
+          if (purchase.description) {
+            const recurringPurchase: Types.OnboardingPurchaseCreateData = {
+              placement: index,
+              description: purchase.description,
+              cost: Number(purchase.cost),
+            };
+            recurringPurchasesData.push(recurringPurchase);
+          }
+        }
+      );
+
+      const incomingPurchasesData: Types.OnboardingPurchaseCreateData[] = [];
+      incomingPurchases.value.forEach(
+        (purchase: Types.OnboardingPurchase, index: number) => {
+          if (purchase.description) {
+            const incomingPurchase: Types.OnboardingPurchaseCreateData = {
+              placement: index,
+              description: purchase.description,
+              cost: Number(purchase.cost),
+            };
+            incomingPurchasesData.push(incomingPurchase);
+          }
+        }
+      );
+
+      dispatch(
+        onboardNewUserRequest({
+          overview: overviewData,
+          recurringOverviewGroup: recurringOverviewGroupData,
+          incomingOverviewGroup: incomingOverviewGroupData,
+          recurringPurchases: recurringPurchasesData,
+          incomingPurchases: incomingPurchasesData,
+        })
+      );
+    }
+  }
+
   function toPreviousPage(): void {
     if (currentPage.value - 1 > 0) currentPage.value -= 1;
     else currentPage.value = 1;
@@ -48,15 +108,7 @@ const Onboarding = () => {
     if (currentPage.value + 1 <= Constants.onboardingCopies.length) {
       currentPage.value += 1;
     } else {
-      dispatch(
-        onboardNewUserRequest(
-          { income: Number(income.value), savings: Number(savings.value) },
-          { name: "Recurring", totalCost: recurringPurchasesTotal.value },
-          recurringPurchases,
-          { name: "Incoming", totalCost: incomingPurchasesTotal.value },
-          recurringPurchases
-        )
-      );
+      onboardNewUser();
     }
   }
 
@@ -131,33 +183,39 @@ const Onboarding = () => {
     }
   });
 
-  return (
-    <>
-      <Head>
-        <title>Kujira | Onboarding</title>
-        <meta name="description" content="Kujira app" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+  if (loadingOnboarding) {
+    return <Globals.Loading text="Sit tight as I get you set up!" />;
+  } else {
+    return (
+      <>
+        <Head>
+          <title>Kujira | Onboarding</title>
+          <meta name="description" content="Kujira app" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
 
-      <Globals.ConfirmationModal
-        backButtonAction={toPreviousPage}
-        supportingText={supportingText.value}
-        title={Constants.onboardingCopies[currentPage.value - 1].title}
-        cornerText={`${currentPage.value}/${Constants.onboardingCopies.length}`}
-        bodyTexts={Constants.onboardingCopies[currentPage.value - 1].bodyTexts}
-        submitButtonAction={toNextPage}
-        submitButtonText={
-          Constants.onboardingCopies[currentPage.value - 1].submitButtonText
-        }
-        disableSubmit={disableSubmit.value}
-        showBackButton={currentPage.value === 1 ? false : true}
-        showSubmitArrow
-      >
-        {renderPage()}
-      </Globals.ConfirmationModal>
-    </>
-  );
+        <Globals.ConfirmationModal
+          backButtonAction={toPreviousPage}
+          supportingText={supportingText.value}
+          title={Constants.onboardingCopies[currentPage.value - 1].title}
+          cornerText={`${currentPage.value}/${Constants.onboardingCopies.length}`}
+          bodyTexts={
+            Constants.onboardingCopies[currentPage.value - 1].bodyTexts
+          }
+          submitButtonAction={toNextPage}
+          submitButtonText={
+            Constants.onboardingCopies[currentPage.value - 1].submitButtonText
+          }
+          disableSubmit={disableSubmit.value}
+          showBackButton={currentPage.value === 1 ? false : true}
+          showSubmitArrow
+        >
+          {renderPage()}
+        </Globals.ConfirmationModal>
+      </>
+    );
+  }
 };
 
 export default Onboarding;
