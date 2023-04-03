@@ -151,10 +151,14 @@ const Onboarding = () => {
   }
 
   useEffect(() => {
+    // if (currentUser && currentUser.onboarded) {
+    //   router.push(Constants.ClientRoutes.LOGBOOKS);
+    // } else {
+    //   router.push(Constants.ClientRoutes.LANDING);
+    // }
+
     if (currentUser && currentUser.onboarded) {
       router.push(Constants.ClientRoutes.LOGBOOKS);
-    } else {
-      router.push(Constants.ClientRoutes.LANDING);
     }
   }, [currentUser]);
 

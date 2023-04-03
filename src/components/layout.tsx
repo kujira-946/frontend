@@ -294,7 +294,8 @@ export type ThemeProps = { theme: ThemeContents };
 
 // ↓↓↓ Global Axios Defaults ↓↓↓ //
 if (process.env.NODE_ENV === "production") {
-  axios.defaults.baseURL = "https://kuijra-backend.up.railway.app";
+  // axios.defaults.baseURL = "https://kuijra-backend.up.railway.app";
+  axios.defaults.baseURL = "http://localhost:8000";
 } else {
   axios.defaults.baseURL = "http://localhost:8000";
 }
