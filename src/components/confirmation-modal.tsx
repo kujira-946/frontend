@@ -116,7 +116,7 @@ type Props = {
   showBackButton?: boolean;
   backButtonAction?: () => void;
   title: string;
-  cornerText: string;
+  cornerText?: string;
   closeButtonAction?: () => void;
   supportingText?: string;
   bodyTexts?: string[];
@@ -153,7 +153,7 @@ export const ConfirmationModal = (props: Props) => {
             </HeaderButton>
           )}
           <Title>{props.title}</Title>
-          <CornerText>{props.cornerText}</CornerText>
+          {props.cornerText && <CornerText>{props.cornerText}</CornerText>}
           {props.closeButtonAction && (
             <HeaderButton type="button" onClick={props.closeButtonAction}>
               <Icons.Close

@@ -94,18 +94,19 @@ const DeleteButton = styled.div`
 type Props = {
   borderRadius?: keyof typeof Styles.pxAsRem;
   provided: DraggableProvided;
-  selectionValue: number;
+  selectionValue: number; // index or purchase id
   disableSubmit?: Signal<boolean>;
 
   description: string;
   cost: string;
+
+  onCheckActive?: () => void;
+  onCheckInactive?: () => void;
   updatePurchase?: (
     selectionValue: number,
     description: string,
     cost: string
   ) => void;
-  onCheckActive?: () => void;
-  onCheckInactive?: () => void;
   deleteAction?: (deletePosition: number) => void;
 
   hideDrag?: true;
@@ -185,10 +186,10 @@ const ExportedComponent = (props: Props) => {
     >
       {!props.hideDrag && (
         <DragButton
+          {...props.provided.dragHandleProps}
           onMouseEnter={() => (dragHovered.value = true)}
           onMouseLeave={() => (dragHovered.value = false)}
           tabIndex={-1}
-          {...props.provided.dragHandleProps}
         >
           <Icons.Drag
             height={12}

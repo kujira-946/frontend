@@ -18,8 +18,7 @@ const Onboarding = () => {
   const dispatch = Functions.useAppDispatch();
   const router = useRouter();
 
-  const { currentUser, overviews, overviewGroups, purchases } =
-    Functions.useEntitiesSlice();
+  const { currentUser } = Functions.useEntitiesSlice();
   const { loadingOnboarding } = Functions.useUiSlice();
 
   // ↓↓↓ Confirmation Modal Component Data ↓↓↓ //
@@ -154,6 +153,8 @@ const Onboarding = () => {
   useEffect(() => {
     if (currentUser && currentUser.onboarded) {
       router.push(Constants.ClientRoutes.LOGBOOKS);
+    } else {
+      router.push(Constants.ClientRoutes.LANDING);
     }
   }, [currentUser]);
 
@@ -196,10 +197,11 @@ const Onboarding = () => {
         </Head>
 
         <Globals.ConfirmationModal
+          showBackButton={currentPage.value === 1 ? false : true}
           backButtonAction={toPreviousPage}
-          supportingText={supportingText.value}
           title={Constants.onboardingCopies[currentPage.value - 1].title}
           cornerText={`${currentPage.value}/${Constants.onboardingCopies.length}`}
+          supportingText={supportingText.value}
           bodyTexts={
             Constants.onboardingCopies[currentPage.value - 1].bodyTexts
           }
@@ -208,7 +210,6 @@ const Onboarding = () => {
             Constants.onboardingCopies[currentPage.value - 1].submitButtonText
           }
           disableSubmit={disableSubmit.value}
-          showBackButton={currentPage.value === 1 ? false : true}
           showSubmitArrow
         >
           {renderPage()}
