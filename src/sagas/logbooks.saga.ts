@@ -117,7 +117,7 @@ function* fetchUserLogbooks(action: UserLogbooksAction) {
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const { ownerId, forCurrentUser } = action.payload;
     const endpoint = ApiRoutes.LOGBOOKS + `/fetch-user-logbooks`;
-    const { data } = yield Saga.call(axios.get, endpoint, ownerId as any);
+    const { data } = yield Saga.call(axios.post, endpoint, { ownerId });
     const normalizedData = normalize(data.data, [logbooksSchema]);
     const { logbooks } = normalizedData.entities;
     const logbookIds = normalizedData.result;

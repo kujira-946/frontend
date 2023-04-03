@@ -128,7 +128,7 @@ function* fetchUserOverviews(action: UserOverviewsAction) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
     const { ownerId, forCurrentUser } = action.payload;
     const endpoint = ApiRoutes.OVERVIEWS + `/fetch-user-overviews`;
-    const { data } = yield Saga.call(axios.get, endpoint, ownerId as any);
+    const { data } = yield Saga.call(axios.post, endpoint, { ownerId });
     const normalizedData = normalize(data.data, [overviewsSchema]);
     const { overviews } = normalizedData.entities;
     const overviewIds = normalizedData.result;
@@ -161,7 +161,7 @@ function* bulkFetchOverviews(action: OverviewIdsAction) {
   yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
   const { overviewIds } = action.payload;
   const endpoint = ApiRoutes.OVERVIEWS + `/bulk-fetch`;
-  const { data } = yield Saga.call(axios.get, endpoint, overviewIds as any);
+  const { data } = yield Saga.call(axios.post, endpoint, { overviewIds });
   const normalizedData = normalize(data.data, [overviewsSchema]);
   const { overviews } = normalizedData.entities;
   yield Saga.put(

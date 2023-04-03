@@ -4,13 +4,19 @@ import { useEffect } from "react";
 
 import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
+import { fetchUserDataRequest } from "@/sagas/fetch-user-data.saga";
 
 const Logbooks = () => {
+  const dispatch = Functions.useAppDispatch();
   const { currentUser } = Functions.useEntitiesSlice();
 
   const router = useRouter();
   useEffect(() => {
-    if (!currentUser) router.push(Constants.ClientRoutes.LANDING);
+    if (currentUser) {
+      dispatch(fetchUserDataRequest(currentUser.id));
+    } else {
+      router.push(Constants.ClientRoutes.LANDING);
+    }
   }, [currentUser]);
 
   return (
