@@ -84,29 +84,18 @@ export const OverviewHeader = (props: Props) => {
     [overviews]
   );
 
-  return (
-    <Container>
-      <Heading>
-        <HeadingTitle>February 2023 Overview</HeadingTitle>
-        <HeadingCaption>{props.page}</HeadingCaption>
-      </Heading>
+  const purchaseCells = useMemo(() => {
+    if (overviews) {
+      const overview = Object.values(overviews)[0];
+      const { id, income, savings } = overview;
 
-      {loadingOverviews && (
-        <>
-          <Globals.Shimmer height={44} borderRadius="six" />
-          <Globals.Shimmer height={44} borderRadius="six" />
-          <Globals.Shimmer height={44} borderRadius="six" />
-          <Globals.Shimmer height={44} borderRadius="six" />
-        </>
-      )}
-
-      {!loadingOverviews && overviews && (
+      return (
         <>
           <Globals.PurchaseCell
             key={`dashboard-overview-header-purchase-cell-income`}
-            selectionValue={Number(Object.keys(overviews)[0])}
+            selectionValue={id}
             description="Income"
-            cost={Functions.roundNumber(Object.values(overviews)[0].income, 2)}
+            cost={Functions.roundNumber(income, 2)}
             updateAction={updateIncome}
             costFrontText="$"
             hideDrag
@@ -118,13 +107,12 @@ export const OverviewHeader = (props: Props) => {
 
           <Globals.PurchaseCell
             key={`dashboard-overview-header-purchase-cell-savings`}
-            selectionValue={Number(Object.keys(overviews)[0])}
+            selectionValue={id}
             description={`Savings (%)\n$${Functions.roundNumber(
-              Object.values(overviews)[0].income *
-                (Object.values(overviews)[0].savings / 100),
+              income * (savings / 100),
               2
             )}`}
-            cost={Object.values(overviews)[0].savings.toString()}
+            cost={savings.toString()}
             updateAction={updateSavings}
             hideDrag
             hideCheck
@@ -135,7 +123,7 @@ export const OverviewHeader = (props: Props) => {
 
           <Globals.PurchaseCell
             key={`dashboard-overview-header-purchase-cell-total-spent`}
-            selectionValue={Number(Object.keys(overviews)[0])}
+            selectionValue={id}
             description="Total Spent"
             cost={totalSpent.value.toString()}
             costFrontText="$"
@@ -149,14 +137,9 @@ export const OverviewHeader = (props: Props) => {
 
           <Globals.PurchaseCell
             key={`dashboard-overview-header-purchase-cell-remaining`}
-            selectionValue={Number(Object.keys(overviews)[0])}
+            selectionValue={id}
             description="Remaining"
-            cost={Functions.roundNumber(
-              Object.values(overviews)[0].income -
-                Object.values(overviews)[0].income *
-                  (Object.values(overviews)[0].savings / 100),
-              2
-            )}
+            cost={Functions.roundNumber(income - income * (savings / 100), 2)}
             costFrontText="$"
             hideDrag
             hideCheck
@@ -166,6 +149,26 @@ export const OverviewHeader = (props: Props) => {
             costFrozen
           />
         </>
+      );
+    }
+  }, [overviews]);
+
+  return (
+    <Container>
+      <Heading>
+        <HeadingTitle>February 2023 Overview</HeadingTitle>
+        <HeadingCaption>{props.page}</HeadingCaption>
+      </Heading>
+
+      {loadingOverviews ? (
+        <>
+          <Globals.Shimmer height={44} borderRadius="six" />
+          <Globals.Shimmer height={44} borderRadius="six" />
+          <Globals.Shimmer height={44} borderRadius="six" />
+          <Globals.Shimmer height={44} borderRadius="six" />
+        </>
+      ) : (
+        purchaseCells
       )}
     </Container>
   );
