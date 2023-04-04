@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
-import { Overview } from "./overview";
+import { ThemeProps } from "../layout";
+
+import { OverviewNavbar } from "./overview";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -15,6 +17,12 @@ const Container = styled.main`
   display: flex;
 
   border: red solid 1px;
+`;
+
+const Overview = styled.section`
+  width: 400px;
+  height: 100%;
+  border-right: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
 `;
 
 const Children = styled.section`
@@ -34,7 +42,10 @@ type Props = {
 export const DashboardPartial = (props: Props) => {
   return (
     <Container>
-      <Overview />
+      <Overview>
+        <OverviewNavbar />
+      </Overview>
+			
       <Children>{props.children}</Children>
     </Container>
   );
