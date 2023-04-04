@@ -104,8 +104,9 @@ const ExportedComponent = (props: Props) => {
                       disableSubmit={props.disableSubmit}
                       description={purchase.description}
                       cost={purchase.cost}
-                      updatePurchase={updatePurchase}
+                      updateAction={updatePurchase}
                       deleteAction={deletePurchase}
+                      costFrontText="$"
                       hideCheck
                       hideCategories
                     />

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { effect, useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
@@ -53,29 +53,36 @@ export const OverviewHeader = (props: Props) => {
   const { overviews } = Functions.useEntitiesSlice();
   const { loadingOverviews } = Functions.useUiSlice();
 
-  const income = useSignal(0);
-  const savings = useSignal(0);
   const totalSpent = useSignal(0);
   const error = useSignal("");
 
   const updateIncome = useCallback(
-    Functions.debounce(() => {
-      (selectionValue: number, _: string, cost: string) => {
-        dispatch(
-          updateOverviewRequest(selectionValue, { income: Number(cost) })
-        );
-      };
+    Functions.debounce((_: number, __: string, cost: string) => {
+      if (overviews) {
+        const overview = Object.values(overviews)[0];
+        if (Number(cost) && Number(cost) !== overview.income) {
+          dispatch(
+            updateOverviewRequest(overview.id, { income: Number(cost) })
+          );
+        }
+      }
     }, 1000),
-    []
+    [overviews]
   );
 
-  useEffect(() => {
-    if (overviews) {
-      const overview = Object.values(overviews)[0];
-      income.value = overview.income;
-      savings.value = overview.income * (overview.savings / 100);
-    }
-  }, [overviews]);
+  const updateSavings = useCallback(
+    Functions.debounce((_: number, __: string, cost: string) => {
+      if (overviews) {
+        const overview = Object.values(overviews)[0];
+        if (Number(cost) && Number(cost) !== overview.savings) {
+          dispatch(
+            updateOverviewRequest(overview.id, { savings: Number(cost) })
+          );
+        }
+      }
+    }, 1000),
+    [overviews]
+  );
 
   return (
     <Container>
@@ -96,10 +103,12 @@ export const OverviewHeader = (props: Props) => {
       {!loadingOverviews && overviews && (
         <>
           <Globals.PurchaseCell
+            key={`dashboard-overview-header-purchase-cell-income`}
             selectionValue={Number(Object.keys(overviews)[0])}
             description="Income"
-            cost={Functions.roundNumber(income.value, 2)}
-            updatePurchase={updateIncome}
+            cost={Functions.roundNumber(Object.values(overviews)[0].income, 2)}
+            updateAction={updateIncome}
+            costFrontText="$"
             hideDrag
             hideCheck
             hideCategories
@@ -108,10 +117,15 @@ export const OverviewHeader = (props: Props) => {
           />
 
           <Globals.PurchaseCell
+            key={`dashboard-overview-header-purchase-cell-savings`}
             selectionValue={Number(Object.keys(overviews)[0])}
-            description="Savings"
-            cost={Functions.roundNumber(savings.value, 2)}
-            updatePurchase={updateIncome}
+            description={`Savings (%)\n$${Functions.roundNumber(
+              Object.values(overviews)[0].income *
+                (Object.values(overviews)[0].savings / 100),
+              2
+            )}`}
+            cost={Object.values(overviews)[0].savings.toString()}
+            updateAction={updateSavings}
             hideDrag
             hideCheck
             hideCategories
@@ -120,9 +134,11 @@ export const OverviewHeader = (props: Props) => {
           />
 
           <Globals.PurchaseCell
+            key={`dashboard-overview-header-purchase-cell-total-spent`}
             selectionValue={Number(Object.keys(overviews)[0])}
             description="Total Spent"
             cost={totalSpent.value.toString()}
+            costFrontText="$"
             hideDrag
             hideCheck
             hideCategories
@@ -132,9 +148,16 @@ export const OverviewHeader = (props: Props) => {
           />
 
           <Globals.PurchaseCell
+            key={`dashboard-overview-header-purchase-cell-remaining`}
             selectionValue={Number(Object.keys(overviews)[0])}
             description="Remaining"
-            cost={Functions.roundNumber(income.value - savings.value, 2)}
+            cost={Functions.roundNumber(
+              Object.values(overviews)[0].income -
+                Object.values(overviews)[0].income *
+                  (Object.values(overviews)[0].savings / 100),
+              2
+            )}
+            costFrontText="$"
             hideDrag
             hideCheck
             hideCategories

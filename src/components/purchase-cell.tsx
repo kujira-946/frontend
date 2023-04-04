@@ -102,13 +102,17 @@ type Props = {
 
   onCheckActive?: () => void;
   onCheckInactive?: () => void;
-  updatePurchase?: (
+  updateAction?: (
     selectionValue: number,
     description: string,
     cost: string
   ) => void;
   deleteAction?: (deletePosition: number) => void;
 
+  descriptionFrontText?: string;
+  descriptionBackText?: string;
+  costFrontText?: string;
+  costBackText?: string;
   hideDrag?: true;
   hideCheck?: true;
   hideCategories?: true;
@@ -153,8 +157,8 @@ const ExportedComponent = (props: Props) => {
   }, [checkboxActive.value, props.onCheckActive, props.onCheckInactive]);
 
   useEffect(() => {
-    if (props.updatePurchase) {
-      props.updatePurchase(props.selectionValue, description.value, cost.value);
+    if (props.updateAction) {
+      props.updateAction(props.selectionValue, description.value, cost.value);
     }
   }, [description.value, cost.value]);
 
@@ -162,7 +166,7 @@ const ExportedComponent = (props: Props) => {
     if (props.disableSubmit) {
       props.disableSubmit.value = !!costError.value;
     }
-  }, [costError.value]);
+  }, [props.disableSubmit]);
 
   effect(() => {
     if (cost.value !== "") {
@@ -246,6 +250,8 @@ const ExportedComponent = (props: Props) => {
           placeholder="Description"
           userInput={props.description}
           setUserInput={updateDescription}
+          frontText={props.descriptionFrontText}
+          backText={props.descriptionBackText}
           hasValue={!!props.description}
           frozen={!!props.descriptionFrozen}
         />
@@ -255,12 +261,14 @@ const ExportedComponent = (props: Props) => {
           borderRadius={props.borderRadius}
           placeholder="Cost"
           errorMessage={costError.value}
-          userInput={props.cost}
+          // userInput={props.cost}
+          userInput={cost.value}
           setUserInput={updateCost}
           onBlur={onCostBlur}
+          frontText={props.costFrontText}
+          backText={props.costBackText}
           hasValue={!!props.cost}
           frozen={!!props.costFrozen}
-          isCost
         />
       </Inputs>
 

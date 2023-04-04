@@ -98,11 +98,13 @@ const entitiesSlice = createSlice({
       if (state.users) {
         const { userId, user } = action.payload;
         const updatedUsers = Functions.deepCopy(state.users);
-        let updatedUser = updatedUsers[userId];
-        const { overviewIds, logbookIds } = updatedUser;
-        updatedUser = user;
-        if (overviewIds) updatedUser["overviewIds"] = overviewIds;
-        if (logbookIds) updatedUser["logbookIds"] = logbookIds;
+        updatedUsers[userId] = user;
+        if (state.users[userId].overviewIds) {
+          updatedUsers[userId]["overviewIds"] = state.users[userId].overviewIds;
+        }
+        if (state.users[userId].logbookIds) {
+          updatedUsers[userId]["logbookIds"] = state.users[userId].logbookIds;
+        }
         state.users = updatedUsers;
       }
     },
@@ -158,11 +160,10 @@ const entitiesSlice = createSlice({
       if (state.overviews) {
         const { overviewId, overview } = action.payload;
         const updatedOverviews = Functions.deepCopy(state.overviews);
-        let updatedOverview = updatedOverviews[overviewId];
-        const { overviewGroupIds } = updatedOverview;
-        updatedOverview = overview;
-        if (overviewGroupIds) {
-          updatedOverview["overviewGroupIds"] = overviewGroupIds;
+        updatedOverviews[overviewId] = overview;
+        if (state.overviews[overviewId].overviewGroupIds) {
+          updatedOverviews[overviewId]["overviewGroupIds"] =
+            state.overviews[overviewId].overviewGroupIds;
         }
         state.overviews = updatedOverviews;
       }

@@ -23,7 +23,7 @@ const Container = styled.main`
 
 const Overview = styled.section`
   position: relative;
-  width: 400px;
+  width: 18.75rem;
   height: 100%;
   border-right: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
   overflow-y: auto;

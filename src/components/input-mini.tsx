@@ -71,7 +71,7 @@ const Body = styled.div`
   align-items: center;
 `;
 
-const ForwardText = styled.span`
+const Text = styled.span`
   display: block;
 `;
 
@@ -107,9 +107,10 @@ type Props = {
   onBlur?: () => void;
   onFocus?: () => void;
 
+  frontText?: string;
+  backText?: string;
   hasValue?: boolean;
   frozen?: boolean;
-  isCost?: true;
 };
 
 const ExportedComponent = (props: Props) => {
@@ -151,8 +152,8 @@ const ExportedComponent = (props: Props) => {
       {props.errorMessage && <ErrorMessage>{props.errorMessage}</ErrorMessage>}
 
       <Body>
-        {props.isCost && props.userInput !== "" && !props.errorMessage && (
-          <ForwardText>$</ForwardText>
+        {props.frontText && props.userInput !== "" && !props.errorMessage && (
+          <Text>{props.frontText}</Text>
         )}
 
         <Textarea
@@ -166,6 +167,10 @@ const ExportedComponent = (props: Props) => {
           minRows={1}
           tabIndex={props.frozen ? -1 : 0}
         />
+
+        {props.backText && props.userInput !== "" && !props.errorMessage && (
+          <Text>{props.backText}</Text>
+        )}
       </Body>
     </Container>
   );
