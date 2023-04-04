@@ -37,5 +37,11 @@ export const clearButton = css`
 
 export const preventUserInteraction = css`
   pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 `;

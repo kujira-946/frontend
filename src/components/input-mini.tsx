@@ -164,6 +164,7 @@ const ExportedComponent = (props: Props) => {
           onFocus={onFocus}
           onKeyPress={preventEnterKey}
           minRows={1}
+          tabIndex={props.frozen ? -1 : 0}
         />
       </Body>
     </Container>

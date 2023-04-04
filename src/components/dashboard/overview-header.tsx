@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { effect, useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
@@ -53,14 +53,29 @@ export const OverviewHeader = (props: Props) => {
   const { overviews } = Functions.useEntitiesSlice();
   const { loadingOverviews } = Functions.useUiSlice();
 
+  const income = useSignal(0);
+  const savings = useSignal(0);
   const totalSpent = useSignal(0);
   const error = useSignal("");
 
-  function updateIncome(selectionValue: number, _: string, cost: string) {
-    return Functions.debounce(() => {
-      dispatch(updateOverviewRequest(selectionValue, { income: Number(cost) }));
-    }, 1000);
-  }
+  const updateIncome = useCallback(
+    Functions.debounce(() => {
+      (selectionValue: number, _: string, cost: string) => {
+        dispatch(
+          updateOverviewRequest(selectionValue, { income: Number(cost) })
+        );
+      };
+    }, 1000),
+    []
+  );
+
+  useEffect(() => {
+    if (overviews) {
+      const overview = Object.values(overviews)[0];
+      income.value = overview.income;
+      savings.value = overview.income * (overview.savings / 100);
+    }
+  }, [overviews]);
 
   return (
     <Container>
@@ -83,7 +98,7 @@ export const OverviewHeader = (props: Props) => {
           <Globals.PurchaseCell
             selectionValue={Number(Object.keys(overviews)[0])}
             description="Income"
-            cost={Functions.roundNumber(Object.values(overviews)[0].income, 2)}
+            cost={Functions.roundNumber(income.value, 2)}
             updatePurchase={updateIncome}
             hideDrag
             hideCheck
@@ -95,7 +110,7 @@ export const OverviewHeader = (props: Props) => {
           <Globals.PurchaseCell
             selectionValue={Number(Object.keys(overviews)[0])}
             description="Savings"
-            cost={Functions.roundNumber(Object.values(overviews)[0].savings, 2)}
+            cost={Functions.roundNumber(savings.value, 2)}
             updatePurchase={updateIncome}
             hideDrag
             hideCheck
@@ -108,7 +123,6 @@ export const OverviewHeader = (props: Props) => {
             selectionValue={Number(Object.keys(overviews)[0])}
             description="Total Spent"
             cost={totalSpent.value.toString()}
-            updatePurchase={updateIncome}
             hideDrag
             hideCheck
             hideCategories
@@ -120,12 +134,7 @@ export const OverviewHeader = (props: Props) => {
           <Globals.PurchaseCell
             selectionValue={Number(Object.keys(overviews)[0])}
             description="Remaining"
-            cost={Functions.roundNumber(
-              Object.values(overviews)[0].income -
-                Object.values(overviews)[0].savings,
-              2
-            )}
-            updatePurchase={updateIncome}
+            cost={Functions.roundNumber(income.value - savings.value, 2)}
             hideDrag
             hideCheck
             hideCategories
