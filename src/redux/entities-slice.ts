@@ -228,11 +228,10 @@ const entitiesSlice = createSlice({
       if (state.overviewGroups) {
         const { overviewGroupId, overviewGroup } = action.payload;
         const updatedOverviewGroups = Functions.deepCopy(state.overviewGroups);
-        let updatedOverviewGroup = updatedOverviewGroups[overviewGroupId];
-        const { purchaseIds } = updatedOverviewGroup;
-        updatedOverviewGroup = overviewGroup;
-        if (purchaseIds) {
-          updatedOverviewGroup["purchaseIds"] = purchaseIds;
+        updatedOverviewGroups[overviewGroupId] = overviewGroup;
+        if (state.overviewGroups[overviewGroupId].purchaseIds) {
+          updatedOverviewGroups[overviewGroupId]["purchaseIds"] =
+            state.overviewGroups[overviewGroupId].purchaseIds;
         }
         state.overviewGroups = updatedOverviewGroups;
       }
@@ -295,11 +294,10 @@ const entitiesSlice = createSlice({
       if (state.logbooks) {
         const { logbookId, logbook } = action.payload;
         const updatedLogbooks = Functions.deepCopy(state.logbooks);
-        let updatedLogbook = updatedLogbooks[logbookId];
-        const { logbookEntryIds } = updatedLogbook;
-        updatedLogbook = logbook;
-        if (logbookEntryIds) {
-          updatedLogbook["logbookEntryIds"] = logbookEntryIds;
+        updatedLogbooks[logbookId] = logbook;
+        if (state.logbooks[logbookId].logbookEntryIds) {
+          updatedLogbooks[logbookId]["logbookEntryIds"] =
+            state.logbooks[logbookId].logbookEntryIds;
         }
         state.logbooks = updatedLogbooks;
       }
@@ -362,11 +360,10 @@ const entitiesSlice = createSlice({
       if (state.logbookEntries) {
         const { logbookEntryId, logbookEntry } = action.payload;
         const updatedLogbookEntry = Functions.deepCopy(state.logbookEntries);
-        let updatedOverview = updatedLogbookEntry[logbookEntryId];
-        const { purchaseIds } = updatedOverview;
-        updatedOverview = logbookEntry;
-        if (purchaseIds) {
-          updatedOverview["purchaseIds"] = purchaseIds;
+        updatedLogbookEntry[logbookEntryId] = logbookEntry;
+        if (state.logbookEntries[logbookEntryId].purchaseIds) {
+          updatedLogbookEntry[logbookEntryId]["purchaseIds"] =
+            state.logbookEntries[logbookEntryId].purchaseIds;
         }
         state.logbookEntries = updatedLogbookEntry;
       }
