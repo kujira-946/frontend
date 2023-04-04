@@ -1,5 +1,6 @@
 import Head from "next/head";
 
+import * as Components from "@/components/dashboard";
 import * as Functions from "@/utils/functions";
 
 const Logbooks = () => {
@@ -21,7 +22,7 @@ const Logbooks = () => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <>Logbooks Page</>
+        <Components.DashboardPartial>Logbooks Page Baybayyy</Components.DashboardPartial>
       </>
     );
   }
