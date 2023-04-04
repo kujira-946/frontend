@@ -315,14 +315,12 @@ export const Layout = (props: Props) => {
   const router = useRouter();
 
   const { ui } = useContext(SignalsStoreContext);
-  const { overviews, overviewGroups, logbooks } = Functions.useEntitiesSlice();
+  const { currentUser, overviews, overviewGroups, logbooks } =
+    Functions.useEntitiesSlice();
   const { loadingUsers } = Functions.useUiSlice();
-  const currentUser = Functions.useFetchAuthenticatedUser();
 
   useEffect(() => {
-    if (!jwtAccessToken || !userId) {
-      router.push(Constants.ClientRoutes.LANDING);
-    } else if (!jwtAccessToken && userId) {
+    if (!jwtAccessToken && userId) {
       dispatch(logoutRequest(Number(userId)));
       Cookies.remove("id");
     }

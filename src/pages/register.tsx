@@ -7,10 +7,11 @@ import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
 
 const Register = () => {
+  const router = useRouter();
+  
   const { currentUser } = Functions.useEntitiesSlice();
   const { tempUserId } = Functions.useUiSlice();
 
-  const router = useRouter();
   useEffect(() => {
     if (currentUser) {
       if (currentUser.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);

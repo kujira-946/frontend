@@ -5,6 +5,8 @@ import * as Functions from "@/utils/functions";
 const Logbooks = () => {
   const { currentUser } = Functions.useEntitiesSlice();
 
+  Functions.useDetectAuthorizedUser(currentUser);
+
   if (!currentUser) {
     return null;
   } else {

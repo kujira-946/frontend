@@ -62,11 +62,9 @@ export function useDetectInView(
   return { ref, inView: inView.value };
 }
 
-export function useFetchAuthenticatedUser(): Types.User | null {
+export function useDetectAuthorizedUser(currentUser: Types.User | null): void {
   const router = useRouter();
-  const { currentUser } = Functions.useEntitiesSlice();
   useEffect(() => {
     if (!currentUser) router.push(Constants.ClientRoutes.LANDING);
   }, [currentUser]);
-  return currentUser;
 }

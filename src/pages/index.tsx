@@ -22,7 +22,7 @@ const Main = styled.main`
 
 const Home = () => {
   const router = useRouter();
-
+  
   const { currentUser } = Functions.useEntitiesSlice();
 
   // ↓↓↓ Starts the page back at the top when refreshing. ↓↓↓ //

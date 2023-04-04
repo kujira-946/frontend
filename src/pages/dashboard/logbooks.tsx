@@ -3,7 +3,11 @@ import Head from "next/head";
 import * as Functions from "@/utils/functions";
 
 const Logbooks = () => {
+  console.log("Logbooks Page Rendered");
+
   const { currentUser } = Functions.useEntitiesSlice();
+
+  Functions.useDetectAuthorizedUser(currentUser);
 
   if (!currentUser) {
     return null;
