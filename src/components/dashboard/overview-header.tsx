@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { useCallback, useEffect, useMemo } from "react";
-import { effect, useSignal } from "@preact/signals-react";
+import { useCallback, useMemo } from "react";
+import { useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
-import * as Constants from "@/utils/constants";
+
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { ThemeProps } from "../layout";
