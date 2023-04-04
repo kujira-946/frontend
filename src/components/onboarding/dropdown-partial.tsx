@@ -3,7 +3,7 @@ import { memo, useCallback, useEffect } from "react";
 import { Signal } from "@preact/signals-react";
 
 import * as Global from "@/components";
-import * as Overview from "@/components/overview";
+import * as Dashboard from "@/components/dashboard";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 
@@ -71,7 +71,8 @@ const ExportedComponent = (props: Props) => {
   }, [props.disableSubmit, props.purchases.value]);
 
   return (
-    <Overview.Dropdown
+    <Dashboard.Dropdown
+      initiallyOpen={true}
       title={props.title}
       totalCost={Functions.roundNumber(props.totalCost.value, 2)}
       purchases={props.purchases}
@@ -117,7 +118,7 @@ const ExportedComponent = (props: Props) => {
           );
         }
       )}
-    </Overview.Dropdown>
+    </Dashboard.Dropdown>
   );
 };
 

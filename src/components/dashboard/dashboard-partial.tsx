@@ -7,6 +7,7 @@ import { ThemeProps } from "../layout";
 
 import { OverviewNavbar } from "./overview-navbar";
 import { OverviewHeader } from "./overview-header";
+import { OverviewGroups } from "./overview-groups";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -58,6 +59,7 @@ export const DashboardPartial = (props: Props) => {
       <Overview>
         <OverviewNavbar />
         <OverviewHeader page={props.page} />
+        <OverviewGroups />
       </Overview>
 
       <Children>{props.children}</Children>

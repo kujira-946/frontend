@@ -96,6 +96,7 @@ const PurchaseCells = styled.div`
 type Props = {
   children: React.ReactNode;
   borderRadius?: Types.PxAsRem;
+  initiallyOpen: boolean;
   title: "Recurring" | "Incoming" | string;
   totalCost: string;
   purchases: Signal<Types.OnboardingPurchase[]>;
@@ -110,7 +111,7 @@ type Props = {
 export const Dropdown = (props: Props) => {
   const { ui } = useContext(SignalsStoreContext);
 
-  const opened = useSignal(true);
+  const opened = useSignal(props.initiallyOpen);
 
   return (
     <Container borderRadius={props.borderRadius} opened={opened.value}>
