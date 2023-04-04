@@ -26,7 +26,9 @@ const Container = styled.article<ContainerProps>`
   padding: 0 ${Styles.pxAsRem.six};
   color: ${(props: ThemeProps) => props.theme.text};
   background-color: ${(props: ContainerProps & ThemeProps) => {
-    return props.hasValue
+    return props.frozen
+      ? "transparent"
+      : props.hasValue
       ? props.theme.backgroundTwo
       : props.theme.backgroundOne;
   }};

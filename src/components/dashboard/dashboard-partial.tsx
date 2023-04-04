@@ -1,8 +1,12 @@
 import styled from "styled-components";
+import { useEffect } from "react";
 
+import * as Functions from "@/utils/functions";
+import { fetchUserOverviewsRequest } from "@/sagas/overviews.saga";
 import { ThemeProps } from "../layout";
 
-import { OverviewNavbar } from "./overview";
+import { OverviewNavbar } from "./overview-navbar";
+import { OverviewHeader } from "./overview-header";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -15,8 +19,6 @@ const Container = styled.main`
   bottom: 0;
   left: 0;
   display: flex;
-
-  border: red solid 1px;
 `;
 
 const Overview = styled.section`
@@ -27,8 +29,6 @@ const Overview = styled.section`
 
 const Children = styled.section`
   flex: 1;
-
-  /* border: blue solid 1px; */
 `;
 
 // ========================================================================================= //
@@ -40,12 +40,23 @@ type Props = {
 };
 
 export const DashboardPartial = (props: Props) => {
+  const dispatch = Functions.useAppDispatch();
+
+  const { currentUser, overviews } = Functions.useEntitiesSlice();
+
+  useEffect(() => {
+    if (currentUser && !overviews) {
+      dispatch(fetchUserOverviewsRequest(currentUser.id));
+    }
+  }, [currentUser, overviews]);
+
   return (
     <Container>
       <Overview>
         <OverviewNavbar />
+        <OverviewHeader />
       </Overview>
-			
+
       <Children>{props.children}</Children>
     </Container>
   );

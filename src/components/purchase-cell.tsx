@@ -93,7 +93,7 @@ const DeleteButton = styled.div`
 
 type Props = {
   borderRadius?: keyof typeof Styles.pxAsRem;
-  provided: DraggableProvided;
+  provided?: DraggableProvided;
   selectionValue: number; // index or purchase id
   disableSubmit?: Signal<boolean>;
 
@@ -166,7 +166,9 @@ const ExportedComponent = (props: Props) => {
 
   effect(() => {
     if (cost.value !== "") {
-      if (!Number(cost.value)) {
+      if (cost.value === "0") {
+        costError.value = "";
+      } else if (!Number(cost.value)) {
         costError.value = "Must be a number.";
       } else if (Number(cost.value) < 0) {
         costError.value = "Please use positive values.";
@@ -184,7 +186,7 @@ const ExportedComponent = (props: Props) => {
           : Styles.pxAsRem.six,
       }}
     >
-      {!props.hideDrag && (
+      {!props.hideDrag && props.provided && (
         <DragButton
           {...props.provided.dragHandleProps}
           onMouseEnter={() => (dragHovered.value = true)}
