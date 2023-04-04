@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { useEffect } from "react";
@@ -26,6 +27,7 @@ export const OverviewGroups = () => {
   const dispatch = Functions.useAppDispatch();
 
   const { overviews, overviewGroups } = Functions.useEntitiesSlice();
+  const { loadingOverviewGroups } = Functions.useUiSlice();
 
   useEffect(() => {
     if (overviews && !overviewGroups) {
@@ -34,5 +36,16 @@ export const OverviewGroups = () => {
     }
   }, [overviews, overviewGroups]);
 
-  return <Container></Container>;
+  return (
+    <Container>
+      {loadingOverviewGroups ? (
+        <>
+          <Globals.Shimmer borderRadius="six" height={40} />
+          <Globals.Shimmer borderRadius="six" height={40} />
+        </>
+      ) : (
+        <>Foobar</>
+      )}
+    </Container>
+  );
 };
