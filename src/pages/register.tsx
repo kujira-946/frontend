@@ -18,25 +18,29 @@ const Register = () => {
     }
   }, [currentUser]);
 
-  return (
-    <>
-      <Head>
-        <title>Kujira | Register</title>
-        <meta name="description" content="Kujira app" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+  if (currentUser) {
+    return null;
+  } else {
+    return (
+      <>
+        <Head>
+          <title>Kujira | Register</title>
+          <meta name="description" content="Kujira app" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
 
-      {!tempUserId ? (
-        <Components.AuthForm
-          title="Register"
-          caption="Already have an account?"
-        />
-      ) : (
-        <Components.Verification title="Verify Registration" />
-      )}
-    </>
-  );
+        {!tempUserId ? (
+          <Components.AuthForm
+            title="Register"
+            caption="Already have an account?"
+          />
+        ) : (
+          <Components.Verification title="Verify Registration" />
+        )}
+      </>
+    );
+  }
 };
 
 export default Register;

@@ -3,6 +3,9 @@ import { useEffect, useRef } from "react";
 import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
 import { useSignal } from "@preact/signals-react";
 
+import * as Constants from "@/utils/constants";
+import * as Functions from "@/utils/functions";
+import * as Types from "@/utils/types";
 import { AppDispatch, RootState } from "@/store";
 
 // Use these instead of react-redux's `useDispatch` and `useSelector`,
@@ -57,4 +60,13 @@ export function useDetectInView(
   }, [threshold, inView]);
 
   return { ref, inView: inView.value };
+}
+
+export function useFetchAuthenticatedUser(): Types.User | null {
+  const router = useRouter();
+  const { currentUser } = Functions.useEntitiesSlice();
+  useEffect(() => {
+    if (!currentUser) router.push(Constants.ClientRoutes.LANDING);
+  }, [currentUser]);
+  return currentUser;
 }

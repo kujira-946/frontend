@@ -315,13 +315,16 @@ export const Layout = (props: Props) => {
   const router = useRouter();
 
   const { ui } = useContext(SignalsStoreContext);
-  const { currentUser, overviews, overviewGroups, logbooks } =
-    Functions.useEntitiesSlice();
+  const { overviews, overviewGroups, logbooks } = Functions.useEntitiesSlice();
   const { loadingUsers } = Functions.useUiSlice();
+  const currentUser = Functions.useFetchAuthenticatedUser();
 
   useEffect(() => {
     if (!jwtAccessToken || !userId) {
       router.push(Constants.ClientRoutes.LANDING);
+    } else if (!jwtAccessToken && userId) {
+      dispatch(logoutRequest(Number(userId)));
+      Cookies.remove("id");
     }
   }, []);
 
@@ -329,27 +332,22 @@ export const Layout = (props: Props) => {
     if (userId && !currentUser) {
       dispatch(fetchUserRequest(Number(userId)));
     }
+  }, [currentUser]);
 
-    if (!jwtAccessToken && userId) {
-      dispatch(logoutRequest(Number(userId)));
-      Cookies.remove("id");
-    }
-  }, [currentUser, userId, jwtAccessToken]);
-
-  useEffect(() => {
-    if (currentUser) {
-      if (!overviews) {
-        dispatch(fetchUserOverviewsRequest(currentUser.id));
-      } else if (!overviewGroups) {
-        const overviewId = currentUser.overviewIds[0];
-        dispatch(fetchOverviewOverviewGroupsRequest(overviewId));
-      } else if (!logbooks) {
-        dispatch(fetchUserLogbooksRequest(currentUser.id));
-      }
-    } else {
-      router.push(Constants.ClientRoutes.LANDING);
-    }
-  }, [currentUser, overviews, logbooks, overviewGroups]);
+  // useEffect(() => {
+  //   if (currentUser) {
+  //     if (!overviews) {
+  //       dispatch(fetchUserOverviewsRequest(currentUser.id));
+  //     } else if (!overviewGroups) {
+  //       const overviewId = currentUser.overviewIds[0];
+  //       dispatch(fetchOverviewOverviewGroupsRequest(overviewId));
+  //     } else if (!logbooks) {
+  //       dispatch(fetchUserLogbooksRequest(currentUser.id));
+  //     }
+  //   } else {
+  //     router.push(Constants.ClientRoutes.LANDING);
+  //   }
+  // }, [currentUser, overviews, logbooks, overviewGroups]);
 
   return (
     <ThemeProvider theme={themes[ui.theme.value]}>
@@ -357,7 +355,7 @@ export const Layout = (props: Props) => {
       <Portal id="app-portal" />
       <Notification />
 
-      {loadingUsers ? (
+      {!currentUser ? null : loadingUsers ? (
         <Loading text="Loading your information..." />
       ) : (
         props.children

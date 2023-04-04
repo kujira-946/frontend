@@ -1,6 +1,5 @@
 import Head from "next/head";
 import styled from "styled-components";
-import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -21,11 +20,9 @@ const Main = styled.main`
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-const userId = Cookies.get("id");
-const accessToken = Cookies.get("token");
-
 const Home = () => {
   const router = useRouter();
+
   const { currentUser } = Functions.useEntitiesSlice();
 
   // ↓↓↓ Starts the page back at the top when refreshing. ↓↓↓ //
@@ -36,33 +33,37 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    if (userId && accessToken && currentUser) {
+    if (currentUser) {
       if (!currentUser.onboarded) {
         router.push(Constants.ClientRoutes.ONBOARDING);
       } else {
         router.push(Constants.ClientRoutes.LOGBOOKS);
       }
     }
-  }, [userId, accessToken, currentUser]);
+  }, [currentUser]);
 
-  return (
-    <>
-      <Head>
-        <title>Kujira</title>
-        <meta name="description" content="Kujira app" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+  if (currentUser) {
+    return null;
+  } else {
+    return (
+      <>
+        <Head>
+          <title>Kujira</title>
+          <meta name="description" content="Kujira app" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
 
-      <Main>
-        <Components.Navbar />
-        <Components.AboveTheFold />
-        <Components.About />
-        <Components.CTA />
-        <Components.Footer />
-      </Main>
-    </>
-  );
+        <Main>
+          <Components.Navbar />
+          <Components.AboveTheFold />
+          <Components.About />
+          <Components.CTA />
+          <Components.Footer />
+        </Main>
+      </>
+    );
+  }
 };
 
 export default Home;

@@ -182,7 +182,9 @@ const Onboarding = () => {
     }
   });
 
-  if (loadingOnboarding) {
+  if (!currentUser) {
+    return null;
+  } else if (loadingOnboarding) {
     return <Globals.Loading text="Sit tight as I get you set up!" />;
   } else {
     return (

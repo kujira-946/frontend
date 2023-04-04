@@ -18,22 +18,29 @@ const Login = () => {
     }
   }, [currentUser]);
 
-  return (
-    <>
-      <Head>
-        <title>Kujira | Login</title>
-        <meta name="description" content="Kujira app" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+  if (currentUser) {
+    return null;
+  } else {
+    return (
+      <>
+        <Head>
+          <title>Kujira | Login</title>
+          <meta name="description" content="Kujira app" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
 
-      {!tempUserId ? (
-        <Components.AuthForm title="Log In" caption="Don't have an account?" />
-      ) : (
-        <Components.Verification title="Verify Login" />
-      )}
-    </>
-  );
+        {!tempUserId ? (
+          <Components.AuthForm
+            title="Log In"
+            caption="Don't have an account?"
+          />
+        ) : (
+          <Components.Verification title="Verify Login" />
+        )}
+      </>
+    );
+  }
 };
 
 export default Login;

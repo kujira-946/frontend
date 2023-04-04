@@ -44,7 +44,7 @@ function* fetchUserData(action: FetchUserDataAction) {
     // yield Saga.put(Redux.uiActions.setLoadingUsers(true));
     const { userId } = action.payload;
 
-    console.log("Fetching User Overviews");
+    // console.log("Fetching User Overviews");
     // yield Saga.put(fetchUserOverviewsRequest(userId));
 
     // console.log("Fetching Overview Groups");
