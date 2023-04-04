@@ -22,9 +22,11 @@ const Container = styled.main`
 `;
 
 const Overview = styled.section`
+  position: relative;
   width: 400px;
   height: 100%;
   border-right: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
+  overflow-y: auto;
 `;
 
 const Children = styled.section`
@@ -36,6 +38,7 @@ const Children = styled.section`
 // ========================================================================================= //
 
 type Props = {
+  page: "Logbooks" | "Reviews" | "Settings";
   children: React.ReactNode;
 };
 
@@ -54,7 +57,7 @@ export const DashboardPartial = (props: Props) => {
     <Container>
       <Overview>
         <OverviewNavbar />
-        <OverviewHeader />
+        <OverviewHeader page={props.page} />
       </Overview>
 
       <Children>{props.children}</Children>

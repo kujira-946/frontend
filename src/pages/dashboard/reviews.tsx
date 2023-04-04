@@ -20,7 +20,9 @@ const Settings = () => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <Components.DashboardPartial>Reviews Page</Components.DashboardPartial>
+        <Components.DashboardPartial page="Reviews">
+          Reviews Page
+        </Components.DashboardPartial>
       </>
     );
   }

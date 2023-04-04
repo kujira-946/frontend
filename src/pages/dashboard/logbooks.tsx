@@ -22,7 +22,9 @@ const Logbooks = () => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <Components.DashboardPartial>Logbooks Page</Components.DashboardPartial>
+        <Components.DashboardPartial page="Logbooks">
+          Logbooks Page
+        </Components.DashboardPartial>
       </>
     );
   }

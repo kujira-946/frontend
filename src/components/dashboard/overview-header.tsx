@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { effect, useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
+import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { ThemeProps } from "../layout";
@@ -43,7 +44,11 @@ const HeadingCaption = styled.p`
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-export const OverviewHeader = () => {
+type Props = {
+  page: "Logbooks" | "Reviews" | "Settings";
+};
+
+export const OverviewHeader = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
   const { overviews } = Functions.useEntitiesSlice();
   const { loadingOverviews } = Functions.useUiSlice();
@@ -60,8 +65,8 @@ export const OverviewHeader = () => {
   return (
     <Container>
       <Heading>
-        <HeadingTitle></HeadingTitle>
-        <HeadingCaption></HeadingCaption>
+        <HeadingTitle>February 2023 Overview</HeadingTitle>
+        <HeadingCaption>{props.page}</HeadingCaption>
       </Heading>
 
       {loadingOverviews && (
