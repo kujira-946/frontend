@@ -2,7 +2,6 @@ import localFont from "@next/font/local";
 import axios from "axios";
 import Cookies from "js-cookie";
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
-import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 
 import * as Constants from "@/utils/constants";
@@ -14,9 +13,6 @@ import { logoutRequest } from "@/sagas/auth.saga";
 
 import { Notification } from "./notification";
 import { Loading } from "./loading";
-import { fetchUserOverviewsRequest } from "@/sagas/overviews.saga";
-import { fetchOverviewOverviewGroupsRequest } from "@/sagas/overview-groups.saga";
-import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
 
 const poppins = localFont({
   src: [
@@ -312,11 +308,9 @@ type Props = { children: React.ReactNode };
 
 export const Layout = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
-  const router = useRouter();
 
   const { ui } = useContext(SignalsStoreContext);
-  const { currentUser, overviews, overviewGroups, logbooks } =
-    Functions.useEntitiesSlice();
+  const { currentUser } = Functions.useEntitiesSlice();
   const { loadingUsers } = Functions.useUiSlice();
 
   useEffect(() => {
@@ -331,21 +325,6 @@ export const Layout = (props: Props) => {
       dispatch(fetchUserRequest(Number(userId)));
     }
   }, [currentUser]);
-
-  // useEffect(() => {
-  //   if (currentUser) {
-  //     if (!overviews) {
-  //       dispatch(fetchUserOverviewsRequest(currentUser.id));
-  //     } else if (!overviewGroups) {
-  //       const overviewId = currentUser.overviewIds[0];
-  //       dispatch(fetchOverviewOverviewGroupsRequest(overviewId));
-  //     } else if (!logbooks) {
-  //       dispatch(fetchUserLogbooksRequest(currentUser.id));
-  //     }
-  //   } else {
-  //     router.push(Constants.ClientRoutes.LANDING);
-  //   }
-  // }, [currentUser, overviews, logbooks, overviewGroups]);
 
   return (
     <ThemeProvider theme={themes[ui.theme.value]}>

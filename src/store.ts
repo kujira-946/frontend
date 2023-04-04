@@ -5,7 +5,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import * as Redux from "@/redux";
 import { authSaga } from "./sagas/auth.saga";
 import { onboardingSaga } from "./sagas/onboarding.saga";
-import { fetchUserDataSaga } from "./sagas/fetch-user-data.saga";
 import { usersSaga } from "./sagas/users.saga";
 import { overviewsSaga } from "./sagas/overviews.saga";
 import { overviewGroupsSaga } from "./sagas/overview-groups.saga";
@@ -29,7 +28,6 @@ function* rootSaga() {
   yield Saga.all([
     authSaga(),
     onboardingSaga(),
-    fetchUserDataSaga(),
     usersSaga(),
     overviewsSaga(),
     overviewGroupsSaga(),
