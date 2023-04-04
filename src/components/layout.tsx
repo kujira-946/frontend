@@ -353,7 +353,7 @@ export const Layout = (props: Props) => {
       <Portal id="app-portal" />
       <Notification />
 
-      {!currentUser ? null : loadingUsers ? (
+      {loadingUsers ? (
         <Loading text="Loading your information..." />
       ) : (
         props.children

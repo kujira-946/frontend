@@ -45,7 +45,7 @@ const Title = styled(motion.span)`
   font-weight: ${Styles.fontWeights.semiBold};
 `;
 
-const ErrorMessage = styled(motion.span)`
+const ErrorMessage = styled.span`
   display: block;
   margin-bottom: ${Styles.pxAsRem.four};
   color: ${(props: ThemeProps) => props.theme.failure};

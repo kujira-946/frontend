@@ -5,7 +5,7 @@ import { UINotification } from "@/utils/types";
 
 export type UIState = {
   notification: UINotification;
-  tempUserId: number | null;
+  verificationCodeSent: boolean;
   loginForThirtyDays: boolean;
 
   loadingOnboarding: boolean;
@@ -19,7 +19,7 @@ export type UIState = {
 
 const initialState: UIState = {
   notification: Constants.initialUINotification,
-  tempUserId: null,
+  verificationCodeSent: false,
   loginForThirtyDays: false,
 
   loadingOnboarding: false,
@@ -35,18 +35,17 @@ const uiSlice = createSlice({
   name: "ui",
   initialState,
   reducers: {
-    resetState: (state: UIState) => {
-      state = initialState;
-    },
-
     setNotification: (
       state: UIState,
       action: PayloadAction<UINotification>
     ) => {
       state.notification = action.payload;
     },
-    setTempUserId: (state: UIState, action: PayloadAction<number | null>) => {
-      state.tempUserId = action.payload;
+    setVerificationCodeSent: (
+      state: UIState,
+      action: PayloadAction<boolean>
+    ) => {
+      state.verificationCodeSent = action.payload;
     },
     setLoginForThirtyDays: (state: UIState, action: PayloadAction<boolean>) => {
       state.loginForThirtyDays = action.payload;

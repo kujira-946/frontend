@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useSignal } from "@preact/signals-react";
 
 import * as Components from "@/components/auth";
 import * as Constants from "@/utils/constants";
@@ -8,9 +9,11 @@ import * as Functions from "@/utils/functions";
 
 const Register = () => {
   const router = useRouter();
-  
+
   const { currentUser } = Functions.useEntitiesSlice();
-  const { tempUserId } = Functions.useUiSlice();
+  const { verificationCodeSent } = Functions.useUiSlice();
+
+  const email = useSignal("");
 
   useEffect(() => {
     if (currentUser) {
@@ -31,13 +34,14 @@ const Register = () => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        {!tempUserId ? (
+        {!verificationCodeSent ? (
           <Components.AuthForm
             title="Register"
             caption="Already have an account?"
+            email={email}
           />
         ) : (
-          <Components.Verification title="Verify Registration" />
+          <Components.Verification title="Verify Registration" email={email} />
         )}
       </>
     );

@@ -10,10 +10,6 @@ import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { onboardNewUserRequest } from "@/sagas/onboarding.saga";
 
-// ========================================================================================= //
-// [ EXPORTED COMPONENT ] ================================================================== //
-// ========================================================================================= //
-
 const Onboarding = () => {
   const dispatch = Functions.useAppDispatch();
   const router = useRouter();
@@ -153,7 +149,7 @@ const Onboarding = () => {
   useEffect(() => {
     if (currentUser && currentUser.onboarded) {
       router.push(Constants.ClientRoutes.LOGBOOKS);
-    } else {
+    } else if (!currentUser) {
       router.push(Constants.ClientRoutes.LANDING);
     }
   }, [currentUser]);

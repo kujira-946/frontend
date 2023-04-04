@@ -1,7 +1,7 @@
 import Image from "next/image";
 import styled from "styled-components";
 import { useContext } from "react";
-import { effect, useSignal } from "@preact/signals-react";
+import { Signal, useSignal } from "@preact/signals-react";
 
 import * as AuthActions from "@/sagas/auth.saga";
 import * as Globals from "@/components";
@@ -50,18 +50,18 @@ const Title = styled.h1`
   text-align: center;
 `;
 
-const Caption = styled.p`
-  margin: 0;
-  font-size: ${Styles.pxAsRem.fourteen};
-  font-weight: ${Styles.fontWeights.medium};
-  text-align: center;
-`;
-
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: ${Styles.pxAsRem.sixteen};
+`;
+
+const Caption = styled.p`
+  margin: 0;
+  font-size: ${Styles.pxAsRem.fourteen};
+  font-weight: ${Styles.fontWeights.medium};
+  text-align: center;
 `;
 
 const ResendButton = styled.button`
@@ -82,48 +82,45 @@ const ResendButton = styled.button`
 
 type Props = {
   title: "Verify Registration" | "Verify Login";
+  email: Signal<string>;
 };
 
 export const Verification = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
   const { ui } = useContext(SignalsStoreContext);
-  const { auth } = Functions.useErrorsSlice();
-  const { tempUserId, loginForThirtyDays } = Functions.useUiSlice();
+  const { loginForThirtyDays } = Functions.useUiSlice();
 
   const verificationCode = useSignal("");
   const verificationCodeError = useSignal("");
 
   function resendVerificationCode(): void {
-    if (tempUserId) {
-      dispatch(AuthActions.requestNewVerificationCodeRequest(tempUserId));
-    } else {
-      effect(
-        () =>
-          (verificationCodeError.value =
-            "There was an error. Please try logging in again.")
+    if (props.email.value) {
+      dispatch(
+        AuthActions.requestNewVerificationCodeRequest(props.email.value)
       );
+    } else {
+      verificationCodeError.value =
+        "There was an error. Please refresh the page and try logging in.";
     }
   }
 
   function submitVerificationCode(event: Types.Submit): void {
     event.preventDefault();
-    if (auth) {
-      verificationCodeError.value = auth;
-    } else if (!tempUserId) {
+    if (!props.email.value) {
       verificationCodeError.value =
         "There was an error locating the account. Please try logging in.";
     } else {
       if (props.title === "Verify Registration") {
         dispatch(
           AuthActions.verifyRegistrationRequest(
-            tempUserId,
+            props.email.value,
             verificationCode.value
           )
         );
       } else {
         dispatch(
           AuthActions.verifyLoginRequest(
-            tempUserId,
+            props.email.value,
             verificationCode.value,
             loginForThirtyDays
           )
@@ -162,9 +159,10 @@ export const Verification = (props: Props) => {
           title="Enter verification code"
           errorMessage={verificationCodeError.value}
           userInput={verificationCode.value}
-          setUserInput={(event: Types.Input) =>
-            (verificationCode.value = event.currentTarget.value)
-          }
+          setUserInput={(event: Types.Input) => {
+            verificationCode.value = event.currentTarget.value;
+          }}
+          required
         />
 
         <Caption>

@@ -28,16 +28,14 @@ export function registerRequest(data: Types.RegistrationData): RegisterAction {
   };
 }
 
-type VerifyRegistrationAction = Types.SagaAction<
-  { userId: number } & Types.VerificationData
->;
+type VerifyRegistrationAction = Types.SagaAction<Types.VerificationData>;
 export function verifyRegistrationRequest(
-  userId: number,
+  email: string,
   verificationCode: string
 ): VerifyRegistrationAction {
   return {
     type: AuthActionTypes.VERIFY_REGISTRATION,
-    payload: { userId, verificationCode },
+    payload: { email, verificationCode },
   };
 }
 
@@ -49,22 +47,19 @@ export function loginRequest(data: Types.LoginData): LoginAction {
   };
 }
 
-type VerifyLoginAction = Types.SagaAction<
-  { userId: number } & Types.VerificationData
->;
+type VerifyLoginAction = Types.SagaAction<Types.VerificationData>;
 export function verifyLoginRequest(
-  userId: number,
+  email: string,
   verificationCode: string,
   thirtyDays?: boolean
 ): VerifyLoginAction {
   return {
     type: AuthActionTypes.VERIFY_LOGIN,
-    payload: { userId, verificationCode, thirtyDays },
+    payload: { email, verificationCode, thirtyDays },
   };
 }
 
 type UserIdAction = Types.SagaAction<{ userId: number }>;
-
 export function logoutRequest(userId: number): UserIdAction {
   return {
     type: AuthActionTypes.LOGOUT,
@@ -72,12 +67,13 @@ export function logoutRequest(userId: number): UserIdAction {
   };
 }
 
+type NewVerificationAction = Types.SagaAction<{ email: string }>;
 export function requestNewVerificationCodeRequest(
-  userId: number
-): UserIdAction {
+  email: string
+): NewVerificationAction {
   return {
     type: AuthActionTypes.REQUEST_NEW_VERIFICATION_CODE,
-    payload: { userId },
+    payload: { email },
   };
 }
 
@@ -89,7 +85,7 @@ function* register(action: RegisterAction) {
   try {
     const endpoint = ApiRoutes.AUTH + `/register`;
     const { data } = yield Saga.call(axios.post, endpoint, action.payload);
-    yield Saga.put(Redux.uiActions.setTempUserId(data.data));
+    yield Saga.put(Redux.uiActions.setVerificationCodeSent(true));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: data.title,
@@ -107,9 +103,10 @@ function* register(action: RegisterAction) {
 function* verifyRegistration(action: VerifyRegistrationAction) {
   try {
     yield Saga.put(Redux.uiActions.setLoadingUsers(true));
-    const { userId, verificationCode } = action.payload;
-    const endpoint = ApiRoutes.AUTH + `/register/${userId}/verify`;
+    const { email, verificationCode } = action.payload;
+    const endpoint = ApiRoutes.AUTH + `/register/verify`;
     const { data } = yield Saga.call(axios.patch, endpoint, {
+      email,
       verificationCode,
     });
     Cookies.set("id", data.data.id, { secure: true });
@@ -119,7 +116,8 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
     });
     yield Saga.put(Redux.entitiesActions.setCurrentUser(data.data));
     // yield Saga.put(Redux.entitiesActions.addUser(data.data));
-    yield Saga.put(Redux.uiActions.resetState());
+    yield Saga.put(Redux.uiActions.setVerificationCodeSent(false));
+    yield Saga.put(Redux.uiActions.setLoginForThirtyDays(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Verified!",
@@ -139,7 +137,7 @@ function* login(action: LoginAction) {
   try {
     const endpoint = ApiRoutes.AUTH + `/login`;
     const { data } = yield Saga.call(axios.patch, endpoint, action.payload);
-    yield Saga.put(Redux.uiActions.setTempUserId(data.data));
+    yield Saga.put(Redux.uiActions.setVerificationCodeSent(true));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Login Successful",
@@ -157,9 +155,10 @@ function* login(action: LoginAction) {
 function* verifyLogin(action: VerifyLoginAction) {
   try {
     yield Saga.put(Redux.uiActions.setLoadingUsers(true));
-    const { userId, verificationCode, thirtyDays } = action.payload;
-    const endpoint = ApiRoutes.AUTH + `/login/${userId}/verify`;
+    const { email, verificationCode, thirtyDays } = action.payload;
+    const endpoint = ApiRoutes.AUTH + `/login/verify`;
     const { data } = yield Saga.call(axios.patch, endpoint, {
+      email,
       verificationCode,
       thirtyDays,
     });
@@ -170,7 +169,8 @@ function* verifyLogin(action: VerifyLoginAction) {
     });
     yield Saga.put(Redux.entitiesActions.setCurrentUser(data.data));
     // yield Saga.put(Redux.entitiesActions.addUser(data.data));
-    yield Saga.put(Redux.uiActions.resetState());
+    yield Saga.put(Redux.uiActions.setVerificationCodeSent(false));
+    yield Saga.put(Redux.uiActions.setLoginForThirtyDays(false));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Verified!",
@@ -207,14 +207,14 @@ function* logout(action: UserIdAction) {
   }
 }
 
-function* requestNewVerificationCode(action: UserIdAction) {
+function* requestNewVerificationCode(action: NewVerificationAction) {
   try {
-    const { userId } = action.payload;
-    const endpoint =
-      ApiRoutes.AUTH + `/request-new-verification-code/${userId}`;
-    const { data } = yield Saga.call(axios.patch, endpoint);
+    const { email } = action.payload;
+    const endpoint = ApiRoutes.AUTH + `/request-new-verification-code`;
+    const { data } = yield Saga.call(axios.patch, endpoint, { email });
     Cookies.remove("id");
     Cookies.remove("token");
+    yield Saga.put(Redux.uiActions.setVerificationCodeSent(true));
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "New Verification Code Request",

@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 import { useContext, useEffect } from "react";
-import { effect, useSignal } from "@preact/signals-react";
+import { Signal, effect, useSignal } from "@preact/signals-react";
 
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
@@ -56,11 +56,11 @@ const Title = styled.h1`
   text-align: center;
 `;
 
-const Caption = styled.p`
+const Caption = styled.p<{ resend?: true }>`
   margin: 0;
   font-size: ${Styles.pxAsRem.fourteen};
   font-weight: ${Styles.fontWeights.medium};
-  text-align: center;
+  text-align: ${(props) => (props.resend ? "left" : "center")};
 `;
 
 const Redirect = styled(Link)`
@@ -79,6 +79,31 @@ const Form = styled.form`
   gap: ${Styles.pxAsRem.sixteen};
 `;
 
+const ResendContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const ResendButton = styled.button`
+  ${Styles.clearButton};
+  color: ${(props: ThemeProps) => props.theme.secondaryMain};
+  font-weight: ${Styles.fontWeights.semiBold};
+
+  @media (hover: hover) {
+    :hover {
+      color: ${(props: ThemeProps) => props.theme.secondaryDark};
+    }
+  }
+`;
+
+const ErrorMessage = styled.span`
+  display: block;
+  margin-bottom: ${Styles.pxAsRem.four};
+  color: ${(props: ThemeProps) => props.theme.failure};
+  font-size: ${Styles.pxAsRem.twelve};
+  font-weight: ${Styles.fontWeights.semiBold};
+`;
+
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
@@ -86,23 +111,34 @@ const Form = styled.form`
 type Props = {
   title: "Register" | "Log In";
   caption: string;
+  email: Signal<string>;
 };
 
 export const AuthForm = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
   const { ui } = useContext(SignalsStoreContext);
 
-  const email = useSignal("");
   const username = useSignal("");
   const password = useSignal("");
   const confirmPassword = useSignal("");
+  const checkboxActive = useSignal(false);
 
   const emailError = useSignal("");
   const usernameError = useSignal("");
   const passwordError = useSignal("");
   const confirmPasswordError = useSignal("");
+  const verificationCodeError = useSignal("");
 
-  const checkboxActive = useSignal(false);
+  function resendVerificationCode(): void {
+    if (props.email.value && !emailError.value) {
+      verificationCodeError.value = "";
+      dispatch(
+        AuthActions.requestNewVerificationCodeRequest(props.email.value)
+      );
+    } else {
+      verificationCodeError.value = "Please provide a valid email.";
+    }
+  }
 
   useEffect(() => {
     if (props.title === "Log In") {
@@ -116,10 +152,10 @@ export const AuthForm = (props: Props) => {
 
   effect(() => {
     // Email error check
-    if (email.value !== "") {
-      if (!email.value.includes("@")) {
+    if (props.email.value !== "") {
+      if (!props.email.value.includes("@")) {
         emailError.value = "Enter a valid email.";
-      } else if (!email.value.includes(".com")) {
+      } else if (!props.email.value.includes(".com")) {
         emailError.value = "Enter a valid email.";
       } else {
         emailError.value = "";
@@ -153,7 +189,7 @@ export const AuthForm = (props: Props) => {
     if (checkRegistrationErrors()) {
       dispatch(
         AuthActions.registerRequest({
-          email: email.value,
+          email: props.email.value,
           username: username.value,
           password: password.value,
         } as Types.RegistrationData)
@@ -163,7 +199,7 @@ export const AuthForm = (props: Props) => {
 
   function checkLoginErrors(): boolean {
     return (
-      email.value.length > 0 &&
+      props.email.value.length > 0 &&
       emailError.value === "" &&
       password.value.length > 0 &&
       passwordError.value === ""
@@ -173,7 +209,7 @@ export const AuthForm = (props: Props) => {
     if (checkLoginErrors()) {
       dispatch(
         AuthActions.loginRequest({
-          email: email.value,
+          email: props.email.value,
           password: password.value,
         } as Types.LoginData)
       );
@@ -221,7 +257,7 @@ export const AuthForm = (props: Props) => {
         <Form onSubmit={submit}>
           {props.title === "Register" ? (
             <RegisterInputs
-              email={email}
+              email={props.email}
               username={username}
               password={password}
               confirmPassword={confirmPassword}
@@ -232,7 +268,7 @@ export const AuthForm = (props: Props) => {
             />
           ) : (
             <LoginInputs
-              email={email}
+              email={props.email}
               password={password}
               emailError={emailError}
               passwordError={passwordError}
@@ -243,6 +279,19 @@ export const AuthForm = (props: Props) => {
             isRegister={props.title === "Register"}
             checkboxActive={checkboxActive}
           />
+
+          {props.title === "Log In" && (
+            <ResendContainer>
+              {verificationCodeError.value && (
+                <ErrorMessage>{verificationCodeError.value}</ErrorMessage>
+              )}
+              <Caption resend>
+                <ResendButton type="button" onClick={resendVerificationCode}>
+                  Request New Verification Code
+                </ResendButton>
+              </Caption>
+            </ResendContainer>
+          )}
 
           <Globals.Button
             type="submit"
