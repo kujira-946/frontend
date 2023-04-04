@@ -1,8 +1,9 @@
 import Head from "next/head";
 
+import * as Components from "@/components/dashboard";
 import * as Functions from "@/utils/functions";
 
-const Logbooks = () => {
+const Settings = () => {
   const { currentUser } = Functions.useEntitiesSlice();
 
   Functions.useDetectAuthorizedUser(currentUser);
@@ -19,10 +20,10 @@ const Logbooks = () => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <>Reviews Page</>
+        <Components.DashboardPartial>Reviews Page</Components.DashboardPartial>
       </>
     );
   }
 };
 
-export default Logbooks;
+export default Settings;

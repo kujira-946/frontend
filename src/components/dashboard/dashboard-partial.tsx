@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+import { Overview } from "./overview";
+
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
@@ -15,16 +17,10 @@ const Container = styled.main`
   border: red solid 1px;
 `;
 
-const Overview = styled.section`
-  width: 400px;
-
-  border: green solid 1px;
-`;
-
 const Children = styled.section`
   flex: 1;
 
-  border: blue solid 1px;
+  /* border: blue solid 1px; */
 `;
 
 // ========================================================================================= //
@@ -38,7 +34,7 @@ type Props = {
 export const DashboardPartial = (props: Props) => {
   return (
     <Container>
-      <Overview>Overview</Overview>
+      <Overview />
       <Children>{props.children}</Children>
     </Container>
   );
