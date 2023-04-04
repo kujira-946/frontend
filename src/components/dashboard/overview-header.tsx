@@ -127,6 +127,7 @@ export const OverviewHeader = (props: Props) => {
             description="Total Spent"
             cost={totalSpent.value.toString()}
             costFrontText="$"
+            importance="Secondary"
             hideDrag
             hideCheck
             hideCategories
@@ -141,6 +142,7 @@ export const OverviewHeader = (props: Props) => {
             description="Remaining"
             cost={Functions.roundNumber(income - income * (savings / 100), 2)}
             costFrontText="$"
+            importance="Primary"
             hideDrag
             hideCheck
             hideCategories

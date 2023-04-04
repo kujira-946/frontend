@@ -113,6 +113,7 @@ type Props = {
   descriptionBackText?: string;
   costFrontText?: string;
   costBackText?: string;
+  importance?: "Primary" | "Secondary";
   hideDrag?: true;
   hideCheck?: true;
   hideCategories?: true;
@@ -267,6 +268,7 @@ const ExportedComponent = (props: Props) => {
           onBlur={onCostBlur}
           frontText={props.costFrontText}
           backText={props.costBackText}
+          importance={props.importance}
           hasValue={!!props.cost}
           frozen={!!props.costFrozen}
         />

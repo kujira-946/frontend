@@ -71,19 +71,41 @@ const Body = styled.div`
   align-items: center;
 `;
 
-const Text = styled.span`
+type TextProps = {
+  importance?: "Primary" | "Secondary";
+};
+
+const Text = styled.span<TextProps>`
   display: block;
+  color: ${(props: TextProps & ThemeProps) => {
+    return props.importance === "Primary"
+      ? props.theme.primaryMain
+      : props.importance === "Secondary"
+      ? props.theme.secondaryMain
+      : "inherit";
+  }};
+  font-weight: ${(props) => {
+    return props.importance === "Primary" ? Styles.fontWeights.bold : "inherit";
+  }};
 `;
 
-const Textarea = styled(TextareaAutosize)`
+const Textarea = styled(TextareaAutosize)<TextProps>`
   width: 100%;
   height: 100%;
   padding: ${Styles.pxAsRem.four} 0;
-  color: inherit;
+  color: ${(props: TextProps & ThemeProps) => {
+    return props.importance === "Primary"
+      ? props.theme.primaryMain
+      : props.importance === "Secondary"
+      ? props.theme.secondaryMain
+      : "inherit";
+  }};
   background-color: transparent;
   border: none;
   font-size: inherit;
-  font-weight: inherit;
+  font-weight: ${(props) => {
+    return props.importance === "Primary" ? Styles.fontWeights.bold : "inherit";
+  }};
   outline: none;
   resize: none;
   cursor: text;
@@ -109,6 +131,7 @@ type Props = {
 
   frontText?: string;
   backText?: string;
+  importance?: "Primary" | "Secondary";
   hasValue?: boolean;
   frozen?: boolean;
 };
@@ -153,7 +176,7 @@ const ExportedComponent = (props: Props) => {
 
       <Body>
         {props.frontText && props.userInput !== "" && !props.errorMessage && (
-          <Text>{props.frontText}</Text>
+          <Text importance={props.importance}>{props.frontText}</Text>
         )}
 
         <Textarea
@@ -166,10 +189,11 @@ const ExportedComponent = (props: Props) => {
           onKeyPress={preventEnterKey}
           minRows={1}
           tabIndex={props.frozen ? -1 : 0}
+          importance={props.importance}
         />
 
         {props.backText && props.userInput !== "" && !props.errorMessage && (
-          <Text>{props.backText}</Text>
+          <Text importance={props.importance}>{props.backText}</Text>
         )}
       </Body>
     </Container>
