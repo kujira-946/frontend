@@ -43,9 +43,9 @@ const ExportedComponent = () => {
     if (newIndex && newIndex !== previousIndex) {
       const purchaseId = Number(result.draggableId);
       const updatedPlacement = newIndex + 1;
-      dispatch(
-        updatePurchaseRequest(purchaseId, { placement: updatedPlacement })
-      );
+      // dispatch(
+      //   updatePurchaseRequest(purchaseId, { placement: updatedPlacement })
+      // );
     }
   }
 
