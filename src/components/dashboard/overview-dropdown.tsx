@@ -5,14 +5,10 @@ import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import * as Global from "@/components";
+import * as PurchasesSaga from "@/sagas/purchases.saga";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import {
-  deletePurchaseRequest,
-  fetchOverviewGroupPurchasesRequest,
-  updatePurchaseRequest,
-} from "@/sagas/purchases.saga";
 import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
@@ -138,10 +134,6 @@ const ExportedComponent = (props: Props) => {
   const updateOverviewPurchase = useCallback(
     Functions.debounce(
       (purchaseId: number, description: string, cost: string) => {
-        console.log("Update Purchase Id:", purchaseId);
-        console.log("Update Purchase Description:", description);
-        console.log("Update Purchase Cost:", cost);
-
         if (purchases && purchases[purchaseId]) {
           console.log("Foo");
           const purchase = purchases[purchaseId];
@@ -152,7 +144,7 @@ const ExportedComponent = (props: Props) => {
               Number(cost) !== purchase.cost)
           ) {
             dispatch(
-              updatePurchaseRequest(purchaseId, {
+              PurchasesSaga.updatePurchaseRequest(purchaseId, {
                 description: description,
                 cost: Number(cost),
               })
@@ -167,12 +159,14 @@ const ExportedComponent = (props: Props) => {
 
   const deleteOverviewPurchase = useCallback((purchaseId: number) => {
     console.log("Delete Purchase:", purchaseId);
-    dispatch(deletePurchaseRequest(purchaseId));
+    dispatch(PurchasesSaga.deletePurchaseRequest(purchaseId));
   }, []);
 
   useEffect(() => {
     if (props.overviewGroupId && opened.value && !overviewGroupPurchases) {
-      dispatch(fetchOverviewGroupPurchasesRequest(props.overviewGroupId));
+      dispatch(
+        PurchasesSaga.fetchOverviewGroupPurchasesRequest(props.overviewGroupId)
+      );
     }
   }, [props.overviewGroupId, opened.value, overviewGroupPurchases]);
 
