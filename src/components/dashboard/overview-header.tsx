@@ -6,8 +6,8 @@ import * as Globals from "@/components";
 
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
-import { ThemeProps } from "../layout";
 import { updateOverviewRequest } from "@/sagas/overviews.saga";
+import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -164,10 +164,10 @@ export const OverviewHeader = (props: Props) => {
 
       {loadingOverviews ? (
         <>
-          <Globals.Shimmer height={44} borderRadius="six" />
-          <Globals.Shimmer height={44} borderRadius="six" />
-          <Globals.Shimmer height={44} borderRadius="six" />
-          <Globals.Shimmer height={44} borderRadius="six" />
+          <Globals.Shimmer borderRadius="six" height={44} />
+          <Globals.Shimmer borderRadius="six" height={44} />
+          <Globals.Shimmer borderRadius="six" height={44} />
+          <Globals.Shimmer borderRadius="six" height={44} />
         </>
       ) : (
         purchaseCells

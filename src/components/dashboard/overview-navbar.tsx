@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 import { useContext } from "react";
 import { useSignal } from "@preact/signals-react";
 
@@ -9,7 +10,6 @@ import * as Constants from "@/utils/constants";
 import * as Styles from "@/utils/styles";
 import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "../layout";
-import { useRouter } from "next/router";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //

@@ -99,7 +99,7 @@ type Props = {
   initiallyOpen: boolean;
   title: "Recurring" | "Incoming" | string;
   totalCost: string;
-  purchases: Signal<Types.OnboardingPurchase[]>;
+  purchaseCount: number;
   onDragEnd: (
     result: Drag.DropResult,
     provided: Drag.ResponderProvided
@@ -121,7 +121,7 @@ export const Dropdown = (props: Props) => {
           opened={opened.value}
         >
           <Title>
-            {props.title} ({props.purchases.value.length})
+            {props.title} ({props.purchaseCount})
           </Title>
           <Total>${props.totalCost}</Total>
         </Header>

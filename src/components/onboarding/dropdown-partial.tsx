@@ -75,7 +75,7 @@ const ExportedComponent = (props: Props) => {
       initiallyOpen={true}
       title={props.title}
       totalCost={Functions.roundNumber(props.totalCost.value, 2)}
-      purchases={props.purchases}
+      purchaseCount={props.purchases.value.length}
       onDragEnd={onDragEnd}
       deleteAllPurchases={deleteAllPurchases}
       addPurchase={addPurchase}

@@ -2,12 +2,10 @@ import localFont from "@next/font/local";
 import axios from "axios";
 import Cookies from "js-cookie";
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 
-import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
-import { SignalsStoreContext } from "@/pages/_app";
 import { fetchUserRequest } from "@/sagas/users.saga";
 import { logoutRequest } from "@/sagas/auth.saga";
 
@@ -309,7 +307,7 @@ type Props = { children: React.ReactNode };
 export const Layout = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
-  const { ui } = useContext(SignalsStoreContext);
+  const { ui } = Functions.useSignalsStore();
   const { currentUser } = Functions.useEntitiesSlice();
   const { loadingUsers } = Functions.useUiSlice();
 
