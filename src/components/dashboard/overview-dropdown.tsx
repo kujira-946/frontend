@@ -1,6 +1,6 @@
 import * as Drag from "react-beautiful-dnd";
 import styled from "styled-components";
-import { memo, useEffect } from "react";
+import { memo, useCallback, useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -8,7 +8,10 @@ import * as Global from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { fetchOverviewGroupPurchasesRequest } from "@/sagas/purchases.saga";
+import {
+  deletePurchaseRequest,
+  fetchOverviewGroupPurchasesRequest,
+} from "@/sagas/purchases.saga";
 import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
@@ -95,7 +98,7 @@ const PurchaseCells = styled.div`
 // ========================================================================================= //
 
 type Props = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   borderRadius?: Types.PxAsRem;
 
   initiallyOpen: boolean;
@@ -121,11 +124,29 @@ const ExportedComponent = (props: Props) => {
 
   const opened = useSignal(props.initiallyOpen);
 
+  const overviewGroupPurchases = Functions.useAppSelector((state) => {
+    if (props.overviewGroupId) {
+      return Functions.fetchOverviewGroupPurchases(
+        state,
+        props.overviewGroupId
+      );
+    }
+  });
+
+  const updateOverviewPurchase = useCallback((purchaseId: number) => {
+    console.log("update Purchase:", purchaseId);
+  }, []);
+
+  const deleteOverviewPurchase = useCallback((purchaseId: number) => {
+    console.log("Delete Purchase:", purchaseId);
+    // dispatch(deletePurchaseRequest(purchaseId));
+  }, []);
+
   useEffect(() => {
-    if (props.overviewGroupId && opened.value) {
+    if (props.overviewGroupId && opened.value && !overviewGroupPurchases) {
       dispatch(fetchOverviewGroupPurchasesRequest(props.overviewGroupId));
     }
-  }, [props.overviewGroupId]);
+  }, [props.overviewGroupId, opened.value, overviewGroupPurchases]);
 
   return (
     <Container borderRadius={props.borderRadius} opened={opened.value}>
@@ -158,7 +179,54 @@ const ExportedComponent = (props: Props) => {
                       {...provided.droppableProps}
                       ref={provided.innerRef}
                     >
-                      {props.children}
+                      {overviewGroupPurchases
+                        ? overviewGroupPurchases.map(
+                            (purchase: Types.Purchase, index: number) => {
+                              return (
+                                <Drag.Draggable
+                                  key={`overview-dropdown-purchase-${purchase.id}`}
+                                  draggableId={`${purchase.id}-${index}`}
+                                  index={index}
+                                >
+                                  {(
+                                    provided: Drag.DraggableProvided,
+                                    snapshot: Drag.DraggableStateSnapshot
+                                  ) => {
+                                    return (
+                                      <Global.DraggablePortalItem
+                                        provided={provided}
+                                        snapshot={snapshot}
+                                        preventEntireElementDrag
+                                      >
+                                        <Global.PurchaseCell
+                                          key={`overview-dropdown-purchase-cell-${purchase.id}-${index}`}
+                                          borderRadius="four"
+                                          provided={provided}
+                                          selectionValue={index}
+                                          description={
+                                            purchase.description || ""
+                                          }
+                                          cost={
+                                            purchase.cost?.toString() || "0"
+                                          }
+                                          updateAction={() =>
+                                            updateOverviewPurchase(purchase.id)
+                                          }
+                                          deleteAction={() =>
+                                            deleteOverviewPurchase(purchase.id)
+                                          }
+                                          costFrontText="$"
+                                          hideCheck
+                                          hideCategories
+                                        />
+                                      </Global.DraggablePortalItem>
+                                    );
+                                  }}
+                                </Drag.Draggable>
+                              );
+                            }
+                          )
+                        : props.children ?? null}
                     </PurchaseCells>
                   );
                 }}

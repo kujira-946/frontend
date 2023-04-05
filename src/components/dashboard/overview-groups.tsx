@@ -48,81 +48,16 @@ const ExportedComponent = () => {
     // }
   }
 
-  const purchaseCellDeleteAction = useCallback((purchaseId: number) => {
-    dispatch(deletePurchaseRequest(purchaseId));
-  }, []);
-
   const overview = Functions.useAppSelector(Functions.fetchCurrentUserOverview);
   const overviewGroups = Functions.useAppSelector(
     Functions.fetchOverviewGroups
   );
-
-  // const purchases = Functions.useAppSelector((state: GlobalState) => {
-  //   if (overviewGroups) {
-  //     overviewGroups.forEach((overviewGroup: Types.OverviewGroup) => {
-  //       return Functions.fetchOverviewGroupPurchases(state, overviewGroup.id);
-  //     });
-  //   }
-  // });
-
-  // console.log("purchases:", purchases);
-
-  // const overviewGroupDropdowns = useMemo(() => {
-  //   return (
-  //     fetchedOverviewGroups &&
-  //     fetchedOverviewGroups.map((overviewGroup: Types.OverviewGroup) => {
-  //       return (
-  //         <OverviewDropdown
-  //           key={`dashboard-overview-overview-groups-${overviewGroup.id}`}
-  //           initiallyOpen={false}
-  //           title={overviewGroup.name}
-  //           totalCost={Functions.roundNumber(overviewGroup.totalCost, 2)}
-  //           purchaseCount={
-  //             overviewGroup.purchaseIds ? overviewGroup.purchaseIds.length : 0
-  //           }
-  //           onDragEnd={onDragEnd}
-  //           deleteAllPurchases={() => "Delete All Purchases"}
-  //           addPurchase={() => "Add Purchase"}
-  //         >
-  //           <>
-  //             {purchases &&
-  //               overviewGroup.purchaseIds &&
-  //               overviewGroup.purchaseIds.map((purchaseId: number) => {
-  //                 const purchase = purchases[purchaseId];
-  //                 return (
-  //                   <Globals.PurchaseCell
-  //                     key={`dashboard-overview-overview-groups-purchase-cell-${purchaseId}`}
-  //                     borderRadius="four"
-  //                     selectionValue={purchaseId}
-  //                     description={purchase.description || ""}
-  //                     cost={purchase.cost?.toString() || ""}
-  //                     deleteAction={purchaseCellDeleteAction}
-  //                     costFrontText="$"
-  //                     hideCheck
-  //                     hideCategories
-  //                   />
-  //                 );
-  //               })}
-  //           </>
-  //         </OverviewDropdown>
-  //       );
-  //     })
-  //   );
-  // }, [fetchedOverviewGroups, purchases]);
 
   useEffect(() => {
     if (overview && !overviewGroups) {
       dispatch(fetchOverviewOverviewGroupsRequest(overview.id));
     }
   }, [overview, overviewGroups]);
-
-  // useEffect(() => {
-  //   if (overviewGroups && !purchases) {
-  //     for (const overviewGroup of overviewGroups) {
-  //       dispatch(fetchOverviewGroupPurchasesRequest(overviewGroup.id));
-  //     }
-  //   }
-  // }, [overviewGroups, purchases]);
 
   return (
     <Container>
@@ -141,12 +76,11 @@ const ExportedComponent = () => {
                 title={overviewGroup.name}
                 totalCost={overviewGroup.totalCost}
                 purchaseCount={overviewGroup.purchaseIds?.length || 0}
+                overviewGroupId={overviewGroup.id}
                 onDragEnd={onDragEnd}
                 deleteAllPurchases={() => console.log("Delete All Purchases")}
                 addPurchase={() => console.log("Add Purchase")}
-              >
-                <>Foo</>
-              </OverviewDropdown>
+              />
             );
           })}
         </>
