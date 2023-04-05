@@ -1,11 +1,10 @@
 import Link from "next/link";
 import styled from "styled-components";
-import { useContext } from "react";
 import { motion } from "framer-motion";
 
 import * as Globals from "@/components";
+import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
-import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
 
 import { CardBack } from "./card-back";
@@ -79,7 +78,7 @@ function scrollToAbout(): void {
 }
 
 export const AboveTheFold = () => {
-  const { ui } = useContext(SignalsStoreContext);
+  const { ui } = Functions.useSignalsStore();
 
   return (
     <Container>

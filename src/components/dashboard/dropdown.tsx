@@ -1,13 +1,12 @@
 import * as Drag from "react-beautiful-dnd";
 import styled from "styled-components";
-import { useContext } from "react";
-import { Signal, useSignal } from "@preact/signals-react";
+import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import * as Global from "@/components";
+import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
@@ -109,7 +108,7 @@ type Props = {
 };
 
 export const Dropdown = (props: Props) => {
-  const { ui } = useContext(SignalsStoreContext);
+  const { ui } = Functions.useSignalsStore();
 
   const opened = useSignal(props.initiallyOpen);
 

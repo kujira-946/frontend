@@ -1,11 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
-import { useContext } from "react";
 
 import * as Globals from "@/components";
+import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
-import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
 
 // ========================================================================================= //
@@ -141,7 +140,7 @@ function scrollToTop(): void {
 }
 
 export const Footer = () => {
-  const { ui } = useContext(SignalsStoreContext);
+  const { ui } = Functions.useSignalsStore();
 
   return (
     <Container>

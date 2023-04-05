@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { Signal, effect, useSignal } from "@preact/signals-react";
 
 import * as Redux from "@/redux";
@@ -10,7 +10,6 @@ import * as AuthActions from "@/sagas/auth.saga";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
 
 import { RegisterInputs } from "./register-inputs";
@@ -116,7 +115,7 @@ type Props = {
 
 export const AuthForm = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
-  const { ui } = useContext(SignalsStoreContext);
+  const { ui } = Functions.useSignalsStore();
 
   const username = useSignal("");
   const password = useSignal("");

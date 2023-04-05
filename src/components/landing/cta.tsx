@@ -1,11 +1,10 @@
 import Link from "next/link";
 import styled from "styled-components";
-import { useContext } from "react";
 
 import * as Globals from "@/components";
 import * as Constants from "@/utils/constants";
+import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
-import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
 
 // ========================================================================================= //
@@ -49,7 +48,7 @@ const CopyBody = styled.h2`
 // ========================================================================================= //
 
 export const CTA = () => {
-  const { ui } = useContext(SignalsStoreContext);
+  const { ui } = Functions.useSignalsStore();
 
   return (
     <Container>

@@ -2,13 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import { useContext } from "react";
 import { useSignal } from "@preact/signals-react";
 
 import * as Icons from "@/components/icons";
 import * as Constants from "@/utils/constants";
+import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
-import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
@@ -50,7 +49,7 @@ const links = [
 export const OverviewNavbar = () => {
   const router = useRouter();
 
-  const { ui } = useContext(SignalsStoreContext);
+  const { ui } = Functions.useSignalsStore();
 
   const dashboardHovered = useSignal(false);
   const reviewsHovered = useSignal(false);

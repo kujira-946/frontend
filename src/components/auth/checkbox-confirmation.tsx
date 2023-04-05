@@ -1,11 +1,10 @@
 import Link from "next/link";
 import styled from "styled-components";
-import { useContext } from "react";
 import { Signal } from "@preact/signals-react";
 
 import * as Icons from "@/components/icons";
+import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
-import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
 
 // ========================================================================================= //
@@ -52,7 +51,7 @@ type Props = {
 };
 
 export const CheckboxConfirmation = (props: Props) => {
-  const { ui } = useContext(SignalsStoreContext);
+  const { ui } = Functions.useSignalsStore();
 
   return (
     <Container>

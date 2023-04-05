@@ -1,13 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
-import { useContext } from "react";
 import { useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
+import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
-import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
 import { signalsHelpers } from "@/signals";
 
@@ -74,7 +73,7 @@ const LoginButton = styled(Link)`
 // ========================================================================================= //
 
 export const Navbar = () => {
-  const { ui } = useContext(SignalsStoreContext);
+  const { ui } = Functions.useSignalsStore();
   const themeButtonHovered = useSignal(false);
 
   return (

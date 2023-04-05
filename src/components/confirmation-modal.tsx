@@ -1,12 +1,11 @@
 import styled from "styled-components";
-import { useContext } from "react";
 import { motion } from "framer-motion";
 
 import * as Icons from "@/components/icons";
 import * as Constants from "@/utils/constants";
+import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "./layout";
 
 import { Button } from "./button";
@@ -128,7 +127,7 @@ type Props = {
 };
 
 export const ConfirmationModal = (props: Props) => {
-  const { ui } = useContext(SignalsStoreContext);
+  const { ui } = Functions.useSignalsStore();
 
   function submit(event: Types.Submit) {
     event.preventDefault();

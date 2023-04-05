@@ -1,12 +1,11 @@
 import styled from "styled-components";
-import { useContext, useRef } from "react";
+import { useRef } from "react";
 import { useSignal } from "@preact/signals-react";
 import { motion } from "framer-motion";
 
 import * as Icons from "@/components/icons";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "./layout";
 
 // ========================================================================================= //
@@ -122,7 +121,7 @@ type Props = {
 };
 
 export const Input = (props: Props) => {
-  const { ui } = useContext(SignalsStoreContext);
+  const { ui } = Functions.useSignalsStore();
 
   const inputFieldRef = useRef<any>(null);
   const focused = useSignal(false);

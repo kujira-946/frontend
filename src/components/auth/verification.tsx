@@ -1,6 +1,5 @@
 import Image from "next/image";
 import styled from "styled-components";
-import { useContext } from "react";
 import { Signal, useSignal } from "@preact/signals-react";
 
 import * as AuthActions from "@/sagas/auth.saga";
@@ -8,7 +7,6 @@ import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
 
 // ========================================================================================= //
@@ -87,7 +85,7 @@ type Props = {
 
 export const Verification = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
-  const { ui } = useContext(SignalsStoreContext);
+  const { ui } = Functions.useSignalsStore();
   const { loginForThirtyDays } = Functions.useUiSlice();
 
   const verificationCode = useSignal("");

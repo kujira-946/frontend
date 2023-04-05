@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { memo, useContext, useEffect } from "react";
+import { memo, useEffect } from "react";
 import { effect, Signal, useSignal } from "@preact/signals-react";
 import { DraggableProvided } from "react-beautiful-dnd";
 
@@ -8,7 +8,6 @@ import * as Icons from "@/components/icons";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { SignalsStoreContext } from "@/pages/_app";
 import { ThemeProps } from "@/components/layout";
 
 // ========================================================================================= //
@@ -125,7 +124,7 @@ type Props = {
 const categories: Category[] = ["Need", "Planned", "Impulse", "Regret"];
 
 const ExportedComponent = (props: Props) => {
-  const { ui } = useContext(SignalsStoreContext);
+  const { ui } = Functions.useSignalsStore();
 
   const dragHovered = useSignal(false);
   const checkboxHovered = useSignal(false);
