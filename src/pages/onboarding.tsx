@@ -13,6 +13,12 @@ import { onboardNewUserRequest } from "@/sagas/onboarding.saga";
 const Onboarding = () => {
   const dispatch = Functions.useAppDispatch();
   const router = useRouter();
+  Functions.useDetectAuthorizedUser(() => {
+    if (currentUser) {
+      if (currentUser.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
+      else router.push(Constants.ClientRoutes.LANDING);
+    }
+  });
 
   const { currentUser } = Functions.useEntitiesSlice();
   const { loadingOnboarding } = Functions.useUiSlice();
@@ -145,13 +151,6 @@ const Onboarding = () => {
         return null;
     }
   }
-
-  Functions.useDetectAuthorizedUser(() => {
-    if (currentUser) {
-      if (currentUser.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
-      else router.push(Constants.ClientRoutes.LANDING);
-    }
-  });
 
   // ↓↓↓ Handling Supporting Text Value ↓↓↓ //
   effect(() => {

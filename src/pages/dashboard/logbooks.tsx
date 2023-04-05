@@ -6,9 +6,9 @@ import * as Functions from "@/utils/functions";
 const Logbooks = () => {
   console.log("Logbooks Page Rendered");
 
-  const { currentUser } = Functions.useEntitiesSlice();
-
   Functions.useDetectAuthorizedUser();
+
+  const { currentUser } = Functions.useEntitiesSlice();
 
   if (!currentUser) {
     return null;

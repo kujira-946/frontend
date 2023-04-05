@@ -4,9 +4,9 @@ import * as Components from "@/components/dashboard";
 import * as Functions from "@/utils/functions";
 
 const Settings = () => {
-  const { currentUser } = Functions.useEntitiesSlice();
-
   Functions.useDetectAuthorizedUser();
+
+  const { currentUser } = Functions.useEntitiesSlice();
 
   if (!currentUser) {
     return null;
