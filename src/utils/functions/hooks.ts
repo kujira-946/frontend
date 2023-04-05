@@ -1,11 +1,11 @@
 import { useRouter } from "next/router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useContext } from "react";
 import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
 import { useSignal } from "@preact/signals-react";
 
 import * as Constants from "@/utils/constants";
-import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
+import { SignalsStoreContext } from "@/pages/_app";
 import { AppDispatch, RootState } from "@/store";
 
 // Use these instead of react-redux's `useDispatch` and `useSelector`,
@@ -67,4 +67,8 @@ export function useDetectAuthorizedUser(currentUser: Types.User | null): void {
   useEffect(() => {
     if (!currentUser) router.push(Constants.ClientRoutes.LANDING);
   }, [currentUser]);
+}
+
+export function useSignalsStore() {
+  return useContext(SignalsStoreContext);
 }

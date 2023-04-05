@@ -3,12 +3,6 @@ import { createSelector } from "reselect";
 import { GlobalState } from "@/store";
 
 import { useAppSelector } from "./hooks";
-import { useContext } from "react";
-import { SignalsStoreContext } from "@/pages/_app";
-
-export function useSignalsStore() {
-  return useContext(SignalsStoreContext);
-}
 
 export function useUiSlice() {
   return useAppSelector((state) => state.ui);
