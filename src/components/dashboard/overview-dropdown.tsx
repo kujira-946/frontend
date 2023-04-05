@@ -11,6 +11,7 @@ import * as Types from "@/utils/types";
 import {
   deletePurchaseRequest,
   fetchOverviewGroupPurchasesRequest,
+  updatePurchaseRequest,
 } from "@/sagas/purchases.saga";
 import { ThemeProps } from "../layout";
 
@@ -121,6 +122,7 @@ const ExportedComponent = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
   const { ui } = Functions.useSignalsStore();
+  const { purchases } = Functions.useEntitiesSlice();
 
   const opened = useSignal(props.initiallyOpen);
 
@@ -133,13 +135,39 @@ const ExportedComponent = (props: Props) => {
     }
   });
 
-  const updateOverviewPurchase = useCallback((purchaseId: number) => {
-    console.log("update Purchase:", purchaseId);
-  }, []);
+  const updateOverviewPurchase = useCallback(
+    Functions.debounce(
+      (purchaseId: number, description: string, cost: string) => {
+        console.log("Update Purchase Id:", purchaseId);
+        console.log("Update Purchase Description:", description);
+        console.log("Update Purchase Cost:", cost);
+
+        if (purchases && purchases[purchaseId]) {
+          console.log("Foo");
+          const purchase = purchases[purchaseId];
+          if (
+            purchase &&
+            Number(cost) &&
+            (description !== purchase.description ||
+              Number(cost) !== purchase.cost)
+          ) {
+            dispatch(
+              updatePurchaseRequest(purchaseId, {
+                description: description,
+                cost: Number(cost),
+              })
+            );
+          }
+        }
+      },
+      500
+    ),
+    [purchases]
+  );
 
   const deleteOverviewPurchase = useCallback((purchaseId: number) => {
     console.log("Delete Purchase:", purchaseId);
-    // dispatch(deletePurchaseRequest(purchaseId));
+    dispatch(deletePurchaseRequest(purchaseId));
   }, []);
 
   useEffect(() => {
@@ -202,20 +230,16 @@ const ExportedComponent = (props: Props) => {
                                           key={`overview-dropdown-purchase-cell-${purchase.id}-${index}`}
                                           borderRadius="four"
                                           provided={provided}
-                                          selectionValue={index}
+                                          selectionValue={purchase.id}
                                           description={
                                             purchase.description || ""
                                           }
                                           cost={
                                             purchase.cost?.toString() || "0"
                                           }
-                                          updateAction={() =>
-                                            updateOverviewPurchase(purchase.id)
-                                          }
-                                          deleteAction={() =>
-                                            deleteOverviewPurchase(purchase.id)
-                                          }
-                                          costFrontText="$"
+                                          updateAction={updateOverviewPurchase}
+                                          deleteAction={deleteOverviewPurchase}
+                                          costForwardText="$"
                                           hideCheck
                                           hideCategories
                                         />

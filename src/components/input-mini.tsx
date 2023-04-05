@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import TextareaAutosize from "react-textarea-autosize";
 import { memo, useRef } from "react";
 import { useSignal } from "@preact/signals-react";
@@ -75,8 +75,7 @@ type TextProps = {
   importance?: "Primary" | "Secondary";
 };
 
-const Text = styled.span<TextProps>`
-  display: block;
+const textStyles = css<TextProps>`
   color: ${(props: TextProps & ThemeProps) => {
     return props.importance === "Primary"
       ? props.theme.primaryMain
@@ -89,23 +88,19 @@ const Text = styled.span<TextProps>`
   }};
 `;
 
+const ForwardText = styled.span<TextProps>`
+  ${textStyles};
+  display: block;
+`;
+
 const Textarea = styled(TextareaAutosize)<TextProps>`
+  ${textStyles};
   width: 100%;
   height: 100%;
   padding: ${Styles.pxAsRem.four} 0;
-  color: ${(props: TextProps & ThemeProps) => {
-    return props.importance === "Primary"
-      ? props.theme.primaryMain
-      : props.importance === "Secondary"
-      ? props.theme.secondaryMain
-      : "inherit";
-  }};
   background-color: transparent;
   border: none;
   font-size: inherit;
-  font-weight: ${(props) => {
-    return props.importance === "Primary" ? Styles.fontWeights.bold : "inherit";
-  }};
   outline: none;
   resize: none;
   cursor: text;
@@ -125,12 +120,12 @@ type Props = {
   errorMessage?: string;
   placeholder: string;
   userInput: string;
+
   setUserInput: (event: Types.Input) => void;
   onBlur?: () => void;
   onFocus?: () => void;
 
-  frontText?: string;
-  backText?: string;
+  forwardText?: string;
   importance?: "Primary" | "Secondary";
   hasValue?: boolean;
   frozen?: boolean;
@@ -175,8 +170,10 @@ const ExportedComponent = (props: Props) => {
       {props.errorMessage && <ErrorMessage>{props.errorMessage}</ErrorMessage>}
 
       <Body>
-        {props.frontText && props.userInput !== "" && !props.errorMessage && (
-          <Text importance={props.importance}>{props.frontText}</Text>
+        {props.forwardText && props.userInput !== "" && !props.errorMessage && (
+          <ForwardText importance={props.importance}>
+            {props.forwardText}
+          </ForwardText>
         )}
 
         <Textarea
@@ -191,10 +188,6 @@ const ExportedComponent = (props: Props) => {
           tabIndex={props.frozen ? -1 : 0}
           importance={props.importance}
         />
-
-        {props.backText && props.userInput !== "" && !props.errorMessage && (
-          <Text importance={props.importance}>{props.backText}</Text>
-        )}
       </Body>
     </Container>
   );

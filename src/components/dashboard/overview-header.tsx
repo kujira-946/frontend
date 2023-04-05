@@ -104,7 +104,7 @@ export const OverviewHeader = (props: Props) => {
             description="Income"
             cost={Functions.roundNumber(overview.income, 2)}
             updateAction={updateIncome}
-            costFrontText="$"
+            costForwardText="$"
             hideDrag
             hideCheck
             hideCategories
@@ -133,7 +133,7 @@ export const OverviewHeader = (props: Props) => {
             selectionValue={overview.id}
             description="Total Spent"
             cost={totalSpent.value.toString()}
-            costFrontText="$"
+            costForwardText="$"
             importance="Secondary"
             hideDrag
             hideCheck
@@ -151,7 +151,7 @@ export const OverviewHeader = (props: Props) => {
               overview.income - overview.income * (overview.savings / 100),
               2
             )}
-            costFrontText="$"
+            costForwardText="$"
             importance="Primary"
             hideDrag
             hideCheck

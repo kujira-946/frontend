@@ -108,11 +108,10 @@ type Props = {
   ) => void;
   deleteAction?: (deletePosition: number) => void;
 
-  descriptionFrontText?: string;
-  descriptionBackText?: string;
-  costFrontText?: string;
-  costBackText?: string;
+  descriptionForwardText?: string;
+  costForwardText?: string;
   importance?: "Primary" | "Secondary";
+  onboarding?: true;
   hideDrag?: true;
   hideCheck?: true;
   hideCategories?: true;
@@ -248,10 +247,9 @@ const ExportedComponent = (props: Props) => {
           key={`purchase-cell-description-input-${props.selectionValue}`}
           borderRadius={props.borderRadius}
           placeholder="Description"
-          userInput={props.description}
+          userInput={props.onboarding ? props.description : description.value}
           setUserInput={updateDescription}
-          frontText={props.descriptionFrontText}
-          backText={props.descriptionBackText}
+          forwardText={props.descriptionForwardText}
           hasValue={!!props.description}
           frozen={!!props.descriptionFrozen}
         />
@@ -261,12 +259,10 @@ const ExportedComponent = (props: Props) => {
           borderRadius={props.borderRadius}
           placeholder="Cost"
           errorMessage={costError.value}
-          // userInput={props.cost}
-          userInput={cost.value}
+          userInput={props.onboarding ? props.cost : cost.value}
           setUserInput={updateCost}
           onBlur={onCostBlur}
-          frontText={props.costFrontText}
-          backText={props.costBackText}
+          forwardText={props.costForwardText}
           importance={props.importance}
           hasValue={!!props.cost}
           frozen={!!props.costFrozen}

@@ -1,6 +1,6 @@
 import * as Drag from "react-beautiful-dnd";
 import styled from "styled-components";
-import { memo, useCallback, useEffect, useMemo } from "react";
+import { memo, useCallback, useEffect } from "react";
 
 import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
@@ -9,9 +9,6 @@ import * as Types from "@/utils/types";
 import { fetchOverviewOverviewGroupsRequest } from "@/sagas/overview-groups.saga";
 
 import { OverviewDropdown } from "./overview-dropdown";
-import { fetchOverviewGroupPurchasesRequest } from "@/sagas/purchases.saga";
-import { deletePurchaseRequest } from "@/sagas/purchases.saga";
-import { GlobalState } from "@/store";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -36,10 +33,8 @@ const ExportedComponent = () => {
   const { purchases } = Functions.useEntitiesSlice();
   const { loadingOverviewGroups } = Functions.useUiSlice();
 
-  function onDragEnd(
-    result: Drag.DropResult,
-    provided: Drag.ResponderProvided
-  ): void {
+  function onDragEnd(result: Drag.DropResult, _: Drag.ResponderProvided): void {
+    console.log("On Drag End Result:", result);
     // const updatedPurchases = Functions.deepCopy(props.purchases.value);
     // const draggedElement = updatedPurchases.splice(result.source.index, 1);
     // if (result.destination) {
