@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 
 import * as Functions from "@/utils/functions";
+import * as Types from "@/utils/types";
 import { fetchUserOverviewsRequest } from "@/sagas/overviews.saga";
 import { ThemeProps } from "../layout";
 
@@ -39,11 +40,13 @@ const Children = styled.section`
 // ========================================================================================= //
 
 type Props = {
-  page: "Logbooks" | "Reviews" | "Settings";
+  page: Types.DashboardPage;
   children: React.ReactNode;
 };
 
-export const DashboardPartial = (props: Props) => {
+const ExportedComponent = (props: Props) => {
+  // console.log("Dashboard Partial Rendered");
+
   const dispatch = Functions.useAppDispatch();
 
   const { currentUser, overviews } = Functions.useEntitiesSlice();
@@ -66,3 +69,5 @@ export const DashboardPartial = (props: Props) => {
     </Container>
   );
 };
+
+export const DashboardPartial = memo(ExportedComponent);

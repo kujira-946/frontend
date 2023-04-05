@@ -1,6 +1,6 @@
 import * as Drag from "react-beautiful-dnd";
 import styled from "styled-components";
-import { useCallback, useEffect, useMemo } from "react";
+import { memo, useCallback, useEffect, useMemo } from "react";
 
 import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
@@ -11,6 +11,7 @@ import { fetchOverviewOverviewGroupsRequest } from "@/sagas/overview-groups.saga
 import { Dropdown } from "./dropdown";
 import { fetchOverviewGroupPurchasesRequest } from "@/sagas/purchases.saga";
 import { deletePurchaseRequest } from "@/sagas/purchases.saga";
+import { GlobalState } from "@/store";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -27,10 +28,12 @@ const Container = styled.section`
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-export const OverviewGroups = () => {
+const ExportedComponent = () => {
+  console.log("Overview Groups Rendered");
+
   const dispatch = Functions.useAppDispatch();
 
-  const { overviews, overviewGroups, purchases } = Functions.useEntitiesSlice();
+  const { purchases } = Functions.useEntitiesSlice();
   const { loadingOverviewGroups } = Functions.useUiSlice();
 
   function onDragEnd(
@@ -49,70 +52,77 @@ export const OverviewGroups = () => {
     dispatch(deletePurchaseRequest(purchaseId));
   }, []);
 
-  const fetchedOverviewGroups = Functions.useAppSelector(
+  const overview = Functions.useAppSelector(Functions.fetchCurrentUserOverview);
+  const overviewGroups = Functions.useAppSelector(
     Functions.fetchOverviewGroups
   );
 
-  const overviewGroupDropdowns = useMemo(() => {
-    return (
-      fetchedOverviewGroups &&
-      fetchedOverviewGroups.map((overviewGroup: Types.OverviewGroup) => {
-        return (
-          <Dropdown
-            key={`dashboard-overview-overview-groups-${overviewGroup.id}`}
-            initiallyOpen={false}
-            title={overviewGroup.name}
-            totalCost={Functions.roundNumber(overviewGroup.totalCost, 2)}
-            purchaseCount={
-              overviewGroup.purchaseIds ? overviewGroup.purchaseIds.length : 0
-            }
-            onDragEnd={onDragEnd}
-            deleteAllPurchases={() => "Delete All Purchases"}
-            addPurchase={() => "Add Purchase"}
-          >
-            <>
-              {purchases &&
-                overviewGroup.purchaseIds &&
-                overviewGroup.purchaseIds.map((purchaseId: number) => {
-                  const purchase = purchases[purchaseId];
-                  return (
-                    <Globals.PurchaseCell
-                      key={`dashboard-overview-overview-groups-purchase-cell-${purchaseId}`}
-                      borderRadius="four"
-                      selectionValue={purchaseId}
-                      description={purchase.description || ""}
-                      cost={purchase.cost?.toString() || ""}
-                      deleteAction={purchaseCellDeleteAction}
-                      costFrontText="$"
-                      hideCheck
-                      hideCategories
-                    />
-                  );
-                })}
-            </>
-          </Dropdown>
-        );
-      })
-    );
-  }, [fetchedOverviewGroups, purchases]);
+  // const purchases = Functions.useAppSelector((state: GlobalState) => {
+  //   if (overviewGroups) {
+  //     overviewGroups.forEach((overviewGroup: Types.OverviewGroup) => {
+  //       return Functions.fetchOverviewGroupPurchases(state, overviewGroup.id);
+  //     });
+  //   }
+  // });
+
+  // console.log("purchases:", purchases);
+
+  // const overviewGroupDropdowns = useMemo(() => {
+  //   return (
+  //     fetchedOverviewGroups &&
+  //     fetchedOverviewGroups.map((overviewGroup: Types.OverviewGroup) => {
+  //       return (
+  //         <Dropdown
+  //           key={`dashboard-overview-overview-groups-${overviewGroup.id}`}
+  //           initiallyOpen={false}
+  //           title={overviewGroup.name}
+  //           totalCost={Functions.roundNumber(overviewGroup.totalCost, 2)}
+  //           purchaseCount={
+  //             overviewGroup.purchaseIds ? overviewGroup.purchaseIds.length : 0
+  //           }
+  //           onDragEnd={onDragEnd}
+  //           deleteAllPurchases={() => "Delete All Purchases"}
+  //           addPurchase={() => "Add Purchase"}
+  //         >
+  //           <>
+  //             {purchases &&
+  //               overviewGroup.purchaseIds &&
+  //               overviewGroup.purchaseIds.map((purchaseId: number) => {
+  //                 const purchase = purchases[purchaseId];
+  //                 return (
+  //                   <Globals.PurchaseCell
+  //                     key={`dashboard-overview-overview-groups-purchase-cell-${purchaseId}`}
+  //                     borderRadius="four"
+  //                     selectionValue={purchaseId}
+  //                     description={purchase.description || ""}
+  //                     cost={purchase.cost?.toString() || ""}
+  //                     deleteAction={purchaseCellDeleteAction}
+  //                     costFrontText="$"
+  //                     hideCheck
+  //                     hideCategories
+  //                   />
+  //                 );
+  //               })}
+  //           </>
+  //         </Dropdown>
+  //       );
+  //     })
+  //   );
+  // }, [fetchedOverviewGroups, purchases]);
 
   useEffect(() => {
-    if (overviews && !overviewGroups) {
-      const overview = Object.values(overviews)[0];
+    if (overview && !overviewGroups) {
       dispatch(fetchOverviewOverviewGroupsRequest(overview.id));
     }
-  }, [overviews, overviewGroups]);
+  }, [overview, overviewGroups]);
 
-  useEffect(() => {
-    if (overviewGroups && !purchases) {
-      const overviewGroupIds = Object.keys(overviewGroups).map(
-        (overviewGroupId: string) => Number(overviewGroupId)
-      );
-      for (const overviewGroupId of overviewGroupIds) {
-        dispatch(fetchOverviewGroupPurchasesRequest(overviewGroupId));
-      }
-    }
-  }, [overviewGroups, purchases]);
+  // useEffect(() => {
+  //   if (overviewGroups && !purchases) {
+  //     for (const overviewGroup of overviewGroups) {
+  //       dispatch(fetchOverviewGroupPurchasesRequest(overviewGroup.id));
+  //     }
+  //   }
+  // }, [overviewGroups, purchases]);
 
   return (
     <Container>
@@ -121,9 +131,30 @@ export const OverviewGroups = () => {
           <Globals.Shimmer borderRadius="six" height={40} />
           <Globals.Shimmer borderRadius="six" height={40} />
         </>
-      ) : (
-        <>{overviewGroupDropdowns ?? null}</>
-      )}
+      ) : overviewGroups ? (
+        // <>{overviewGroupDropdowns ?? null}</>
+        <>
+          {overviewGroups.map((overviewGroup: Types.OverviewGroup) => {
+            return (
+              <Dropdown
+                key={`dashboard-overviews-overview-group-dropdown-${overviewGroup.id}`}
+                initiallyOpen={false}
+                title={overviewGroup.name}
+                totalCost={Functions.roundNumber(overviewGroup.totalCost, 2)}
+                purchaseCount={overviewGroup.purchaseIds?.length || 0}
+                onDragEnd={onDragEnd}
+                deleteAllPurchases={() => console.log("Delete All Purchases")}
+                addPurchase={() => console.log("Add Purchase")}
+              >
+                <>Foo</>
+              </Dropdown>
+            );
+          })}
+        </>
+      ) : null}
     </Container>
   );
 };
+
+export const OverviewGroups = memo(ExportedComponent);
+// export const OverviewGroups = ExportedComponent;

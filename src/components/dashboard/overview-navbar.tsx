@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import { memo } from "react";
 import { useSignal } from "@preact/signals-react";
 
 import * as Icons from "@/components/icons";
@@ -46,7 +47,7 @@ const links = [
   Constants.ClientRoutes.SETTINGS,
 ];
 
-export const OverviewNavbar = () => {
+const ExportedComponent = () => {
   const router = useRouter();
 
   const { ui } = Functions.useSignalsStore();
@@ -136,3 +137,5 @@ export const OverviewNavbar = () => {
     </Container>
   );
 };
+
+export const OverviewNavbar = memo(ExportedComponent);

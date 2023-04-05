@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
-
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
+import * as Types from "@/utils/types";
 import { updateOverviewRequest } from "@/sagas/overviews.saga";
 import { ThemeProps } from "../layout";
 
@@ -45,115 +45,42 @@ const HeadingCaption = styled.p`
 // ========================================================================================= //
 
 type Props = {
-  page: "Logbooks" | "Reviews" | "Settings";
+  page: Types.DashboardPage;
 };
 
 export const OverviewHeader = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
-  const { overviews } = Functions.useEntitiesSlice();
   const { loadingOverviews } = Functions.useUiSlice();
+  const overview = Functions.useAppSelector(Functions.fetchCurrentUserOverview);
 
   const totalSpent = useSignal(0);
   const error = useSignal("");
 
   const updateIncome = useCallback(
     Functions.debounce((_: number, __: string, cost: string) => {
-      if (overviews) {
-        const overview = Object.values(overviews)[0];
+      if (overview) {
         if (Number(cost) && Number(cost) !== overview.income) {
           dispatch(
             updateOverviewRequest(overview.id, { income: Number(cost) })
           );
         }
       }
-    }, 1000),
-    [overviews]
+    }, 500),
+    [overview]
   );
 
   const updateSavings = useCallback(
     Functions.debounce((_: number, __: string, cost: string) => {
-      if (overviews) {
-        const overview = Object.values(overviews)[0];
+      if (overview) {
         if (Number(cost) && Number(cost) !== overview.savings) {
           dispatch(
             updateOverviewRequest(overview.id, { savings: Number(cost) })
           );
         }
       }
-    }, 1000),
-    [overviews]
+    }, 500),
+    [overview]
   );
-
-  const purchaseCells = useMemo(() => {
-    if (overviews) {
-      const overview = Object.values(overviews)[0];
-      const { id, income, savings } = overview;
-
-      return (
-        <>
-          <Globals.PurchaseCell
-            key={`dashboard-overview-header-purchase-cell-income`}
-            selectionValue={id}
-            description="Income"
-            cost={Functions.roundNumber(income, 2)}
-            updateAction={updateIncome}
-            costFrontText="$"
-            hideDrag
-            hideCheck
-            hideCategories
-            hideClose
-            descriptionFrozen
-          />
-
-          <Globals.PurchaseCell
-            key={`dashboard-overview-header-purchase-cell-savings`}
-            selectionValue={id}
-            description={`Savings (%)\n$${Functions.roundNumber(
-              income * (savings / 100),
-              2
-            )}`}
-            cost={savings.toString()}
-            updateAction={updateSavings}
-            hideDrag
-            hideCheck
-            hideCategories
-            hideClose
-            descriptionFrozen
-          />
-
-          <Globals.PurchaseCell
-            key={`dashboard-overview-header-purchase-cell-total-spent`}
-            selectionValue={id}
-            description="Total Spent"
-            cost={totalSpent.value.toString()}
-            costFrontText="$"
-            importance="Secondary"
-            hideDrag
-            hideCheck
-            hideCategories
-            hideClose
-            descriptionFrozen
-            costFrozen
-          />
-
-          <Globals.PurchaseCell
-            key={`dashboard-overview-header-purchase-cell-remaining`}
-            selectionValue={id}
-            description="Remaining"
-            cost={Functions.roundNumber(income - income * (savings / 100), 2)}
-            costFrontText="$"
-            importance="Primary"
-            hideDrag
-            hideCheck
-            hideCategories
-            hideClose
-            descriptionFrozen
-            costFrozen
-          />
-        </>
-      );
-    }
-  }, [overviews]);
 
   return (
     <Container>
@@ -169,9 +96,72 @@ export const OverviewHeader = (props: Props) => {
           <Globals.Shimmer borderRadius="six" height={44} />
           <Globals.Shimmer borderRadius="six" height={44} />
         </>
-      ) : (
-        purchaseCells
-      )}
+      ) : overview ? (
+        <>
+          <Globals.PurchaseCell
+            key={`dashboard-overview-header-purchase-cell-income`}
+            selectionValue={overview.id}
+            description="Income"
+            cost={Functions.roundNumber(overview.income, 2)}
+            updateAction={updateIncome}
+            costFrontText="$"
+            hideDrag
+            hideCheck
+            hideCategories
+            hideClose
+            descriptionFrozen
+          />
+
+          <Globals.PurchaseCell
+            key={`dashboard-overview-header-purchase-cell-savings`}
+            selectionValue={overview.id}
+            description={`Savings (%)\n$${Functions.roundNumber(
+              overview.income * (overview.savings / 100),
+              2
+            )}`}
+            cost={overview.savings.toString()}
+            updateAction={updateSavings}
+            hideDrag
+            hideCheck
+            hideCategories
+            hideClose
+            descriptionFrozen
+          />
+
+          <Globals.PurchaseCell
+            key={`dashboard-overview-header-purchase-cell-total-spent`}
+            selectionValue={overview.id}
+            description="Total Spent"
+            cost={totalSpent.value.toString()}
+            costFrontText="$"
+            importance="Secondary"
+            hideDrag
+            hideCheck
+            hideCategories
+            hideClose
+            descriptionFrozen
+            costFrozen
+          />
+
+          <Globals.PurchaseCell
+            key={`dashboard-overview-header-purchase-cell-remaining`}
+            selectionValue={overview.id}
+            description="Remaining"
+            cost={Functions.roundNumber(
+              overview.income - overview.income * (overview.savings / 100),
+              2
+            )}
+            costFrontText="$"
+            importance="Primary"
+            hideDrag
+            hideCheck
+            hideCategories
+            hideClose
+            descriptionFrozen
+            costFrozen
+          />
+        </>
+      ) : null}
     </Container>
   );
 };

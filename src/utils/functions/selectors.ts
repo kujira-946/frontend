@@ -16,15 +16,44 @@ export function useErrorsSlice() {
   return useAppSelector((state) => state.errors);
 }
 
+export const fetchCurrentUserOverview = createSelector(
+  (state: GlobalState) => state.entities.currentUser,
+  (state: GlobalState) => state.entities.overviews,
+  (currentUser, overviews) => {
+    if (currentUser && currentUser.overviewIds && overviews) {
+      return overviews[currentUser.overviewIds[0]];
+    }
+  }
+);
+
 export const fetchOverviewGroups = createSelector(
+  (state: GlobalState) => state.entities.currentUser,
   (state: GlobalState) => state.entities.overviews,
   (state: GlobalState) => state.entities.overviewGroups,
-  (overviews, overviewGroups) => {
-    if (overviews && overviewGroups) {
-      const overview = Object.values(overviews)[0];
-      return overview.overviewGroupIds.map((overviewGroupId: number) => {
-        return overviewGroups[overviewGroupId];
-      });
+  (currentUser, overviews, overviewGroups) => {
+    if (currentUser && currentUser.overviewIds && overviews && overviewGroups) {
+      const overview = overviews[currentUser.overviewIds[0]];
+      if (overview.overviewGroupIds && overview.overviewGroupIds.length > 0) {
+        return overview.overviewGroupIds.map((overviewGroupId: number) => {
+          return overviewGroups[overviewGroupId];
+        });
+      }
+    }
+  }
+);
+
+export const fetchOverviewGroupPurchases = createSelector(
+  (state: GlobalState) => state.entities.overviewGroups,
+  (state: GlobalState, overviewGroupId: number) => overviewGroupId,
+  (state: GlobalState) => state.entities.purchases,
+  (overviewGroups, overviewGroupId, purchases) => {
+    if (overviewGroups && purchases) {
+      const overviewGroup = overviewGroups[overviewGroupId];
+      if (overviewGroup.purchaseIds) {
+        return overviewGroup.purchaseIds.map((purchaseId: number) => {
+          return purchases[purchaseId];
+        });
+      }
     }
   }
 );
