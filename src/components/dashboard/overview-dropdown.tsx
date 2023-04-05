@@ -279,7 +279,10 @@ const ExportedComponent = (props: Props) => {
 
               <Global.Button
                 type="button"
-                onClick={() => (deleteConfirmationOpen.value = true)}
+                onClick={() => {
+                  props.purchaseCount > 0 &&
+                    (deleteConfirmationOpen.value = true);
+                }}
                 size="medium"
                 borderRadius="four"
                 color={Styles.background[ui.theme.value].seven}
