@@ -139,7 +139,12 @@ function* fetchUserOverviews(action: UserOverviewsAction) {
       yield Saga.put(
         Redux.entitiesActions.updateCurrentUserRelations({
           relationalField: "overviewIds",
-          ids: overviewIds.length > 0 ? overviewIds : [overviewIds],
+          ids:
+            overviewIds.length > 0
+              ? overviewIds
+              : overviewIds.length === 1
+              ? [overviewIds]
+              : [],
         })
       );
     }
@@ -147,7 +152,12 @@ function* fetchUserOverviews(action: UserOverviewsAction) {
       Redux.entitiesActions.updateUserRelations({
         userId: ownerId,
         relationalField: "overviewIds",
-        ids: overviewIds.length > 0 ? overviewIds : [overviewIds],
+        ids:
+          overviewIds.length > 0
+            ? overviewIds
+            : overviewIds.length === 1
+            ? [overviewIds]
+            : [],
       })
     );
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));

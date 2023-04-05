@@ -9,6 +9,11 @@ import * as Types from "@/utils/types";
 import { fetchOverviewOverviewGroupsRequest } from "@/sagas/overview-groups.saga";
 
 import { OverviewDropdown } from "./overview-dropdown";
+import {
+  createPurchaseRequest,
+  deleteAssociatedPurchasesRequest,
+  updatePurchaseRequest,
+} from "@/sagas/purchases.saga";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -30,17 +35,31 @@ const ExportedComponent = () => {
 
   const dispatch = Functions.useAppDispatch();
 
-  const { purchases } = Functions.useEntitiesSlice();
   const { loadingOverviewGroups } = Functions.useUiSlice();
 
   function onDragEnd(result: Drag.DropResult, _: Drag.ResponderProvided): void {
-    console.log("On Drag End Result:", result);
-    // const updatedPurchases = Functions.deepCopy(props.purchases.value);
-    // const draggedElement = updatedPurchases.splice(result.source.index, 1);
-    // if (result.destination) {
-    //   updatedPurchases.splice(result.destination.index, 0, ...draggedElement);
-    //   props.purchases.value = updatedPurchases;
-    // }
+    const previousIndex = result.source.index;
+    const newIndex = result.destination?.index;
+    if (newIndex && newIndex !== previousIndex) {
+      const purchaseId = Number(result.draggableId);
+      const updatedPlacement = newIndex + 1;
+      dispatch(
+        updatePurchaseRequest(purchaseId, { placement: updatedPlacement })
+      );
+    }
+  }
+
+  function deleteAllPurchases(overviewGroupId: number): void {
+    dispatch(deleteAssociatedPurchasesRequest({ overviewGroupId }));
+  }
+
+  function addPurchase(overviewGroupId: number): void {
+    dispatch(
+      createPurchaseRequest({
+        placement: 0,
+        overviewGroupId,
+      })
+    );
   }
 
   const overview = Functions.useAppSelector(Functions.fetchCurrentUserOverview);
@@ -73,8 +92,8 @@ const ExportedComponent = () => {
                 purchaseCount={overviewGroup.purchaseIds?.length || 0}
                 overviewGroupId={overviewGroup.id}
                 onDragEnd={onDragEnd}
-                deleteAllPurchases={() => console.log("Delete All Purchases")}
-                addPurchase={() => console.log("Add Purchase")}
+                deleteAllPurchases={() => deleteAllPurchases(overviewGroup.id)}
+                addPurchase={() => addPurchase(overviewGroup.id)}
               />
             );
           })}

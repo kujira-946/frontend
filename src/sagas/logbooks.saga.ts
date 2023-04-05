@@ -128,7 +128,12 @@ function* fetchUserLogbooks(action: UserLogbooksAction) {
       yield Saga.put(
         Redux.entitiesActions.updateCurrentUserRelations({
           relationalField: "logbookIds",
-          ids: logbookIds.length > 0 ? logbookIds : [logbookIds],
+          ids:
+            logbookIds.length > 0
+              ? logbookIds
+              : logbookIds.length === 1
+              ? [logbookIds]
+              : [],
         })
       );
     }
@@ -136,7 +141,12 @@ function* fetchUserLogbooks(action: UserLogbooksAction) {
       Redux.entitiesActions.updateUserRelations({
         userId: ownerId,
         relationalField: "logbookIds",
-        ids: logbookIds.length > 0 ? logbookIds : [logbookIds],
+        ids:
+          logbookIds.length > 0
+            ? logbookIds
+            : logbookIds.length === 1
+            ? [logbookIds]
+            : [],
       })
     );
     yield Saga.put(Redux.uiActions.setLoadingLogbooks(false));

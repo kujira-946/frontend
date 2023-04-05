@@ -79,7 +79,8 @@ const Inputs = styled.div`
   width: 100%;
 `;
 
-const DeleteButton = styled.div`
+const DeleteButton = styled.button`
+  ${Styles.clearButton};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -271,6 +272,7 @@ const ExportedComponent = (props: Props) => {
 
       {!props.hideClose && (
         <DeleteButton
+          type="button"
           onClick={() =>
             props.deleteAction && props.deleteAction(props.selectionValue)
           }
@@ -281,7 +283,7 @@ const ExportedComponent = (props: Props) => {
             height={12}
             fill={Styles.background[ui.theme.value].six}
             hovered={closeHovered.value}
-            hoveredFill={Styles.background[ui.theme.value].eight}
+            hoveredFill={Styles.text[ui.theme.value]}
           />
         </DeleteButton>
       )}

@@ -29,7 +29,7 @@ enum PurchasesActionTypes {
   UPDATE_PURCHASE = "UPDATE_PURCHASE",
   DELETE_PURCHASE = "DELETE_PURCHASE",
   BATCH_DELETE_PURCHASES = "BATCH_DELETE_PURCHASES",
-  DELETE_ALL_PURCHASES = "DELETE_ALL_PURCHASES",
+  DELETE_ASSOCIATED_PURCHASES = "DELETE_ASSOCIATED_PURCHASES",
 }
 
 export function fetchPurchasesRequest(): Types.NullAction {
@@ -141,10 +141,19 @@ export function batchDeletePurchasesRequest(
   };
 }
 
-export function deleteAllPurchasesRequest(): Types.NullAction {
+type DeleteAllAction = Types.SagaAction<{
+  deleteData: {
+    overviewGroupId?: number;
+    logbookEntryId?: number;
+  };
+}>;
+export function deleteAssociatedPurchasesRequest(deleteData: {
+  overviewGroupId?: number;
+  logbookEntryId?: number;
+}): DeleteAllAction {
   return {
-    type: PurchasesActionTypes.DELETE_ALL_PURCHASES,
-    payload: null,
+    type: PurchasesActionTypes.DELETE_ASSOCIATED_PURCHASES,
+    payload: { deleteData },
   };
 }
 
@@ -183,7 +192,12 @@ function* fetchOverviewGroupPurchases(action: OverviewGroupPurchasesAction) {
     yield Saga.put(
       Redux.entitiesActions.updateOverviewGroupRelations({
         overviewGroupId,
-        purchaseIds: purchaseIds.length > 0 ? purchaseIds : [purchaseIds],
+        purchaseIds:
+          purchaseIds.length > 0
+            ? purchaseIds
+            : purchaseIds.length === 1
+            ? [purchaseIds]
+            : [],
       })
     );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
@@ -208,7 +222,12 @@ function* fetchLogbookEntryPurchases(action: LogbookEntryPurchasesAction) {
     yield Saga.put(
       Redux.entitiesActions.updateLogbookEntryRelations({
         logbookEntryId,
-        purchaseIds: purchaseIds.length > 0 ? purchaseIds : [purchaseIds],
+        purchaseIds:
+          purchaseIds.length > 0
+            ? purchaseIds
+            : purchaseIds.length === 1
+            ? [purchaseIds]
+            : [],
       })
     );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
@@ -307,14 +326,24 @@ function* bulkCreatePurchases(action: PurchaseBulkCreateAction) {
         yield Saga.put(
           Redux.entitiesActions.updateOverviewGroupRelations({
             overviewGroupId: relation.relationalId,
-            purchaseIds: purchaseIds.length > 0 ? purchaseIds : [purchaseIds],
+            purchaseIds:
+              purchaseIds.length > 0
+                ? purchaseIds
+                : purchaseIds.length === 1
+                ? [purchaseIds]
+                : [],
           })
         );
       } else {
         yield Saga.put(
           Redux.entitiesActions.updateLogbookEntryRelations({
             logbookEntryId: relation.relationalId,
-            purchaseIds: purchaseIds.length > 0 ? purchaseIds : [purchaseIds],
+            purchaseIds:
+              purchaseIds.length > 0
+                ? purchaseIds
+                : purchaseIds.length === 1
+                ? [purchaseIds]
+                : [],
           })
         );
       }
@@ -370,12 +399,14 @@ function* batchDeletePurchases(action: PurchaseBatchDeleteAction) {
   }
 }
 
-function* deleteAllPurchases() {
+function* deleteAssociatedPurchases(action: DeleteAllAction) {
   try {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
-    const endpoint = ApiRoutes.PURCHASES + `/delete-all`;
-    yield Saga.call(axios.post, endpoint);
-    yield Saga.put(Redux.entitiesActions.setPurchases(null));
+    const { deleteData } = action.payload;
+    const endpoint = ApiRoutes.PURCHASES + `/delete-associated-purchases`;
+    yield Saga.call(axios.post, endpoint, deleteData);
+    // yield Saga.put(Redux.entitiesActions.setPurchases(null));
+    yield Saga.put(Redux.entitiesActions.deleteAssociatedPurchases(deleteData));
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
@@ -411,8 +442,8 @@ export function* purchasesSaga() {
       batchDeletePurchases
     ),
     Saga.takeEvery(
-      PurchasesActionTypes.DELETE_ALL_PURCHASES,
-      deleteAllPurchases
+      PurchasesActionTypes.DELETE_ASSOCIATED_PURCHASES,
+      deleteAssociatedPurchases
     ),
   ]);
 }

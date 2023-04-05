@@ -130,7 +130,11 @@ function* fetchLogbookLogbookEntries(action: LogbookLogbookEntriesAction) {
       Redux.entitiesActions.updateLogbookRelations({
         logbookId,
         logbookEntryIds:
-          logbookEntryIds.length > 0 ? logbookEntryIds : [logbookEntryIds],
+          logbookEntryIds.length > 0
+            ? logbookEntryIds
+            : logbookEntryIds.length === 1
+            ? [logbookEntryIds]
+            : [],
       })
     );
     yield Saga.put(Redux.uiActions.setLoadingLogbookEntries(false));

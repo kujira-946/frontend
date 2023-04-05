@@ -141,7 +141,11 @@ function* fetchOverviewOverviewGroups(action: OverviewOverviewGroupsAction) {
       Redux.entitiesActions.updateOverviewRelations({
         overviewId,
         overviewGroupIds:
-          overviewGroupIds.length > 0 ? overviewGroupIds : [overviewGroupIds],
+          overviewGroupIds.length > 0
+            ? overviewGroupIds
+            : overviewGroupIds.length === 1
+            ? [overviewGroupIds]
+            : [],
       })
     );
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));

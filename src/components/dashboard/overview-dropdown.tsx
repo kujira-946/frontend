@@ -1,4 +1,5 @@
 import * as Drag from "react-beautiful-dnd";
+import dynamic from "next/dynamic";
 import styled from "styled-components";
 import { memo, useCallback, useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
@@ -10,6 +11,7 @@ import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { ThemeProps } from "../layout";
+import { OverviewDeleteConfirmation } from "./overview-delete-confirmation";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -21,6 +23,7 @@ type ContainerProps = {
 };
 
 const Container = styled.section<ContainerProps>`
+  position: relative;
   border: ${(props: ThemeProps & ContainerProps) => {
     return props.opened
       ? `${props.theme.backgroundSix} solid 1px`
@@ -91,6 +94,16 @@ const PurchaseCells = styled.div`
 `;
 
 // ========================================================================================= //
+// [ DYNAMIC IMPORT ] ====================================================================== //
+// ========================================================================================= //
+
+const DynamicOverviewDeleteConfirmation = dynamic(() =>
+  import("./overview-delete-confirmation").then(
+    (mod) => mod.OverviewDeleteConfirmation
+  )
+);
+
+// ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
@@ -122,6 +135,7 @@ const ExportedComponent = (props: Props) => {
   const { loadingPurchases } = Functions.useUiSlice();
 
   const opened = useSignal(props.initiallyOpen);
+  const deleteConfirmationOpen = useSignal(false);
 
   const overviewGroupPurchases = Functions.useAppSelector((state) => {
     if (props.overviewGroupId) {
@@ -158,7 +172,6 @@ const ExportedComponent = (props: Props) => {
   );
 
   const deleteOverviewPurchase = useCallback((purchaseId: number) => {
-    console.log("Delete Purchase:", purchaseId);
     dispatch(PurchasesSaga.deletePurchaseRequest(purchaseId));
   }, []);
 
@@ -172,6 +185,16 @@ const ExportedComponent = (props: Props) => {
 
   return (
     <Container borderRadius={props.borderRadius} opened={opened.value}>
+      <AnimatePresence>
+        {deleteConfirmationOpen.value && (
+          <DynamicOverviewDeleteConfirmation
+            open={deleteConfirmationOpen}
+            onClose={() => (deleteConfirmationOpen.value = false)}
+            onConfirm={props.deleteAllPurchases}
+          />
+        )}
+      </AnimatePresence>
+
       <Drag.DragDropContext onDragEnd={props.onDragEnd}>
         <Header
           onClick={() => (opened.value = !opened.value)}
@@ -214,7 +237,7 @@ const ExportedComponent = (props: Props) => {
                             return (
                               <Drag.Draggable
                                 key={`overview-dropdown-purchase-${purchase.id}`}
-                                draggableId={`${purchase.id}-${index}`}
+                                draggableId={`${purchase.id}`}
                                 index={index}
                               >
                                 {(
@@ -257,7 +280,7 @@ const ExportedComponent = (props: Props) => {
 
               <Global.Button
                 type="button"
-                onClick={props.deleteAllPurchases}
+                onClick={() => (deleteConfirmationOpen.value = true)}
                 size="medium"
                 borderRadius="four"
                 color={Styles.background[ui.theme.value].seven}
@@ -290,3 +313,4 @@ const ExportedComponent = (props: Props) => {
 };
 
 export const OverviewDropdown = memo(ExportedComponent);
+// export const OverviewDropdown = ExportedComponent;

@@ -110,7 +110,8 @@ export const shadow = {
   },
 };
 
-export const overlay = "box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.7)";
+// export const overlay = "box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.7)";
+export const overlay = "background-color: rgba(0, 0, 0, 0.7)";
 
 export const shadowOverlay = {
   light: "box-shadow: 0px 8px 16px #2F2F2F",

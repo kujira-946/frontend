@@ -433,8 +433,41 @@ const entitiesSlice = createSlice({
     deletePurchase: (state: EntitiesState, action: PayloadAction<number>) => {
       if (state.purchases) {
         const purchasesCopy = Functions.deepCopy(state.purchases);
+        // console.log("Purchases Copy Before:", purchasesCopy);
+        const purchase = purchasesCopy[action.payload];
+        if (purchase.overviewGroupId && state.overviewGroups) {
+          const updatedOverviewGroups = Functions.deepCopy(
+            state.overviewGroups
+          );
+          if (updatedOverviewGroups[purchase.overviewGroupId].purchaseIds) {
+            const purchaseIndex = updatedOverviewGroups[
+              purchase.overviewGroupId
+            ].purchaseIds.indexOf(action.payload);
+            updatedOverviewGroups[purchase.overviewGroupId].purchaseIds.splice(
+              purchaseIndex,
+              1
+            );
+            state.overviewGroups = updatedOverviewGroups;
+          }
+        } else if (purchase.logbookEntryId && state.logbookEntries) {
+          const updatedLogbookEntries = Functions.deepCopy(
+            state.logbookEntries
+          );
+          if (updatedLogbookEntries[purchase.logbookEntryId].purchaseIds) {
+            const purchaseIndex = updatedLogbookEntries[
+              purchase.logbookEntryId
+            ].purchaseIds.indexOf(action.payload);
+            updatedLogbookEntries[purchase.logbookEntryId].purchaseIds.splice(
+              purchaseIndex,
+              1
+            );
+            state.logbookEntries = updatedLogbookEntries;
+          }
+        }
         delete purchasesCopy[action.payload];
+        // console.log("Purchases Copy After:", purchasesCopy);
         state.purchases = purchasesCopy;
+        // console.log("State Purchases:", state.purchases);
       }
     },
     batchDeletePurchases: (
@@ -447,6 +480,50 @@ const entitiesSlice = createSlice({
           delete purchasesCopy[purchaseId];
         }
         state.purchases = purchasesCopy;
+      }
+    },
+    deleteAssociatedPurchases: (
+      state: EntitiesState,
+      action: PayloadAction<{
+        overviewGroupId?: number;
+        logbookEntryId?: number;
+      }>
+    ) => {
+      if (state.purchases) {
+        const updatedPurchases = Functions.deepCopy(state.purchases);
+
+        if (state.overviewGroups) {
+          const { overviewGroupId } = action.payload;
+          if (overviewGroupId) {
+            const updatedOverviewGroups = Functions.deepCopy(
+              state.overviewGroups
+            );
+            if (updatedOverviewGroups[overviewGroupId].purchaseIds) {
+              updatedOverviewGroups[overviewGroupId].purchaseIds.forEach(
+                (purchaseId: number) => {
+                  delete updatedPurchases[purchaseId];
+                }
+              );
+              updatedOverviewGroups[overviewGroupId].purchaseIds = [];
+              state.overviewGroups = updatedOverviewGroups;
+            }
+          }
+        } else if (state.logbookEntries) {
+          const { logbookEntryId } = action.payload;
+          if (logbookEntryId) {
+            const updatedLogbookEntries = Functions.deepCopy(
+              state.logbookEntries
+            );
+            if (updatedLogbookEntries[logbookEntryId].purchaseIds) {
+              updatedLogbookEntries[logbookEntryId].purchaseIds.forEach(
+                (purchaseId: number) => {
+                  delete updatedPurchases[purchaseId];
+                }
+              );
+              state.logbookEntries = updatedLogbookEntries;
+            }
+          }
+        }
       }
     },
   },
