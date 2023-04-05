@@ -146,13 +146,12 @@ const Onboarding = () => {
     }
   }
 
-  useEffect(() => {
-    if (currentUser && currentUser.onboarded) {
-      router.push(Constants.ClientRoutes.LOGBOOKS);
-    } else if (!currentUser) {
-      router.push(Constants.ClientRoutes.LANDING);
+  Functions.useDetectAuthorizedUser(() => {
+    if (currentUser) {
+      if (currentUser.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
+      else router.push(Constants.ClientRoutes.LANDING);
     }
-  }, [currentUser]);
+  });
 
   // ↓↓↓ Handling Supporting Text Value ↓↓↓ //
   effect(() => {

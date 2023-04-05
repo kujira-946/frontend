@@ -6,7 +6,7 @@ import * as Functions from "@/utils/functions";
 const Settings = () => {
   const { currentUser } = Functions.useEntitiesSlice();
 
-  Functions.useDetectAuthorizedUser(currentUser);
+  Functions.useDetectAuthorizedUser();
 
   if (!currentUser) {
     return null;

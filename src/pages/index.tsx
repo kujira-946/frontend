@@ -22,8 +22,15 @@ const Main = styled.main`
 
 const Home = () => {
   const router = useRouter();
-  
+
   const { currentUser } = Functions.useEntitiesSlice();
+
+  Functions.useDetectAuthorizedUser(() => {
+    if (currentUser) {
+      if (currentUser.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
+      else router.push(Constants.ClientRoutes.ONBOARDING);
+    }
+  });
 
   // ↓↓↓ Starts the page back at the top when refreshing. ↓↓↓ //
   useEffect(() => {
@@ -31,16 +38,6 @@ const Home = () => {
       window.history.scrollRestoration = "manual";
     }
   }, []);
-
-  useEffect(() => {
-    if (currentUser) {
-      if (!currentUser.onboarded) {
-        router.push(Constants.ClientRoutes.ONBOARDING);
-      } else {
-        router.push(Constants.ClientRoutes.LOGBOOKS);
-      }
-    }
-  }, [currentUser]);
 
   if (currentUser) {
     return null;

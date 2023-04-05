@@ -15,12 +15,12 @@ const Login = () => {
 
   const email = useSignal("");
 
-  useEffect(() => {
+  Functions.useDetectAuthorizedUser(() => {
     if (currentUser) {
       if (currentUser.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
       else router.push(Constants.ClientRoutes.ONBOARDING);
     }
-  }, [currentUser]);
+  });
 
   if (currentUser) {
     return null;

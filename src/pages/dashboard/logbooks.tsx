@@ -4,11 +4,11 @@ import * as Components from "@/components/dashboard";
 import * as Functions from "@/utils/functions";
 
 const Logbooks = () => {
-  // console.log("Logbooks Page Rendered");
+  console.log("Logbooks Page Rendered");
 
   const { currentUser } = Functions.useEntitiesSlice();
 
-  Functions.useDetectAuthorizedUser(currentUser);
+  Functions.useDetectAuthorizedUser();
 
   if (!currentUser) {
     return null;
@@ -22,9 +22,9 @@ const Logbooks = () => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <Components.DashboardPartial page="Logbooks">
+        {/* <Components.DashboardPartial page="Logbooks">
           Logbooks Page
-        </Components.DashboardPartial>
+        </Components.DashboardPartial> */}
       </>
     );
   }

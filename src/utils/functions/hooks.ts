@@ -4,9 +4,10 @@ import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
 import { useSignal } from "@preact/signals-react";
 
 import * as Constants from "@/utils/constants";
-import * as Types from "@/utils/types";
+import * as Functions from "@/utils/functions";
 import { SignalsStoreContext } from "@/pages/_app";
 import { AppDispatch, RootState } from "@/store";
+import Cookies from "js-cookie";
 
 // Use these instead of react-redux's `useDispatch` and `useSelector`,
 // as these come packed with the inferred types, found in @/store.ts.
@@ -62,11 +63,20 @@ export function useDetectInView(
   return { ref, inView: inView.value };
 }
 
-export function useDetectAuthorizedUser(currentUser: Types.User | null): void {
+export function useDetectAuthorizedUser(callback?: Function): void {
+  // const { currentUser } = Functions.useEntitiesSlice();
+  const userId = Cookies.get("id");
+  const jwtAccessToken = Cookies.get("token");
   const router = useRouter();
   useEffect(() => {
-    if (!currentUser) router.push(Constants.ClientRoutes.LANDING);
-  }, [currentUser]);
+    // if (!currentUser) router.push(Constants.ClientRoutes.LANDING);
+    const userNotLoggedIn = !userId && !jwtAccessToken;
+    if (userNotLoggedIn) {
+      router.push(Constants.ClientRoutes.LANDING);
+    } else {
+      if (callback) callback();
+    }
+  }, []);
 }
 
 export function useSignalsStore() {
