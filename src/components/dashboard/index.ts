@@ -1,4 +1,4 @@
 import { DashboardPartial } from "./dashboard-partial";
-import { Dropdown } from "./dropdown";
+import { OverviewDropdown } from "./overview-dropdown";
 
-export { DashboardPartial, Dropdown };
+export { DashboardPartial, OverviewDropdown };

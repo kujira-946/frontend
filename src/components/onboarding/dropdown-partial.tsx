@@ -71,10 +71,10 @@ const ExportedComponent = (props: Props) => {
   }, [props.disableSubmit, props.purchases.value]);
 
   return (
-    <Dashboard.Dropdown
+    <Dashboard.OverviewDropdown
       initiallyOpen={true}
       title={props.title}
-      totalCost={Functions.roundNumber(props.totalCost.value, 2)}
+      totalCost={props.totalCost.value}
       purchaseCount={props.purchases.value.length}
       onDragEnd={onDragEnd}
       deleteAllPurchases={deleteAllPurchases}
@@ -118,7 +118,7 @@ const ExportedComponent = (props: Props) => {
           );
         }
       )}
-    </Dashboard.Dropdown>
+    </Dashboard.OverviewDropdown>
   );
 };
 

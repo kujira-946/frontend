@@ -1,5 +1,6 @@
 import * as Drag from "react-beautiful-dnd";
 import styled from "styled-components";
+import { memo, useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -7,6 +8,7 @@ import * as Global from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
+import { fetchOverviewGroupPurchasesRequest } from "@/sagas/purchases.saga";
 import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
@@ -95,10 +97,13 @@ const PurchaseCells = styled.div`
 type Props = {
   children: React.ReactNode;
   borderRadius?: Types.PxAsRem;
+
   initiallyOpen: boolean;
   title: "Recurring" | "Incoming" | string;
-  totalCost: string;
+  totalCost: number;
   purchaseCount: number;
+  overviewGroupId?: number;
+
   onDragEnd: (
     result: Drag.DropResult,
     provided: Drag.ResponderProvided
@@ -107,10 +112,20 @@ type Props = {
   addPurchase: () => void;
 };
 
-export const Dropdown = (props: Props) => {
+const ExportedComponent = (props: Props) => {
+  console.log("Overview Dropdown Rendered");
+
+  const dispatch = Functions.useAppDispatch();
+
   const { ui } = Functions.useSignalsStore();
 
   const opened = useSignal(props.initiallyOpen);
+
+  useEffect(() => {
+    if (props.overviewGroupId && opened.value) {
+      dispatch(fetchOverviewGroupPurchasesRequest(props.overviewGroupId));
+    }
+  }, [props.overviewGroupId]);
 
   return (
     <Container borderRadius={props.borderRadius} opened={opened.value}>
@@ -122,7 +137,7 @@ export const Dropdown = (props: Props) => {
           <Title>
             {props.title} ({props.purchaseCount})
           </Title>
-          <Total>${props.totalCost}</Total>
+          <Total>${Functions.roundNumber(props.totalCost, 2)}</Total>
         </Header>
 
         <AnimatePresence>
@@ -182,3 +197,5 @@ export const Dropdown = (props: Props) => {
     </Container>
   );
 };
+
+export const OverviewDropdown = memo(ExportedComponent);

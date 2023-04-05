@@ -8,7 +8,7 @@ import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { fetchOverviewOverviewGroupsRequest } from "@/sagas/overview-groups.saga";
 
-import { Dropdown } from "./dropdown";
+import { OverviewDropdown } from "./overview-dropdown";
 import { fetchOverviewGroupPurchasesRequest } from "@/sagas/purchases.saga";
 import { deletePurchaseRequest } from "@/sagas/purchases.saga";
 import { GlobalState } from "@/store";
@@ -29,7 +29,7 @@ const Container = styled.section`
 // ========================================================================================= //
 
 const ExportedComponent = () => {
-  console.log("Overview Groups Rendered");
+  // console.log("Overview Groups Rendered");
 
   const dispatch = Functions.useAppDispatch();
 
@@ -72,7 +72,7 @@ const ExportedComponent = () => {
   //     fetchedOverviewGroups &&
   //     fetchedOverviewGroups.map((overviewGroup: Types.OverviewGroup) => {
   //       return (
-  //         <Dropdown
+  //         <OverviewDropdown
   //           key={`dashboard-overview-overview-groups-${overviewGroup.id}`}
   //           initiallyOpen={false}
   //           title={overviewGroup.name}
@@ -104,7 +104,7 @@ const ExportedComponent = () => {
   //                 );
   //               })}
   //           </>
-  //         </Dropdown>
+  //         </OverviewDropdown>
   //       );
   //     })
   //   );
@@ -132,22 +132,21 @@ const ExportedComponent = () => {
           <Globals.Shimmer borderRadius="six" height={40} />
         </>
       ) : overviewGroups ? (
-        // <>{overviewGroupDropdowns ?? null}</>
         <>
           {overviewGroups.map((overviewGroup: Types.OverviewGroup) => {
             return (
-              <Dropdown
+              <OverviewDropdown
                 key={`dashboard-overviews-overview-group-dropdown-${overviewGroup.id}`}
                 initiallyOpen={false}
                 title={overviewGroup.name}
-                totalCost={Functions.roundNumber(overviewGroup.totalCost, 2)}
+                totalCost={overviewGroup.totalCost}
                 purchaseCount={overviewGroup.purchaseIds?.length || 0}
                 onDragEnd={onDragEnd}
                 deleteAllPurchases={() => console.log("Delete All Purchases")}
                 addPurchase={() => console.log("Add Purchase")}
               >
                 <>Foo</>
-              </Dropdown>
+              </OverviewDropdown>
             );
           })}
         </>
