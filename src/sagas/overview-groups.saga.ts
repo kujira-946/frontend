@@ -164,9 +164,6 @@ function* bulkFetchOverviewGroups(action: OverviewGroupIdsAction) {
         overviewGroups as Types.OverviewGroupsEntity
       )
     );
-
-    console.log("Overview Groups:", overviewGroups);
-
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(false));

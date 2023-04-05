@@ -119,6 +119,7 @@ const ExportedComponent = (props: Props) => {
 
   const { ui } = Functions.useSignalsStore();
   const { purchases } = Functions.useEntitiesSlice();
+  const { loadingPurchases } = Functions.useUiSlice();
 
   const opened = useSignal(props.initiallyOpen);
 
@@ -135,7 +136,6 @@ const ExportedComponent = (props: Props) => {
     Functions.debounce(
       (purchaseId: number, description: string, cost: string) => {
         if (purchases && purchases[purchaseId]) {
-          console.log("Foo");
           const purchase = purchases[purchaseId];
           if (
             purchase &&
@@ -201,50 +201,55 @@ const ExportedComponent = (props: Props) => {
                       {...provided.droppableProps}
                       ref={provided.innerRef}
                     >
-                      {overviewGroupPurchases
-                        ? overviewGroupPurchases.map(
-                            (purchase: Types.Purchase, index: number) => {
-                              return (
-                                <Drag.Draggable
-                                  key={`overview-dropdown-purchase-${purchase.id}`}
-                                  draggableId={`${purchase.id}-${index}`}
-                                  index={index}
-                                >
-                                  {(
-                                    provided: Drag.DraggableProvided,
-                                    snapshot: Drag.DraggableStateSnapshot
-                                  ) => {
-                                    return (
-                                      <Global.DraggablePortalItem
+                      {loadingPurchases ? (
+                        <>
+                          <Global.Shimmer borderRadius="six" height={40} />
+                          <Global.Shimmer borderRadius="six" height={40} />
+                          <Global.Shimmer borderRadius="six" height={40} />
+                          <Global.Shimmer borderRadius="six" height={40} />
+                        </>
+                      ) : overviewGroupPurchases ? (
+                        overviewGroupPurchases.map(
+                          (purchase: Types.Purchase, index: number) => {
+                            return (
+                              <Drag.Draggable
+                                key={`overview-dropdown-purchase-${purchase.id}`}
+                                draggableId={`${purchase.id}-${index}`}
+                                index={index}
+                              >
+                                {(
+                                  provided: Drag.DraggableProvided,
+                                  snapshot: Drag.DraggableStateSnapshot
+                                ) => {
+                                  return (
+                                    <Global.DraggablePortalItem
+                                      provided={provided}
+                                      snapshot={snapshot}
+                                      preventEntireElementDrag
+                                    >
+                                      <Global.PurchaseCell
+                                        key={`overview-dropdown-purchase-cell-${purchase.id}-${index}`}
+                                        borderRadius="four"
                                         provided={provided}
-                                        snapshot={snapshot}
-                                        preventEntireElementDrag
-                                      >
-                                        <Global.PurchaseCell
-                                          key={`overview-dropdown-purchase-cell-${purchase.id}-${index}`}
-                                          borderRadius="four"
-                                          provided={provided}
-                                          selectionValue={purchase.id}
-                                          description={
-                                            purchase.description || ""
-                                          }
-                                          cost={
-                                            purchase.cost?.toString() || "0"
-                                          }
-                                          updateAction={updateOverviewPurchase}
-                                          deleteAction={deleteOverviewPurchase}
-                                          costForwardText="$"
-                                          hideCheck
-                                          hideCategories
-                                        />
-                                      </Global.DraggablePortalItem>
-                                    );
-                                  }}
-                                </Drag.Draggable>
-                              );
-                            }
-                          )
-                        : props.children ?? null}
+                                        selectionValue={purchase.id}
+                                        description={purchase.description || ""}
+                                        cost={purchase.cost?.toString() || "0"}
+                                        updateAction={updateOverviewPurchase}
+                                        deleteAction={deleteOverviewPurchase}
+                                        costForwardText="$"
+                                        hideCheck
+                                        hideCategories
+                                      />
+                                    </Global.DraggablePortalItem>
+                                  );
+                                }}
+                              </Drag.Draggable>
+                            );
+                          }
+                        )
+                      ) : (
+                        props.children ?? null
+                      )}
                     </PurchaseCells>
                   );
                 }}
