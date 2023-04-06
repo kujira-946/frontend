@@ -1,12 +1,15 @@
 import styled from "styled-components";
-import { memo, useCallback } from "react";
+import { memo, useCallback, useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { updateOverviewRequest } from "@/sagas/overviews.saga";
+import {
+  fetchUserOverviewsRequest,
+  updateOverviewRequest,
+} from "@/sagas/overviews.saga";
 import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
@@ -49,11 +52,18 @@ type Props = {
 };
 
 const ExportedComponent = (props: Props) => {
-  const dispatch = Functions.useAppDispatch();
-  const { loadingOverviews } = Functions.useUiSlice();
-  const overview = Functions.useAppSelector(Functions.fetchCurrentUserOverview);
+  // console.log("Overview Header Rendered");
 
-  const totalSpent = useSignal(0);
+  const dispatch = Functions.useAppDispatch();
+  // const { loadingOverviews } = Functions.useUiSlice();
+  const { currentUser, overviews } = Functions.useEntitiesSlice();
+  const overview = Functions.useAppSelector(Functions.fetchCurrentUserOverview);
+  const overviewGroups = Functions.useAppSelector(
+    Functions.fetchOverviewGroups
+  );
+
+  const loadingOverviews = useSignal(false);
+  const recurringTotalCost = useSignal(0);
   const error = useSignal("");
 
   const updateIncome = useCallback(
@@ -82,6 +92,26 @@ const ExportedComponent = (props: Props) => {
     [overview]
   );
 
+  useEffect(() => {
+    if (currentUser && !overviews) {
+      // loadingOverviews.value = true;
+      dispatch(fetchUserOverviewsRequest(currentUser.id));
+    } else if (loadingOverviews.value && overviews) {
+      // loadingOverviews.value = false;
+    }
+  }, [currentUser, overviews]);
+
+  useEffect(() => {
+    if (recurringTotalCost.value === 0 && overviewGroups) {
+      for (const overviewGroup of overviewGroups) {
+        if (overviewGroup.name === "Recurring") {
+          recurringTotalCost.value = overviewGroup.totalCost;
+        }
+        break;
+      }
+    }
+  }, [overviewGroups]);
+
   return (
     <Container>
       <Heading>
@@ -89,7 +119,7 @@ const ExportedComponent = (props: Props) => {
         <HeadingCaption>{props.page}</HeadingCaption>
       </Heading>
 
-      {loadingOverviews ? (
+      {loadingOverviews.value ? (
         <>
           <Globals.Shimmer borderRadius="six" height={44} />
           <Globals.Shimmer borderRadius="six" height={44} />
@@ -132,9 +162,10 @@ const ExportedComponent = (props: Props) => {
             key={`dashboard-overview-header-purchase-cell-total-spent`}
             selectionValue={overview.id}
             description="Total Spent"
-            cost={totalSpent.value.toString()}
+            cost={recurringTotalCost.value.toString()}
             costForwardText="$"
             importance="Secondary"
+            persistInput
             hideDrag
             hideCheck
             hideCategories
@@ -148,9 +179,12 @@ const ExportedComponent = (props: Props) => {
             selectionValue={overview.id}
             description="Remaining"
             cost={Functions.roundNumber(
-              overview.income - overview.income * (overview.savings / 100),
+              overview.income -
+                overview.income * (overview.savings / 100) -
+                recurringTotalCost.value,
               2
             )}
+            persistInput
             costForwardText="$"
             importance="Primary"
             hideDrag

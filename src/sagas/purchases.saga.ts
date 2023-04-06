@@ -179,7 +179,6 @@ function* fetchPurchases() {
 
 function* fetchOverviewGroupPurchases(action: OverviewGroupPurchasesAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const { overviewGroupId } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/fetch-overview-group-purchases`;
     const { data } = yield Saga.call(axios.post, endpoint, { overviewGroupId });
@@ -200,9 +199,7 @@ function* fetchOverviewGroupPurchases(action: OverviewGroupPurchasesAction) {
             : [],
       })
     );
-    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
-    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
     yield Functions.sagaError(error);
   }
 }

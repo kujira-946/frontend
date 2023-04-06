@@ -48,6 +48,8 @@ const links = [
 ];
 
 const ExportedComponent = () => {
+  console.log("Overview Navbar Rendered");
+
   const router = useRouter();
 
   const { ui } = Functions.useSignalsStore();
@@ -85,7 +87,18 @@ const ExportedComponent = () => {
       )}
 
       <NavbarLinks>
-        {links.map((link: Constants.ClientRoutes, index: number) => {
+        <Icons.Dashboard
+          height={16}
+          fill={
+            router.pathname === Constants.ClientRoutes.LOGBOOKS
+              ? Styles.text[ui.theme.value]
+              : Styles.background[ui.theme.value].six
+          }
+          hoveredFill={Styles.text[ui.theme.value]}
+          addHover
+        />
+
+        {/* {links.map((link: Constants.ClientRoutes, index: number) => {
           return (
             <NavbarLink
               key={`overview-tab-${link}-${index}`}
@@ -132,7 +145,7 @@ const ExportedComponent = () => {
               )}
             </NavbarLink>
           );
-        })}
+        })} */}
       </NavbarLinks>
     </Container>
   );

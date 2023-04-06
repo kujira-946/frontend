@@ -67,15 +67,17 @@ export const Notification = () => {
   const { notification } = Functions.useUiSlice();
 
   useEffect(() => {
-    if (notification.redirect) router.push(notification.redirect);
+    if (notification.title) {
+      if (notification.redirect) router.push(notification.redirect);
 
-    const timer = setTimeout(() => {
-      dispatch(uiActions.setNotification(Constants.initialUINotification));
-    }, notification.timeout || 5000);
-    return function cleanUp(): void {
-      clearTimeout(timer);
-    };
-  }, [dispatch, notification]);
+      const timer = setTimeout(() => {
+        dispatch(uiActions.setNotification(Constants.initialUINotification));
+      }, notification.timeout || 5000);
+      return function cleanUp(): void {
+        clearTimeout(timer);
+      };
+    }
+  }, [notification]);
 
   return (
     <AnimatePresence>

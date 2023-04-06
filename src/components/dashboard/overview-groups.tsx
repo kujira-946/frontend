@@ -31,9 +31,15 @@ const Container = styled.section`
 // ========================================================================================= //
 
 const ExportedComponent = () => {
+  // console.log("Overview Groups Rendered");
+
   const dispatch = Functions.useAppDispatch();
 
   const { loadingOverviewGroups } = Functions.useUiSlice();
+  const overview = Functions.useAppSelector(Functions.fetchCurrentUserOverview);
+  const overviewGroups = Functions.useAppSelector(
+    Functions.fetchOverviewGroups
+  );
 
   const onDragEnd = useCallback(() => {
     (result: Drag.DropResult, _: Drag.ResponderProvided): void => {
@@ -61,11 +67,6 @@ const ExportedComponent = () => {
       })
     );
   }
-
-  const overview = Functions.useAppSelector(Functions.fetchCurrentUserOverview);
-  const overviewGroups = Functions.useAppSelector(
-    Functions.fetchOverviewGroups
-  );
 
   useEffect(() => {
     if (overview && !overviewGroups) {

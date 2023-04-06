@@ -108,7 +108,7 @@ const ExportedComponent = (props: Props) => {
                       updateAction={updatePurchase}
                       deleteAction={deletePurchase}
                       costForwardText="$"
-                      onboarding
+                      persistInput
                       hideCheck
                       hideCategories
                     />

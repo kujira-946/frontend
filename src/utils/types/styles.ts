@@ -6,6 +6,8 @@ export type SVGProps = {
   fill: string;
   hovered?: boolean;
   hoveredFill?: string;
+
+  addHover?: true;
 };
 
 export type PxAsRem = keyof typeof pxAsRem;

@@ -125,15 +125,13 @@ type Props = {
 };
 
 const ExportedComponent = (props: Props) => {
-  console.log("Overview Dropdown Rendered");
-
   const dispatch = Functions.useAppDispatch();
 
   const { ui } = Functions.useSignalsStore();
   const { purchases } = Functions.useEntitiesSlice();
-  const { loadingPurchases } = Functions.useUiSlice();
 
   const opened = useSignal(props.initiallyOpen);
+  const loadingPurchases = useSignal(false);
   const deleteConfirmationOpen = useSignal(false);
 
   const overviewGroupPurchases = Functions.useAppSelector((state) => {
@@ -176,9 +174,12 @@ const ExportedComponent = (props: Props) => {
 
   useEffect(() => {
     if (props.overviewGroupId && opened.value && !overviewGroupPurchases) {
+      loadingPurchases.value = true;
       dispatch(
         PurchasesSaga.fetchOverviewGroupPurchasesRequest(props.overviewGroupId)
       );
+    } else if (loadingPurchases.value && overviewGroupPurchases) {
+      loadingPurchases.value = false;
     }
   }, [props.overviewGroupId, opened.value, overviewGroupPurchases]);
 
@@ -223,7 +224,7 @@ const ExportedComponent = (props: Props) => {
                       {...provided.droppableProps}
                       ref={provided.innerRef}
                     >
-                      {loadingPurchases ? (
+                      {loadingPurchases.value ? (
                         <>
                           <Global.Shimmer borderRadius="six" height={40} />
                           <Global.Shimmer borderRadius="six" height={40} />

@@ -1,9 +1,7 @@
 import styled from "styled-components";
-import { memo, useEffect } from "react";
+import { memo } from "react";
 
-import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
-import { fetchUserOverviewsRequest } from "@/sagas/overviews.saga";
 import { ThemeProps } from "../layout";
 
 import { OverviewNavbar } from "./overview-navbar";
@@ -45,16 +43,6 @@ type Props = {
 };
 
 const ExportedComponent = (props: Props) => {
-  const dispatch = Functions.useAppDispatch();
-
-  const { currentUser, overviews } = Functions.useEntitiesSlice();
-
-  useEffect(() => {
-    if (currentUser && !overviews) {
-      dispatch(fetchUserOverviewsRequest(currentUser.id));
-    }
-  }, [currentUser, overviews]);
-
   return (
     <Container>
       <Overview>

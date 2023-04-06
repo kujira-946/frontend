@@ -112,7 +112,7 @@ type Props = {
   descriptionForwardText?: string;
   costForwardText?: string;
   importance?: "Primary" | "Secondary";
-  onboarding?: true;
+  persistInput?: true;
   hideDrag?: true;
   hideCheck?: true;
   hideCategories?: true;
@@ -248,7 +248,7 @@ const ExportedComponent = (props: Props) => {
           key={`purchase-cell-description-input-${props.selectionValue}`}
           borderRadius={props.borderRadius}
           placeholder="Description"
-          userInput={props.onboarding ? props.description : description.value}
+          userInput={props.persistInput ? props.description : description.value}
           setUserInput={updateDescription}
           forwardText={props.descriptionForwardText}
           hasValue={!!props.description}
@@ -260,7 +260,7 @@ const ExportedComponent = (props: Props) => {
           borderRadius={props.borderRadius}
           placeholder="Cost"
           errorMessage={costError.value}
-          userInput={props.onboarding ? props.cost : cost.value}
+          userInput={props.persistInput ? props.cost : cost.value}
           setUserInput={updateCost}
           onBlur={onCostBlur}
           forwardText={props.costForwardText}
