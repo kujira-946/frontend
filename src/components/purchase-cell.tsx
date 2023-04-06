@@ -126,13 +126,10 @@ const categories: Category[] = ["Need", "Planned", "Impulse", "Regret"];
 const ExportedComponent = (props: Props) => {
   const { ui } = Functions.useSignalsStore();
 
-  const dragHovered = useSignal(false);
-  const checkboxHovered = useSignal(false);
   const checkboxActive = useSignal(false);
   const description = useSignal(props.description);
   const cost = useSignal(props.cost);
   const costError = useSignal("");
-  const closeHovered = useSignal(false);
 
   function updateDescription(event: Types.Input): void {
     description.value = event.currentTarget.value;
@@ -191,17 +188,12 @@ const ExportedComponent = (props: Props) => {
       }}
     >
       {!props.hideDrag && props.provided && (
-        <DragButton
-          {...props.provided.dragHandleProps}
-          onMouseEnter={() => (dragHovered.value = true)}
-          onMouseLeave={() => (dragHovered.value = false)}
-          tabIndex={-1}
-        >
+        <DragButton {...props.provided.dragHandleProps} tabIndex={-1}>
           <Icons.Drag
             height={12}
             fill={Styles.background[ui.theme.value].six}
-            hovered={dragHovered.value}
             hoveredFill={Styles.background[ui.theme.value].eight}
+            addHover
           />
         </DragButton>
       )}
@@ -221,8 +213,8 @@ const ExportedComponent = (props: Props) => {
             <Icons.CheckboxInactive
               height={20}
               fill={Styles.background[ui.theme.value].seven}
-              hovered={checkboxHovered.value}
               hoveredFill={Styles.text[ui.theme.value]}
+              addHover
             />
           )}
         </CheckButton>
@@ -276,14 +268,12 @@ const ExportedComponent = (props: Props) => {
           onClick={() =>
             props.deleteAction && props.deleteAction(props.selectionValue)
           }
-          onMouseEnter={() => (closeHovered.value = true)}
-          onMouseLeave={() => (closeHovered.value = false)}
         >
           <Icons.Close
             height={12}
             fill={Styles.background[ui.theme.value].six}
-            hovered={closeHovered.value}
             hoveredFill={Styles.text[ui.theme.value]}
+            addHover
           />
         </DeleteButton>
       )}

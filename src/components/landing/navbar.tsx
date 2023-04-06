@@ -74,7 +74,6 @@ const LoginButton = styled(Link)`
 
 export const Navbar = () => {
   const { ui } = Functions.useSignalsStore();
-  const themeButtonHovered = useSignal(false);
 
   return (
     <Nav>
@@ -96,25 +95,20 @@ export const Navbar = () => {
         )}
 
         <Links>
-          <ThemeButton
-            type="button"
-            onClick={signalsHelpers.ui.toggleTheme}
-            onMouseEnter={() => (themeButtonHovered.value = true)}
-            onMouseLeave={() => (themeButtonHovered.value = false)}
-          >
+          <ThemeButton type="button" onClick={signalsHelpers.ui.toggleTheme}>
             {ui.theme.value === "light" ? (
               <Icons.ThemeDark
                 height={12}
-                hovered={themeButtonHovered.value}
                 fill={Styles.background[ui.theme.value].six}
                 hoveredFill={Styles.background[ui.theme.value].eight}
+                addHover
               />
             ) : (
               <Icons.ThemeLight
                 height={12}
-                hovered={themeButtonHovered.value}
                 fill={Styles.background[ui.theme.value].six}
                 hoveredFill={Styles.background[ui.theme.value].eight}
+                addHover
               />
             )}
           </ThemeButton>

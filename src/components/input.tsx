@@ -126,7 +126,6 @@ export const Input = (props: Props) => {
 
   const inputFieldRef = useRef<any>(null);
   const focused = useSignal(false);
-  const hiddenHovered = useSignal(false);
 
   function focusInputField(): void {
     inputFieldRef.current && inputFieldRef.current.focus();
@@ -181,29 +180,21 @@ export const Input = (props: Props) => {
 
         {props.password &&
           (props.hidden ? (
-            <IconContainer
-              onClick={props.toggleHidden}
-              onMouseEnter={() => (hiddenHovered.value = true)}
-              onMouseLeave={() => (hiddenHovered.value = false)}
-            >
+            <IconContainer onClick={props.toggleHidden}>
               <Icons.Hidden
                 height={16}
                 fill={Styles.background[ui.theme.value].eight}
-                hovered={hiddenHovered.value}
                 hoveredFill={Styles.text[ui.theme.value]}
+                addHover
               />
             </IconContainer>
           ) : (
-            <IconContainer
-              onClick={props.toggleHidden}
-              onMouseEnter={() => (hiddenHovered.value = true)}
-              onMouseLeave={() => (hiddenHovered.value = false)}
-            >
+            <IconContainer onClick={props.toggleHidden}>
               <Icons.Revealed
                 height={16}
                 fill={Styles.background[ui.theme.value].eight}
-                hovered={hiddenHovered.value}
                 hoveredFill={Styles.text[ui.theme.value]}
+                addHover
               />
             </IconContainer>
           ))}

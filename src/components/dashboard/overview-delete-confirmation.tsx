@@ -77,8 +77,6 @@ type Props = {
 export const OverviewDeleteConfirmation = (props: Props) => {
   const { ui } = Functions.useSignalsStore();
 
-  const closeHovered = useSignal(false);
-
   return (
     <Parent
       onClick={props.onClose}
@@ -90,17 +88,12 @@ export const OverviewDeleteConfirmation = (props: Props) => {
       <Child onClick={(event: Types.OnClick) => event.stopPropagation()}>
         <Header>
           <Title>Delete all purchases for this group?</Title>
-          <DeleteButton
-            type="button"
-            onClick={props.onClose}
-            onMouseEnter={() => (closeHovered.value = true)}
-            onMouseLeave={() => (closeHovered.value = false)}
-          >
+          <DeleteButton type="button" onClick={props.onClose}>
             <Icons.Close
               height={12}
               fill={Styles.background[ui.theme.value].six}
-              hovered={closeHovered.value}
               hoveredFill={Styles.text[ui.theme.value]}
+              addHover
             />
           </DeleteButton>
         </Header>

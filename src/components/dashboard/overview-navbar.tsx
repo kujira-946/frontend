@@ -48,25 +48,9 @@ const links = [
 ];
 
 const ExportedComponent = () => {
-  console.log("Overview Navbar Rendered");
-
   const router = useRouter();
 
   const { ui } = Functions.useSignalsStore();
-
-  const dashboardHovered = useSignal(false);
-  const reviewsHovered = useSignal(false);
-  const settingsHovered = useSignal(false);
-
-  function setHover(link: Constants.ClientRoutes, value: boolean): void {
-    if (link === Constants.ClientRoutes.LOGBOOKS) {
-      dashboardHovered.value = value;
-    } else if (link === Constants.ClientRoutes.REVIEWS) {
-      reviewsHovered.value = value;
-    } else {
-      settingsHovered.value = value;
-    }
-  }
 
   return (
     <Container>
@@ -87,28 +71,11 @@ const ExportedComponent = () => {
       )}
 
       <NavbarLinks>
-        <Icons.Dashboard
-          height={16}
-          fill={
-            router.pathname === Constants.ClientRoutes.LOGBOOKS
-              ? Styles.text[ui.theme.value]
-              : Styles.background[ui.theme.value].six
-          }
-          hoveredFill={Styles.text[ui.theme.value]}
-          addHover
-        />
-
-        {/* {links.map((link: Constants.ClientRoutes, index: number) => {
+        {links.map((link: Constants.ClientRoutes, index: number) => {
           return (
-            <NavbarLink
-              key={`overview-tab-${link}-${index}`}
-              href={link}
-              onMouseEnter={() => setHover(link, true)}
-              onMouseLeave={() => setHover(link, false)}
-            >
+            <NavbarLink key={`overview-tab-${link}-${index}`} href={link}>
               {link === Constants.ClientRoutes.LOGBOOKS ? (
                 <Icons.Dashboard
-                  width={16}
                   height={16}
                   fill={
                     router.pathname === link
@@ -116,11 +83,10 @@ const ExportedComponent = () => {
                       : Styles.background[ui.theme.value].six
                   }
                   hoveredFill={Styles.text[ui.theme.value]}
-                  hovered={dashboardHovered.value}
+                  addHover
                 />
               ) : link === Constants.ClientRoutes.REVIEWS ? (
                 <Icons.Reviews
-                  width={16}
                   height={16}
                   fill={
                     router.pathname === link
@@ -128,11 +94,10 @@ const ExportedComponent = () => {
                       : Styles.background[ui.theme.value].six
                   }
                   hoveredFill={Styles.text[ui.theme.value]}
-                  hovered={reviewsHovered.value}
+                  addHover
                 />
               ) : (
                 <Icons.Settings
-                  width={16}
                   height={16}
                   fill={
                     router.pathname === link
@@ -140,12 +105,12 @@ const ExportedComponent = () => {
                       : Styles.background[ui.theme.value].six
                   }
                   hoveredFill={Styles.text[ui.theme.value]}
-                  hovered={settingsHovered.value}
+                  addHover
                 />
               )}
             </NavbarLink>
           );
-        })} */}
+        })}
       </NavbarLinks>
     </Container>
   );
