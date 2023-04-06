@@ -46,7 +46,7 @@ const links = [
   Constants.ClientRoutes.SETTINGS,
 ];
 
-const ExportedComponent = () => {
+export const OverviewNavbar = () => {
   const router = useRouter();
 
   const { ui } = Functions.useSignalsStore();
@@ -114,5 +114,3 @@ const ExportedComponent = () => {
     </Container>
   );
 };
-
-export const OverviewNavbar = memo(ExportedComponent);
