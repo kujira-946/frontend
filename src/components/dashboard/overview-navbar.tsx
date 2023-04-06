@@ -3,7 +3,6 @@ import Link from "next/link";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { memo } from "react";
-import { useSignal } from "@preact/signals-react";
 
 import * as Icons from "@/components/icons";
 import * as Constants from "@/utils/constants";
