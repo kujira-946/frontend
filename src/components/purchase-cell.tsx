@@ -122,8 +122,6 @@ type Props = {
 const categories: Category[] = ["Need", "Planned", "Impulse", "Regret"];
 
 const ExportedComponent = (props: Props) => {
-  const dispatch = Functions.useAppDispatch();
-  const { purchases } = Functions.useEntitiesSlice();
   const { ui } = Functions.useSignalsStore();
 
   const checkboxActive = useSignal(false);
