@@ -52,7 +52,10 @@ type Props = {
 };
 
 const ExportedComponent = (props: Props) => {
+  // console.log("Overview Header Rendered");
+
   const dispatch = Functions.useAppDispatch();
+
   const { loadingOverviews } = Functions.useUiSlice();
   const { currentUser, overviews } = Functions.useEntitiesSlice();
   const overview = Functions.useAppSelector(Functions.fetchCurrentUserOverview);
@@ -190,4 +193,5 @@ const ExportedComponent = (props: Props) => {
   );
 };
 
-export const OverviewHeader = memo(ExportedComponent);
+// export const OverviewHeader = memo(ExportedComponent);
+export const OverviewHeader = ExportedComponent;

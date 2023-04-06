@@ -30,8 +30,8 @@ const Container = styled.section`
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-const ExportedComponent = () => {
-  console.log("Overview Groups Rendered");
+export const OverviewGroups = () => {
+  // console.log("Overview Groups Rendered");
 
   const dispatch = Functions.useAppDispatch();
 
@@ -98,6 +98,3 @@ const ExportedComponent = () => {
     </Container>
   );
 };
-
-export const OverviewGroups = memo(ExportedComponent);
-// export const OverviewGroups = ExportedComponent;

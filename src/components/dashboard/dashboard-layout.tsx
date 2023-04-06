@@ -42,18 +42,16 @@ type Props = {
   page: Types.DashboardPage;
 };
 
-const ExportedComponent = (props: Props) => {
+export const DashboardLayout = (props: Props) => {
   return (
     <Container>
       <Overview>
         <OverviewNavbar />
         <OverviewHeader page={props.page} />
-        {/* <OverviewGroups /> */}
+        <OverviewGroups />
       </Overview>
 
       <Children>{props.children}</Children>
     </Container>
   );
 };
-
-export const DashboardLayout = memo(ExportedComponent);

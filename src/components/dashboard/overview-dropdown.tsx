@@ -130,7 +130,7 @@ type Props = {
   addOnboardingPurchase?: () => void;
 };
 
-const ExportedComponent = (props: Props) => {
+export const OverviewDropdown = (props: Props) => {
   console.log("Overview Dropdown Rendered:", props.overviewGroupId);
 
   const dispatch = Functions.useAppDispatch();
@@ -340,6 +340,3 @@ const ExportedComponent = (props: Props) => {
     </Container>
   );
 };
-
-export const OverviewDropdown = memo(ExportedComponent);
-// export const OverviewDropdown = ExportedComponent;
