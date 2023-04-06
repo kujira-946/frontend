@@ -41,6 +41,24 @@ const ExportedComponent = (props: Props) => {
     props.purchases.value = updatedPurchases;
   }
 
+  const updatePurchase = useCallback(
+    (index: number, description: string, cost: string) => {
+      const updatedPurchases = Functions.deepCopy(props.purchases.value);
+      updatedPurchases[index] = {
+        description: description,
+        cost: cost,
+      } as Types.OnboardingPurchase;
+      props.purchases.value = updatedPurchases;
+    },
+    []
+  );
+
+  const deletePurchase = useCallback((index: number): void => {
+    const updatedPurchases = Functions.deepCopy(props.purchases.value);
+    updatedPurchases.splice(index, 1);
+    props.purchases.value = updatedPurchases;
+  }, []);
+
   useEffect(() => {
     if (!props.disableSubmit.value) {
       props.totalCost.value = 0;
@@ -59,8 +77,8 @@ const ExportedComponent = (props: Props) => {
       totalCost={props.totalCost.value}
       purchaseCount={props.purchases.value.length}
       onDragEnd={onDragEnd}
-      deleteAllPurchases={deleteAllPurchases}
-      addPurchase={addPurchase}
+      deleteAllOnboardingPurchases={deleteAllPurchases}
+      addOnboardingPurchase={addPurchase}
     >
       {props.purchases.value.map(
         (purchase: Types.OnboardingPurchase, index: number) => {
@@ -88,6 +106,8 @@ const ExportedComponent = (props: Props) => {
                       description={purchase.description}
                       cost={purchase.cost}
                       disableSubmit={props.disableSubmit}
+                      update={updatePurchase}
+                      delete={deletePurchase}
                       costForwardText="$"
                       persistInput
                       hideCheck

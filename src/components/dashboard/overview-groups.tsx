@@ -55,6 +55,14 @@ const ExportedComponent = () => {
     };
   }, []);
 
+  const deleteAllPurchases = useCallback((overviewGroupId: number): void => {
+    dispatch(deleteAssociatedPurchasesRequest({ overviewGroupId }));
+  }, []);
+
+  const addPurchase = useCallback((overviewGroupId: number): void => {
+    dispatch(createPurchaseRequest({ placement: 0, overviewGroupId }));
+  }, []);
+
   useEffect(() => {
     if (overview && !overviewGroups) {
       dispatch(fetchOverviewOverviewGroupsRequest(overview.id));
@@ -80,6 +88,8 @@ const ExportedComponent = () => {
                 purchaseCount={overviewGroup.purchaseIds?.length || 0}
                 overviewGroupId={overviewGroup.id}
                 onDragEnd={onDragEnd}
+                deleteAllOverviewPurchases={deleteAllPurchases}
+                addOverviewPurchase={addPurchase}
               />
             );
           })}

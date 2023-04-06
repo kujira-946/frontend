@@ -6,11 +6,15 @@ import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import * as Global from "@/components";
-import * as PurchasesSaga from "@/sagas/purchases.saga";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { ThemeProps } from "../layout";
+import {
+  deletePurchaseRequest,
+  fetchOverviewGroupPurchasesRequest,
+  updatePurchaseRequest,
+} from "@/sagas/purchases.saga";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -120,8 +124,10 @@ type Props = {
     result: Drag.DropResult,
     provided: Drag.ResponderProvided
   ) => void;
-  deleteAllPurchases?: () => void;
-  addPurchase?: () => void;
+  deleteAllOverviewPurchases?: (overviewGroupId: number) => void;
+  deleteAllOnboardingPurchases?: () => void;
+  addOverviewPurchase?: (overviewGroupId: number) => void;
+  addOnboardingPurchase?: () => void;
 };
 
 const ExportedComponent = (props: Props) => {
@@ -130,6 +136,7 @@ const ExportedComponent = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
   const { ui } = Functions.useSignalsStore();
+  const { purchases } = Functions.useEntitiesSlice();
   const overviewGroupPurchases = Functions.useAppSelector((state) => {
     if (props.overviewGroupId) {
       return Functions.fetchOverviewGroupPurchases(
@@ -144,36 +151,59 @@ const ExportedComponent = (props: Props) => {
   const deleteConfirmationOpen = useSignal(false);
 
   function deleteAllPurchases(): void {
-    if (props.overviewGroupId) {
-      dispatch(
-        PurchasesSaga.deleteAssociatedPurchasesRequest({
-          overviewGroupId: props.overviewGroupId,
-        })
-      );
-    } else if (props.deleteAllPurchases) {
-      props.deleteAllPurchases();
+    if (props.overviewGroupId && props.deleteAllOverviewPurchases) {
+      props.deleteAllOverviewPurchases(props.overviewGroupId);
+    } else if (props.deleteAllOnboardingPurchases) {
+      props.deleteAllOnboardingPurchases();
     }
   }
 
   function addPurchase(): void {
-    if (props.overviewGroupId) {
-      dispatch(
-        PurchasesSaga.createPurchaseRequest({
-          placement: 0,
-          overviewGroupId: props.overviewGroupId,
-        })
-      );
-    } else if (props.addPurchase) {
-      props.addPurchase();
+    if (props.overviewGroupId && props.addOverviewPurchase) {
+      props.addOverviewPurchase(props.overviewGroupId);
+    } else if (props.addOnboardingPurchase) {
+      props.addOnboardingPurchase();
     }
   }
+
+  const updatePurchase = useCallback(
+    Functions.debounce(
+      (purchaseId: number, description: string, cost: string) => {
+        if (purchases && purchases[purchaseId]) {
+          const purchase = purchases[purchaseId];
+          if (description !== purchase.description) {
+            dispatch(
+              updatePurchaseRequest(purchaseId, {
+                description: description,
+              })
+            );
+          } else if (Number(cost) && Number(cost) !== purchase.cost) {
+            dispatch(
+              updatePurchaseRequest(purchaseId, {
+                cost: Number(cost),
+              })
+            );
+          }
+        }
+      },
+      500
+    ),
+    [purchases]
+  );
+
+  const deletePurchase = useCallback(
+    (purchaseId: number) => {
+      if (purchases && purchases[purchaseId]) {
+        dispatch(deletePurchaseRequest(purchaseId));
+      }
+    },
+    [purchases]
+  );
 
   useEffect(() => {
     if (props.overviewGroupId && opened.value && !overviewGroupPurchases) {
       loadingPurchases.value = true;
-      dispatch(
-        PurchasesSaga.fetchOverviewGroupPurchasesRequest(props.overviewGroupId)
-      );
+      dispatch(fetchOverviewGroupPurchasesRequest(props.overviewGroupId));
     } else if (loadingPurchases.value && overviewGroupPurchases) {
       loadingPurchases.value = false;
     }
@@ -253,6 +283,8 @@ const ExportedComponent = (props: Props) => {
                                         purchaseId={purchase.id}
                                         description={purchase.description || ""}
                                         cost={purchase.cost?.toString() || "0"}
+                                        update={updatePurchase}
+                                        delete={deletePurchase}
                                         costForwardText="$"
                                         hideCheck
                                         hideCategories

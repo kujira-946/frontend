@@ -126,7 +126,7 @@ const ExportedComponent = (props: Props) => {
             key={`dashboard-overview-header-purchase-cell-income`}
             description="Income"
             cost={Functions.roundNumber(overview.income, 2)}
-            customUpdate={updateIncome}
+            costUpdate={updateIncome}
             costForwardText="$"
             hideDrag
             hideCheck
@@ -142,7 +142,7 @@ const ExportedComponent = (props: Props) => {
               2
             )}`}
             cost={overview.savings.toString()}
-            customUpdate={updateSavings}
+            costUpdate={updateSavings}
             hideDrag
             hideCheck
             hideCategories

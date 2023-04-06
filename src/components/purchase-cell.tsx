@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { memo, useCallback, useEffect } from "react";
+import { memo, useEffect } from "react";
 import { effect, Signal, useSignal } from "@preact/signals-react";
 import { DraggableProvided } from "react-beautiful-dnd";
 
@@ -9,10 +9,6 @@ import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { ThemeProps } from "@/components/layout";
-import {
-  deletePurchaseRequest,
-  updatePurchaseRequest,
-} from "@/sagas/purchases.saga";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -98,16 +94,18 @@ const DeleteButton = styled.button`
 type Props = {
   borderRadius?: keyof typeof Styles.pxAsRem;
   provided?: DraggableProvided;
+  purchaseId?: number;
   index?: number;
   onboardingPurchases?: Signal<Types.OnboardingPurchase[]>;
-  purchaseId?: number;
   description: string;
   cost: string;
   disableSubmit?: Signal<boolean>;
 
+  costUpdate?: (cost: string) => void;
+  update?: (identifier: number, description: string, cost: string) => void;
+  delete?: (identifier: number) => void;
   onCheckActive?: () => void;
   onCheckInactive?: () => void;
-  customUpdate?: (cost: string) => void;
 
   descriptionForwardText?: string;
   costForwardText?: string;
@@ -147,54 +145,10 @@ const ExportedComponent = (props: Props) => {
     }
   }
 
-  const updatePurchaseWithId = useCallback(
-    Functions.debounce(() => {
-      if (purchases && props.purchaseId && purchases[props.purchaseId]) {
-        const purchase = purchases[props.purchaseId];
-        if (description.value !== purchase.description) {
-          dispatch(
-            updatePurchaseRequest(props.purchaseId, {
-              description: description.value,
-            })
-          );
-        } else if (Number(cost) && Number(cost) !== purchase.cost) {
-          dispatch(
-            updatePurchaseRequest(props.purchaseId, {
-              cost: Number(cost),
-            })
-          );
-        }
-      }
-    }, 500),
-    [purchases]
-  );
-
-  function updatePurchaseWithIndex(): void {
-    if (props.onboardingPurchases && props.index) {
-      const updatedPurchases = Functions.deepCopy(
-        props.onboardingPurchases.value
-      );
-      updatedPurchases[props.index] = {
-        description: description.value,
-        cost: cost.value,
-      } as Types.OnboardingPurchase;
-      props.onboardingPurchases.value = updatedPurchases;
-    }
-  }
-
-  const deletePurchaseWithId = Functions.debounce(() => {
-    if (purchases && props.purchaseId && purchases[props.purchaseId]) {
-      dispatch(deletePurchaseRequest(props.purchaseId));
-    }
-  }, 500);
-
-  function deletePurchaseWithIndex(): void {
-    if (props.index && props.onboardingPurchases) {
-      const updatedPurchases = Functions.deepCopy(
-        props.onboardingPurchases.value
-      );
-      updatedPurchases.splice(props.index, 1);
-      props.onboardingPurchases.value = updatedPurchases;
+  function deletePurchase(): void {
+    if (props.delete) {
+      if (props.purchaseId) props.delete(props.purchaseId);
+      else if (props.index) props.delete(props.index);
     }
   }
 
@@ -207,9 +161,15 @@ const ExportedComponent = (props: Props) => {
   }, [checkboxActive.value, props.onCheckActive, props.onCheckInactive]);
 
   useEffect(() => {
-    if (props.customUpdate) props.customUpdate(cost.value);
-    else if (props.purchaseId) updatePurchaseWithId();
-    else updatePurchaseWithIndex();
+    if (props.update) {
+      if (props.purchaseId) {
+        props.update(props.purchaseId, description.value, cost.value);
+      } else if (props.index) {
+        props.update(props.index, description.value, cost.value);
+      }
+    } else if (props.costUpdate) {
+      props.costUpdate(cost.value);
+    }
   }, [description.value, cost.value]);
 
   useEffect(() => {
@@ -316,14 +276,7 @@ const ExportedComponent = (props: Props) => {
       </Inputs>
 
       {!props.hideClose && (
-        <DeleteButton
-          type="button"
-          onClick={() => {
-            return props.purchaseId
-              ? deletePurchaseWithId()
-              : deletePurchaseWithIndex();
-          }}
-        >
+        <DeleteButton type="button" onClick={deletePurchase}>
           <Icons.Close
             height={12}
             fill={Styles.background[ui.theme.value].six}
