@@ -93,7 +93,8 @@ const ForwardText = styled.span<TextProps>`
   display: block;
 `;
 
-const Textarea = styled(TextareaAutosize)<TextProps>`
+// const Textarea = styled(TextareaAutosize)<TextProps>`
+const Textarea = styled.textarea<TextProps>`
   ${textStyles};
   width: 100%;
   height: 100%;
@@ -184,7 +185,7 @@ const ExportedComponent = (props: Props) => {
           onBlur={onBlur}
           onFocus={onFocus}
           onKeyPress={preventEnterKey}
-          minRows={1}
+          // minRows={1}
           tabIndex={props.frozen ? -1 : 0}
           importance={props.importance}
         />

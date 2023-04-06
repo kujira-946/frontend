@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useCallback } from "react";
+import { memo, useCallback } from "react";
 import { useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
@@ -48,7 +48,7 @@ type Props = {
   page: Types.DashboardPage;
 };
 
-export const OverviewHeader = (props: Props) => {
+const ExportedComponent = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
   const { loadingOverviews } = Functions.useUiSlice();
   const overview = Functions.useAppSelector(Functions.fetchCurrentUserOverview);
@@ -165,3 +165,5 @@ export const OverviewHeader = (props: Props) => {
     </Container>
   );
 };
+
+export const OverviewHeader = memo(ExportedComponent);

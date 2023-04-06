@@ -1,5 +1,6 @@
 import type { AppProps } from "next/app";
-import { createContext } from "react";
+import { NextPage } from "next";
+import { ReactElement, ReactNode, createContext } from "react";
 import { Provider as ReduxProvider } from "react-redux";
 
 import { store } from "@/store";
@@ -10,13 +11,21 @@ export const SignalsStoreContext = createContext<SignalsStore>(
   {} as SignalsStore
 );
 
-export default function App({ Component, pageProps }: AppProps) {
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+export default function App({ Component, pageProps }: AppPropsWithLayout) {
+  const getLayout = Component.getLayout ?? ((page) => page);
+
   return (
     <ReduxProvider store={store}>
       <SignalsStoreContext.Provider value={signalsStore}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <Layout>{getLayout(<Component {...pageProps} />)}</Layout>
       </SignalsStoreContext.Provider>
     </ReduxProvider>
   );

@@ -40,13 +40,11 @@ const Children = styled.section`
 // ========================================================================================= //
 
 type Props = {
-  page: Types.DashboardPage;
   children: React.ReactNode;
+  page: Types.DashboardPage;
 };
 
 const ExportedComponent = (props: Props) => {
-  // console.log("Dashboard Partial Rendered");
-
   const dispatch = Functions.useAppDispatch();
 
   const { currentUser, overviews } = Functions.useEntitiesSlice();
@@ -70,4 +68,4 @@ const ExportedComponent = (props: Props) => {
   );
 };
 
-export const DashboardPartial = memo(ExportedComponent);
+export const DashboardLayout = memo(ExportedComponent);

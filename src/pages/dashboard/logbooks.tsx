@@ -1,11 +1,11 @@
 import Head from "next/head";
+import { ReactElement } from "react";
 
 import * as Components from "@/components/dashboard";
 import * as Functions from "@/utils/functions";
+import { NextPageWithLayout } from "../_app";
 
-const Logbooks = () => {
-  // console.log("Logbooks Page Rendered");
-
+const Logbooks: NextPageWithLayout = () => {
   Functions.useDetectAuthorizedUser();
 
   const { currentUser } = Functions.useEntitiesSlice();
@@ -21,13 +21,18 @@ const Logbooks = () => {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-
-        <Components.DashboardPartial page="Logbooks">
-          Logbooks Page
-        </Components.DashboardPartial>
+        Logbooks Page
       </>
     );
   }
+};
+
+Logbooks.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <Components.DashboardLayout page="Logbooks">
+      {page}
+    </Components.DashboardLayout>
+  );
 };
 
 export default Logbooks;
