@@ -47,8 +47,8 @@ const ExportedComponent = (props: Props) => {
     <Container>
       <Overview>
         <OverviewNavbar />
-        {/* <OverviewHeader page={props.page} /> */}
-        {/* <OverviewGroups /> */}
+        <OverviewHeader page={props.page} />
+        <OverviewGroups />
       </Overview>
 
       <Children>{props.children}</Children>

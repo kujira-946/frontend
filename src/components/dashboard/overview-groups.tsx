@@ -31,7 +31,7 @@ const Container = styled.section`
 // ========================================================================================= //
 
 const ExportedComponent = () => {
-  // console.log("Overview Groups Rendered");
+  console.log("Overview Groups Rendered");
 
   const dispatch = Functions.useAppDispatch();
 
@@ -54,19 +54,6 @@ const ExportedComponent = () => {
       }
     };
   }, []);
-
-  function deleteAllPurchases(overviewGroupId: number): void {
-    dispatch(deleteAssociatedPurchasesRequest({ overviewGroupId }));
-  }
-
-  function addPurchase(overviewGroupId: number): void {
-    dispatch(
-      createPurchaseRequest({
-        placement: 0,
-        overviewGroupId,
-      })
-    );
-  }
 
   useEffect(() => {
     if (overview && !overviewGroups) {
@@ -93,8 +80,6 @@ const ExportedComponent = () => {
                 purchaseCount={overviewGroup.purchaseIds?.length || 0}
                 overviewGroupId={overviewGroup.id}
                 onDragEnd={onDragEnd}
-                deleteAllPurchases={() => deleteAllPurchases(overviewGroup.id)}
-                addPurchase={() => addPurchase(overviewGroup.id)}
               />
             );
           })}

@@ -120,20 +120,17 @@ type Props = {
     result: Drag.DropResult,
     provided: Drag.ResponderProvided
   ) => void;
-  deleteAllPurchases: () => void;
-  addPurchase: () => void;
+  deleteAllPurchases?: () => void;
+  addPurchase?: () => void;
 };
 
 const ExportedComponent = (props: Props) => {
+  console.log("Overview Dropdown Rendered:", props.overviewGroupId);
+
   const dispatch = Functions.useAppDispatch();
 
   const { ui } = Functions.useSignalsStore();
   const { purchases } = Functions.useEntitiesSlice();
-
-  const opened = useSignal(props.initiallyOpen);
-  const loadingPurchases = useSignal(false);
-  const deleteConfirmationOpen = useSignal(false);
-
   const overviewGroupPurchases = Functions.useAppSelector((state) => {
     if (props.overviewGroupId) {
       return Functions.fetchOverviewGroupPurchases(
@@ -142,6 +139,35 @@ const ExportedComponent = (props: Props) => {
       );
     }
   });
+
+  const opened = useSignal(props.initiallyOpen);
+  const loadingPurchases = useSignal(false);
+  const deleteConfirmationOpen = useSignal(false);
+
+  function deleteAllPurchases(): void {
+    if (props.overviewGroupId) {
+      dispatch(
+        PurchasesSaga.deleteAssociatedPurchasesRequest({
+          overviewGroupId: props.overviewGroupId,
+        })
+      );
+    } else if (props.deleteAllPurchases) {
+      props.deleteAllPurchases();
+    }
+  }
+
+  function addPurchase(): void {
+    if (props.overviewGroupId) {
+      dispatch(
+        PurchasesSaga.createPurchaseRequest({
+          placement: 0,
+          overviewGroupId: props.overviewGroupId,
+        })
+      );
+    } else if (props.addPurchase) {
+      props.addPurchase();
+    }
+  }
 
   const updateOverviewPurchase = useCallback(
     Functions.debounce(
@@ -190,7 +216,7 @@ const ExportedComponent = (props: Props) => {
           <DynamicOverviewDeleteConfirmation
             open={deleteConfirmationOpen}
             onClose={() => (deleteConfirmationOpen.value = false)}
-            onConfirm={props.deleteAllPurchases}
+            onConfirm={deleteAllPurchases}
           />
         )}
       </AnimatePresence>
@@ -298,7 +324,7 @@ const ExportedComponent = (props: Props) => {
 
               <Global.Button
                 type="button"
-                onClick={props.addPurchase}
+                onClick={addPurchase}
                 size="medium"
                 borderRadius="four"
                 color={Styles.background[ui.theme.value].eight}

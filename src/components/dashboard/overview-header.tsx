@@ -52,17 +52,14 @@ type Props = {
 };
 
 const ExportedComponent = (props: Props) => {
-  // console.log("Overview Header Rendered");
-
   const dispatch = Functions.useAppDispatch();
-  // const { loadingOverviews } = Functions.useUiSlice();
+  const { loadingOverviews } = Functions.useUiSlice();
   const { currentUser, overviews } = Functions.useEntitiesSlice();
   const overview = Functions.useAppSelector(Functions.fetchCurrentUserOverview);
   const overviewGroups = Functions.useAppSelector(
     Functions.fetchOverviewGroups
   );
 
-  const loadingOverviews = useSignal(false);
   const recurringTotalCost = useSignal(0);
   const error = useSignal("");
 
@@ -94,10 +91,7 @@ const ExportedComponent = (props: Props) => {
 
   useEffect(() => {
     if (currentUser && !overviews) {
-      // loadingOverviews.value = true;
       dispatch(fetchUserOverviewsRequest(currentUser.id));
-    } else if (loadingOverviews.value && overviews) {
-      // loadingOverviews.value = false;
     }
   }, [currentUser, overviews]);
 
@@ -119,7 +113,7 @@ const ExportedComponent = (props: Props) => {
         <HeadingCaption>{props.page}</HeadingCaption>
       </Heading>
 
-      {loadingOverviews.value ? (
+      {loadingOverviews ? (
         <>
           <Globals.Shimmer borderRadius="six" height={44} />
           <Globals.Shimmer borderRadius="six" height={44} />
