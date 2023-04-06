@@ -93,11 +93,9 @@ const ForwardText = styled.span<TextProps>`
   display: block;
 `;
 
-// const Textarea = styled(TextareaAutosize)<TextProps>`
-const Textarea = styled.textarea<TextProps>`
+const Textarea = styled(TextareaAutosize)<TextProps>`
   ${textStyles};
   width: 100%;
-  height: 100%;
   padding: ${Styles.pxAsRem.four} 0;
   background-color: transparent;
   border: none;
@@ -180,13 +178,12 @@ const ExportedComponent = (props: Props) => {
         <Textarea
           placeholder={props.placeholder}
           value={props.userInput}
+          tabIndex={props.frozen ? -1 : 0}
           ref={inputFieldRef}
           onChange={props.setUserInput}
           onBlur={onBlur}
           onFocus={onFocus}
           onKeyPress={preventEnterKey}
-          // minRows={1}
-          tabIndex={props.frozen ? -1 : 0}
           importance={props.importance}
         />
       </Body>
