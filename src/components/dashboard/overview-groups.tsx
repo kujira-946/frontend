@@ -37,17 +37,19 @@ const ExportedComponent = () => {
 
   const { loadingOverviewGroups } = Functions.useUiSlice();
 
-  function onDragEnd(result: Drag.DropResult, _: Drag.ResponderProvided): void {
-    const previousIndex = result.source.index;
-    const newIndex = result.destination?.index;
-    if (newIndex && newIndex !== previousIndex) {
-      const purchaseId = Number(result.draggableId);
-      const updatedPlacement = newIndex + 1;
-      // dispatch(
-      //   updatePurchaseRequest(purchaseId, { placement: updatedPlacement })
-      // );
-    }
-  }
+  const onDragEnd = useCallback(() => {
+    (result: Drag.DropResult, _: Drag.ResponderProvided): void => {
+      const previousIndex = result.source.index;
+      const newIndex = result.destination?.index;
+      if (newIndex && newIndex !== previousIndex) {
+        const purchaseId = Number(result.draggableId);
+        const updatedPlacement = newIndex + 1;
+        // dispatch(
+        //   updatePurchaseRequest(purchaseId, { placement: updatedPlacement })
+        // );
+      }
+    };
+  }, []);
 
   function deleteAllPurchases(overviewGroupId: number): void {
     dispatch(deleteAssociatedPurchasesRequest({ overviewGroupId }));
