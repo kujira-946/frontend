@@ -4,9 +4,7 @@ export type SVGProps = {
   width?: number | string;
   height: number | string;
   fill: string;
-  hovered?: boolean;
   hoveredFill?: string;
-
   addHover?: true;
 };
 
