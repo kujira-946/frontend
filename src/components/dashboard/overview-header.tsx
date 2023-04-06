@@ -64,7 +64,7 @@ const ExportedComponent = (props: Props) => {
   const error = useSignal("");
 
   const updateIncome = useCallback(
-    Functions.debounce((_: number, __: string, cost: string) => {
+    Functions.debounce((cost: string) => {
       if (overview) {
         if (Number(cost) && Number(cost) !== overview.income) {
           dispatch(
@@ -77,7 +77,7 @@ const ExportedComponent = (props: Props) => {
   );
 
   const updateSavings = useCallback(
-    Functions.debounce((_: number, __: string, cost: string) => {
+    Functions.debounce((cost: string) => {
       if (overview) {
         if (Number(cost) && Number(cost) !== overview.savings) {
           dispatch(
@@ -124,10 +124,9 @@ const ExportedComponent = (props: Props) => {
         <>
           <Globals.PurchaseCell
             key={`dashboard-overview-header-purchase-cell-income`}
-            selectionValue={overview.id}
             description="Income"
             cost={Functions.roundNumber(overview.income, 2)}
-            updateAction={updateIncome}
+            customUpdate={updateIncome}
             costForwardText="$"
             hideDrag
             hideCheck
@@ -138,13 +137,12 @@ const ExportedComponent = (props: Props) => {
 
           <Globals.PurchaseCell
             key={`dashboard-overview-header-purchase-cell-savings`}
-            selectionValue={overview.id}
             description={`Savings (%)\n$${Functions.roundNumber(
               overview.income * (overview.savings / 100),
               2
             )}`}
             cost={overview.savings.toString()}
-            updateAction={updateSavings}
+            customUpdate={updateSavings}
             hideDrag
             hideCheck
             hideCategories
@@ -154,7 +152,6 @@ const ExportedComponent = (props: Props) => {
 
           <Globals.PurchaseCell
             key={`dashboard-overview-header-purchase-cell-total-spent`}
-            selectionValue={overview.id}
             description="Total Spent"
             cost={recurringTotalCost.value.toString()}
             costForwardText="$"
@@ -170,7 +167,6 @@ const ExportedComponent = (props: Props) => {
 
           <Globals.PurchaseCell
             key={`dashboard-overview-header-purchase-cell-remaining`}
-            selectionValue={overview.id}
             description="Remaining"
             cost={Functions.roundNumber(
               overview.income -
@@ -178,9 +174,9 @@ const ExportedComponent = (props: Props) => {
                 recurringTotalCost.value,
               2
             )}
-            persistInput
             costForwardText="$"
             importance="Primary"
+            persistInput
             hideDrag
             hideCheck
             hideCategories

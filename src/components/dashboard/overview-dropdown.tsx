@@ -130,7 +130,6 @@ const ExportedComponent = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
   const { ui } = Functions.useSignalsStore();
-  const { purchases } = Functions.useEntitiesSlice();
   const overviewGroupPurchases = Functions.useAppSelector((state) => {
     if (props.overviewGroupId) {
       return Functions.fetchOverviewGroupPurchases(
@@ -168,35 +167,6 @@ const ExportedComponent = (props: Props) => {
       props.addPurchase();
     }
   }
-
-  const updateOverviewPurchase = useCallback(
-    Functions.debounce(
-      (purchaseId: number, description: string, cost: string) => {
-        if (purchases && purchases[purchaseId]) {
-          const purchase = purchases[purchaseId];
-          if (
-            purchase &&
-            Number(cost) &&
-            (description !== purchase.description ||
-              Number(cost) !== purchase.cost)
-          ) {
-            dispatch(
-              PurchasesSaga.updatePurchaseRequest(purchaseId, {
-                description: description,
-                cost: Number(cost),
-              })
-            );
-          }
-        }
-      },
-      500
-    ),
-    [purchases]
-  );
-
-  const deleteOverviewPurchase = useCallback((purchaseId: number) => {
-    dispatch(PurchasesSaga.deletePurchaseRequest(purchaseId));
-  }, []);
 
   useEffect(() => {
     if (props.overviewGroupId && opened.value && !overviewGroupPurchases) {
@@ -280,11 +250,9 @@ const ExportedComponent = (props: Props) => {
                                         key={`overview-dropdown-purchase-cell-${purchase.id}-${index}`}
                                         borderRadius="four"
                                         provided={provided}
-                                        selectionValue={purchase.id}
+                                        purchaseId={purchase.id}
                                         description={purchase.description || ""}
                                         cost={purchase.cost?.toString() || "0"}
-                                        updateAction={updateOverviewPurchase}
-                                        deleteAction={deleteOverviewPurchase}
                                         costForwardText="$"
                                         hideCheck
                                         hideCategories

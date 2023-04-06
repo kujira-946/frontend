@@ -41,24 +41,6 @@ const ExportedComponent = (props: Props) => {
     props.purchases.value = updatedPurchases;
   }
 
-  const updatePurchase = useCallback(
-    (purchaseIndex: number, description: string, cost: string): void => {
-      const updatedPurchases = Functions.deepCopy(props.purchases.value);
-      updatedPurchases[purchaseIndex] = {
-        description: description,
-        cost: cost,
-      } as Types.OnboardingPurchase;
-      props.purchases.value = updatedPurchases;
-    },
-    []
-  );
-
-  const deletePurchase = useCallback((purchaseIndex: number): void => {
-    const updatedPurchases = Functions.deepCopy(props.purchases.value);
-    updatedPurchases.splice(purchaseIndex, 1);
-    props.purchases.value = updatedPurchases;
-  }, []);
-
   useEffect(() => {
     if (!props.disableSubmit.value) {
       props.totalCost.value = 0;
@@ -101,12 +83,11 @@ const ExportedComponent = (props: Props) => {
                     <Global.PurchaseCell
                       borderRadius="four"
                       provided={provided}
-                      selectionValue={index}
-                      disableSubmit={props.disableSubmit}
+                      index={index}
+                      onboardingPurchases={props.purchases}
                       description={purchase.description}
                       cost={purchase.cost}
-                      updateAction={updatePurchase}
-                      deleteAction={deletePurchase}
+                      disableSubmit={props.disableSubmit}
                       costForwardText="$"
                       persistInput
                       hideCheck

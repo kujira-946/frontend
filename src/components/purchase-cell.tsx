@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { memo, useEffect } from "react";
+import { memo, useCallback, useEffect } from "react";
 import { effect, Signal, useSignal } from "@preact/signals-react";
 import { DraggableProvided } from "react-beautiful-dnd";
 
@@ -9,6 +9,10 @@ import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { ThemeProps } from "@/components/layout";
+import {
+  deletePurchaseRequest,
+  updatePurchaseRequest,
+} from "@/sagas/purchases.saga";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -94,20 +98,16 @@ const DeleteButton = styled.button`
 type Props = {
   borderRadius?: keyof typeof Styles.pxAsRem;
   provided?: DraggableProvided;
-  selectionValue: number; // index or purchase id
-  disableSubmit?: Signal<boolean>;
-
+  index?: number;
+  onboardingPurchases?: Signal<Types.OnboardingPurchase[]>;
+  purchaseId?: number;
   description: string;
   cost: string;
+  disableSubmit?: Signal<boolean>;
 
   onCheckActive?: () => void;
   onCheckInactive?: () => void;
-  updateAction?: (
-    selectionValue: number,
-    description: string,
-    cost: string
-  ) => void;
-  deleteAction?: (deletePosition: number) => void;
+  customUpdate?: (cost: string) => void;
 
   descriptionForwardText?: string;
   costForwardText?: string;
@@ -124,6 +124,8 @@ type Props = {
 const categories: Category[] = ["Need", "Planned", "Impulse", "Regret"];
 
 const ExportedComponent = (props: Props) => {
+  const dispatch = Functions.useAppDispatch();
+  const { purchases } = Functions.useEntitiesSlice();
   const { ui } = Functions.useSignalsStore();
 
   const checkboxActive = useSignal(false);
@@ -145,6 +147,57 @@ const ExportedComponent = (props: Props) => {
     }
   }
 
+  const updatePurchaseWithId = useCallback(
+    Functions.debounce(() => {
+      if (purchases && props.purchaseId && purchases[props.purchaseId]) {
+        const purchase = purchases[props.purchaseId];
+        if (description.value !== purchase.description) {
+          dispatch(
+            updatePurchaseRequest(props.purchaseId, {
+              description: description.value,
+            })
+          );
+        } else if (Number(cost) && Number(cost) !== purchase.cost) {
+          dispatch(
+            updatePurchaseRequest(props.purchaseId, {
+              cost: Number(cost),
+            })
+          );
+        }
+      }
+    }, 500),
+    [purchases]
+  );
+
+  function updatePurchaseWithIndex(): void {
+    if (props.onboardingPurchases && props.index) {
+      const updatedPurchases = Functions.deepCopy(
+        props.onboardingPurchases.value
+      );
+      updatedPurchases[props.index] = {
+        description: description.value,
+        cost: cost.value,
+      } as Types.OnboardingPurchase;
+      props.onboardingPurchases.value = updatedPurchases;
+    }
+  }
+
+  const deletePurchaseWithId = Functions.debounce(() => {
+    if (purchases && props.purchaseId && purchases[props.purchaseId]) {
+      dispatch(deletePurchaseRequest(props.purchaseId));
+    }
+  }, 500);
+
+  function deletePurchaseWithIndex(): void {
+    if (props.index && props.onboardingPurchases) {
+      const updatedPurchases = Functions.deepCopy(
+        props.onboardingPurchases.value
+      );
+      updatedPurchases.splice(props.index, 1);
+      props.onboardingPurchases.value = updatedPurchases;
+    }
+  }
+
   useEffect(() => {
     if (checkboxActive.value && props.onCheckActive) {
       props.onCheckActive();
@@ -154,15 +207,13 @@ const ExportedComponent = (props: Props) => {
   }, [checkboxActive.value, props.onCheckActive, props.onCheckInactive]);
 
   useEffect(() => {
-    if (props.updateAction) {
-      props.updateAction(props.selectionValue, description.value, cost.value);
-    }
+    if (props.customUpdate) props.customUpdate(cost.value);
+    else if (props.purchaseId) updatePurchaseWithId();
+    else updatePurchaseWithIndex();
   }, [description.value, cost.value]);
 
   useEffect(() => {
-    if (props.disableSubmit) {
-      props.disableSubmit.value = !!costError.value;
-    }
+    if (props.disableSubmit) props.disableSubmit.value = !!costError.value;
   }, [props.disableSubmit]);
 
   effect(() => {
@@ -237,7 +288,9 @@ const ExportedComponent = (props: Props) => {
 
       <Inputs>
         <Globals.InputMini
-          key={`purchase-cell-description-input-${props.selectionValue}`}
+          key={`purchase-cell-description-input-${
+            props.purchaseId || props.index
+          }`}
           borderRadius={props.borderRadius}
           placeholder="Description"
           userInput={props.persistInput ? props.description : description.value}
@@ -248,7 +301,7 @@ const ExportedComponent = (props: Props) => {
         />
 
         <Globals.InputMini
-          key={`purchase-cell-cost-input-${props.selectionValue}`}
+          key={`purchase-cell-cost-input-${props.purchaseId || props.index}`}
           borderRadius={props.borderRadius}
           placeholder="Cost"
           errorMessage={costError.value}
@@ -265,9 +318,11 @@ const ExportedComponent = (props: Props) => {
       {!props.hideClose && (
         <DeleteButton
           type="button"
-          onClick={() =>
-            props.deleteAction && props.deleteAction(props.selectionValue)
-          }
+          onClick={() => {
+            return props.purchaseId
+              ? deletePurchaseWithId()
+              : deletePurchaseWithIndex();
+          }}
         >
           <Icons.Close
             height={12}
