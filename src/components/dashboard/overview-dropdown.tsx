@@ -15,6 +15,7 @@ import {
   fetchOverviewGroupPurchasesRequest,
   updatePurchaseRequest,
 } from "@/sagas/purchases.saga";
+import { updateOverviewGroupRequest } from "@/sagas/overview-groups.saga";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -130,7 +131,9 @@ type Props = {
   addOnboardingPurchase?: () => void;
 };
 
-export const OverviewDropdown = (props: Props) => {
+const ExportedComponent = (props: Props) => {
+  console.log("Overview Dropdown Rendered");
+
   const dispatch = Functions.useAppDispatch();
 
   const { ui } = Functions.useSignalsStore();
@@ -164,36 +167,32 @@ export const OverviewDropdown = (props: Props) => {
     }
   }
 
+  function updateOverviewGroupTotalCost(
+    previousPurchaseCost: number,
+    currentPurchaseCost: number
+  ): void {
+    if (props.overviewGroupId) {
+      const purchaseCostDelta = currentPurchaseCost - previousPurchaseCost;
+      let updatedTotalCost = props.totalCost + purchaseCostDelta;
+      if (updatedTotalCost < 0) updatedTotalCost = 0;
+      dispatch(
+        updateOverviewGroupRequest(props.overviewGroupId, {
+          totalCost: updatedTotalCost,
+        })
+      );
+    }
+  }
+
   const updatePurchase = useCallback(
     Functions.debounce(
       (purchaseId: number, description: string, cost: string) => {
         if (purchases && purchases[purchaseId]) {
           const purchase = purchases[purchaseId];
           if (description !== purchase.description) {
-            dispatch(
-              updatePurchaseRequest(purchaseId, {
-                description: description,
-              })
-            );
-          } else if (
-            Number(cost) &&
-            Number(cost) !== purchase.cost &&
-            props.overviewGroupId
-          ) {
-            let purchaseCostDelta = Number(cost);
-            if (purchase.cost) purchaseCostDelta = Number(cost) - purchase.cost;
-            let updatedTotalCost = props.totalCost + purchaseCostDelta;
-            if (updatedTotalCost < 0) updatedTotalCost = 0;
-            dispatch(
-              updatePurchaseRequest(
-                purchaseId,
-                {
-                  cost: Number(cost),
-                },
-                props.overviewGroupId,
-                updatedTotalCost
-              )
-            );
+            dispatch(updatePurchaseRequest(purchaseId, { description }));
+          } else if (Number(cost) && Number(cost) !== purchase.cost) {
+            dispatch(updatePurchaseRequest(purchaseId, { cost: Number(cost) }));
+            updateOverviewGroupTotalCost(purchase.cost || 0, Number(cost));
           }
         }
       },
@@ -251,7 +250,8 @@ export const OverviewDropdown = (props: Props) => {
           opened={opened.value}
         >
           <Title>
-            {props.title} ({props.purchaseCount})
+            {props.title}{" "}
+            {props.purchaseCount > 0 && `(${props.purchaseCount})`}
           </Title>
           <Total>${Functions.roundNumber(props.totalCost, 2)}</Total>
         </Header>
@@ -364,3 +364,5 @@ export const OverviewDropdown = (props: Props) => {
     </Container>
   );
 };
+
+export const OverviewDropdown = memo(ExportedComponent);

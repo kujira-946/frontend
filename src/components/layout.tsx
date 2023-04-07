@@ -312,9 +312,9 @@ export const Layout = (props: Props) => {
   const { loadingUsers } = Functions.useUiSlice();
 
   useEffect(() => {
-    if (!jwtAccessToken && userId) {
-      dispatch(logoutRequest(Number(userId)));
+    if (userId && !jwtAccessToken) {
       Cookies.remove("id");
+      dispatch(logoutRequest(Number(userId)));
     }
   }, []);
 

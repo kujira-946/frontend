@@ -1,5 +1,6 @@
 import * as Saga from "redux-saga/effects";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { normalize, schema } from "normalizr";
 
 import * as Redux from "@/redux";
@@ -106,6 +107,11 @@ function* fetchUser(action: UserIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
+    const { forCurrentUser } = action.payload;
+    if (forCurrentUser) {
+      Cookies.remove("id");
+      Cookies.remove("token");
+    }
     yield Functions.sagaError(error);
   }
 }

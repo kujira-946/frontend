@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { useCallback, useEffect } from "react";
-import { useSignal } from "@preact/signals-react";
+import { useCallback, useEffect, useMemo } from "react";
+import { effect, useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
@@ -64,6 +64,27 @@ export const UserSummary = (props: Props) => {
   const recurringTotalCost = useSignal(0);
   const error = useSignal("");
 
+  const totalSpent = useMemo(() => {
+    if (overview) {
+      return recurringTotalCost.value.toString();
+    } else {
+      return "0";
+    }
+  }, [overview]);
+
+  const remainingBudget = useMemo(() => {
+    if (overview) {
+      return Functions.roundNumber(
+        overview.income -
+          overview.income * (overview.savings / 100) -
+          recurringTotalCost.value,
+        2
+      );
+    } else {
+      return "0";
+    }
+  }, [overview]);
+
   const updateIncome = useCallback(
     Functions.debounce((cost: string) => {
       if (overview) {
@@ -97,15 +118,21 @@ export const UserSummary = (props: Props) => {
   }, [currentUser, overviews]);
 
   useEffect(() => {
-    if (recurringTotalCost.value === 0 && overviewGroups) {
+    if (
+      overviewGroups &&
+      Object.keys(overviewGroups).length > 0 &&
+      recurringTotalCost.value === 0
+    ) {
+      let overviewGroupsTotalSpent = 0;
       for (const overviewGroup of overviewGroups) {
-        if (overviewGroup.name === "Recurring") {
-          recurringTotalCost.value = overviewGroup.totalCost;
+        if (overviewGroup.name !== "Incoming") {
+          overviewGroupsTotalSpent += overviewGroup.totalCost;
         }
         break;
       }
+      recurringTotalCost.value = overviewGroupsTotalSpent;
     }
-  }, [overviewGroups]);
+  }, [overviewGroups, recurringTotalCost.value]);
 
   return (
     <Container>
@@ -154,7 +181,7 @@ export const UserSummary = (props: Props) => {
           <Globals.PurchaseCell
             key={`dashboard-overview-header-purchase-cell-total-spent`}
             description="Total Spent"
-            cost={recurringTotalCost.value.toString()}
+            cost={totalSpent}
             costForwardText="$"
             importance="Secondary"
             persistInput
@@ -169,12 +196,7 @@ export const UserSummary = (props: Props) => {
           <Globals.PurchaseCell
             key={`dashboard-overview-header-purchase-cell-remaining`}
             description="Remaining"
-            cost={Functions.roundNumber(
-              overview.income -
-                overview.income * (overview.savings / 100) -
-                recurringTotalCost.value,
-              2
-            )}
+            cost={remainingBudget}
             costForwardText="$"
             importance="Primary"
             persistInput

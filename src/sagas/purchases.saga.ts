@@ -114,18 +114,14 @@ export function bulkCreatePurchasesRequest(
 type PurchaseUpdateAction = Types.SagaAction<{
   purchaseId: number;
   updateData: Types.PurchaseUpdateData;
-  overviewGroupId?: number;
-  updatedTotalCost?: number;
 }>;
 export function updatePurchaseRequest(
   purchaseId: number,
-  updateData: Types.PurchaseUpdateData,
-  overviewGroupId?: number,
-  updatedTotalCost?: number
+  updateData: Types.PurchaseUpdateData
 ): PurchaseUpdateAction {
   return {
     type: PurchasesActionTypes.UPDATE_PURCHASE,
-    payload: { purchaseId, updateData, overviewGroupId, updatedTotalCost },
+    payload: { purchaseId, updateData },
   };
 }
 
@@ -369,20 +365,12 @@ function* bulkCreatePurchases(action: PurchaseBulkCreateAction) {
 function* updatePurchase(action: PurchaseUpdateAction) {
   try {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
-    const { purchaseId, updateData, overviewGroupId, updatedTotalCost } =
-      action.payload;
+    const { purchaseId, updateData } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/${purchaseId}`;
     const { data } = yield Saga.call(axios.patch, endpoint, updateData);
     yield Saga.put(
       Redux.entitiesActions.updatePurchase({ purchaseId, purchase: data.data })
     );
-    if (overviewGroupId && (updatedTotalCost || updatedTotalCost === 0)) {
-      yield Saga.put(
-        updateOverviewGroupRequest(overviewGroupId, {
-          totalCost: updatedTotalCost,
-        })
-      );
-    }
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));

@@ -31,6 +31,8 @@ const Container = styled.section`
 // ========================================================================================= //
 
 export const OverviewGroups = () => {
+  // console.log("Overview Groups Rendered");
+
   const dispatch = Functions.useAppDispatch();
 
   const { loadingOverviewGroups } = Functions.useUiSlice();
