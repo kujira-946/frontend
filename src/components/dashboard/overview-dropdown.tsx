@@ -205,19 +205,8 @@ const ExportedComponent = (props: Props) => {
     (purchaseId: number) => {
       if (purchases && purchases[purchaseId]) {
         const purchase = purchases[purchaseId];
-        if (props.overviewGroupId && purchase.cost) {
-          let updatedTotalCost = props.totalCost - purchase.cost;
-          if (updatedTotalCost < 0) updatedTotalCost = 0;
-          dispatch(
-            deletePurchaseRequest(
-              purchaseId,
-              props.overviewGroupId,
-              updatedTotalCost
-            )
-          );
-        } else {
-          dispatch(deletePurchaseRequest(purchaseId));
-        }
+        dispatch(deletePurchaseRequest(purchaseId));
+        updateOverviewGroupTotalCost(purchase.cost || 0, 0);
       }
     },
     [purchases]

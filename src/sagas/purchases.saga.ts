@@ -125,19 +125,10 @@ export function updatePurchaseRequest(
   };
 }
 
-type PurchaseDeleteAction = Types.SagaAction<{
-  purchaseId: number;
-  overviewGroupId?: number;
-  updatedTotalCost?: number;
-}>;
-export function deletePurchaseRequest(
-  purchaseId: number,
-  overviewGroupId?: number,
-  updatedTotalCost?: number
-): PurchaseDeleteAction {
+export function deletePurchaseRequest(purchaseId: number): PurchaseIdAction {
   return {
     type: PurchasesActionTypes.DELETE_PURCHASE,
-    payload: { purchaseId, overviewGroupId, updatedTotalCost },
+    payload: { purchaseId },
   };
 }
 
@@ -378,20 +369,13 @@ function* updatePurchase(action: PurchaseUpdateAction) {
   }
 }
 
-function* deletePurchase(action: PurchaseDeleteAction) {
+function* deletePurchase(action: PurchaseIdAction) {
   try {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
-    const { purchaseId, overviewGroupId, updatedTotalCost } = action.payload;
+    const { purchaseId } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/${purchaseId}`;
     yield Saga.call(axios.delete, endpoint);
     yield Saga.put(Redux.entitiesActions.deletePurchase(purchaseId));
-    if (overviewGroupId && (updatedTotalCost || updatedTotalCost === 0)) {
-      yield Saga.put(
-        updateOverviewGroupRequest(overviewGroupId, {
-          totalCost: updatedTotalCost,
-        })
-      );
-    }
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
