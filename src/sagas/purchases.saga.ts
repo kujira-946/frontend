@@ -6,7 +6,6 @@ import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
-import { updateOverviewGroupRequest } from "./overview-groups.saga";
 
 // ========================================================================================= //
 // [ SCHEMAS ] ============================================================================= //
@@ -405,11 +404,6 @@ function* deleteAssociatedPurchases(action: DeleteAllAction) {
     yield Saga.call(axios.post, endpoint, deleteData);
     // yield Saga.put(Redux.entitiesActions.setPurchases(null));
     yield Saga.put(Redux.entitiesActions.deleteAssociatedPurchases(deleteData));
-    if (deleteData.overviewGroupId) {
-      yield Saga.put(
-        updateOverviewGroupRequest(deleteData.overviewGroupId, { totalCost: 0 })
-      );
-    }
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
