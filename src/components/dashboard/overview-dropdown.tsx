@@ -192,7 +192,20 @@ export const OverviewDropdown = (props: Props) => {
   const deletePurchase = useCallback(
     (purchaseId: number) => {
       if (purchases && purchases[purchaseId]) {
-        dispatch(deletePurchaseRequest(purchaseId));
+        const purchase = purchases[purchaseId];
+        if (props.overviewGroupId && purchase.cost) {
+          let updatedTotalCost = props.totalCost - purchase.cost;
+          if (updatedTotalCost < 0) updatedTotalCost = 0;
+          dispatch(
+            deletePurchaseRequest(
+              purchaseId,
+              props.overviewGroupId,
+              updatedTotalCost
+            )
+          );
+        } else {
+          dispatch(deletePurchaseRequest(purchaseId));
+        }
       }
     },
     [purchases]
