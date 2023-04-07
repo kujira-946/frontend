@@ -53,13 +53,19 @@ export const OverviewGroups = () => {
     };
   }, []);
 
-  const deleteAllPurchases = useCallback((overviewGroupId: number): void => {
-    dispatch(deleteAssociatedPurchasesRequest({ overviewGroupId }));
-  }, []);
+  const deleteAssociatedPurchases = useCallback(
+    (overviewGroupId: number): void => {
+      dispatch(deleteAssociatedPurchasesRequest({ overviewGroupId }));
+    },
+    []
+  );
 
-  const addPurchase = useCallback((overviewGroupId: number): void => {
-    dispatch(createPurchaseRequest({ placement: 0, overviewGroupId }));
-  }, []);
+  const addPurchaseToOverviewGroup = useCallback(
+    (overviewGroupId: number): void => {
+      dispatch(createPurchaseRequest({ placement: 0, overviewGroupId }));
+    },
+    []
+  );
 
   useEffect(() => {
     if (overview && !overviewGroups) {
@@ -86,8 +92,8 @@ export const OverviewGroups = () => {
                 purchaseCount={overviewGroup.purchaseIds?.length || 0}
                 overviewGroupId={overviewGroup.id}
                 onDragEnd={onDragEnd}
-                deleteAllOverviewPurchases={deleteAllPurchases}
-                addOverviewPurchase={addPurchase}
+                deleteAllOverviewPurchases={deleteAssociatedPurchases}
+                addOverviewPurchase={addPurchaseToOverviewGroup}
               />
             );
           })}
