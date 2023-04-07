@@ -175,11 +175,24 @@ export const OverviewDropdown = (props: Props) => {
                 description: description,
               })
             );
-          } else if (Number(cost) && Number(cost) !== purchase.cost) {
+          } else if (
+            Number(cost) &&
+            Number(cost) !== purchase.cost &&
+            props.overviewGroupId
+          ) {
+            let purchaseCostDelta = Number(cost);
+            if (purchase.cost) purchaseCostDelta = Number(cost) - purchase.cost;
+            let updatedTotalCost = props.totalCost + purchaseCostDelta;
+            if (updatedTotalCost < 0) updatedTotalCost = 0;
             dispatch(
-              updatePurchaseRequest(purchaseId, {
-                cost: Number(cost),
-              })
+              updatePurchaseRequest(
+                purchaseId,
+                {
+                  cost: Number(cost),
+                },
+                props.overviewGroupId,
+                updatedTotalCost
+              )
             );
           }
         }
