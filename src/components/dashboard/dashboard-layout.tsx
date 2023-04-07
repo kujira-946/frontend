@@ -5,7 +5,7 @@ import * as Types from "@/utils/types";
 import { ThemeProps } from "../layout";
 
 import { OverviewNavbar } from "./overview-navbar";
-import { OverviewHeader } from "./overview-header";
+import { UserSummary } from "./user-summary";
 import { OverviewGroups } from "./overview-groups";
 
 // ========================================================================================= //
@@ -47,7 +47,7 @@ export const DashboardLayout = (props: Props) => {
     <Container>
       <Overview>
         <OverviewNavbar />
-        <OverviewHeader page={props.page} />
+        <UserSummary page={props.page} />
         <OverviewGroups />
       </Overview>
 

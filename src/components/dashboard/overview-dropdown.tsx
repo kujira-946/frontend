@@ -131,8 +131,6 @@ type Props = {
 };
 
 export const OverviewDropdown = (props: Props) => {
-  console.log("Overview Dropdown Rendered:", props.overviewGroupId);
-
   const dispatch = Functions.useAppDispatch();
 
   const { ui } = Functions.useSignalsStore();

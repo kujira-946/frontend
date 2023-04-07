@@ -102,7 +102,7 @@ const Textarea = styled(TextareaAutosize)<TextProps>`
   font-size: inherit;
   outline: none;
   resize: none;
-  cursor: text;
+  cursor: pointer;
 
   ::placeholder {
     ${(props: ThemeProps) => props.theme.backgroundSeven};
