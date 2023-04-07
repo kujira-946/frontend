@@ -9,17 +9,18 @@ import * as Functions from "@/utils/functions";
 
 const Register = () => {
   const router = useRouter();
-  Functions.useDetectAuthorizedUser(() => {
-    if (currentUser) {
-      if (currentUser.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
-      else router.push(Constants.ClientRoutes.ONBOARDING);
-    }
-  });
 
   const { currentUser } = Functions.useEntitiesSlice();
   const { verificationCodeSent } = Functions.useUiSlice();
 
   const email = useSignal("");
+
+  useEffect(() => {
+    if (currentUser) {
+      if (currentUser.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
+      else router.push(Constants.ClientRoutes.ONBOARDING);
+    }
+  }, [currentUser]);
 
   if (currentUser) {
     return null;

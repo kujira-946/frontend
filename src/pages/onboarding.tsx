@@ -14,9 +14,8 @@ const Onboarding = () => {
   const dispatch = Functions.useAppDispatch();
   const router = useRouter();
   Functions.useDetectAuthorizedUser(() => {
-    if (currentUser) {
-      if (currentUser.onboarded) router.push(Constants.ClientRoutes.LOGBOOKS);
-      else router.push(Constants.ClientRoutes.LANDING);
+    if (currentUser && currentUser.onboarded) {
+      router.push(Constants.ClientRoutes.LOGBOOKS);
     }
   });
 
