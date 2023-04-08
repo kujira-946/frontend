@@ -96,7 +96,6 @@ type Props = {
   provided?: DraggableProvided;
   purchaseId?: number;
   index?: number;
-  onboardingPurchases?: Signal<Types.OnboardingPurchase[]>;
   description: string;
   cost: string;
   disableSubmit?: Signal<boolean>;
