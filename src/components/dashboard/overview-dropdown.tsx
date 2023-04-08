@@ -5,7 +5,7 @@ import { memo, useCallback, useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
-import * as Global from "@/components";
+import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
@@ -243,10 +243,10 @@ const ExportedComponent = (props: Props) => {
                     >
                       {loadingPurchases.value ? (
                         <>
-                          <Global.Shimmer borderRadius="six" height={40} />
-                          <Global.Shimmer borderRadius="six" height={40} />
-                          <Global.Shimmer borderRadius="six" height={40} />
-                          <Global.Shimmer borderRadius="six" height={40} />
+                          <Globals.Shimmer borderRadius="six" height={40} />
+                          <Globals.Shimmer borderRadius="six" height={40} />
+                          <Globals.Shimmer borderRadius="six" height={40} />
+                          <Globals.Shimmer borderRadius="six" height={40} />
                         </>
                       ) : overviewGroupPurchases ? (
                         overviewGroupPurchases.map(
@@ -262,12 +262,12 @@ const ExportedComponent = (props: Props) => {
                                   snapshot: Drag.DraggableStateSnapshot
                                 ) => {
                                   return (
-                                    <Global.DraggablePortalItem
+                                    <Globals.DraggablePortalItem
                                       provided={provided}
                                       snapshot={snapshot}
                                       preventEntireElementDrag
                                     >
-                                      <Global.PurchaseCell
+                                      <Globals.PurchaseCell
                                         key={`overview-dropdown-purchase-cell-${purchase.id}-${index}`}
                                         borderRadius="four"
                                         provided={provided}
@@ -280,7 +280,7 @@ const ExportedComponent = (props: Props) => {
                                         hideCheck
                                         hideCategories
                                       />
-                                    </Global.DraggablePortalItem>
+                                    </Globals.DraggablePortalItem>
                                   );
                                 }}
                               </Drag.Draggable>
@@ -293,7 +293,7 @@ const ExportedComponent = (props: Props) => {
                 }}
               </Drag.Droppable>
 
-              <Global.Button
+              <Globals.Button
                 type="button"
                 onClick={() => {
                   props.purchaseCount > 0 &&
@@ -309,9 +309,9 @@ const ExportedComponent = (props: Props) => {
                 hoverBorder={Styles.background[ui.theme.value].eight}
               >
                 Delete All
-              </Global.Button>
+              </Globals.Button>
 
-              <Global.Button
+              <Globals.Button
                 type="button"
                 onClick={() => props.addPurchase(props.overviewGroupId)}
                 size="medium"
@@ -321,7 +321,7 @@ const ExportedComponent = (props: Props) => {
                 hoverBackground={Styles.background[ui.theme.value].five}
               >
                 Add
-              </Global.Button>
+              </Globals.Button>
             </Body>
           )}
         </AnimatePresence>

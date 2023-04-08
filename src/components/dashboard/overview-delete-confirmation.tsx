@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { Signal, useSignal } from "@preact/signals-react";
+import { Signal } from "@preact/signals-react";
 import { motion } from "framer-motion";
 
-import * as Global from "@/components";
+import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
 import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
@@ -98,7 +98,7 @@ export const OverviewDeleteConfirmation = (props: Props) => {
           </DeleteButton>
         </Header>
 
-        <Global.Button
+        <Globals.Button
           type="button"
           onClick={() => {
             props.onConfirm();
@@ -111,7 +111,7 @@ export const OverviewDeleteConfirmation = (props: Props) => {
           hoverBackground={Styles.primary[ui.theme.value].darker}
         >
           Yes
-        </Global.Button>
+        </Globals.Button>
       </Child>
     </Parent>
   );
