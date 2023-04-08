@@ -5,3 +5,4 @@ export * from "./performance";
 export * from "./sagas";
 export * from "./selectors";
 export * from "./strings";
+export * from "./purchases";

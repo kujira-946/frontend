@@ -4,5 +4,4 @@ export * from "./saga";
 export * from "./styles";
 export * from "./models";
 export * from "./normalizr";
-export * from "./onboarding";
 export * from "./dashboard";
