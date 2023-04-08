@@ -6,7 +6,6 @@ import { effect, useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Components from "@/components/onboarding";
-import * as Dashboard from "@/components/dashboard";
 import * as OverviewsSagas from "@/sagas/overviews.saga";
 import * as OverviewGroupsSagas from "@/sagas/overview-groups.saga";
 import * as PurchasesSagas from "@/sagas/purchases.saga";
@@ -21,7 +20,7 @@ const Onboarding = () => {
   const router = useRouter();
 
   const { currentUser } = Functions.useEntitiesSlice();
-  const { loadingOnboarding, loadingOverviewGroups } = Functions.useUiSlice();
+  const { loadingOnboarding } = Functions.useUiSlice();
   const overview = Functions.useAppSelector(Functions.fetchCurrentUserOverview);
   const overviewGroups = Functions.useAppSelector(
     Functions.fetchOverviewGroups
@@ -188,45 +187,23 @@ const Onboarding = () => {
           {currentPage.value === 2 ? (
             <Components.Income income={income} disableSubmit={disableSubmit} />
           ) : currentPage.value === 3 ? (
-            overviewGroups ? (
-              <Dashboard.OverviewDropdown
-                key="onboarding-overview-group-dropdown-1"
-                borderRadius="four"
-                initiallyOpen={true}
-                title={Object.values(overviewGroups)[0].name}
-                totalCost={Object.values(overviewGroups)[0].totalCost}
-                purchaseCount={
-                  Object.values(overviewGroups)[0].purchaseIds
-                    ? Object.values(overviewGroups)[0].purchaseIds.length
-                    : 0
-                }
-                overviewGroupId={Object.values(overviewGroups)[0].id}
-                onDragEnd={onDragEnd}
-                deleteAllPurchases={deleteAllPurchases}
-                addPurchase={addPurchase}
-              />
-            ) : null
+            <Components.Purchases
+              key="onboarding-overview-group-recurring-purchases-dropdown"
+              type="Recurring"
+              overviewGroups={overviewGroups}
+              onDragEnd={onDragEnd}
+              deleteAllPurchases={deleteAllPurchases}
+              addPurchase={addPurchase}
+            />
           ) : currentPage.value === 4 ? (
-            loadingOverviewGroups ? (
-              <Globals.Shimmer borderRadius="four" height={40} />
-            ) : overviewGroups ? (
-              <Dashboard.OverviewDropdown
-                key="onboarding-overview-group-dropdown-2"
-                borderRadius="four"
-                initiallyOpen={true}
-                title={Object.values(overviewGroups)[1].name}
-                totalCost={Object.values(overviewGroups)[1].totalCost}
-                purchaseCount={
-                  Object.values(overviewGroups)[1].purchaseIds
-                    ? Object.values(overviewGroups)[1].purchaseIds.length
-                    : 0
-                }
-                overviewGroupId={Object.values(overviewGroups)[1].id}
-                onDragEnd={onDragEnd}
-                deleteAllPurchases={deleteAllPurchases}
-                addPurchase={addPurchase}
-              />
-            ) : null
+            <Components.Purchases
+              key="onboarding-overview-group-incoming-purchases-dropdown"
+              type="Incoming"
+              overviewGroups={overviewGroups}
+              onDragEnd={onDragEnd}
+              deleteAllPurchases={deleteAllPurchases}
+              addPurchase={addPurchase}
+            />
           ) : currentPage.value === 5 ? (
             <Components.Savings
               income={Number(income.value)}

@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { effect, Signal, useSignal } from "@preact/signals-react";
 
+import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
-import { Input } from "../input";
 
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
@@ -54,7 +54,7 @@ export const Savings = (props: Props) => {
   }, [props.savings, props.disableSubmit]);
 
   return (
-    <Input
+    <Globals.Input
       title={`Savings (%) ${calculateIncomeSaved()}`}
       userInput={props.savings.value}
       setUserInput={setUserInput}
