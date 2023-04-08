@@ -3,20 +3,13 @@ import styled from "styled-components";
 import { useCallback, useEffect } from "react";
 
 import * as Globals from "@/components";
+import * as OverviewGroupsSagas from "@/sagas/overview-groups.saga";
+import * as PurchasesSagas from "@/sagas/purchases.saga";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import {
-  fetchOverviewOverviewGroupsRequest,
-  updateOverviewGroupRequest,
-} from "@/sagas/overview-groups.saga";
 
 import { OverviewDropdown } from "./overview-dropdown";
-import {
-  createPurchaseRequest,
-  deleteAssociatedPurchasesRequest,
-  updatePurchaseRequest,
-} from "@/sagas/purchases.saga";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -46,36 +39,43 @@ export const OverviewGroups = () => {
 
   const onDragEnd = useCallback(() => {
     (result: Drag.DropResult, _: Drag.ResponderProvided): void => {
+      console.log("Overview Dragged");
       const previousIndex = result.source.index;
       const newIndex = result.destination?.index;
       if (newIndex && newIndex !== previousIndex) {
         const purchaseId = Number(result.draggableId);
         const updatedPlacement = newIndex + 1;
+        console.log("Purchase Id:", purchaseId);
+        console.log("Updated Placement:", updatedPlacement);
         // dispatch(
-        //   updatePurchaseRequest(purchaseId, { placement: updatedPlacement })
+        //   PurchasesSagas.updatePurchaseRequest(purchaseId, { placement: updatedPlacement })
         // );
       }
     };
   }, []);
 
-  const deleteAssociatedPurchases = useCallback(
-    (overviewGroupId: number): void => {
-      dispatch(deleteAssociatedPurchasesRequest({ overviewGroupId }));
-      dispatch(updateOverviewGroupRequest(overviewGroupId, { totalCost: 0 }));
-    },
-    []
-  );
+  const deleteAllPurchases = useCallback((overviewGroupId: number): void => {
+    dispatch(
+      PurchasesSagas.deleteAssociatedPurchasesRequest({ overviewGroupId })
+    );
+    dispatch(
+      OverviewGroupsSagas.updateOverviewGroupRequest(overviewGroupId, {
+        totalCost: 0,
+      })
+    );
+  }, []);
 
-  const addPurchaseToOverviewGroup = useCallback(
-    (overviewGroupId: number): void => {
-      dispatch(createPurchaseRequest({ placement: 0, overviewGroupId }));
-    },
-    []
-  );
+  const addPurchase = useCallback((overviewGroupId: number): void => {
+    dispatch(
+      PurchasesSagas.createPurchaseRequest({ placement: 0, overviewGroupId })
+    );
+  }, []);
 
   useEffect(() => {
     if (overview && !overviewGroups) {
-      dispatch(fetchOverviewOverviewGroupsRequest(overview.id));
+      dispatch(
+        OverviewGroupsSagas.fetchOverviewOverviewGroupsRequest(overview.id)
+      );
     }
   }, [overview, overviewGroups]);
 
@@ -98,8 +98,8 @@ export const OverviewGroups = () => {
                 purchaseCount={overviewGroup.purchaseIds?.length || 0}
                 overviewGroupId={overviewGroup.id}
                 onDragEnd={onDragEnd}
-                deleteAllOverviewPurchases={deleteAssociatedPurchases}
-                addOverviewPurchase={addPurchaseToOverviewGroup}
+                deleteAllPurchases={deleteAllPurchases}
+                addPurchase={addPurchase}
               />
             );
           })}

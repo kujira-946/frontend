@@ -33,7 +33,11 @@ const Container = styled.section<ContainerProps>`
       ? `${props.theme.backgroundSix} solid 1px`
       : `${props.theme.backgroundFour} solid 1px`;
   }};
-  border-radius: ${(props) => props.borderRadius || Styles.pxAsRem.six};
+  border-radius: ${(props) => {
+    return props.borderRadius
+      ? Styles.pxAsRem[props.borderRadius]
+      : Styles.pxAsRem.six;
+  }};
   overflow-y: auto;
 
   @media (hover: hover) {
@@ -112,23 +116,20 @@ const DynamicOverviewDeleteConfirmation = dynamic(() =>
 // ========================================================================================= //
 
 type Props = {
-  children?: React.ReactNode;
   borderRadius?: Types.PxAsRem;
 
   initiallyOpen: boolean;
   title: "Recurring" | "Incoming" | string;
   totalCost: number;
   purchaseCount: number;
-  overviewGroupId?: number;
+  overviewGroupId: number;
 
   onDragEnd: (
     result: Drag.DropResult,
     provided: Drag.ResponderProvided
   ) => void;
-  deleteAllOverviewPurchases?: (overviewGroupId: number) => void;
-  deleteAllOnboardingPurchases?: () => void;
-  addOverviewPurchase?: (overviewGroupId: number) => void;
-  addOnboardingPurchase?: () => void;
+  deleteAllPurchases: (overviewGroupId: number) => void;
+  addPurchase: (overviewGroupId: number) => void;
 };
 
 const ExportedComponent = (props: Props) => {
@@ -139,48 +140,25 @@ const ExportedComponent = (props: Props) => {
   const { ui } = Functions.useSignalsStore();
   const { purchases } = Functions.useEntitiesSlice();
   const overviewGroupPurchases = Functions.useAppSelector((state) => {
-    if (props.overviewGroupId) {
-      return Functions.fetchOverviewGroupPurchases(
-        state,
-        props.overviewGroupId
-      );
-    }
+    return Functions.fetchOverviewGroupPurchases(state, props.overviewGroupId);
   });
 
   const opened = useSignal(props.initiallyOpen);
   const loadingPurchases = useSignal(false);
   const deleteConfirmationOpen = useSignal(false);
 
-  function deleteAllPurchases(): void {
-    if (props.overviewGroupId && props.deleteAllOverviewPurchases) {
-      props.deleteAllOverviewPurchases(props.overviewGroupId);
-    } else if (props.deleteAllOnboardingPurchases) {
-      props.deleteAllOnboardingPurchases();
-    }
-  }
-
-  function addPurchase(): void {
-    if (props.overviewGroupId && props.addOverviewPurchase) {
-      props.addOverviewPurchase(props.overviewGroupId);
-    } else if (props.addOnboardingPurchase) {
-      props.addOnboardingPurchase();
-    }
-  }
-
   function updateOverviewGroupTotalCost(
     previousPurchaseCost: number,
     currentPurchaseCost: number
   ): void {
-    if (props.overviewGroupId) {
-      const purchaseCostDelta = currentPurchaseCost - previousPurchaseCost;
-      let updatedTotalCost = props.totalCost + purchaseCostDelta;
-      if (updatedTotalCost < 0) updatedTotalCost = 0;
-      dispatch(
-        updateOverviewGroupRequest(props.overviewGroupId, {
-          totalCost: updatedTotalCost,
-        })
-      );
-    }
+    const purchaseCostDelta = currentPurchaseCost - previousPurchaseCost;
+    let updatedTotalCost = props.totalCost + purchaseCostDelta;
+    if (updatedTotalCost < 0) updatedTotalCost = 0;
+    dispatch(
+      updateOverviewGroupRequest(props.overviewGroupId, {
+        totalCost: updatedTotalCost,
+      })
+    );
   }
 
   const updatePurchase = useCallback(
@@ -213,13 +191,13 @@ const ExportedComponent = (props: Props) => {
   );
 
   useEffect(() => {
-    if (props.overviewGroupId && opened.value && !overviewGroupPurchases) {
+    if (opened.value && !overviewGroupPurchases) {
       loadingPurchases.value = true;
       dispatch(fetchOverviewGroupPurchasesRequest(props.overviewGroupId));
     } else if (loadingPurchases.value && overviewGroupPurchases) {
       loadingPurchases.value = false;
     }
-  }, [props.overviewGroupId, opened.value, overviewGroupPurchases]);
+  }, [opened.value, overviewGroupPurchases]);
 
   return (
     <Container borderRadius={props.borderRadius} opened={opened.value}>
@@ -228,7 +206,7 @@ const ExportedComponent = (props: Props) => {
           <DynamicOverviewDeleteConfirmation
             open={deleteConfirmationOpen}
             onClose={() => (deleteConfirmationOpen.value = false)}
-            onConfirm={deleteAllPurchases}
+            onConfirm={() => props.deleteAllPurchases(props.overviewGroupId)}
           />
         )}
       </AnimatePresence>
@@ -309,9 +287,7 @@ const ExportedComponent = (props: Props) => {
                             );
                           }
                         )
-                      ) : (
-                        props.children ?? null
-                      )}
+                      ) : null}
                     </PurchaseCells>
                   );
                 }}
@@ -337,7 +313,7 @@ const ExportedComponent = (props: Props) => {
 
               <Global.Button
                 type="button"
-                onClick={addPurchase}
+                onClick={() => props.addPurchase(props.overviewGroupId)}
                 size="medium"
                 borderRadius="four"
                 color={Styles.background[ui.theme.value].eight}

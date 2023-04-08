@@ -1,179 +1,157 @@
+import * as Drag from "react-beautiful-dnd";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { effect, useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Components from "@/components/onboarding";
+import * as Dashboard from "@/components/dashboard";
+import * as OverviewsSagas from "@/sagas/overviews.saga";
+import * as OverviewGroupsSagas from "@/sagas/overview-groups.saga";
+import * as PurchasesSagas from "@/sagas/purchases.saga";
 import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
-import * as Types from "@/utils/types";
-import { onboardNewUserRequest } from "@/sagas/onboarding.saga";
+import { updateUserRequest } from "@/sagas/users.saga";
 
 const Onboarding = () => {
+  console.log("Onboarding Page Loading");
+
   const dispatch = Functions.useAppDispatch();
   const router = useRouter();
-  Functions.useDetectAuthorizedUser(() => {
-    if (currentUser && currentUser.onboarded) {
-      router.push(Constants.ClientRoutes.LOGBOOKS);
-    }
-  });
 
   const { currentUser } = Functions.useEntitiesSlice();
-  const { loadingOnboarding } = Functions.useUiSlice();
+  const { loadingOnboarding, loadingOverviewGroups } = Functions.useUiSlice();
+  const overview = Functions.useAppSelector(Functions.fetchCurrentUserOverview);
+  const overviewGroups = Functions.useAppSelector(
+    Functions.fetchOverviewGroups
+  );
 
-  // ↓↓↓ Confirmation Modal Component Data ↓↓↓ //
   const currentPage = useSignal(1);
-  const recurringPurchasesTotal = useSignal(0);
-  const incomingPurchasesTotal = useSignal(0);
   const supportingText = useSignal("");
   const disableSubmit = useSignal(false);
-
-  // ↓↓↓ Submission Data ↓↓↓ //
   const income = useSignal("");
-  const recurringPurchases = useSignal<Types.OnboardingPurchase[]>([
-    { description: "", cost: "" },
-  ]);
-  const incomingPurchases = useSignal<Types.OnboardingPurchase[]>([
-    { description: "", cost: "" },
-  ]);
   const savings = useSignal("");
-
-  function onboardNewUser(): void {
-    if (currentUser) {
-      const overviewData: Types.OnboardingOverviewCreateData = {
-        income: Number(income.value),
-        savings: Number(savings.value),
-        ownerId: currentUser.id,
-      };
-
-      const recurringOverviewGroupData: Types.OnboardingOverviewGroupCreateData =
-        {
-          name: "Recurring",
-          totalCost: recurringPurchasesTotal.value,
-        };
-
-      const incomingOverviewGroupData: Types.OnboardingOverviewGroupCreateData =
-        {
-          name: "Incoming",
-          totalCost: incomingPurchasesTotal.value,
-        };
-
-      const recurringPurchasesData: Types.OnboardingPurchaseCreateData[] = [];
-      recurringPurchases.value.forEach(
-        (purchase: Types.OnboardingPurchase, index: number) => {
-          if (purchase.description) {
-            const recurringPurchase: Types.OnboardingPurchaseCreateData = {
-              placement: index,
-              description: purchase.description,
-              cost: Number(purchase.cost),
-            };
-            recurringPurchasesData.push(recurringPurchase);
-          }
-        }
-      );
-
-      const incomingPurchasesData: Types.OnboardingPurchaseCreateData[] = [];
-      incomingPurchases.value.forEach(
-        (purchase: Types.OnboardingPurchase, index: number) => {
-          if (purchase.description) {
-            const incomingPurchase: Types.OnboardingPurchaseCreateData = {
-              placement: index,
-              description: purchase.description,
-              cost: Number(purchase.cost),
-            };
-            incomingPurchasesData.push(incomingPurchase);
-          }
-        }
-      );
-
-      dispatch(
-        onboardNewUserRequest({
-          overview: overviewData,
-          recurringOverviewGroup: recurringOverviewGroupData,
-          incomingOverviewGroup: incomingOverviewGroupData,
-          recurringPurchases: recurringPurchasesData,
-          incomingPurchases: incomingPurchasesData,
-        })
-      );
-    }
-  }
 
   function toPreviousPage(): void {
     if (currentPage.value - 1 > 0) currentPage.value -= 1;
     else currentPage.value = 1;
   }
 
+  function* completeOnboarding() {
+    if (
+      currentUser &&
+      overview &&
+      Number(income.value) &&
+      Number(savings.value)
+    ) {
+      yield dispatch(
+        OverviewsSagas.updateOverviewRequest(overview.id, {
+          income: Number(income.value),
+          savings: Number(savings.value),
+        })
+      );
+      yield dispatch(updateUserRequest(currentUser.id, { onboarded: true }));
+    }
+  }
+
   function toNextPage(): void {
     if (currentPage.value + 1 <= Constants.onboardingCopies.length) {
       currentPage.value += 1;
     } else {
-      onboardNewUser();
+      completeOnboarding();
     }
   }
 
-  function renderPage() {
-    switch (currentPage.value) {
-      case 2:
-        return (
-          <Components.Income income={income} disableSubmit={disableSubmit} />
-        );
-      case 3:
-        return (
-          <Components.DropdownPartial
-            key="onboarding-page-recurring-purchases"
-            title="Recurring"
-            totalCost={recurringPurchasesTotal}
-            purchases={recurringPurchases}
-            disableSubmit={disableSubmit}
-          />
-        );
-      case 4:
-        return (
-          <Components.DropdownPartial
-            key="onboarding-page-incoming-purchases"
-            title="Incoming"
-            totalCost={incomingPurchasesTotal}
-            purchases={incomingPurchases}
-            disableSubmit={disableSubmit}
-          />
-        );
-      case 5:
-        return (
-          <Components.Savings
-            income={Number(income.value)}
-            savings={savings}
-            disableSubmit={disableSubmit}
-          />
-        );
-      default:
-        return null;
-    }
-  }
+  const onDragEnd = useCallback(
+    (result: Drag.DropResult, provided: Drag.ResponderProvided): void => {
+      console.log("Onboarding Dragged");
+      const previousIndex = result.source.index;
+      const newIndex = result.destination?.index;
+      if (newIndex && newIndex !== previousIndex) {
+        const purchaseId = Number(result.draggableId);
+        const updatedPlacement = newIndex + 1;
+        console.log("Purchase Id:", purchaseId);
+        console.log("Updated Placement:", updatedPlacement);
+        // dispatch(
+        //   PurchasesSagas.updatePurchaseRequest(purchaseId, { placement: updatedPlacement })
+        // );
+      }
+    },
+    []
+  );
 
-  // ↓↓↓ Handling Supporting Text Value ↓↓↓ //
+  const deleteAllPurchases = useCallback((overviewGroupId: number): void => {
+    dispatch(
+      PurchasesSagas.deleteAssociatedPurchasesRequest({ overviewGroupId })
+    );
+    dispatch(
+      OverviewGroupsSagas.updateOverviewGroupRequest(overviewGroupId, {
+        totalCost: 0,
+      })
+    );
+  }, []);
+
+  const addPurchase = useCallback((overviewGroupId: number): void => {
+    dispatch(
+      PurchasesSagas.createPurchaseRequest({ placement: 0, overviewGroupId })
+    );
+  }, []);
+
+  Functions.useDetectAuthorizedUser(() => {
+    if (currentUser && currentUser.onboarded) {
+      router.push(Constants.ClientRoutes.LOGBOOKS);
+    }
+  });
+
+  useEffect(() => {
+    if (currentUser && !overview) {
+      dispatch(OverviewsSagas.fetchUserOverviewsRequest(currentUser.id));
+    }
+  }, [currentUser, overview]);
+
+  useEffect(() => {
+    if (overview && !overviewGroups) {
+      dispatch(
+        OverviewGroupsSagas.fetchOverviewOverviewGroupsRequest(overview.id)
+      );
+    }
+  }, [overview, overviewGroups]);
+
+  useEffect(() => {
+    if (overviewGroups) {
+      const recurringOverviewGroup = Object.values(overviewGroups)[0];
+      effect(() => {
+        if (Number(income.value)) {
+          let remainingBudget =
+            Number(income.value) - recurringOverviewGroup.totalCost;
+          if (Number(savings.value)) {
+            remainingBudget -=
+              (Number(income.value) * Number(savings.value)) / 100;
+          }
+          const formattedBudget = Functions.formattedNumber(remainingBudget);
+          if (remainingBudget < 0) {
+            supportingText.value = `You are ${formattedBudget} below budget!`;
+          } else if (remainingBudget === 0) {
+            supportingText.value = "You have no money left over!";
+          } else {
+            supportingText.value = `$${formattedBudget} remaining`;
+          }
+        }
+      });
+    }
+  }, [overviewGroups]);
+
   effect(() => {
     if (currentPage.value === 1) {
+      supportingText.value = "";
       disableSubmit.value = false;
-    } else if (disableSubmit.value) {
-      supportingText.value = "";
-    } else if (recurringPurchasesTotal.value < 0) {
-      recurringPurchasesTotal.value = 0;
-    } else if (incomingPurchasesTotal.value < 0) {
-      incomingPurchasesTotal.value = 0;
-    } else if (Number(income.value)) {
-      let remainingBudget = Number(income.value);
-      remainingBudget -= recurringPurchasesTotal.value;
-      remainingBudget -= incomingPurchasesTotal.value;
-      if (Number(savings.value)) {
-        const savedIncome =
-          Number(income.value) * (Number(savings.value) / 100);
-        remainingBudget -= savedIncome;
-      }
-      const formattedBudget = Functions.formattedNumber(remainingBudget);
-      supportingText.value = `$${formattedBudget} remaining`;
-    } else {
-      supportingText.value = "";
+    } else if (currentPage.value === 3) {
+      disableSubmit.value = false;
+    } else if (currentPage.value === 4) {
+      disableSubmit.value = false;
+    } else if (currentPage.value === 6) {
+      disableSubmit.value = false;
     }
   });
 
@@ -207,7 +185,55 @@ const Onboarding = () => {
           disableSubmit={disableSubmit.value}
           showSubmitArrow
         >
-          {renderPage()}
+          {currentPage.value === 2 ? (
+            <Components.Income income={income} disableSubmit={disableSubmit} />
+          ) : currentPage.value === 3 ? (
+            overviewGroups ? (
+              <Dashboard.OverviewDropdown
+                key="onboarding-overview-group-dropdown-1"
+                borderRadius="four"
+                initiallyOpen={true}
+                title={Object.values(overviewGroups)[0].name}
+                totalCost={Object.values(overviewGroups)[0].totalCost}
+                purchaseCount={
+                  Object.values(overviewGroups)[0].purchaseIds
+                    ? Object.values(overviewGroups)[0].purchaseIds.length
+                    : 0
+                }
+                overviewGroupId={Object.values(overviewGroups)[0].id}
+                onDragEnd={onDragEnd}
+                deleteAllPurchases={deleteAllPurchases}
+                addPurchase={addPurchase}
+              />
+            ) : null
+          ) : currentPage.value === 4 ? (
+            loadingOverviewGroups ? (
+              <Globals.Shimmer borderRadius="four" height={40} />
+            ) : overviewGroups ? (
+              <Dashboard.OverviewDropdown
+                key="onboarding-overview-group-dropdown-2"
+                borderRadius="four"
+                initiallyOpen={true}
+                title={Object.values(overviewGroups)[1].name}
+                totalCost={Object.values(overviewGroups)[1].totalCost}
+                purchaseCount={
+                  Object.values(overviewGroups)[1].purchaseIds
+                    ? Object.values(overviewGroups)[1].purchaseIds.length
+                    : 0
+                }
+                overviewGroupId={Object.values(overviewGroups)[1].id}
+                onDragEnd={onDragEnd}
+                deleteAllPurchases={deleteAllPurchases}
+                addPurchase={addPurchase}
+              />
+            ) : null
+          ) : currentPage.value === 5 ? (
+            <Components.Savings
+              income={Number(income.value)}
+              savings={savings}
+              disableSubmit={disableSubmit}
+            />
+          ) : null}
         </Globals.ConfirmationModal>
       </>
     );
