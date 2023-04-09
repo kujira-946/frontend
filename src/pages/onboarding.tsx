@@ -5,6 +5,7 @@ import { effect, useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Components from "@/components/onboarding";
+import * as Redux from "@/redux";
 import * as OverviewsSagas from "@/sagas/overviews.saga";
 import * as OverviewGroupsSagas from "@/sagas/overview-groups.saga";
 import * as Constants from "@/utils/constants";
@@ -80,6 +81,7 @@ const Onboarding = () => {
 
   useEffect(() => {
     if (currentUser && !overview) {
+      dispatch(Redux.uiActions.setLoadingOverviews(true));
       dispatch(OverviewsSagas.fetchUserOverviewsRequest(currentUser.id));
     }
   }, [currentUser, overview]);

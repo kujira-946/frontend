@@ -109,7 +109,6 @@ export function deleteOverviewRequest(overviewId: number): OverviewIdAction {
 
 function* fetchOverviews() {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
     const { data } = yield Saga.call(axios.get, ApiRoutes.OVERVIEWS);
     const normalizedData = normalize(data.data, [overviewsSchema]);
     const { overviews } = normalizedData.entities;
@@ -125,7 +124,6 @@ function* fetchOverviews() {
 
 function* fetchUserOverviews(action: UserOverviewsAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
     const { ownerId, forCurrentUser } = action.payload;
     const endpoint = ApiRoutes.OVERVIEWS + `/fetch-user-overviews`;
     const { data } = yield Saga.call(axios.post, endpoint, { ownerId });
@@ -168,7 +166,6 @@ function* fetchUserOverviews(action: UserOverviewsAction) {
 }
 
 function* bulkFetchOverviews(action: OverviewIdsAction) {
-  yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
   const { overviewIds } = action.payload;
   const endpoint = ApiRoutes.OVERVIEWS + `/bulk-fetch`;
   const { data } = yield Saga.call(axios.post, endpoint, { overviewIds });
@@ -186,7 +183,6 @@ function* bulkFetchOverviews(action: OverviewIdsAction) {
 }
 
 function* fetchOverview(action: OverviewIdAction) {
-  yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
   const { overviewId } = action.payload;
   const endpoint = ApiRoutes.OVERVIEWS + `/${overviewId}`;
   const { data } = yield Saga.call(axios.get, endpoint);
@@ -211,7 +207,6 @@ function* fetchOverview(action: OverviewIdAction) {
 }
 
 function* createOverview(action: OverviewCreateAction) {
-  yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
   const { createData, forCurrentUser } = action.payload;
   const { data } = yield Saga.call(axios.post, ApiRoutes.OVERVIEWS, createData);
   const normalizedData = normalize(data.data, overviewSchema);
@@ -244,7 +239,6 @@ function* createOverview(action: OverviewCreateAction) {
 
 function* updateOverview(action: OverviewUpdateAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
     const { overviewId, updateData } = action.payload;
     const endpoint = ApiRoutes.OVERVIEWS + `/${overviewId}`;
     const { data } = yield Saga.call(axios.patch, endpoint, updateData);
@@ -260,7 +254,6 @@ function* updateOverview(action: OverviewUpdateAction) {
 
 function* deleteOverview(action: OverviewIdAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingOverviews(true));
     const { overviewId } = action.payload;
     const endpoint = ApiRoutes.OVERVIEWS + `/${overviewId}`;
     yield Saga.call(axios.delete, endpoint);
