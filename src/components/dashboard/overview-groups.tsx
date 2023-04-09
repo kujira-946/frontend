@@ -1,15 +1,13 @@
-import * as Drag from "react-beautiful-dnd";
 import styled from "styled-components";
 import { useCallback, useEffect } from "react";
 
 import * as Globals from "@/components";
 import * as OverviewGroupsSagas from "@/sagas/overview-groups.saga";
-import * as PurchasesSagas from "@/sagas/purchases.saga";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 
-import { OverviewDropdown } from "./overview-dropdown";
+import { OverviewGroupDropdown } from "./overview-group-dropdown";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -32,43 +30,21 @@ export const OverviewGroups = () => {
   const dispatch = Functions.useAppDispatch();
 
   const { loadingOverviewGroups } = Functions.useUiSlice();
-  const overview = Functions.useAppSelector(Functions.fetchCurrentUserOverview);
-  const overviewGroups = Functions.useAppSelector(
-    Functions.fetchOverviewGroups
-  );
+  const overview = Functions.useFetchCurrentUserOverview();
+  const overviewGroups = Functions.useFetchOverviewGroups();
 
-  const onDragEnd = useCallback(() => {
-    (result: Drag.DropResult, _: Drag.ResponderProvided): void => {
-      console.log("Overview Dragged");
-      const previousIndex = result.source.index;
-      const newIndex = result.destination?.index;
-      if (newIndex && newIndex !== previousIndex) {
-        const purchaseId = Number(result.draggableId);
-        const updatedPlacement = newIndex + 1;
-        console.log("Purchase Id:", purchaseId);
-        console.log("Updated Placement:", updatedPlacement);
-        // dispatch(
-        //   PurchasesSagas.updatePurchaseRequest(purchaseId, { placement: updatedPlacement })
-        // );
-      }
-    };
-  }, []);
+  const onDragEnd = useCallback(Functions.onDragEnd, []);
 
   const deleteAllPurchases = useCallback((overviewGroupId: number): void => {
-    dispatch(
-      PurchasesSagas.deleteAssociatedPurchasesRequest({ overviewGroupId })
-    );
-    dispatch(
-      OverviewGroupsSagas.updateOverviewGroupRequest(overviewGroupId, {
-        totalCost: 0,
-      })
+    return Functions.deleteAllAssociatedPurchases(
+      "Overview Group",
+      dispatch,
+      overviewGroupId
     );
   }, []);
 
   const addPurchase = useCallback((overviewGroupId: number): void => {
-    dispatch(
-      PurchasesSagas.createPurchaseRequest({ placement: 0, overviewGroupId })
-    );
+    return Functions.addPurchase("Overview Group", dispatch, overviewGroupId);
   }, []);
 
   useEffect(() => {
@@ -90,12 +66,11 @@ export const OverviewGroups = () => {
         <>
           {overviewGroups.map((overviewGroup: Types.OverviewGroup) => {
             return (
-              <OverviewDropdown
+              <OverviewGroupDropdown
                 key={`dashboard-overviews-overview-group-dropdown-${overviewGroup.id}`}
-                initiallyOpen={false}
-                title={overviewGroup.name}
-                totalCost={overviewGroup.totalCost}
-                purchaseCount={overviewGroup.purchaseIds?.length || 0}
+                // title={overviewGroup.name}
+                // totalCost={overviewGroup.totalCost}
+                // purchaseCount={overviewGroup.purchaseIds?.length || 0}
                 overviewGroupId={overviewGroup.id}
                 onDragEnd={onDragEnd}
                 deleteAllPurchases={deleteAllPurchases}

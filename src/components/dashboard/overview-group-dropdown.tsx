@@ -9,13 +9,13 @@ import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { ThemeProps } from "../layout";
+import { updateOverviewGroupRequest } from "@/sagas/overview-groups.saga";
 import {
   deletePurchaseRequest,
   fetchOverviewGroupPurchasesRequest,
   updatePurchaseRequest,
 } from "@/sagas/purchases.saga";
-import { updateOverviewGroupRequest } from "@/sagas/overview-groups.saga";
+import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -28,6 +28,7 @@ type ContainerProps = {
 
 const Container = styled.section<ContainerProps>`
   position: relative;
+  width: 100%;
   border: ${(props: ThemeProps & ContainerProps) => {
     return props.opened
       ? `${props.theme.backgroundSix} solid 1px`
@@ -117,11 +118,9 @@ const DynamicOverviewDeleteConfirmation = dynamic(() =>
 
 type Props = {
   borderRadius?: Types.PxAsRem;
-
-  initiallyOpen: boolean;
-  title: "Recurring" | "Incoming" | string;
-  totalCost: number;
-  purchaseCount: number;
+  // title: string;
+  // totalCost: number;
+  // purchaseCount: number;
   overviewGroupId: number;
 
   onDragEnd: (
@@ -130,35 +129,44 @@ type Props = {
   ) => void;
   deleteAllPurchases: (overviewGroupId: number) => void;
   addPurchase: (overviewGroupId: number) => void;
+
+  initiallyOpen?: true;
 };
 
 const ExportedComponent = (props: Props) => {
-  console.log("Overview Dropdown Rendered");
+  // console.log("Overview Dropdown Rendered");
 
   const dispatch = Functions.useAppDispatch();
 
   const { ui } = Functions.useSignalsStore();
   const { purchases } = Functions.useEntitiesSlice();
-  const overviewGroupPurchases = Functions.useAppSelector((state) => {
-    return Functions.fetchOverviewGroupPurchases(state, props.overviewGroupId);
-  });
+  const overviewGroup = Functions.useFetchOverviewGroup(props.overviewGroupId);
+  const overviewGroupPurchases = Functions.useFetchOverviewGroupPurchases(
+    props.overviewGroupId
+  );
 
-  const opened = useSignal(props.initiallyOpen);
+  const opened = useSignal(!!props.initiallyOpen);
   const loadingPurchases = useSignal(false);
   const deleteConfirmationOpen = useSignal(false);
 
-  function updateOverviewGroupTotalCost(
+  function updateTotalCostAfterPurchaseUpdate(
     previousPurchaseCost: number,
     currentPurchaseCost: number
   ): void {
-    const purchaseCostDelta = currentPurchaseCost - previousPurchaseCost;
-    let updatedTotalCost = props.totalCost + purchaseCostDelta;
-    if (updatedTotalCost < 0) updatedTotalCost = 0;
-    dispatch(
-      updateOverviewGroupRequest(props.overviewGroupId, {
-        totalCost: updatedTotalCost,
-      })
-    );
+    if (overviewGroup) {
+      let updatedTotalCost =
+        overviewGroup.totalCost - previousPurchaseCost + currentPurchaseCost;
+      if (updatedTotalCost < 0) updatedTotalCost = 0;
+      const roundedUpdatedTotalCost = Functions.roundNumber(
+        updatedTotalCost,
+        2
+      );
+      dispatch(
+        updateOverviewGroupRequest(props.overviewGroupId, {
+          totalCost: Number(roundedUpdatedTotalCost),
+        })
+      );
+    }
   }
 
   const updatePurchase = useCallback(
@@ -169,8 +177,15 @@ const ExportedComponent = (props: Props) => {
           if (description !== purchase.description) {
             dispatch(updatePurchaseRequest(purchaseId, { description }));
           } else if (Number(cost) && Number(cost) !== purchase.cost) {
-            dispatch(updatePurchaseRequest(purchaseId, { cost: Number(cost) }));
-            updateOverviewGroupTotalCost(purchase.cost || 0, Number(cost));
+            dispatch(
+              updatePurchaseRequest(purchaseId, {
+                cost: Number(Functions.roundNumber(Number(cost), 2)),
+              })
+            );
+            updateTotalCostAfterPurchaseUpdate(
+              purchase.cost || 0,
+              Number(cost)
+            );
           }
         }
       },
@@ -179,12 +194,28 @@ const ExportedComponent = (props: Props) => {
     [purchases]
   );
 
+  function updateTotalCostAfterPurchaseDeletion(purchaseCost: number) {
+    if (overviewGroup) {
+      let updatedTotalCost = overviewGroup.totalCost - purchaseCost;
+      if (updatedTotalCost < 0) updatedTotalCost = 0;
+      const roundedUpdatedTotalCost = Functions.roundNumber(
+        updatedTotalCost,
+        2
+      );
+      dispatch(
+        updateOverviewGroupRequest(props.overviewGroupId, {
+          totalCost: Number(roundedUpdatedTotalCost),
+        })
+      );
+    }
+  }
+
   const deletePurchase = useCallback(
     (purchaseId: number) => {
       if (purchases && purchases[purchaseId]) {
         const purchase = purchases[purchaseId];
         dispatch(deletePurchaseRequest(purchaseId));
-        updateOverviewGroupTotalCost(purchase.cost || 0, 0);
+        if (purchase.cost) updateTotalCostAfterPurchaseDeletion(purchase.cost);
       }
     },
     [purchases]
@@ -217,10 +248,14 @@ const ExportedComponent = (props: Props) => {
           opened={opened.value}
         >
           <Title>
-            {props.title}{" "}
-            {props.purchaseCount > 0 && `(${props.purchaseCount})`}
+            {overviewGroup && overviewGroup.name}{" "}
+            {overviewGroup?.purchaseIds &&
+              overviewGroup.purchaseIds.length > 0 &&
+              `(${overviewGroup.purchaseIds.length})`}
           </Title>
-          <Total>${Functions.roundNumber(props.totalCost, 2)}</Total>
+          <Total>
+            ${Functions.roundNumber(overviewGroup?.totalCost || 0, 2)}
+          </Total>
         </Header>
 
         <AnimatePresence>
@@ -272,8 +307,14 @@ const ExportedComponent = (props: Props) => {
                                         borderRadius="four"
                                         provided={provided}
                                         purchaseId={purchase.id}
-                                        description={purchase.description || ""}
-                                        cost={purchase.cost?.toString() || "0"}
+                                        description={purchase.description}
+                                        cost={
+                                          purchase.cost
+                                            ? Functions.formattedNumber(
+                                                purchase.cost
+                                              )
+                                            : ""
+                                        }
                                         update={updatePurchase}
                                         delete={deletePurchase}
                                         costForwardText="$"
@@ -293,23 +334,23 @@ const ExportedComponent = (props: Props) => {
                 }}
               </Drag.Droppable>
 
-              <Globals.Button
-                type="button"
-                onClick={() => {
-                  props.purchaseCount > 0 &&
-                    (deleteConfirmationOpen.value = true);
-                }}
-                size="medium"
-                borderRadius="four"
-                color={Styles.background[ui.theme.value].seven}
-                hoverColor={Styles.background[ui.theme.value].eight}
-                background={Styles.background[ui.theme.value].one}
-                hoverBackground={Styles.background[ui.theme.value].three}
-                border={Styles.background[ui.theme.value].seven}
-                hoverBorder={Styles.background[ui.theme.value].eight}
-              >
-                Delete All
-              </Globals.Button>
+              {overviewGroup?.purchaseIds &&
+                overviewGroup.purchaseIds.length > 0 && (
+                  <Globals.Button
+                    type="button"
+                    onClick={() => (deleteConfirmationOpen.value = true)}
+                    size="medium"
+                    borderRadius="four"
+                    color={Styles.background[ui.theme.value].seven}
+                    hoverColor={Styles.background[ui.theme.value].eight}
+                    background={Styles.background[ui.theme.value].one}
+                    hoverBackground={Styles.background[ui.theme.value].three}
+                    border={Styles.background[ui.theme.value].seven}
+                    hoverBorder={Styles.background[ui.theme.value].eight}
+                  >
+                    Delete All
+                  </Globals.Button>
+                )}
 
               <Globals.Button
                 type="button"
@@ -330,4 +371,4 @@ const ExportedComponent = (props: Props) => {
   );
 };
 
-export const OverviewDropdown = memo(ExportedComponent);
+export const OverviewGroupDropdown = memo(ExportedComponent);

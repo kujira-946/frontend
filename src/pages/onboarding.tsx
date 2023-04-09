@@ -1,4 +1,3 @@
-import * as Drag from "react-beautiful-dnd";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useEffect } from "react";
@@ -8,23 +7,20 @@ import * as Globals from "@/components";
 import * as Components from "@/components/onboarding";
 import * as OverviewsSagas from "@/sagas/overviews.saga";
 import * as OverviewGroupsSagas from "@/sagas/overview-groups.saga";
-import * as PurchasesSagas from "@/sagas/purchases.saga";
 import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
 import { updateUserRequest } from "@/sagas/users.saga";
 
 const Onboarding = () => {
-  console.log("Onboarding Page Loading");
+  console.log("Onboarding Page Rendered");
 
   const dispatch = Functions.useAppDispatch();
   const router = useRouter();
 
   const { currentUser } = Functions.useEntitiesSlice();
-  const { loadingOnboarding } = Functions.useUiSlice();
-  const overview = Functions.useAppSelector(Functions.fetchCurrentUserOverview);
-  const overviewGroups = Functions.useAppSelector(
-    Functions.fetchOverviewGroups
-  );
+  const { loadingUsers } = Functions.useUiSlice();
+  const overview = Functions.useFetchCurrentUserOverview();
+  const overviewGroups = Functions.useFetchOverviewGroups();
 
   const currentPage = useSignal(1);
   const supportingText = useSignal("");
@@ -135,7 +131,7 @@ const Onboarding = () => {
 
   if (!currentUser) {
     return null;
-  } else if (loadingOnboarding) {
+  } else if (loadingUsers) {
     return <Globals.Loading text="Sit tight as I get you set up!" />;
   } else {
     return (
@@ -165,20 +161,20 @@ const Onboarding = () => {
         >
           {currentPage.value === 2 ? (
             <Components.Income income={income} disableSubmit={disableSubmit} />
-          ) : currentPage.value === 3 ? (
+          ) : overviewGroups && currentPage.value === 3 ? (
             <Components.Purchases
               key="onboarding-overview-group-recurring-purchases-dropdown"
               type="Recurring"
-              overviewGroups={overviewGroups}
+              overviewGroupId={Object.values(overviewGroups)[0].id}
               onDragEnd={onDragEnd}
               deleteAllPurchases={deleteAllPurchases}
               addPurchase={addPurchase}
             />
-          ) : currentPage.value === 4 ? (
+          ) : overviewGroups && currentPage.value === 4 ? (
             <Components.Purchases
               key="onboarding-overview-group-incoming-purchases-dropdown"
               type="Incoming"
-              overviewGroups={overviewGroups}
+              overviewGroupId={Object.values(overviewGroups)[1].id}
               onDragEnd={onDragEnd}
               deleteAllPurchases={deleteAllPurchases}
               addPurchase={addPurchase}

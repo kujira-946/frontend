@@ -56,10 +56,8 @@ export const UserSummary = (props: Props) => {
 
   const { loadingOverviews } = Functions.useUiSlice();
   const { currentUser, overviews } = Functions.useEntitiesSlice();
-  const overview = Functions.useAppSelector(Functions.fetchCurrentUserOverview);
-  const overviewGroups = Functions.useAppSelector(
-    Functions.fetchOverviewGroups
-  );
+  const overview = Functions.useFetchCurrentUserOverview();
+  const overviewGroups = Functions.useFetchOverviewGroups();
 
   const recurringTotalCost = useSignal(0);
   const error = useSignal("");

@@ -16,7 +16,7 @@ export function useErrorsSlice() {
   return useAppSelector((state) => state.errors);
 }
 
-export const fetchCurrentUserOverview = createSelector(
+const fetchCurrentUserOverview = createSelector(
   (state: GlobalState) => state.entities.currentUser,
   (state: GlobalState) => state.entities.overviews,
   (currentUser, overviews) => {
@@ -25,8 +25,11 @@ export const fetchCurrentUserOverview = createSelector(
     }
   }
 );
+export function useFetchCurrentUserOverview() {
+  return useAppSelector(fetchCurrentUserOverview);
+}
 
-export const fetchOverviewGroups = createSelector(
+const fetchOverviewGroups = createSelector(
   (state: GlobalState) => state.entities.currentUser,
   (state: GlobalState) => state.entities.overviews,
   (state: GlobalState) => state.entities.overviewGroups,
@@ -41,8 +44,22 @@ export const fetchOverviewGroups = createSelector(
     }
   }
 );
+export function useFetchOverviewGroups() {
+  return useAppSelector(fetchOverviewGroups);
+}
 
-export const fetchOverviewGroupPurchases = createSelector(
+const fetchOverviewGroup = createSelector(
+  (state: GlobalState) => state.entities.overviewGroups,
+  (state: GlobalState, overviewGroupId: number) => overviewGroupId,
+  (overviewGroups, overviewGroupId) => {
+    if (overviewGroups) return overviewGroups[overviewGroupId];
+  }
+);
+export function useFetchOverviewGroup(overviewGroupId: number) {
+  return useAppSelector((state) => fetchOverviewGroup(state, overviewGroupId));
+}
+
+const fetchOverviewGroupPurchases = createSelector(
   (state: GlobalState) => state.entities.overviewGroups,
   (state: GlobalState, overviewGroupId: number) => overviewGroupId,
   (state: GlobalState) => state.entities.purchases,
@@ -57,3 +74,19 @@ export const fetchOverviewGroupPurchases = createSelector(
     }
   }
 );
+export function useFetchOverviewGroupPurchases(overviewGroupId: number) {
+  return useAppSelector((state) =>
+    fetchOverviewGroupPurchases(state, overviewGroupId)
+  );
+}
+
+const fetchPurchase = createSelector(
+  (state: GlobalState) => state.entities.purchases,
+  (state: GlobalState, purchaseId: number) => purchaseId,
+  (purchases, purchaseId) => {
+    if (purchases) return purchases[purchaseId];
+  }
+);
+export function useFetchPurchase(purchaseId: number) {
+  return useAppSelector((state) => fetchPurchase(state, purchaseId));
+}

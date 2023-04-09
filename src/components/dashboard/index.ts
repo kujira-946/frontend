@@ -1,4 +1,4 @@
 import { DashboardLayout } from "./dashboard-layout";
-import { OverviewDropdown } from "./overview-dropdown";
+import { OverviewGroupDropdown } from "./overview-group-dropdown";
 
-export { DashboardLayout, OverviewDropdown };
+export { DashboardLayout, OverviewGroupDropdown };

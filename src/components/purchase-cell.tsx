@@ -95,14 +95,13 @@ type Props = {
   borderRadius?: keyof typeof Styles.pxAsRem;
   provided?: DraggableProvided;
   purchaseId?: number;
-  index?: number;
   description: string;
   cost: string;
   disableSubmit?: Signal<boolean>;
 
   costUpdate?: (cost: string) => void;
-  update?: (identifier: number, description: string, cost: string) => void;
-  delete?: (identifier: number) => void;
+  update?: (purchaseId: number, description: string, cost: string) => void;
+  delete?: (purchaseId: number) => void;
   onCheckActive?: () => void;
   onCheckInactive?: () => void;
 
@@ -143,10 +142,7 @@ const ExportedComponent = (props: Props) => {
   }
 
   function deletePurchase(): void {
-    if (props.delete) {
-      if (props.purchaseId) props.delete(props.purchaseId);
-      else if (props.index) props.delete(props.index);
-    }
+    if (props.delete && props.purchaseId) props.delete(props.purchaseId);
   }
 
   useEffect(() => {
@@ -158,12 +154,8 @@ const ExportedComponent = (props: Props) => {
   }, [checkboxActive.value, props.onCheckActive, props.onCheckInactive]);
 
   useEffect(() => {
-    if (props.update) {
-      if (props.purchaseId) {
-        props.update(props.purchaseId, description.value, cost.value);
-      } else if (props.index) {
-        props.update(props.index, description.value, cost.value);
-      }
+    if (props.update && props.purchaseId) {
+      props.update(props.purchaseId, description.value, cost.value);
     } else if (props.costUpdate) {
       props.costUpdate(cost.value);
     }
@@ -245,9 +237,7 @@ const ExportedComponent = (props: Props) => {
 
       <Inputs>
         <Globals.InputMini
-          key={`purchase-cell-description-input-${
-            props.purchaseId || props.index
-          }`}
+          key={`purchase-cell-description-input`}
           borderRadius={props.borderRadius}
           placeholder="Description"
           userInput={props.persistInput ? props.description : description.value}
@@ -258,7 +248,7 @@ const ExportedComponent = (props: Props) => {
         />
 
         <Globals.InputMini
-          key={`purchase-cell-cost-input-${props.purchaseId || props.index}`}
+          key={`purchase-cell-cost-input`}
           borderRadius={props.borderRadius}
           placeholder="Cost"
           errorMessage={costError.value}

@@ -60,7 +60,7 @@ export type Purchase = {
   id: number;
   placement: number;
   category?: Category;
-  description?: string;
+  description: string;
   cost?: number;
   overviewGroupId?: number; // belongs to an overview group
   logbookEntryId?: number; // belongs to a logbook entry

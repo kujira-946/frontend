@@ -19,7 +19,7 @@ export const Savings = (props: Props) => {
   const errorMessage = useSignal("");
 
   function calculateIncomeSaved(): string {
-    if (errorMessage.value.length === 0 && Number(props.savings.value)) {
+    if (!errorMessage.value && Number(props.savings.value)) {
       const incomeSaved = props.income * (Number(props.savings.value) / 100);
       const formattedIncomeSaved = Functions.formattedNumber(incomeSaved);
       return `: $${formattedIncomeSaved}`;
