@@ -6,9 +6,12 @@ import * as OverviewGroupsSagas from "@/sagas/overview-groups.saga";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
+import {
+  createPurchaseRequest,
+  deleteAssociatedPurchasesRequest,
+} from "@/sagas/purchases.saga";
 
 import { OverviewGroupDropdown } from "./overview-group-dropdown";
-
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
@@ -36,15 +39,11 @@ export const OverviewGroups = () => {
   const onDragEnd = useCallback(Functions.onDragEnd, []);
 
   const deleteAllPurchases = useCallback((overviewGroupId: number): void => {
-    return Functions.deleteAllAssociatedPurchases(
-      "Overview Group",
-      dispatch,
-      overviewGroupId
-    );
+    dispatch(deleteAssociatedPurchasesRequest({ overviewGroupId }));
   }, []);
 
   const addPurchase = useCallback((overviewGroupId: number): void => {
-    return Functions.addPurchase("Overview Group", dispatch, overviewGroupId);
+    dispatch(createPurchaseRequest({ placement: 0, overviewGroupId }));
   }, []);
 
   useEffect(() => {

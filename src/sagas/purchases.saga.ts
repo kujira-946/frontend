@@ -164,7 +164,6 @@ export function deleteAssociatedPurchasesRequest(deleteData: {
 
 function* fetchPurchases() {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const { data } = yield Saga.call(axios.get, ApiRoutes.PURCHASES);
     const normalizedData = normalize(data.data, [purchasesSchema]);
     const { purchases } = normalizedData.entities;
@@ -207,7 +206,6 @@ function* fetchOverviewGroupPurchases(action: OverviewGroupPurchasesAction) {
 
 function* fetchLogbookEntryPurchases(action: LogbookEntryPurchasesAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const { logbookEntryId } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/fetch-logbook-entry-purchases`;
     const { data } = yield Saga.call(axios.post, endpoint, { logbookEntryId });
@@ -237,7 +235,6 @@ function* fetchLogbookEntryPurchases(action: LogbookEntryPurchasesAction) {
 
 function* bulkFetchPurchases(action: PurchaseIdsAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const { purchaseIds } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/bulk-fetch`;
     const { data } = yield Saga.call(axios.post, endpoint, { purchaseIds });
@@ -255,7 +252,6 @@ function* bulkFetchPurchases(action: PurchaseIdsAction) {
 
 function* fetchPurchase(action: PurchaseIdAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const { purchaseId } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/${purchaseId}`;
     const { data } = yield Saga.call(axios.get, endpoint);
@@ -273,7 +269,6 @@ function* fetchPurchase(action: PurchaseIdAction) {
 
 function* createPurchase(action: PurchaseCreateAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const { createData } = action.payload;
     const { data } = yield Saga.call(
       axios.post,
@@ -309,7 +304,6 @@ function* createPurchase(action: PurchaseCreateAction) {
 
 function* bulkCreatePurchases(action: PurchaseBulkCreateAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const { purchasesData, relation } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/bulk-create-purchases`;
     const { data } = yield Saga.call(axios.post, endpoint, { purchasesData });
@@ -355,7 +349,6 @@ function* bulkCreatePurchases(action: PurchaseBulkCreateAction) {
 
 function* updatePurchase(action: PurchaseUpdateAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const { purchaseId, updateData } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/${purchaseId}`;
     const { data } = yield Saga.call(axios.patch, endpoint, updateData);
@@ -371,7 +364,6 @@ function* updatePurchase(action: PurchaseUpdateAction) {
 
 function* deletePurchase(action: PurchaseIdAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const { purchaseId } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/${purchaseId}`;
     yield Saga.call(axios.delete, endpoint);
@@ -385,7 +377,6 @@ function* deletePurchase(action: PurchaseIdAction) {
 
 function* batchDeletePurchases(action: PurchaseBatchDeleteAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const { purchaseIds } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/batch-delete`;
     yield Saga.call(axios.post, endpoint, { purchaseIds });
@@ -399,7 +390,6 @@ function* batchDeletePurchases(action: PurchaseBatchDeleteAction) {
 
 function* deleteAssociatedPurchases(action: DeleteAllAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingPurchases(true));
     const { deleteData } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/delete-associated-purchases`;
     yield Saga.call(axios.post, endpoint, deleteData);

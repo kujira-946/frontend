@@ -107,7 +107,6 @@ export function deleteOverviewGroupRequest(
 
 function* fetchOverviewGroups() {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(true));
     const { data } = yield Saga.call(axios.get, ApiRoutes.OVERVIEW_GROUPS);
     const normalizedData = normalize(data.data, [overviewGroupsSchema]);
     const { overviewGroups } = normalizedData.entities;
@@ -125,7 +124,6 @@ function* fetchOverviewGroups() {
 
 function* fetchOverviewOverviewGroups(action: OverviewOverviewGroupsAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(true));
     const { overviewId } = action.payload;
     const endpoint = ApiRoutes.OVERVIEW_GROUPS + `/fetch-overview-groups`;
     const { data } = yield Saga.call(axios.post, endpoint, { overviewId });
@@ -157,7 +155,6 @@ function* fetchOverviewOverviewGroups(action: OverviewOverviewGroupsAction) {
 
 function* bulkFetchOverviewGroups(action: OverviewGroupIdsAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(true));
     const { overviewGroupIds } = action.payload;
     const endpoint = ApiRoutes.OVERVIEW_GROUPS + `/bulk-fetch`;
     const { data } = yield Saga.call(axios.post, endpoint, overviewGroupIds);
@@ -177,7 +174,6 @@ function* bulkFetchOverviewGroups(action: OverviewGroupIdsAction) {
 
 function* fetchOverviewGroup(action: OverviewGroupIdAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(true));
     const { overviewGroupId } = action.payload;
     const endpoint = ApiRoutes.OVERVIEW_GROUPS + `/${overviewGroupId}`;
     const { data } = yield Saga.call(axios.get, endpoint);
@@ -197,7 +193,6 @@ function* fetchOverviewGroup(action: OverviewGroupIdAction) {
 
 function* createOverviewGroup(action: OverviewGroupCreateAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(true));
     const { createData } = action.payload;
     const { data } = yield Saga.call(
       axios.post,
@@ -244,7 +239,6 @@ function* updateOverviewGroup(action: OverviewGroupUpdateAction) {
 
 function* deleteOverviewGroup(action: OverviewGroupIdAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(true));
     const { overviewGroupId } = action.payload;
     const endpoint = ApiRoutes.OVERVIEW_GROUPS + `/${overviewGroupId}`;
     yield Saga.call(axios.delete, endpoint);
