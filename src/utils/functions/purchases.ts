@@ -24,30 +24,3 @@ export function onDragEnd(
     // );
   }
 }
-
-type PurchaseAssociation = "Overview Group" | "Logbook Entry";
-
-export function deleteAllAssociatedPurchases(
-  type: PurchaseAssociation,
-  dispatch: Dispatch<AnyAction>,
-  id: number
-): void {
-  if (type === "Overview Group") {
-    dispatch(deleteAssociatedPurchasesRequest({ overviewGroupId: id }));
-    dispatch(updateOverviewGroupRequest(id, { totalCost: 0 }));
-  } else {
-    dispatch(deleteAssociatedPurchasesRequest({ logbookEntryId: id }));
-  }
-}
-
-export function addPurchase(
-  type: PurchaseAssociation,
-  dispatch: Dispatch<AnyAction>,
-  id: number
-): void {
-  if (type === "Overview Group") {
-    dispatch(createPurchaseRequest({ placement: 0, overviewGroupId: id }));
-  } else {
-    dispatch(createPurchaseRequest({ placement: 0, logbookEntryId: id }));
-  }
-}

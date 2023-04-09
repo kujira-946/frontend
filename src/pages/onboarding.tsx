@@ -10,6 +10,10 @@ import * as OverviewGroupsSagas from "@/sagas/overview-groups.saga";
 import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
 import { updateUserRequest } from "@/sagas/users.saga";
+import {
+  createPurchaseRequest,
+  deleteAssociatedPurchasesRequest,
+} from "@/sagas/purchases.saga";
 
 const Onboarding = () => {
   console.log("Onboarding Page Rendered");
@@ -61,15 +65,11 @@ const Onboarding = () => {
   const onDragEnd = useCallback(Functions.onDragEnd, []);
 
   const deleteAllPurchases = useCallback((overviewGroupId: number): void => {
-    return Functions.deleteAllAssociatedPurchases(
-      "Overview Group",
-      dispatch,
-      overviewGroupId
-    );
+    dispatch(deleteAssociatedPurchasesRequest({ overviewGroupId }));
   }, []);
 
   const addPurchase = useCallback((overviewGroupId: number): void => {
-    return Functions.addPurchase("Overview Group", dispatch, overviewGroupId);
+    dispatch(createPurchaseRequest({ placement: 0, overviewGroupId }));
   }, []);
 
   Functions.useDetectAuthorizedUser(() => {

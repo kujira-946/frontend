@@ -226,7 +226,6 @@ function* createOverviewGroup(action: OverviewGroupCreateAction) {
 
 function* updateOverviewGroup(action: OverviewGroupUpdateAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingOverviewGroups(true));
     const { overviewGroupId, updateData } = action.payload;
     const endpoint = ApiRoutes.OVERVIEW_GROUPS + `/${overviewGroupId}`;
     const { data } = yield Saga.call(axios.patch, endpoint, updateData);
