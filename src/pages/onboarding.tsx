@@ -133,8 +133,6 @@ const Onboarding = () => {
 
   if (!currentUser) {
     return null;
-  } else if (loadingUsers) {
-    return <Globals.Loading text="Sit tight as I get you set up!" />;
   } else {
     return (
       <>

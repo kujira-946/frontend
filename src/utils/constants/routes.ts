@@ -1,6 +1,5 @@
 export enum ApiRoutes {
   AUTH = "/api/v1/auth",
-  ONBOARDING = "/api/v1/onboarding",
   USERS = "/api/v1/users",
   PURCHASES = "/api/v1/purchases",
   OVERVIEWS = "/api/v1/overviews",

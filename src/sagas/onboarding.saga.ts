@@ -4,8 +4,8 @@ import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { ClientRoutes } from "@/utils/constants/routes";
-import { updateOverviewRequest } from "./overviews.saga";
 import { updateUserRequest } from "./users.saga";
+import { updateOverviewRequest } from "./overviews.saga";
 
 // ========================================================================================= //
 // [ ACTIONS ] ============================================================================= //
@@ -41,16 +41,13 @@ export function onboardNewUserRequest(
 function* onboardNewUser(action: OnboardNewUserActions) {
   try {
     const { overviewId, income, savings, currentUserId } = action.payload;
-
     yield Saga.put(
       updateOverviewRequest(overviewId, {
         income,
         savings,
       })
     );
-
     yield Saga.put(updateUserRequest(currentUserId, { onboarded: true }));
-
     yield Saga.put(
       Redux.uiActions.setNotification({
         title: "Onboarding Complete!",

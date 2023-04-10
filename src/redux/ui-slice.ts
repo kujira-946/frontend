@@ -8,7 +8,6 @@ export type UIState = {
   verificationCodeSent: boolean;
   loginForThirtyDays: boolean;
 
-  loadingOnboarding: boolean;
   loadingUsers: boolean;
   loadingOverviews: boolean;
   loadingOverviewGroups: boolean;
@@ -22,7 +21,6 @@ const initialState: UIState = {
   verificationCodeSent: false,
   loginForThirtyDays: false,
 
-  loadingOnboarding: false,
   loadingUsers: false,
   loadingOverviews: false,
   loadingOverviewGroups: false,
@@ -55,9 +53,6 @@ const uiSlice = createSlice({
     // [ LOADING STATES ] ====================================================================== //
     // ========================================================================================= //
 
-    setLoadingOnboarding: (state: UIState, action: PayloadAction<boolean>) => {
-      state.loadingOnboarding = action.payload;
-    },
     setLoadingUsers: (state: UIState, action: PayloadAction<boolean>) => {
       state.loadingUsers = action.payload;
     },
