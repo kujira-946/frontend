@@ -29,7 +29,7 @@ export function useFetchCurrentUserOverview() {
   return useAppSelector(fetchCurrentUserOverview);
 }
 
-const fetchOverviewGroups = createSelector(
+const fetchCurrentUserOverviewGroups = createSelector(
   (state: GlobalState) => state.entities.currentUser,
   (state: GlobalState) => state.entities.overviews,
   (state: GlobalState) => state.entities.overviewGroups,
@@ -44,8 +44,8 @@ const fetchOverviewGroups = createSelector(
     }
   }
 );
-export function useFetchOverviewGroups() {
-  return useAppSelector(fetchOverviewGroups);
+export function useFetchCurrentUserOverviewGroups() {
+  return useAppSelector(fetchCurrentUserOverviewGroups);
 }
 
 const fetchOverviewGroup = createSelector(

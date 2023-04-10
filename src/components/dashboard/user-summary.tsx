@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import { useCallback, useEffect, useMemo } from "react";
-import { effect, useSignal } from "@preact/signals-react";
+import { useCallback, useEffect } from "react";
+import { useSignal } from "@preact/signals-react";
 
+import * as Redux from "@/redux";
 import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
@@ -52,36 +53,17 @@ type Props = {
 };
 
 export const UserSummary = (props: Props) => {
+  console.log("User Summary Rendered");
+
   const dispatch = Functions.useAppDispatch();
 
   const { loadingOverviews } = Functions.useUiSlice();
   const { currentUser, overviews } = Functions.useEntitiesSlice();
   const overview = Functions.useFetchCurrentUserOverview();
-  const overviewGroups = Functions.useFetchOverviewGroups();
+  const overviewGroups = Functions.useFetchCurrentUserOverviewGroups();
 
-  const recurringTotalCost = useSignal(0);
-  const error = useSignal("");
-
-  const totalSpent = useMemo(() => {
-    if (overview) {
-      return recurringTotalCost.value.toString();
-    } else {
-      return "0";
-    }
-  }, [overview]);
-
-  const remainingBudget = useMemo(() => {
-    if (overview) {
-      return Functions.roundNumber(
-        overview.income -
-          overview.income * (overview.savings / 100) -
-          recurringTotalCost.value,
-        2
-      );
-    } else {
-      return "0";
-    }
-  }, [overview]);
+  const totalSpent = useSignal(0);
+  const remainingBudget = useSignal(0);
 
   const updateIncome = useCallback(
     Functions.debounce((cost: string) => {
@@ -111,26 +93,35 @@ export const UserSummary = (props: Props) => {
 
   useEffect(() => {
     if (currentUser && !overviews) {
+      dispatch(Redux.uiActions.setLoadingOverviews(true));
       dispatch(fetchUserOverviewsRequest(currentUser.id));
     }
   }, [currentUser, overviews]);
 
   useEffect(() => {
-    if (
-      overviewGroups &&
-      Object.keys(overviewGroups).length > 0 &&
-      recurringTotalCost.value === 0
-    ) {
-      let overviewGroupsTotalSpent = 0;
-      for (const overviewGroup of overviewGroups) {
-        if (overviewGroup.name !== "Incoming") {
-          overviewGroupsTotalSpent += overviewGroup.totalCost;
+    if (overviewGroups) {
+      const userHasOverviewGroups = Object.keys(overviewGroups).length > 0;
+      if (userHasOverviewGroups) {
+        let overviewGroupsTotalSpent = 0;
+        for (const overviewGroup of overviewGroups) {
+          if (overviewGroup.name === "Incoming") {
+            continue;
+          } else {
+            overviewGroupsTotalSpent += overviewGroup.totalCost;
+          }
         }
-        break;
+        totalSpent.value = overviewGroupsTotalSpent;
       }
-      recurringTotalCost.value = overviewGroupsTotalSpent;
     }
-  }, [overviewGroups, recurringTotalCost.value]);
+  }, [overviewGroups]);
+
+  useEffect(() => {
+    if (overview) {
+      const savedIncome = overview.income * (overview.savings / 100);
+      const remainingIncome = overview.income - savedIncome - totalSpent.value;
+      remainingBudget.value = remainingIncome;
+    }
+  }, [overview, totalSpent.value]);
 
   return (
     <Container>
@@ -179,7 +170,7 @@ export const UserSummary = (props: Props) => {
           <Globals.PurchaseCell
             key={`dashboard-overview-header-purchase-cell-total-spent`}
             description="Total Spent"
-            cost={totalSpent}
+            cost={Functions.roundNumber(totalSpent.value, 2)}
             costForwardText="$"
             importance="Secondary"
             persistInput
@@ -194,7 +185,7 @@ export const UserSummary = (props: Props) => {
           <Globals.PurchaseCell
             key={`dashboard-overview-header-purchase-cell-remaining`}
             description="Remaining"
-            cost={remainingBudget}
+            cost={Functions.roundNumber(remainingBudget.value, 2)}
             costForwardText="$"
             importance="Primary"
             persistInput

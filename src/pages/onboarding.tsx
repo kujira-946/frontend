@@ -23,7 +23,7 @@ const Onboarding = () => {
   const { currentUser } = Functions.useEntitiesSlice();
   const { loadingUsers } = Functions.useUiSlice();
   const overview = Functions.useFetchCurrentUserOverview();
-  const overviewGroups = Functions.useFetchOverviewGroups();
+  const overviewGroups = Functions.useFetchCurrentUserOverviewGroups();
 
   const currentPage = useSignal(1);
   const supportingText = useSignal("");

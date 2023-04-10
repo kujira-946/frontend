@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useCallback, useEffect } from "react";
 
+import * as Redux from "@/redux";
 import * as Globals from "@/components";
 import * as OverviewGroupsSagas from "@/sagas/overview-groups.saga";
 import * as Functions from "@/utils/functions";
@@ -28,13 +29,11 @@ const Container = styled.section`
 // ========================================================================================= //
 
 export const OverviewGroups = () => {
-  // console.log("Overview Groups Rendered");
-
   const dispatch = Functions.useAppDispatch();
 
   const { loadingOverviewGroups } = Functions.useUiSlice();
   const overview = Functions.useFetchCurrentUserOverview();
-  const overviewGroups = Functions.useFetchOverviewGroups();
+  const overviewGroups = Functions.useFetchCurrentUserOverviewGroups();
 
   const onDragEnd = useCallback(Functions.onDragEnd, []);
 
@@ -48,6 +47,7 @@ export const OverviewGroups = () => {
 
   useEffect(() => {
     if (overview && !overviewGroups) {
+      dispatch(Redux.uiActions.setLoadingOverviewGroups(true));
       dispatch(
         OverviewGroupsSagas.fetchOverviewOverviewGroupsRequest(overview.id)
       );

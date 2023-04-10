@@ -133,8 +133,6 @@ type Props = {
 };
 
 const ExportedComponent = (props: Props) => {
-  // console.log("Overview Dropdown Rendered");
-
   const dispatch = Functions.useAppDispatch();
 
   const { ui } = Functions.useSignalsStore();
