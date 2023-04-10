@@ -17,8 +17,6 @@ type Props = {
 };
 
 export const Purchases = (props: Props) => {
-  console.log("Purchases Page Rendered");
-
   const { loadingOverviewGroups } = Functions.useUiSlice();
 
   if (loadingOverviewGroups) {

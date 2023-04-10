@@ -17,8 +17,6 @@ import {
 } from "@/sagas/purchases.saga";
 
 const Onboarding = () => {
-  console.log("Onboarding Page Rendered");
-
   const dispatch = Functions.useAppDispatch();
   const router = useRouter();
 
