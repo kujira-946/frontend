@@ -200,6 +200,7 @@ const ExportedComponent = (props: Props) => {
 
       {!props.hideCheck && (
         <CheckButton
+          tabIndex={-1}
           onClick={() => {
             checkboxActive.value = !checkboxActive.value;
           }}
@@ -226,6 +227,7 @@ const ExportedComponent = (props: Props) => {
             return (
               <CategoryButton
                 key={`purchase-cell-${category}`}
+                tabIndex={-1}
                 category={category}
               >
                 {category}
@@ -263,7 +265,7 @@ const ExportedComponent = (props: Props) => {
       </Inputs>
 
       {!props.hideClose && (
-        <DeleteButton type="button" onClick={deletePurchase}>
+        <DeleteButton type="button" tabIndex={-1} onClick={deletePurchase}>
           <Icons.Close
             height={12}
             fill={Styles.background[ui.theme.value].six}
