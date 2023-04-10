@@ -98,7 +98,6 @@ export function deleteLogbookRequest(logbookId: number): LogbookIdAction {
 
 function* fetchLogbooks() {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const { data } = yield Saga.call(axios.get, ApiRoutes.LOGBOOKS);
     const normalizedData = normalize(data.data, [logbooksSchema]);
     const { logbooks } = normalizedData.entities;
@@ -114,7 +113,6 @@ function* fetchLogbooks() {
 
 function* fetchUserLogbooks(action: UserLogbooksAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const { ownerId, forCurrentUser } = action.payload;
     const endpoint = ApiRoutes.LOGBOOKS + `/fetch-user-logbooks`;
     const { data } = yield Saga.call(axios.post, endpoint, { ownerId });
@@ -158,7 +156,6 @@ function* fetchUserLogbooks(action: UserLogbooksAction) {
 
 function* fetchLogbook(action: LogbookIdAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const { logbookId } = action.payload;
     const endpoint = ApiRoutes.LOGBOOKS + `/${logbookId}`;
     const { data } = yield Saga.call(axios.get, endpoint);
@@ -176,7 +173,6 @@ function* fetchLogbook(action: LogbookIdAction) {
 
 function* createLogbook(action: LogbookCreateAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const { createData, forCurrentUser } = action.payload;
     const { data } = yield Saga.call(
       axios.post,
@@ -212,7 +208,6 @@ function* createLogbook(action: LogbookCreateAction) {
 
 function* updateLogbook(action: LogbookUpdateAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const { logbookId, updateData } = action.payload;
     const endpoint = ApiRoutes.LOGBOOKS + `/${logbookId}`;
     const { data } = yield Saga.call(axios.patch, endpoint, updateData);
@@ -228,7 +223,6 @@ function* updateLogbook(action: LogbookUpdateAction) {
 
 function* deleteLogbook(action: LogbookIdAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingLogbooks(true));
     const { logbookId } = action.payload;
     const endpoint = ApiRoutes.LOGBOOKS + `/${logbookId}`;
     yield Saga.call(axios.delete, endpoint);

@@ -80,7 +80,6 @@ export function deleteUserRequest(
 
 function* fetchUsers() {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingUsers(true));
     const { data } = yield Saga.call(axios.get, ApiRoutes.USERS);
     const normalizedData = normalize(data.data, [usersSchema]);
     const { users } = normalizedData.entities;
@@ -94,7 +93,6 @@ function* fetchUsers() {
 
 function* fetchUser(action: UserIdAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingUsers(true));
     const { userId, forCurrentUser } = action.payload;
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     const { data } = yield Saga.call(axios.get, endpoint);
@@ -118,7 +116,6 @@ function* fetchUser(action: UserIdAction) {
 
 function* updateUser(action: UserUpdateAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingUsers(true));
     const { userId, updateData, forCurrentUser } = action.payload;
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     const { data } = yield Saga.call(axios.patch, endpoint, updateData);
@@ -139,7 +136,6 @@ function* updateUser(action: UserUpdateAction) {
 
 function* deleteUser(action: UserIdAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingUsers(true));
     const { userId, forCurrentUser } = action.payload;
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     yield Saga.call(axios.delete, endpoint);

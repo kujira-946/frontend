@@ -33,7 +33,6 @@ export function onboardNewUserRequest(
 
 function* onboardNewUser(action: OnboardNewUserActions) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingOnboarding(true));
     const { createData } = action.payload;
     const { data } = yield Saga.call(
       axios.post,

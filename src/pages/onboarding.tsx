@@ -81,13 +81,13 @@ const Onboarding = () => {
 
   useEffect(() => {
     if (currentUser && !overview) {
-      dispatch(Redux.uiActions.setLoadingOverviews(true));
       dispatch(OverviewsSagas.fetchUserOverviewsRequest(currentUser.id));
     }
   }, [currentUser, overview]);
 
   useEffect(() => {
     if (overview && !overviewGroups) {
+      dispatch(Redux.uiActions.setLoadingOverviewGroups(true));
       dispatch(
         OverviewGroupsSagas.fetchOverviewOverviewGroupsRequest(overview.id)
       );

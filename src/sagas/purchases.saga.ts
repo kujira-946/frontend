@@ -7,6 +7,7 @@ import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
 import { updateOverviewGroupRequest } from "./overview-groups.saga";
+import { GlobalState } from "@/store";
 
 // ========================================================================================= //
 // [ SCHEMAS ] ============================================================================= //
@@ -73,7 +74,6 @@ export function bulkFetchPurchasesRequest(
 }
 
 type PurchaseIdAction = Types.SagaAction<{ purchaseId: number }>;
-
 export function fetchPurchaseRequest(purchaseId: number): PurchaseIdAction {
   return {
     type: PurchasesActionTypes.FETCH_PURCHASE,
@@ -125,10 +125,24 @@ export function updatePurchaseRequest(
   };
 }
 
-export function deletePurchaseRequest(purchaseId: number): PurchaseIdAction {
+type AssociationIds = {
+  overviewGroupId?: number;
+  logbookEntryId?: number;
+};
+
+type DeleteAction = Types.SagaAction<{
+  deleteData: {
+    purchaseId: number;
+  } & AssociationIds;
+}>;
+export function deletePurchaseRequest(deleteData: {
+  purchaseId: number;
+  overviewGroupId?: number;
+  logbookEntryId?: number;
+}): DeleteAction {
   return {
     type: PurchasesActionTypes.DELETE_PURCHASE,
-    payload: { purchaseId },
+    payload: { deleteData },
   };
 }
 
@@ -142,12 +156,7 @@ export function batchDeletePurchasesRequest(
   };
 }
 
-type DeleteAllAction = Types.SagaAction<{
-  deleteData: {
-    overviewGroupId?: number;
-    logbookEntryId?: number;
-  };
-}>;
+type DeleteAllAction = Types.SagaAction<{ deleteData: AssociationIds }>;
 export function deleteAssociatedPurchasesRequest(deleteData: {
   overviewGroupId?: number;
   logbookEntryId?: number;
@@ -362,12 +371,16 @@ function* updatePurchase(action: PurchaseUpdateAction) {
   }
 }
 
-function* deletePurchase(action: PurchaseIdAction) {
+function* deletePurchase(action: DeleteAction) {
   try {
-    const { purchaseId } = action.payload;
-    const endpoint = ApiRoutes.PURCHASES + `/${purchaseId}`;
+    const { deleteData } = action.payload;
+    const endpoint = ApiRoutes.PURCHASES + `/${deleteData.purchaseId}`;
     yield Saga.call(axios.delete, endpoint);
-    yield Saga.put(Redux.entitiesActions.deletePurchase(purchaseId));
+    yield Saga.put(Redux.entitiesActions.deletePurchase(deleteData.purchaseId));
+    if (deleteData.overviewGroupId) {
+      yield Saga.put();
+    } else if (deleteData.logbookEntryId) {
+    }
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));

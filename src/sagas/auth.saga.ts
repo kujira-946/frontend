@@ -102,7 +102,6 @@ function* register(action: RegisterAction) {
 
 function* verifyRegistration(action: VerifyRegistrationAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingUsers(true));
     const { email, verificationCode } = action.payload;
     const endpoint = ApiRoutes.AUTH + `/register/verify`;
     const { data } = yield Saga.call(axios.patch, endpoint, {
@@ -154,7 +153,6 @@ function* login(action: LoginAction) {
 
 function* verifyLogin(action: VerifyLoginAction) {
   try {
-    yield Saga.put(Redux.uiActions.setLoadingUsers(true));
     const { email, verificationCode, thirtyDays } = action.payload;
     const endpoint = ApiRoutes.AUTH + `/login/verify`;
     const { data } = yield Saga.call(axios.patch, endpoint, {
