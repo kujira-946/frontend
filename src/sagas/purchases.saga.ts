@@ -7,7 +7,6 @@ import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
 import { updateOverviewGroupRequest } from "./overview-groups.saga";
-import { GlobalState } from "@/store";
 
 // ========================================================================================= //
 // [ SCHEMAS ] ============================================================================= //
