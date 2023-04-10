@@ -60,6 +60,7 @@ export const CheckboxConfirmation = (props: Props) => {
           <Icons.CheckboxActive
             height={20}
             fill={Styles.secondary[ui.theme.value].main}
+            addHover
           />
         </Icon>
       ) : (
@@ -67,6 +68,7 @@ export const CheckboxConfirmation = (props: Props) => {
           <Icons.CheckboxInactive
             height={20}
             fill={Styles.text[ui.theme.value]}
+            addHover
           />
         </Icon>
       )}
