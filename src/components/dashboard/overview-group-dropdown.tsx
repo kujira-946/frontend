@@ -221,6 +221,8 @@ const ExportedComponent = (props: Props) => {
               },
             })
           );
+        } else {
+          dispatch(deletePurchaseRequest(purchaseId));
         }
       }
     },
