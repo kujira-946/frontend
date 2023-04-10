@@ -117,9 +117,6 @@ const DynamicOverviewDeleteConfirmation = dynamic(() =>
 
 type Props = {
   borderRadius?: Types.PxAsRem;
-  // title: string;
-  // totalCost: number;
-  // purchaseCount: number;
   overviewGroupId: number;
 
   onDragEnd: (

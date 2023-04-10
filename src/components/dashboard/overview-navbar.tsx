@@ -22,6 +22,7 @@ const Container = styled.nav`
   justify-content: space-between;
   align-items: center;
   padding: ${Styles.pxAsRem.sixteen};
+  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
   border-bottom: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
 `;
 

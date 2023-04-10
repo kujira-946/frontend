@@ -64,18 +64,28 @@ export const OverviewGroups = () => {
       ) : overviewGroups ? (
         <>
           {overviewGroups.map((overviewGroup: Types.OverviewGroup) => {
-            return (
-              <OverviewGroupDropdown
-                key={`dashboard-overviews-overview-group-dropdown-${overviewGroup.id}`}
-                // title={overviewGroup.name}
-                // totalCost={overviewGroup.totalCost}
-                // purchaseCount={overviewGroup.purchaseIds?.length || 0}
-                overviewGroupId={overviewGroup.id}
-                onDragEnd={onDragEnd}
-                deleteAllPurchases={deleteAllPurchases}
-                addPurchase={addPurchase}
-              />
-            );
+            if (overviewGroup.name === "Recurring") {
+              return (
+                <OverviewGroupDropdown
+                  key={`dashboard-overviews-overview-group-dropdown-${overviewGroup.id}`}
+                  overviewGroupId={overviewGroup.id}
+                  onDragEnd={onDragEnd}
+                  deleteAllPurchases={deleteAllPurchases}
+                  addPurchase={addPurchase}
+                  initiallyOpen
+                />
+              );
+            } else {
+              return (
+                <OverviewGroupDropdown
+                  key={`dashboard-overviews-overview-group-dropdown-${overviewGroup.id}`}
+                  overviewGroupId={overviewGroup.id}
+                  onDragEnd={onDragEnd}
+                  deleteAllPurchases={deleteAllPurchases}
+                  addPurchase={addPurchase}
+                />
+              );
+            }
           })}
         </>
       ) : null}
