@@ -1,6 +1,6 @@
-import { ChangeEvent, FormEvent, KeyboardEvent, MouseEvent } from "react";
+import * as React from "react";
 
-export type Input = ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
-export type Submit = FormEvent<HTMLFormElement>;
-export type KeyPress = KeyboardEvent<HTMLTextAreaElement>;
-export type OnClick = MouseEvent<HTMLElement>;
+export type Input = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
+export type Submit = React.FormEvent<HTMLFormElement>;
+export type KeyPress = React.KeyboardEvent<HTMLTextAreaElement>;
+export type OnClick = React.MouseEvent<HTMLElement>;

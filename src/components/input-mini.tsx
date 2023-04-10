@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 import TextareaAutosize from "react-textarea-autosize";
-import { memo, useRef } from "react";
+import { FocusEvent, memo, useRef } from "react";
 import { useSignal } from "@preact/signals-react";
 
 import * as Styles from "@/utils/styles";
@@ -131,11 +131,11 @@ type Props = {
 };
 
 const ExportedComponent = (props: Props) => {
-  const inputFieldRef = useRef<any>(null);
+  const textareaRef = useRef<any>(null);
   const focused = useSignal(false);
 
-  function focusInputField(): void {
-    inputFieldRef.current && inputFieldRef.current.focus();
+  function focusTextarea(): void {
+    textareaRef.current && textareaRef.current.focus();
     focused.value = true;
   }
 
@@ -144,7 +144,8 @@ const ExportedComponent = (props: Props) => {
     if (props.onBlur) props.onBlur();
   }
 
-  function onFocus(): void {
+  function onFocus(event: FocusEvent<HTMLTextAreaElement>): void {
+    event.currentTarget.select();
     focused.value = true;
     if (props.onFocus) props.onFocus();
   }
@@ -159,7 +160,7 @@ const ExportedComponent = (props: Props) => {
       hasValue={props.userInput !== ""}
       frozen={props.frozen}
       error={!!props.errorMessage}
-      onClick={focusInputField}
+      onClick={focusTextarea}
       style={{
         borderRadius: props.borderRadius
           ? Styles.pxAsRem[props.borderRadius]
@@ -179,7 +180,7 @@ const ExportedComponent = (props: Props) => {
           placeholder={props.placeholder}
           value={props.userInput}
           tabIndex={props.frozen ? -1 : 0}
-          ref={inputFieldRef}
+          ref={textareaRef}
           onChange={props.setUserInput}
           onBlur={onBlur}
           onFocus={onFocus}
