@@ -111,38 +111,38 @@ export function bulkCreatePurchasesRequest(
   };
 }
 
+type Association = {
+  overviewGroup?: { id: number; totalCost: number };
+  logbookEntry?: { id: number };
+};
+
 type PurchaseUpdateAction = Types.SagaAction<{
   purchaseId: number;
   updateData: Types.PurchaseUpdateData;
+  association?: Association;
 }>;
 export function updatePurchaseRequest(
   purchaseId: number,
-  updateData: Types.PurchaseUpdateData
+  updateData: Types.PurchaseUpdateData,
+  association?: Association
 ): PurchaseUpdateAction {
   return {
     type: PurchasesActionTypes.UPDATE_PURCHASE,
-    payload: { purchaseId, updateData },
+    payload: { purchaseId, updateData, association },
   };
 }
 
-type AssociationIds = {
-  overviewGroupId?: number;
-  logbookEntryId?: number;
-};
-
-type DeleteAction = Types.SagaAction<{
-  deleteData: {
-    purchaseId: number;
-  } & AssociationIds;
-}>;
-export function deletePurchaseRequest(deleteData: {
+type PurchaseDeleteAction = Types.SagaAction<{
   purchaseId: number;
-  overviewGroupId?: number;
-  logbookEntryId?: number;
-}): DeleteAction {
+  association?: Association;
+}>;
+export function deletePurchaseRequest(
+  purchaseId: number,
+  association?: Association
+): PurchaseDeleteAction {
   return {
     type: PurchasesActionTypes.DELETE_PURCHASE,
-    payload: { deleteData },
+    payload: { purchaseId, association },
   };
 }
 
@@ -156,14 +156,16 @@ export function batchDeletePurchasesRequest(
   };
 }
 
-type DeleteAllAction = Types.SagaAction<{ deleteData: AssociationIds }>;
-export function deleteAssociatedPurchasesRequest(deleteData: {
+type PurchaseAssociationDeleteAction = Types.SagaAction<{
+  association: { overviewGroupId?: number; logbookEntryId?: number };
+}>;
+export function deleteAssociatedPurchasesRequest(association: {
   overviewGroupId?: number;
   logbookEntryId?: number;
-}): DeleteAllAction {
+}): PurchaseAssociationDeleteAction {
   return {
     type: PurchasesActionTypes.DELETE_ASSOCIATED_PURCHASES,
-    payload: { deleteData },
+    payload: { association },
   };
 }
 
@@ -358,12 +360,17 @@ function* bulkCreatePurchases(action: PurchaseBulkCreateAction) {
 
 function* updatePurchase(action: PurchaseUpdateAction) {
   try {
-    const { purchaseId, updateData } = action.payload;
+    const { purchaseId, updateData, association } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/${purchaseId}`;
     const { data } = yield Saga.call(axios.patch, endpoint, updateData);
     yield Saga.put(
       Redux.entitiesActions.updatePurchase({ purchaseId, purchase: data.data })
     );
+    if (association?.overviewGroup) {
+      const { id, totalCost } = association.overviewGroup;
+      yield Saga.put(updateOverviewGroupRequest(id, { totalCost }));
+    } else if (association?.logbookEntry) {
+    }
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
@@ -371,15 +378,16 @@ function* updatePurchase(action: PurchaseUpdateAction) {
   }
 }
 
-function* deletePurchase(action: DeleteAction) {
+function* deletePurchase(action: PurchaseDeleteAction) {
   try {
-    const { deleteData } = action.payload;
-    const endpoint = ApiRoutes.PURCHASES + `/${deleteData.purchaseId}`;
+    const { purchaseId, association } = action.payload;
+    const endpoint = ApiRoutes.PURCHASES + `/${purchaseId}`;
     yield Saga.call(axios.delete, endpoint);
-    yield Saga.put(Redux.entitiesActions.deletePurchase(deleteData.purchaseId));
-    if (deleteData.overviewGroupId) {
-      yield Saga.put();
-    } else if (deleteData.logbookEntryId) {
+    yield Saga.put(Redux.entitiesActions.deletePurchase(purchaseId));
+    if (association?.overviewGroup) {
+      const { id, totalCost } = association.overviewGroup;
+      yield Saga.put(updateOverviewGroupRequest(id, { totalCost }));
+    } else if (association?.logbookEntry) {
     }
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
@@ -401,18 +409,22 @@ function* batchDeletePurchases(action: PurchaseBatchDeleteAction) {
   }
 }
 
-function* deleteAssociatedPurchases(action: DeleteAllAction) {
+function* deleteAssociatedPurchases(action: PurchaseAssociationDeleteAction) {
   try {
-    const { deleteData } = action.payload;
+    const { association } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/delete-associated-purchases`;
-    yield Saga.call(axios.post, endpoint, deleteData);
+    yield Saga.call(axios.post, endpoint, association);
     // yield Saga.put(Redux.entitiesActions.setPurchases(null));
-    yield Saga.put(Redux.entitiesActions.deleteAssociatedPurchases(deleteData));
-    if (deleteData.overviewGroupId) {
+    yield Saga.put(
+      Redux.entitiesActions.deleteAssociatedPurchases(association)
+    );
+    if (association.overviewGroupId) {
       yield Saga.put(
-        updateOverviewGroupRequest(deleteData.overviewGroupId, { totalCost: 0 })
+        updateOverviewGroupRequest(association.overviewGroupId, {
+          totalCost: 0,
+        })
       );
-    } else if (deleteData.logbookEntryId) {
+    } else if (association.logbookEntryId) {
     }
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {

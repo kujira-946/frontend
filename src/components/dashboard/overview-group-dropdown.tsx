@@ -149,76 +149,82 @@ const ExportedComponent = (props: Props) => {
   const loadingPurchases = useSignal(false);
   const deleteConfirmationOpen = useSignal(false);
 
-  function updateTotalCostAfterPurchaseUpdate(
-    previousPurchaseCost: number,
-    currentPurchaseCost: number
-  ): void {
-    if (overviewGroup) {
-      let updatedTotalCost =
-        overviewGroup.totalCost - previousPurchaseCost + currentPurchaseCost;
-      if (updatedTotalCost < 0) updatedTotalCost = 0;
-      const roundedUpdatedTotalCost = Functions.roundNumber(
-        updatedTotalCost,
-        2
-      );
-      dispatch(
-        updateOverviewGroupRequest(props.overviewGroupId, {
-          totalCost: Number(roundedUpdatedTotalCost),
-        })
-      );
-    }
+  function calculateNewTotalCost(
+    oldTotalCost: number,
+    oldPurchaseCost: number,
+    newPurchaseCost: number
+  ): number {
+    const purchaseDelta = newPurchaseCost - oldPurchaseCost;
+    let newTotalCost = oldTotalCost + purchaseDelta;
+    if (newTotalCost < 0) newTotalCost = 0;
+    return Number(Functions.roundNumber(newTotalCost, 2));
   }
 
   const updatePurchase = useCallback(
     Functions.debounce(
       (purchaseId: number, description: string, cost: string) => {
-        if (purchases && purchases[purchaseId]) {
+        if (overviewGroup && purchases && purchases[purchaseId]) {
           const purchase = purchases[purchaseId];
+          // On purchase description update
           if (description !== purchase.description) {
             dispatch(updatePurchaseRequest(purchaseId, { description }));
-          } else if (Number(cost) && Number(cost) !== purchase.cost) {
-            dispatch(
-              updatePurchaseRequest(purchaseId, {
-                cost: Number(Functions.roundNumber(Number(cost), 2)),
-              })
-            );
-            updateTotalCostAfterPurchaseUpdate(
-              purchase.cost || 0,
+          }
+          // On purchase cost update
+          if (Number(cost) && Number(cost) !== purchase.cost) {
+            const purchaseUpdateData = {
+              cost: Number(Functions.roundNumber(Number(cost), 2)),
+            };
+
+            const newTotalCost = calculateNewTotalCost(
+              overviewGroup.totalCost,
+              purchase?.cost || 0,
               Number(cost)
+            );
+            const overviewGroupUpdateData = {
+              overviewGroup: {
+                id: overviewGroup.id,
+                totalCost: newTotalCost,
+              },
+            };
+
+            dispatch(
+              updatePurchaseRequest(
+                purchaseId,
+                purchaseUpdateData,
+                overviewGroupUpdateData
+              )
             );
           }
         }
       },
       500
     ),
-    [purchases]
+    [overviewGroup, purchases]
   );
-
-  function updateTotalCostAfterPurchaseDeletion(purchaseCost: number) {
-    if (overviewGroup) {
-      let updatedTotalCost = overviewGroup.totalCost - purchaseCost;
-      if (updatedTotalCost < 0) updatedTotalCost = 0;
-      const roundedUpdatedTotalCost = Functions.roundNumber(
-        updatedTotalCost,
-        2
-      );
-      dispatch(
-        updateOverviewGroupRequest(props.overviewGroupId, {
-          totalCost: Number(roundedUpdatedTotalCost),
-        })
-      );
-    }
-  }
 
   const deletePurchase = useCallback(
     (purchaseId: number) => {
-      if (purchases && purchases[purchaseId]) {
+      if (overviewGroup && purchases && purchases[purchaseId]) {
         const purchase = purchases[purchaseId];
-        dispatch(deletePurchaseRequest(purchaseId));
-        if (purchase.cost) updateTotalCostAfterPurchaseDeletion(purchase.cost);
+        if (purchase.cost) {
+          const newTotalCost = calculateNewTotalCost(
+            overviewGroup.totalCost,
+            purchase.cost,
+            0
+          );
+
+          dispatch(
+            deletePurchaseRequest(purchaseId, {
+              overviewGroup: {
+                id: props.overviewGroupId,
+                totalCost: newTotalCost,
+              },
+            })
+          );
+        }
       }
     },
-    [purchases]
+    [overviewGroup, purchases]
   );
 
   useEffect(() => {
