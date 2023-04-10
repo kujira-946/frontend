@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 import { useEffect } from "react";
 
+import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { fetchUserRequest } from "@/sagas/users.saga";
@@ -320,6 +321,7 @@ export const Layout = (props: Props) => {
 
   useEffect(() => {
     if (userId && !currentUser) {
+      dispatch(Redux.uiActions.setLoadingUsers(true));
       dispatch(fetchUserRequest(Number(userId)));
     }
   }, [currentUser]);
