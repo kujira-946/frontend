@@ -50,7 +50,11 @@ const Container = styled.article<ContainerProps>`
   @media (hover: hover) {
     :hover {
       border: ${(props: ContainerProps & ThemeProps) => {
-        return !props.frozen && `${props.theme.backgroundSix} solid 1px`;
+        if (!props.frozen) {
+          return props.error
+            ? `${props.theme.failure} solid 1px`
+            : `${props.theme.backgroundSix} solid 1px`;
+        }
       }};
     }
   }
