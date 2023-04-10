@@ -10,7 +10,7 @@ import * as OverviewsSagas from "@/sagas/overviews.saga";
 import * as OverviewGroupsSagas from "@/sagas/overview-groups.saga";
 import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
-import { updateUserRequest } from "@/sagas/users.saga";
+import { onboardNewUserRequest } from "@/sagas/onboarding.saga";
 import {
   createPurchaseRequest,
   deleteAssociatedPurchasesRequest,
@@ -36,20 +36,22 @@ const Onboarding = () => {
     else currentPage.value = 1;
   }
 
-  function* completeOnboarding() {
+  function completeOnboarding() {
     if (
       currentUser &&
       overview &&
       Number(income.value) &&
       Number(savings.value)
     ) {
-      yield dispatch(
-        OverviewsSagas.updateOverviewRequest(overview.id, {
-          income: Number(income.value),
-          savings: Number(savings.value),
-        })
+      dispatch(Redux.uiActions.setLoadingUsers(true));
+      dispatch(
+        onboardNewUserRequest(
+          overview.id,
+          Number(income.value),
+          Number(savings.value),
+          currentUser.id
+        )
       );
-      yield dispatch(updateUserRequest(currentUser.id, { onboarded: true }));
     }
   }
 

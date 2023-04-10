@@ -1,10 +1,11 @@
 import * as Saga from "redux-saga/effects";
-import axios from "axios";
 
 import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
-import { ApiRoutes, ClientRoutes } from "@/utils/constants/routes";
+import { ClientRoutes } from "@/utils/constants/routes";
+import { updateOverviewRequest } from "./overviews.saga";
+import { updateUserRequest } from "./users.saga";
 
 // ========================================================================================= //
 // [ ACTIONS ] ============================================================================= //
@@ -15,15 +16,21 @@ enum OnboardingActionTypes {
 }
 
 type OnboardNewUserActions = Types.SagaAction<{
-  createData: Types.OnboardingCreateData;
+  overviewId: number;
+  income: number;
+  savings: number;
+  currentUserId: number;
 }>;
 
 export function onboardNewUserRequest(
-  createData: Types.OnboardingCreateData
+  overviewId: number,
+  income: number,
+  savings: number,
+  currentUserId: number
 ): OnboardNewUserActions {
   return {
     type: OnboardingActionTypes.ONBOARD_NEW_USER,
-    payload: { createData },
+    payload: { overviewId, income, savings, currentUserId },
   };
 }
 
@@ -33,22 +40,27 @@ export function onboardNewUserRequest(
 
 function* onboardNewUser(action: OnboardNewUserActions) {
   try {
-    const { createData } = action.payload;
-    const { data } = yield Saga.call(
-      axios.post,
-      ApiRoutes.ONBOARDING,
-      createData
+    const { overviewId, income, savings, currentUserId } = action.payload;
+
+    yield Saga.put(
+      updateOverviewRequest(overviewId, {
+        income,
+        savings,
+      })
     );
+
+    yield Saga.put(updateUserRequest(currentUserId, { onboarded: true }));
+
     yield Saga.put(
       Redux.uiActions.setNotification({
-        title: data.title,
-        body: data.body,
+        title: "Onboarding Complete!",
+        body: "Thank you and congrats! You're now ready to start using Kujira.",
         type: "success",
         timeout: 5000,
         redirect: ClientRoutes.LOGBOOKS,
       })
     );
-    yield Saga.put(Redux.uiActions.setLoadingOnboarding(false));
+    yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
     yield Functions.sagaError(error);
   }
