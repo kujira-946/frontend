@@ -19,7 +19,7 @@ export const ChevronRight = (props: SVGProps) => {
       <g clip-path="url(#clip0_711_36)">
         <path
           d="M30.875 0L19.125 11.75L57.2917 50L19.125 88.25L30.875 100L80.875 50L30.875 0Z"
-          fill={hovered.value ? props.hoveredFill : props.fill}
+          fill={hovered.value ? props.hoveredFill || props.fill : props.fill}
         />
       </g>
       <defs>

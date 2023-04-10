@@ -19,7 +19,7 @@ export const Close = (props: SVGProps) => {
       <g clipPath="url(#clip0_614_439)">
         <path
           d="M85.9 0L50 35.9L14.1 0L0 14.1L35.9 50L0 85.9L14.1 100L50 64.1L85.9 100L100 85.9L64.1 50L100 14.1L85.9 0Z"
-          fill={hovered.value ? props.hoveredFill : props.fill}
+          fill={hovered.value ? props.hoveredFill || props.fill : props.fill}
         />
       </g>
       <defs>
