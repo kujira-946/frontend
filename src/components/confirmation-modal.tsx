@@ -65,6 +65,7 @@ const HeaderButton = styled.button`
   height: 32px;
   border-radius: 4px;
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
+  cursor: pointer;
 
   @media (hover: hover) {
     :hover {
@@ -148,6 +149,7 @@ export const ConfirmationModal = (props: Props) => {
               <Icons.ChevronLeft
                 height={14}
                 fill={Styles.background[ui.theme.value].eight}
+                addHover
               />
             </HeaderButton>
           )}
@@ -158,6 +160,7 @@ export const ConfirmationModal = (props: Props) => {
               <Icons.Close
                 height={14}
                 fill={Styles.background[ui.theme.value].eight}
+                addHover
               />
             </HeaderButton>
           )}
