@@ -122,7 +122,6 @@ type Props = {
   delete?: (purchaseId: number) => void;
   onCheckActive?: () => void;
   onCheckInactive?: () => void;
-  setParentError?: (error?: string) => void;
 
   descriptionForwardText?: string;
   costForwardText?: string;
@@ -191,21 +190,16 @@ const ExportedComponent = (props: Props) => {
     if (cost.value !== "" && cost.value !== "0") {
       if (!Number(cost.value)) {
         costError.value = "Must be a number.";
-        if (props.setParentError) props.setParentError();
       } else if (Number(cost.value) < 0) {
         costError.value = "Please use positive values.";
-        if (props.setParentError) props.setParentError();
       } else if (props.costLimit && Number(cost.value) > props.costLimit) {
         costError.value =
           props.higherCostError || `Can't be greater than ${props.costLimit}.`;
-        if (props.setParentError) props.setParentError();
       } else {
         costError.value = "";
-        if (props.setParentError) props.setParentError("");
       }
     } else {
       costError.value = "";
-      if (props.setParentError) props.setParentError("");
     }
   });
 

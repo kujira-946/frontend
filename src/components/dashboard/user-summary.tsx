@@ -74,11 +74,6 @@ export const UserSummary = (props: Props) => {
   const remainingBudget = useSignal("");
   const errorMessage = useSignal("");
 
-  const setError = useCallback((error?: string) => {
-    if (error || error === "") errorMessage.value = error;
-    else errorMessage.value = "Please resolve all errors.";
-  }, []);
-
   const updateIncome = useCallback(
     Functions.debounce((cost: string) => {
       if (overview) {
@@ -170,6 +165,9 @@ export const UserSummary = (props: Props) => {
   useEffect(() => {
     if (overview) {
       const overBudget = Number(totalSpent.value) > overview.income;
+
+      console.log("Over Budget:", overBudget);
+
       if (overBudget) {
         errorMessage.value = "You've spent more than you can afford!";
       } else {
@@ -201,7 +199,6 @@ export const UserSummary = (props: Props) => {
             description="Income"
             cost={Functions.roundNumber(overview.income, 2)}
             costUpdate={updateIncome}
-            setParentError={setError}
             costForwardText="$"
             hideDrag
             hideCheck
@@ -216,7 +213,6 @@ export const UserSummary = (props: Props) => {
             cost={overview.savings.toString()}
             costLimit={100}
             costUpdate={updateSavings}
-            setParentError={setError}
             persistDescriptionInput
             hideDrag
             hideCheck
