@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 
 import * as Redux from "@/redux";
@@ -70,40 +70,30 @@ export const UserSummary = (props: Props) => {
   const overviewGroups = Functions.useFetchCurrentUserOverviewGroups();
 
   const savedIncome = useSignal("");
-  const totalSpent = useSignal("");
+  const totalSpent = useSignal("0.00");
   const remainingBudget = useSignal("");
   const errorMessage = useSignal("");
 
-  const updateIncome = useCallback(
-    Functions.debounce((cost: string) => {
-      if (overview) {
-        if (Number(cost) && Number(cost) !== overview.income) {
-          dispatch(
-            updateOverviewRequest(overview.id, { income: Number(cost) })
-          );
-        }
+  const updateIncome = Functions.debounce((cost: string) => {
+    if (overview) {
+      if (Number(cost) && Number(cost) !== overview.income) {
+        dispatch(updateOverviewRequest(overview.id, { income: Number(cost) }));
       }
-    }, 500),
-    [overview]
-  );
+    }
+  }, 500);
 
-  const updateSavings = useCallback(
-    Functions.debounce((cost: string) => {
-      if (overview) {
-        if (
-          Number(cost) &&
-          Number(cost) >= 0 &&
-          Number(cost) <= 100 &&
-          Number(cost) !== overview.savings
-        ) {
-          dispatch(
-            updateOverviewRequest(overview.id, { savings: Number(cost) })
-          );
-        }
+  const updateSavings = Functions.debounce((cost: string) => {
+    if (overview) {
+      if (
+        Number(cost) &&
+        Number(cost) >= 0 &&
+        Number(cost) <= 100 &&
+        Number(cost) !== overview.savings
+      ) {
+        dispatch(updateOverviewRequest(overview.id, { savings: Number(cost) }));
       }
-    }, 500),
-    [overview]
-  );
+    }
+  }, 500);
 
   // ↓↓↓ Fetching the current user's overviews. ↓↓↓ //
   useEffect(() => {
@@ -159,15 +149,12 @@ export const UserSummary = (props: Props) => {
     }
   }, [overview, totalSpent.value]);
 
-  // ↓↓↓ Setting `errorMessage` state when : ↓↓↓ //
-  // ↓↓↓ `totalSpent` exceeds the overview income. ↓↓↓ //
-  // ↓↓↓ `remainingBudget` is negative. ↓↓↓ //
+  // ↓↓↓ Setting `errorMessage` state when :        ↓↓↓ //
+  // ↓↓↓ `totalSpent` exceeds the overview income.  ↓↓↓ //
+  // ↓↓↓ `remainingBudget` is negative.             ↓↓↓ //
   useEffect(() => {
     if (overview) {
       const overBudget = Number(totalSpent.value) > overview.income;
-
-      console.log("Over Budget:", overBudget);
-
       if (overBudget) {
         errorMessage.value = "You've spent more than you can afford!";
       } else {

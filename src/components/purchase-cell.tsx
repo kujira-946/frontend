@@ -187,7 +187,9 @@ const ExportedComponent = (props: Props) => {
   }, [props.disableSubmit]);
 
   effect(() => {
-    if (cost.value !== "" && cost.value !== "0") {
+    if (Number(cost.value) === 0) {
+      costError.value = "";
+    } else if (cost.value !== "") {
       if (!Number(cost.value)) {
         costError.value = "Must be a number.";
       } else if (Number(cost.value) < 0) {
