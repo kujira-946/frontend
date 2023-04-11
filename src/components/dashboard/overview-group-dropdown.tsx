@@ -81,7 +81,7 @@ const Title = styled.h3`
   font-weight: ${Styles.fontWeights.semiBold};
 `;
 
-const Total = styled.h4`
+const Total = styled.h3`
   margin: 0;
   font-size: ${Styles.pxAsRem.fourteen};
   font-weight: ${Styles.fontWeights.bold};
@@ -344,12 +344,12 @@ const ExportedComponent = (props: Props) => {
                     onClick={() => (deleteConfirmationOpen.value = true)}
                     size="medium"
                     borderRadius="four"
-                    color={Styles.background[ui.theme.value].seven}
-                    hoverColor={Styles.background[ui.theme.value].eight}
+                    color={Styles.background[ui.theme.value].eight}
+                    hoverColor={Styles.text[ui.theme.value]}
                     background={Styles.background[ui.theme.value].one}
                     hoverBackground={Styles.background[ui.theme.value].three}
-                    border={Styles.background[ui.theme.value].seven}
-                    hoverBorder={Styles.background[ui.theme.value].eight}
+                    border={Styles.background[ui.theme.value].eight}
+                    hoverBorder={Styles.text[ui.theme.value]}
                   >
                     Delete All
                   </Globals.Button>

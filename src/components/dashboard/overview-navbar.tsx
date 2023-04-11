@@ -72,7 +72,11 @@ export const OverviewNavbar = () => {
       <NavbarLinks>
         {links.map((link: Constants.ClientRoutes, index: number) => {
           return (
-            <NavbarLink key={`overview-tab-${link}-${index}`} href={link}>
+            <NavbarLink
+              key={`overview-tab-${link}-${index}`}
+              href={link}
+              aria-label={`${link}-link-button`}
+            >
               {link === Constants.ClientRoutes.LOGBOOKS ? (
                 <Icons.Dashboard
                   height={16}
