@@ -60,8 +60,6 @@ type Props = {
 };
 
 export const UserSummary = (props: Props) => {
-  console.log("User Summary Rendered");
-
   const dispatch = Functions.useAppDispatch();
 
   const { loadingOverviews } = Functions.useUiSlice();

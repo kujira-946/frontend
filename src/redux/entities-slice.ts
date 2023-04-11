@@ -433,7 +433,6 @@ const entitiesSlice = createSlice({
     deletePurchase: (state: EntitiesState, action: PayloadAction<number>) => {
       if (state.purchases) {
         const purchasesCopy = Functions.deepCopy(state.purchases);
-        // console.log("Purchases Copy Before:", purchasesCopy);
         const purchase = purchasesCopy[action.payload];
         if (purchase.overviewGroupId && state.overviewGroups) {
           const updatedOverviewGroups = Functions.deepCopy(
@@ -465,9 +464,7 @@ const entitiesSlice = createSlice({
           }
         }
         delete purchasesCopy[action.payload];
-        // console.log("Purchases Copy After:", purchasesCopy);
         state.purchases = purchasesCopy;
-        // console.log("State Purchases:", state.purchases);
       }
     },
     batchDeletePurchases: (
