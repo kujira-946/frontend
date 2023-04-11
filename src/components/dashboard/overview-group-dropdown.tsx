@@ -87,7 +87,7 @@ const Total = styled.h4`
   font-weight: ${Styles.fontWeights.bold};
 `;
 
-const Body = styled(motion.article)`
+const Body = styled(motion.form)`
   display: flex;
   flex-direction: column;
   gap: ${Styles.pxAsRem.eight};
@@ -312,8 +312,9 @@ const ExportedComponent = (props: Props) => {
                                         description={purchase.description}
                                         cost={
                                           purchase.cost
-                                            ? Functions.formattedNumber(
-                                                purchase.cost
+                                            ? Functions.roundNumber(
+                                                purchase.cost,
+                                                2
                                               )
                                             : ""
                                         }

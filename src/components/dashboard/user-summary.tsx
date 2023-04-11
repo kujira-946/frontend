@@ -44,6 +44,13 @@ const HeadingCaption = styled.p`
   font-weight: ${Styles.fontWeights.semiBold};
 `;
 
+const ErrorMessage = styled.p`
+  margin: 0;
+  color: ${(props: ThemeProps) => props.theme.failure};
+  font-size: ${Styles.pxAsRem.twelve};
+  font-weight: ${Styles.fontWeights.semiBold};
+`;
+
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
@@ -62,8 +69,15 @@ export const UserSummary = (props: Props) => {
   const overview = Functions.useFetchCurrentUserOverview();
   const overviewGroups = Functions.useFetchCurrentUserOverviewGroups();
 
-  const totalSpent = useSignal(0);
-  const remainingBudget = useSignal(0);
+  const savedIncome = useSignal("");
+  const totalSpent = useSignal("");
+  const remainingBudget = useSignal("");
+  const errorMessage = useSignal("");
+
+  const setError = useCallback((error?: string) => {
+    if (error || error === "") errorMessage.value = error;
+    else errorMessage.value = "Please resolve all errors.";
+  }, []);
 
   const updateIncome = useCallback(
     Functions.debounce((cost: string) => {
@@ -81,7 +95,7 @@ export const UserSummary = (props: Props) => {
   const updateSavings = useCallback(
     Functions.debounce((cost: string) => {
       if (overview) {
-        if (Number(cost) && Number(cost) !== overview.savings) {
+        if (Number(cost) && Number(cost) >= 0 && Number(cost) <= 100) {
           dispatch(
             updateOverviewRequest(overview.id, { savings: Number(cost) })
           );
@@ -91,6 +105,7 @@ export const UserSummary = (props: Props) => {
     [overview]
   );
 
+  // ↓↓↓ Fetching the current user's overviews. ↓↓↓ //
   useEffect(() => {
     if (currentUser && !overviews) {
       dispatch(Redux.uiActions.setLoadingOverviews(true));
@@ -98,9 +113,21 @@ export const UserSummary = (props: Props) => {
     }
   }, [currentUser, overviews]);
 
+  // ↓↓↓ Setting `savedIncome` state. ↓↓↓ //
   useEffect(() => {
-    if (overviewGroups) {
+    if (overview) {
+      savedIncome.value = Functions.roundNumber(
+        overview.income * (overview.savings / 100),
+        2
+      );
+    }
+  }, [overview]);
+
+  // ↓↓↓ Setting `totalSpent` state. ↓↓↓ //
+  useEffect(() => {
+    if (overview && overviewGroups) {
       const userHasOverviewGroups = Object.keys(overviewGroups).length > 0;
+
       if (userHasOverviewGroups) {
         let overviewGroupsTotalSpent = 0;
         for (const overviewGroup of overviewGroups) {
@@ -110,16 +137,39 @@ export const UserSummary = (props: Props) => {
             overviewGroupsTotalSpent += overviewGroup.totalCost;
           }
         }
-        totalSpent.value = overviewGroupsTotalSpent;
+
+        if (Number(savedIncome)) {
+          overviewGroupsTotalSpent += Number(savedIncome);
+        }
+
+        totalSpent.value = Functions.roundNumber(overviewGroupsTotalSpent, 2);
       }
     }
-  }, [overviewGroups]);
+  }, [overview, overviewGroups]);
 
+  // ↓↓↓ Setting `remainingBudget` state ↓↓↓ //
   useEffect(() => {
     if (overview) {
-      const savedIncome = overview.income * (overview.savings / 100);
-      const remainingIncome = overview.income - savedIncome - totalSpent.value;
-      remainingBudget.value = remainingIncome;
+      if (Number(totalSpent.value)) {
+        const remainingIncome = overview.income - Number(totalSpent.value);
+        remainingBudget.value = Functions.roundNumber(remainingIncome, 2);
+      } else {
+        remainingBudget.value = Functions.roundNumber(overview.income, 2);
+      }
+    }
+  }, [overview, totalSpent.value]);
+
+  // ↓↓↓ Setting `errorMessage` state when : ↓↓↓ //
+  // ↓↓↓ `totalSpent` exceeds the overview income. ↓↓↓ //
+  // ↓↓↓ `remainingBudget` is negative. ↓↓↓ //
+  useEffect(() => {
+    if (overview) {
+      const overBudget = Number(totalSpent.value) > overview.income;
+      if (overBudget) {
+        errorMessage.value = "You've spent more than you can afford!";
+      } else {
+        errorMessage.value = "";
+      }
     }
   }, [overview, totalSpent.value]);
 
@@ -129,6 +179,8 @@ export const UserSummary = (props: Props) => {
         <HeadingTitle>February 2023 Overview</HeadingTitle>
         <HeadingCaption>{props.page}</HeadingCaption>
       </Heading>
+
+      {errorMessage.value && <ErrorMessage>{errorMessage.value}</ErrorMessage>}
 
       {loadingOverviews ? (
         <>
@@ -144,6 +196,7 @@ export const UserSummary = (props: Props) => {
             description="Income"
             cost={Functions.roundNumber(overview.income, 2)}
             costUpdate={updateIncome}
+            setParentError={setError}
             costForwardText="$"
             hideDrag
             hideCheck
@@ -154,12 +207,12 @@ export const UserSummary = (props: Props) => {
 
           <Globals.PurchaseCell
             key={`dashboard-overview-header-purchase-cell-savings`}
-            description={`Savings (%)\n$${Functions.roundNumber(
-              overview.income * (overview.savings / 100),
-              2
-            )}`}
+            description={`Savings %\n$${savedIncome.value}`}
             cost={overview.savings.toString()}
+            costLimit={100}
             costUpdate={updateSavings}
+            setParentError={setError}
+            persistDescriptionInput
             hideDrag
             hideCheck
             hideCategories
@@ -170,10 +223,12 @@ export const UserSummary = (props: Props) => {
           <Globals.PurchaseCell
             key={`dashboard-overview-header-purchase-cell-total-spent`}
             description="Total Spent"
-            cost={Functions.roundNumber(totalSpent.value, 2)}
+            cost={totalSpent.value}
+            isError={Number(totalSpent.value) > overview.income}
             costForwardText="$"
             importance="Secondary"
-            persistInput
+            persistDescriptionInput
+            persistCostInput
             hideDrag
             hideCheck
             hideCategories
@@ -185,10 +240,12 @@ export const UserSummary = (props: Props) => {
           <Globals.PurchaseCell
             key={`dashboard-overview-header-purchase-cell-remaining`}
             description="Remaining"
-            cost={Functions.roundNumber(remainingBudget.value, 2)}
+            cost={remainingBudget.value}
+            isError={Number(remainingBudget.value) < 0}
             costForwardText="$"
             importance="Primary"
-            persistInput
+            persistDescriptionInput
+            persistCostInput
             hideDrag
             hideCheck
             hideCategories

@@ -14,13 +14,27 @@ import { ThemeProps } from "@/components/layout";
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
-const Container = styled.article`
+type ContainerProps = {
+  borderRadius?: Types.PxAsRem;
+  isError?: boolean;
+};
+
+const Container = styled.article<ContainerProps>`
   display: flex;
   align-items: center;
   gap: ${Styles.pxAsRem.eight};
   padding: ${Styles.pxAsRem.six} ${Styles.pxAsRem.eight};
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
-  border: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
+  border: ${(props: ContainerProps & ThemeProps) => {
+    return props.isError
+      ? `${props.theme.failure} solid 1px`
+      : `${props.theme.backgroundFour} solid 1px`;
+  }};
+  border-radius: ${(props) => {
+    return props.borderRadius
+      ? Styles.pxAsRem[props.borderRadius]
+      : Styles.pxAsRem.six;
+  }};
 `;
 
 const DragButton = styled.div`
@@ -97,22 +111,30 @@ type Props = {
   purchaseId?: number;
   description: string;
   cost: string;
-  disableSubmit?: Signal<boolean>;
 
-  costUpdate?: (cost: string) => void;
+  costLimit?: number;
+  higherCostError?: string;
+  disableSubmit?: Signal<boolean>;
+  isError?: boolean;
+
+  costUpdate?: (cost: string, costError?: Signal<string>) => void;
   update?: (purchaseId: number, description: string, cost: string) => void;
   delete?: (purchaseId: number) => void;
   onCheckActive?: () => void;
   onCheckInactive?: () => void;
+  setParentError?: (error?: string) => void;
 
   descriptionForwardText?: string;
   costForwardText?: string;
   importance?: "Primary" | "Secondary";
-  persistInput?: true;
+  persistDescriptionInput?: true;
+  persistCostInput?: true;
+
   hideDrag?: true;
   hideCheck?: true;
   hideCategories?: true;
   hideClose?: true;
+
   descriptionFrozen?: true;
   costFrozen?: true;
 };
@@ -166,27 +188,29 @@ const ExportedComponent = (props: Props) => {
   }, [props.disableSubmit]);
 
   effect(() => {
-    if (cost.value !== "") {
-      if (cost.value === "0") {
-        costError.value = "";
-      } else if (!Number(cost.value)) {
+    if (cost.value !== "" && cost.value !== "0") {
+      if (!Number(cost.value)) {
         costError.value = "Must be a number.";
+        if (props.setParentError) props.setParentError();
       } else if (Number(cost.value) < 0) {
         costError.value = "Please use positive values.";
+        if (props.setParentError) props.setParentError();
+      } else if (props.costLimit && Number(cost.value) > props.costLimit) {
+        costError.value =
+          props.higherCostError || `Can't be greater than ${props.costLimit}.`;
+        if (props.setParentError) props.setParentError();
       } else {
         costError.value = "";
+        if (props.setParentError) props.setParentError("");
       }
+    } else {
+      costError.value = "";
+      if (props.setParentError) props.setParentError("");
     }
   });
 
   return (
-    <Container
-      style={{
-        borderRadius: props.borderRadius
-          ? Styles.pxAsRem[props.borderRadius]
-          : Styles.pxAsRem.six,
-      }}
-    >
+    <Container borderRadius={props.borderRadius} isError={props.isError}>
       {!props.hideDrag && props.provided && (
         <DragButton {...props.provided.dragHandleProps} tabIndex={-1}>
           <Icons.Drag
@@ -242,7 +266,11 @@ const ExportedComponent = (props: Props) => {
           key={`purchase-cell-description-input`}
           borderRadius={props.borderRadius}
           placeholder="Description"
-          userInput={props.persistInput ? props.description : description.value}
+          userInput={
+            props.persistDescriptionInput
+              ? props.description
+              : description.value
+          }
           setUserInput={updateDescription}
           forwardText={props.descriptionForwardText}
           hasValue={!!props.description}
@@ -254,7 +282,7 @@ const ExportedComponent = (props: Props) => {
           borderRadius={props.borderRadius}
           placeholder="Cost"
           errorMessage={costError.value}
-          userInput={props.persistInput ? props.cost : cost.value}
+          userInput={props.persistCostInput ? props.cost : cost.value}
           setUserInput={updateCost}
           onBlur={onCostBlur}
           forwardText={props.costForwardText}

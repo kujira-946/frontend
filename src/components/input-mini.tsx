@@ -12,6 +12,7 @@ import { ThemeProps } from "./layout";
 // ========================================================================================= //
 
 type ContainerProps = {
+  borderRadius?: Types.PxAsRem;
   focused: boolean;
   hasValue: boolean;
   error: boolean;
@@ -42,6 +43,11 @@ const Container = styled.article<ContainerProps>`
       : props.hasValue
       ? `${props.theme.backgroundTwo} solid 1px`
       : `${props.theme.backgroundFour} solid 1px`;
+  }};
+  border-radius: ${(props) => {
+    return props.borderRadius
+      ? Styles.pxAsRem[props.borderRadius]
+      : Styles.pxAsRem.six;
   }};
   font-size: ${Styles.pxAsRem.twelve};
   font-weight: ${Styles.fontWeights.medium};
@@ -160,16 +166,12 @@ const ExportedComponent = (props: Props) => {
 
   return (
     <Container
+      borderRadius={props.borderRadius}
       focused={focused.value}
       hasValue={props.userInput !== ""}
       frozen={props.frozen}
       error={!!props.errorMessage}
       onClick={focusTextarea}
-      style={{
-        borderRadius: props.borderRadius
-          ? Styles.pxAsRem[props.borderRadius]
-          : Styles.pxAsRem.six,
-      }}
     >
       {props.errorMessage && <ErrorMessage>{props.errorMessage}</ErrorMessage>}
 

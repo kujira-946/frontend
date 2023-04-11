@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { memo } from "react";
 
 import * as Types from "@/utils/types";
 import { ThemeProps } from "../layout";
