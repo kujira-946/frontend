@@ -4,13 +4,10 @@ import { useCallback, useEffect } from "react";
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
 import * as OverviewGroupsSagas from "@/sagas/overview-groups.saga";
+import * as PurchasesSagas from "@/sagas/purchases.saga";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import {
-  createPurchaseRequest,
-  deleteAssociatedPurchasesRequest,
-} from "@/sagas/purchases.saga";
 
 import { OverviewGroupDropdown } from "./overview-group-dropdown";
 // ========================================================================================= //
@@ -38,11 +35,15 @@ export const OverviewGroups = () => {
   const onDragEnd = useCallback(Functions.onDragEnd, []);
 
   const deleteAllPurchases = useCallback((overviewGroupId: number): void => {
-    dispatch(deleteAssociatedPurchasesRequest({ overviewGroupId }));
+    dispatch(
+      PurchasesSagas.deleteAssociatedPurchasesRequest({ overviewGroupId })
+    );
   }, []);
 
   const addPurchase = useCallback((overviewGroupId: number): void => {
-    dispatch(createPurchaseRequest({ placement: 0, overviewGroupId }));
+    dispatch(
+      PurchasesSagas.createPurchaseRequest({ placement: 0, overviewGroupId })
+    );
   }, []);
 
   useEffect(() => {

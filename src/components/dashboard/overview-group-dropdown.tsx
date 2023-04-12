@@ -6,14 +6,10 @@ import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import * as Globals from "@/components";
+import * as PurchasesSagas from "@/sagas/purchases.saga";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import {
-  deletePurchaseRequest,
-  fetchOverviewGroupPurchasesRequest,
-  updatePurchaseRequest,
-} from "@/sagas/purchases.saga";
 import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
@@ -160,7 +156,9 @@ const ExportedComponent = (props: Props) => {
           const purchase = purchases[purchaseId];
           // On purchase description update
           if (description !== purchase.description) {
-            dispatch(updatePurchaseRequest(purchaseId, { description }));
+            dispatch(
+              PurchasesSagas.updatePurchaseRequest(purchaseId, { description })
+            );
           }
           // On purchase cost update
           if (Number(cost) && Number(cost) !== purchase.cost) {
@@ -181,7 +179,7 @@ const ExportedComponent = (props: Props) => {
             };
 
             dispatch(
-              updatePurchaseRequest(
+              PurchasesSagas.updatePurchaseRequest(
                 purchaseId,
                 purchaseUpdateData,
                 overviewGroupUpdateData
@@ -207,7 +205,7 @@ const ExportedComponent = (props: Props) => {
           );
 
           dispatch(
-            deletePurchaseRequest(purchaseId, {
+            PurchasesSagas.deletePurchaseRequest(purchaseId, {
               overviewGroup: {
                 id: props.overviewGroupId,
                 totalSpent: newTotalSpent,
@@ -215,7 +213,7 @@ const ExportedComponent = (props: Props) => {
             })
           );
         } else {
-          dispatch(deletePurchaseRequest(purchaseId));
+          dispatch(PurchasesSagas.deletePurchaseRequest(purchaseId));
         }
       }
     },
@@ -225,7 +223,9 @@ const ExportedComponent = (props: Props) => {
   useEffect(() => {
     if (opened.value && !overviewGroupPurchases) {
       loadingPurchases.value = true;
-      dispatch(fetchOverviewGroupPurchasesRequest(props.overviewGroupId));
+      dispatch(
+        PurchasesSagas.fetchOverviewGroupPurchasesRequest(props.overviewGroupId)
+      );
     } else if (loadingPurchases.value && overviewGroupPurchases) {
       loadingPurchases.value = false;
     }

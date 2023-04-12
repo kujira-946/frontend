@@ -8,20 +8,16 @@ import * as Components from "@/components/onboarding";
 import * as Redux from "@/redux";
 import * as OverviewsSagas from "@/sagas/overviews.saga";
 import * as OverviewGroupsSagas from "@/sagas/overview-groups.saga";
+import * as PurchasesSagas from "@/sagas/purchases.saga";
 import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
 import { onboardNewUserRequest } from "@/sagas/onboarding.saga";
-import {
-  createPurchaseRequest,
-  deleteAssociatedPurchasesRequest,
-} from "@/sagas/purchases.saga";
 
 const Onboarding = () => {
   const dispatch = Functions.useAppDispatch();
   const router = useRouter();
 
   const { currentUser } = Functions.useEntitiesSlice();
-  const { loadingUsers } = Functions.useUiSlice();
   const overview = Functions.useGetCurrentUserOverview();
   const overviewGroups = Functions.useGetCurrentUserOverviewGroups();
 
@@ -66,11 +62,15 @@ const Onboarding = () => {
   const onDragEnd = useCallback(Functions.onDragEnd, []);
 
   const deleteAllPurchases = useCallback((overviewGroupId: number): void => {
-    dispatch(deleteAssociatedPurchasesRequest({ overviewGroupId }));
+    dispatch(
+      PurchasesSagas.deleteAssociatedPurchasesRequest({ overviewGroupId })
+    );
   }, []);
 
   const addPurchase = useCallback((overviewGroupId: number): void => {
-    dispatch(createPurchaseRequest({ placement: 0, overviewGroupId }));
+    dispatch(
+      PurchasesSagas.createPurchaseRequest({ placement: 0, overviewGroupId })
+    );
   }, []);
 
   Functions.useDetectAuthorizedUser(() => {
