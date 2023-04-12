@@ -99,26 +99,18 @@ export const AboveTheFold = () => {
 
           <Buttons>
             <Link href="/register" style={{ width: "100%" }}>
-              <Globals.Button
-                size="large"
-                background={Styles.primary[ui.theme.value].main}
-                hoverBackground={Styles.primary[ui.theme.value].darker}
-              >
+              <Globals.PrimaryButton size="large">
                 Register
-              </Globals.Button>
+              </Globals.PrimaryButton>
             </Link>
 
-            <Globals.Button
+            <Globals.PrimaryButtonOutlined
               onClick={scrollToAbout}
               size="large"
               borderThickness={2}
-              color={Styles.primary[ui.theme.value].main}
-              hoverColor={Styles.primary[ui.theme.value].darker}
-              border={Styles.primary[ui.theme.value].main}
-              hoverBorder={Styles.primary[ui.theme.value].darker}
             >
               Learn More
-            </Globals.Button>
+            </Globals.PrimaryButtonOutlined>
           </Buttons>
         </CopyAndButtons>
 

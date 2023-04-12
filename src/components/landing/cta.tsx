@@ -67,14 +67,9 @@ export const CTA = () => {
         </Copy>
 
         <Link href="/register">
-          <Globals.Button
-            size="large"
-            maxWidth="600px"
-            background={Styles.primary[ui.theme.value].main}
-            hoverBackground={Styles.primary[ui.theme.value].darker}
-          >
+          <Globals.PrimaryButton size="large" maxWidth="600px">
             Register
-          </Globals.Button>
+          </Globals.PrimaryButton>
         </Link>
       </Globals.LazyLoad>
     </Container>

@@ -51,7 +51,7 @@ const Container = styled.article<ContainerProps>`
   }};
   font-size: ${Styles.pxAsRem.twelve};
   font-weight: ${Styles.fontWeights.medium};
-  cursor: ${(props) => (props.focused ? "default" : "pointer")};
+  cursor: pointer;
 
   @media (hover: hover) {
     :hover {

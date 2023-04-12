@@ -339,33 +339,21 @@ const ExportedComponent = (props: Props) => {
 
               {overviewGroup?.purchaseIds &&
                 overviewGroup.purchaseIds.length > 0 && (
-                  <Globals.Button
-                    type="button"
+                  <Globals.NeutralButtonOutlined
                     onClick={() => (deleteConfirmationOpen.value = true)}
                     size="medium"
-                    borderRadius="four"
-                    color={Styles.background[ui.theme.value].eight}
-                    hoverColor={Styles.text[ui.theme.value]}
-                    background={Styles.background[ui.theme.value].one}
-                    hoverBackground={Styles.background[ui.theme.value].three}
-                    border={Styles.background[ui.theme.value].eight}
-                    hoverBorder={Styles.text[ui.theme.value]}
                   >
                     Delete All
-                  </Globals.Button>
+                  </Globals.NeutralButtonOutlined>
                 )}
 
-              <Globals.Button
-                type="button"
+              <Globals.NeutralButton
                 onClick={() => props.addPurchase(props.overviewGroupId)}
                 size="medium"
                 borderRadius="four"
-                color={Styles.background[ui.theme.value].eight}
-                background={Styles.background[ui.theme.value].three}
-                hoverBackground={Styles.background[ui.theme.value].five}
               >
                 Add
-              </Globals.Button>
+              </Globals.NeutralButton>
             </Body>
           )}
         </AnimatePresence>

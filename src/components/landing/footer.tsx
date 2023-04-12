@@ -76,22 +76,6 @@ const BodyLink = styled(Link)`
   }
 `;
 
-const BackToTopButton = styled(Globals.Button)`
-  color: ${(props: ThemeProps) => props.theme.backgroundEight};
-  background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
-  border: ${(props: ThemeProps) => props.theme.backgroundThree} solid 1px;
-  font-size: ${Styles.pxAsRem.twelve};
-  font-weight: ${Styles.fontWeights.medium};
-
-  @media (hover: hover) {
-    :hover {
-      color: ${(props: ThemeProps) => props.theme.text};
-      background-color: ${(props: ThemeProps) => props.theme.backgroundThree};
-      border: ${(props: ThemeProps) => props.theme.backgroundThree} solid 1px;
-    }
-  }
-`;
-
 const CopyrightAndLegal = styled.section`
   display: flex;
   justify-content: space-between;
@@ -171,24 +155,14 @@ export const Footer = () => {
           </BodyLinks>
         </Body>
 
-        {/* <BackToTopButton onClick={scrollToTop} size="small">
-          Back To Top
-        </BackToTopButton> */}
-
-        <Globals.Button
+        <Globals.NeutralButtonOutlined
           onClick={scrollToTop}
           size="small"
           fontWeight="medium"
-          color={Styles.background[ui.theme.value].seven}
-          hoverColor={Styles.background[ui.theme.value].eight}
-          background={Styles.background[ui.theme.value].two}
-          hoverBackground={Styles.background[ui.theme.value].three}
-          border={Styles.background[ui.theme.value].four}
-          hoverBorder={Styles.background[ui.theme.value].six}
           compact
         >
           Back To Top
-        </Globals.Button>
+        </Globals.NeutralButtonOutlined>
 
         <CopyrightAndLegal>
           <Copyright>© 2023 Kujira. All rights reserved.</Copyright>

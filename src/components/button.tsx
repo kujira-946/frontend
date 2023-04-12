@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 
@@ -10,13 +11,17 @@ import * as Types from "@/utils/types";
 type Size = "smaller" | "small" | "medium" | "large";
 type FontWeight = keyof typeof Styles.fontWeights;
 
-type Props = {
+type SharedProps = {
   size: Size;
   maxWidth?: string;
   borderRadius?: Types.PxAsRem;
   borderThickness?: number;
   fontWeight?: FontWeight;
+  disabled?: boolean;
+  compact?: true;
+};
 
+type Props = {
   color?: string;
   hoverColor?: string;
 
@@ -25,10 +30,7 @@ type Props = {
 
   border?: string;
   hoverBorder?: string;
-
-  disabled?: boolean;
-  compact?: true;
-};
+} & SharedProps;
 
 export const Button = styled.button<Props>`
   display: flex;
@@ -103,3 +105,188 @@ export const Button = styled.button<Props>`
     }
   }
 `;
+
+type ButtonProps = {
+  type?: "submit" | "button";
+  onClick?: () => void;
+  selected?: boolean;
+  children: React.ReactNode;
+} & SharedProps;
+
+export const NeutralButton = (props: ButtonProps) => {
+  const { theme } = Functions.useSignalsStore().ui;
+  return (
+    <Button
+      type={props.type || "button"}
+      disabled={props.disabled}
+      onClick={props.onClick}
+      size={props.size}
+      maxWidth={props.maxWidth}
+      borderRadius={props.borderRadius}
+      borderThickness={props.borderThickness}
+      fontWeight={props.fontWeight}
+      color={Styles.background[theme.value].eight}
+      hoverColor={Styles.text[theme.value]}
+      background={Styles.background[theme.value].four}
+      hoverBackground={Styles.background[theme.value].five}
+      compact={props.compact}
+    >
+      {props.children}
+    </Button>
+  );
+};
+
+export const NeutralButtonOutlined = (props: ButtonProps) => {
+  const { theme } = Functions.useSignalsStore().ui;
+  return (
+    <Button
+      type={props.type || "button"}
+      disabled={props.disabled}
+      onClick={props.onClick}
+      size={props.size}
+      maxWidth={props.maxWidth}
+      borderRadius={props.borderRadius}
+      borderThickness={props.borderThickness}
+      color={Styles.background[theme.value].seven}
+      hoverColor={Styles.text[theme.value]}
+      background={Styles.background[theme.value].one}
+      hoverBackground={Styles.background[theme.value].two}
+      border={Styles.background[theme.value].four}
+      hoverBorder={Styles.background[theme.value].five}
+      compact={props.compact}
+    >
+      {props.children}
+    </Button>
+  );
+};
+
+export const NeutralPillButton = (props: ButtonProps) => {
+  const { theme } = Functions.useSignalsStore().ui;
+  return (
+    <Button
+      type={props.type || "button"}
+      disabled={props.disabled}
+      onClick={props.onClick}
+      size={props.size}
+      maxWidth={props.maxWidth}
+      borderRadius="fortyEight"
+      color={
+        props.selected
+          ? Styles.background[theme.value].one
+          : Styles.background[theme.value].seven
+      }
+      hoverColor={
+        props.selected
+          ? Styles.background[theme.value].one
+          : Styles.text[theme.value]
+      }
+      background={
+        props.selected
+          ? Styles.text[theme.value]
+          : Styles.background[theme.value].one
+      }
+      hoverBackground={
+        props.selected
+          ? Styles.text[theme.value]
+          : Styles.background[theme.value].three
+      }
+      border={
+        props.selected
+          ? Styles.text[theme.value]
+          : Styles.background[theme.value].four
+      }
+      hoverBorder={
+        props.selected
+          ? Styles.text[theme.value]
+          : Styles.background[theme.value].six
+      }
+      compact={props.compact}
+    >
+      {props.children}
+    </Button>
+  );
+};
+
+export const PrimaryButton = (props: ButtonProps) => {
+  const { theme } = Functions.useSignalsStore().ui;
+  return (
+    <Button
+      type={props.type || "button"}
+      disabled={props.disabled}
+      onClick={props.onClick}
+      size={props.size}
+      maxWidth={props.maxWidth}
+      borderRadius={props.borderRadius}
+      borderThickness={props.borderThickness}
+      color={Styles.text.button}
+      background={Styles.primary[theme.value].main}
+      hoverBackground={Styles.primary[theme.value].darker}
+      compact={props.compact}
+    >
+      {props.children}
+    </Button>
+  );
+};
+
+export const PrimaryButtonOutlined = (props: ButtonProps) => {
+  const { theme } = Functions.useSignalsStore().ui;
+  return (
+    <Button
+      type={props.type || "button"}
+      disabled={props.disabled}
+      onClick={props.onClick}
+      size={props.size}
+      maxWidth={props.maxWidth}
+      borderRadius={props.borderRadius}
+      borderThickness={props.borderThickness}
+      color={Styles.primary[theme.value].main}
+      border={Styles.primary[theme.value].main}
+      hoverBorder={Styles.primary[theme.value].darker}
+      compact={props.compact}
+    >
+      {props.children}
+    </Button>
+  );
+};
+
+export const SecondaryButton = (props: ButtonProps) => {
+  const { theme } = Functions.useSignalsStore().ui;
+  return (
+    <Button
+      type={props.type || "button"}
+      disabled={props.disabled}
+      onClick={props.onClick}
+      size={props.size}
+      maxWidth={props.maxWidth}
+      borderRadius={props.borderRadius}
+      borderThickness={props.borderThickness}
+      color={Styles.text.button}
+      background={Styles.secondary[theme.value].main}
+      hoverBackground={Styles.secondary[theme.value].darker}
+      compact={props.compact}
+    >
+      {props.children}
+    </Button>
+  );
+};
+
+export const SecondaryButtonOutlined = (props: ButtonProps) => {
+  const { theme } = Functions.useSignalsStore().ui;
+  return (
+    <Button
+      type={props.type || "button"}
+      disabled={props.disabled}
+      onClick={props.onClick}
+      size={props.size}
+      maxWidth={props.maxWidth}
+      borderRadius={props.borderRadius}
+      borderThickness={props.borderThickness}
+      color={Styles.primary[theme.value].main}
+      border={Styles.primary[theme.value].main}
+      hoverBorder={Styles.primary[theme.value].darker}
+      compact={props.compact}
+    >
+      {props.children}
+    </Button>
+  );
+};

@@ -125,6 +125,7 @@ type Props = {
 
   descriptionForwardText?: string;
   costForwardText?: string;
+  costPlaceholder?: string;
   importance?: "Primary" | "Secondary";
   persistDescriptionInput?: true;
   persistCostInput?: true;
@@ -276,7 +277,7 @@ const ExportedComponent = (props: Props) => {
         <Globals.InputMini
           key={`purchase-cell-cost-input`}
           borderRadius={props.borderRadius}
-          placeholder="Cost"
+          placeholder={props.costPlaceholder || "Cost"}
           errorMessage={costError.value}
           userInput={props.persistCostInput ? props.cost : cost.value}
           setUserInput={updateCost}
@@ -297,7 +298,7 @@ const ExportedComponent = (props: Props) => {
         >
           <Icons.Close
             height={12}
-            fill={Styles.background[ui.theme.value].six}
+            fill={Styles.background[ui.theme.value].seven}
             hoveredFill={Styles.text[ui.theme.value]}
             addHover
           />

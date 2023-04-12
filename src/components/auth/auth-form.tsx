@@ -292,20 +292,18 @@ export const AuthForm = (props: Props) => {
             </ResendContainer>
           )}
 
-          <Globals.Button
+          <Globals.PrimaryButton
             type="submit"
-            size="medium"
-            borderRadius="four"
-            background={Styles.primary[ui.theme.value].main}
-            hoverBackground={Styles.primary[ui.theme.value].darker}
             disabled={
               props.title === "Register"
                 ? !checkRegistrationErrors()
                 : !checkLoginErrors()
             }
+            size="medium"
+            borderRadius="four"
           >
             {props.title}
-          </Globals.Button>
+          </Globals.PrimaryButton>
         </Form>
       </Container>
     </>

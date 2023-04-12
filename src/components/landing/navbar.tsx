@@ -116,13 +116,7 @@ export const Navbar = () => {
           <LoginButton href="/login">Log In</LoginButton>
 
           <Link href="/register">
-            <Globals.Button
-              size="small"
-              background={Styles.primary[ui.theme.value].main}
-              hoverBackground={Styles.primary[ui.theme.value].darker}
-            >
-              Register
-            </Globals.Button>
+            <Globals.PrimaryButton size="small">Register</Globals.PrimaryButton>
           </Link>
         </Links>
       </Main>

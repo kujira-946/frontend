@@ -98,20 +98,16 @@ export const OverviewDeleteConfirmation = (props: Props) => {
           </DeleteButton>
         </Header>
 
-        <Globals.Button
-          type="button"
+        <Globals.PrimaryButton
           onClick={() => {
             props.onConfirm();
             props.open.value = false;
           }}
           size="medium"
           borderRadius="four"
-          color={Styles.text[ui.theme.value]}
-          background={Styles.primary[ui.theme.value].main}
-          hoverBackground={Styles.primary[ui.theme.value].darker}
         >
-          Yes
-        </Globals.Button>
+          yes
+        </Globals.PrimaryButton>
       </Child>
     </Parent>
   );

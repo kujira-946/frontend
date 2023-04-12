@@ -83,7 +83,7 @@ export const OverviewNavbar = () => {
                   fill={
                     router.pathname === link
                       ? Styles.text[ui.theme.value]
-                      : Styles.background[ui.theme.value].six
+                      : Styles.background[ui.theme.value].seven
                   }
                   hoveredFill={Styles.text[ui.theme.value]}
                   addHover
@@ -94,7 +94,7 @@ export const OverviewNavbar = () => {
                   fill={
                     router.pathname === link
                       ? Styles.text[ui.theme.value]
-                      : Styles.background[ui.theme.value].six
+                      : Styles.background[ui.theme.value].seven
                   }
                   hoveredFill={Styles.text[ui.theme.value]}
                   addHover
@@ -105,7 +105,7 @@ export const OverviewNavbar = () => {
                   fill={
                     router.pathname === link
                       ? Styles.text[ui.theme.value]
-                      : Styles.background[ui.theme.value].six
+                      : Styles.background[ui.theme.value].seven
                   }
                   hoveredFill={Styles.text[ui.theme.value]}
                   addHover

@@ -41,13 +41,6 @@ export const heights = {
   largeButtonHeight: pxAsRem.fortyEight,
 };
 
-export const fontSizes = {
-  smallerButtonFont: pxAsRem.ten,
-  smallButtonFont: pxAsRem.twelve,
-  mediumButtonFont: pxAsRem.fourteen,
-  largeButtonFont: pxAsRem.eighteen,
-};
-
 export const fontWeights = {
   thin: 100,
   extraLight: 200,

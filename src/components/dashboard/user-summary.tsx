@@ -83,6 +83,7 @@ export const UserSummary = (props: Props) => {
   const updateSavings = Functions.debounce((cost: string) => {
     if (overview) {
       if (
+        cost.length > 0 &&
         (Number(cost) || Number(cost) === 0) &&
         Number(cost) >= 0 &&
         Number(cost) <= 100 &&
@@ -186,6 +187,7 @@ export const UserSummary = (props: Props) => {
             cost={Functions.roundNumber(overview.income, 2)}
             costUpdate={updateIncome}
             costForwardText="$"
+            costPlaceholder="After tax"
             hideDrag
             hideCheck
             hideCategories
@@ -196,8 +198,9 @@ export const UserSummary = (props: Props) => {
           <Globals.PurchaseCell
             key={`dashboard-overview-header-purchase-cell-savings`}
             description={`Savings %\n$${savedIncome.value}`}
-            cost={overview.savings.toString()}
+            cost={Functions.roundNumber(overview.savings, 2)}
             costLimit={100}
+            costPlaceholder="% of income"
             costUpdate={updateSavings}
             persistDescriptionInput
             hideDrag

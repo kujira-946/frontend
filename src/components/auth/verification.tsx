@@ -170,16 +170,14 @@ export const Verification = (props: Props) => {
           </ResendButton>
         </Caption>
 
-        <Globals.Button
+        <Globals.PrimaryButton
           type="submit"
+          disabled={verificationCode.value === ""}
           size="medium"
           borderRadius="four"
-          background={Styles.primary[ui.theme.value].main}
-          hoverBackground={Styles.primary[ui.theme.value].darker}
-          disabled={verificationCode.value === ""}
         >
           Confirm
-        </Globals.Button>
+        </Globals.PrimaryButton>
       </Form>
     </Container>
   );
