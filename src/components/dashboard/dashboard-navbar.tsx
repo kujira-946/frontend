@@ -20,8 +20,7 @@ const Container = styled.nav`
   align-items: center;
   padding: ${Styles.pxAsRem.sixteen};
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
-
-  border: red solid 1px;
+  border-bottom: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
 `;
 
 const NavigationPillsAndErrorMessage = styled.section`
@@ -45,6 +44,7 @@ const ErrorMessage = styled.p`
 
 const Buttons = styled.section`
   display: flex;
+  gap: ${Styles.pxAsRem.twelve};
   margin-left: ${Styles.pxAsRem.twelve};
 `;
 
@@ -56,14 +56,18 @@ type Props = {
   page: Types.DashboardPage;
 
   navigation?: Types.DashboardNavigation[];
-
-  infoClick?: () => void;
-  createClick?: () => void;
-  createText?: string;
 };
 
 export const DashboardNavbar = (props: Props) => {
   console.log("Dashboard Navbar Rendered");
+
+  function showInfo(): void {
+    console.log("Show Info:", props.page);
+  }
+
+  function createLogbookEntry(): void {
+    console.log("Create Logbook Entry:", props.page);
+  }
 
   return (
     <Container>
@@ -79,6 +83,7 @@ export const DashboardNavbar = (props: Props) => {
                   onClick={onClick}
                   size="smaller"
                   selected={selected}
+                  compact
                 >
                   {text}
                 </Globals.NeutralPillButton>
@@ -90,22 +95,22 @@ export const DashboardNavbar = (props: Props) => {
       </NavigationPillsAndErrorMessage>
 
       <Buttons>
-        {props.infoClick && (
-          <Globals.NeutralButton
+        {props.page !== "Settings" && (
+          <Globals.NeutralButtonOutlined
             size="medium"
-            onClick={props.infoClick}
+            onClick={showInfo}
             compact
           >
             Info
-          </Globals.NeutralButton>
+          </Globals.NeutralButtonOutlined>
         )}
-        {props.createClick && props.createText && (
+        {props.page === "Logbooks" && (
           <Globals.PrimaryButton
             size="medium"
-            onClick={props.createClick}
+            onClick={createLogbookEntry}
             compact
           >
-            Create {props.createText}
+            Create Log Entry
           </Globals.PrimaryButton>
         )}
       </Buttons>

@@ -38,7 +38,7 @@ const Body = styled.section`
 `;
 
 const Children = styled.section`
-  border: blue solid 1px;
+  /* border: blue solid 1px; */
 `;
 
 // ========================================================================================= //
@@ -52,18 +52,10 @@ type Props = {
 
 export const DashboardLayout = (props: Props) => {
   const navigation: Types.DashboardNavigation[] = [
-    { text: "Foo", onClick: () => console.log("Foo"), selected: true },
-    { text: "Bar", onClick: () => console.log("Bar"), selected: false },
-    { text: "Baz", onClick: () => console.log("Baz"), selected: false },
+    { text: "Mar. 2023", onClick: () => console.log("Foo"), selected: true },
+    { text: "Feb. 2023", onClick: () => console.log("Bar"), selected: false },
+    { text: "Mar. 2023", onClick: () => console.log("Baz"), selected: false },
   ];
-
-  function showInfo(): void {
-    console.log("Show Info");
-  }
-
-  function createLogbookEntry(): void {
-    console.log("Create Logbook Entry");
-  }
 
   return (
     <Container>
@@ -74,13 +66,7 @@ export const DashboardLayout = (props: Props) => {
       </Overview>
 
       <Body>
-        <DashboardNavbar
-          page={props.page}
-          navigation={navigation}
-          infoClick={showInfo}
-          createClick={createLogbookEntry}
-          createText="Log Entry"
-        />
+        <DashboardNavbar page={props.page} navigation={navigation} />
         <Children>{props.children}</Children>
       </Body>
     </Container>

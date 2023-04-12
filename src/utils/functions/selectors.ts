@@ -16,25 +16,25 @@ export function useErrorsSlice() {
   return useAppSelector((state) => state.errors);
 }
 
-const fetchCurrentUserOverview = createSelector(
+const getCurrentUserOverview = createSelector(
   (state: GlobalState) => state.entities.currentUser,
   (state: GlobalState) => state.entities.overviews,
   (currentUser, overviews) => {
-    if (currentUser && currentUser.overviewIds && overviews) {
+    if (currentUser && overviews) {
       return overviews[currentUser.overviewIds[0]];
     }
   }
 );
-export function useFetchCurrentUserOverview() {
-  return useAppSelector(fetchCurrentUserOverview);
+export function useGetCurrentUserOverview() {
+  return useAppSelector(getCurrentUserOverview);
 }
 
-const fetchCurrentUserOverviewGroups = createSelector(
+const getCurrentUserOverviewGroups = createSelector(
   (state: GlobalState) => state.entities.currentUser,
   (state: GlobalState) => state.entities.overviews,
   (state: GlobalState) => state.entities.overviewGroups,
   (currentUser, overviews, overviewGroups) => {
-    if (currentUser && currentUser.overviewIds && overviews && overviewGroups) {
+    if (currentUser && overviews && overviewGroups) {
       const overview = overviews[currentUser.overviewIds[0]];
       if (overview.overviewGroupIds && overview.overviewGroupIds.length > 0) {
         return overview.overviewGroupIds.map((overviewGroupId: number) => {
@@ -44,22 +44,37 @@ const fetchCurrentUserOverviewGroups = createSelector(
     }
   }
 );
-export function useFetchCurrentUserOverviewGroups() {
-  return useAppSelector(fetchCurrentUserOverviewGroups);
+export function useGetCurrentUserOverviewGroups() {
+  return useAppSelector(getCurrentUserOverviewGroups);
 }
 
-const fetchOverviewGroup = createSelector(
+const getCurrentUserLogbooks = createSelector(
+  (state: GlobalState) => state.entities.currentUser,
+  (state: GlobalState) => state.entities.logbooks,
+  (currentUser, logbooks) => {
+    if (currentUser && logbooks) {
+      return currentUser.logbookIds.map((logbookId: number) => {
+        return logbooks[logbookId];
+      });
+    }
+  }
+);
+export function useGetCurrentUserLogbooks() {
+  return useAppSelector(getCurrentUserLogbooks);
+}
+
+const getOverviewGroup = createSelector(
   (state: GlobalState) => state.entities.overviewGroups,
   (state: GlobalState, overviewGroupId: number) => overviewGroupId,
   (overviewGroups, overviewGroupId) => {
     if (overviewGroups) return overviewGroups[overviewGroupId];
   }
 );
-export function useFetchOverviewGroup(overviewGroupId: number) {
-  return useAppSelector((state) => fetchOverviewGroup(state, overviewGroupId));
+export function useGetOverviewGroup(overviewGroupId: number) {
+  return useAppSelector((state) => getOverviewGroup(state, overviewGroupId));
 }
 
-const fetchOverviewGroupPurchases = createSelector(
+const getOverviewGroupPurchases = createSelector(
   (state: GlobalState) => state.entities.overviewGroups,
   (state: GlobalState, overviewGroupId: number) => overviewGroupId,
   (state: GlobalState) => state.entities.purchases,
@@ -74,19 +89,27 @@ const fetchOverviewGroupPurchases = createSelector(
     }
   }
 );
-export function useFetchOverviewGroupPurchases(overviewGroupId: number) {
+export function useGetOverviewGroupPurchases(overviewGroupId: number) {
   return useAppSelector((state) =>
-    fetchOverviewGroupPurchases(state, overviewGroupId)
+    getOverviewGroupPurchases(state, overviewGroupId)
   );
 }
 
-const fetchPurchase = createSelector(
-  (state: GlobalState) => state.entities.purchases,
-  (state: GlobalState, purchaseId: number) => purchaseId,
-  (purchases, purchaseId) => {
-    if (purchases) return purchases[purchaseId];
+const getLogbookEntries = createSelector(
+  (state: GlobalState) => state.entities.logbooks,
+  (state: GlobalState, logbookId: number) => logbookId,
+  (state: GlobalState) => state.entities.logbookEntries,
+  (logbooks, logbookId, logbookEntries) => {
+    if (logbooks && logbooks[logbookId] && logbookEntries) {
+      const logbookEntryIds = logbooks[logbookId].logbookEntryIds;
+      if (logbookEntryIds) {
+        return logbookEntryIds.map((logbookEntryId: number) => {
+          return logbookEntries[logbookEntryId];
+        });
+      }
+    }
   }
 );
-export function useFetchPurchase(purchaseId: number) {
-  return useAppSelector((state) => fetchPurchase(state, purchaseId));
+export function useGetLogbookEntries(logbookId: number) {
+  return useAppSelector((state) => getLogbookEntries(state, logbookId));
 }

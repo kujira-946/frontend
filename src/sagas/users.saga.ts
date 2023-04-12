@@ -99,7 +99,10 @@ function* fetchUser(action: UserIdAction) {
     const normalizedData = normalize(data.data, userSchema);
     const { user } = normalizedData.entities;
     if (forCurrentUser) {
-      yield Saga.put(Redux.entitiesActions.setCurrentUser(data.data));
+      const currentUser = data.data;
+      currentUser["overviewIds"] = [];
+      currentUser["logbookIds"] = [];
+      yield Saga.put(Redux.entitiesActions.setCurrentUser(currentUser));
     }
     // yield Saga.put(Redux.entitiesActions.addUser(user as Types.UsersEntity));
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));

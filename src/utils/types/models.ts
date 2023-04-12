@@ -27,7 +27,7 @@ export type Overview = {
   id: number;
   income: number;
   savings: number;
-  overviewGroupIds: number[]; // has many overview groups
+  overviewGroupIds?: number[]; // has many overview groups
   ownerId: number; // belongs to a user
 } & Dates;
 
@@ -35,7 +35,7 @@ export type OverviewGroup = {
   id: number;
   name: string;
   totalSpent: number;
-  purchaseIds: number[]; // has many purchases
+  purchaseIds?: number[]; // has many purchases
   overviewId: number; // belongs to an overview
 } & Dates;
 
@@ -43,7 +43,7 @@ export type Logbook = {
   id: number;
   name: string;
   totalSpent: number;
-  logbookEntryIds: number[]; // has many logbook entries
+  logbookEntryIds?: number[]; // has many logbook entries
   ownerId: number; // belongs to a user
 } & Dates;
 
@@ -52,7 +52,7 @@ export type LogbookEntry = {
   date: Date;
   totalSpent: number;
   budget?: number;
-  purchaseIds: number[]; // has many purchases
+  purchaseIds?: number[]; // has many purchases
   logbookId: number; // belongs to a logbook
 } & Dates;
 

@@ -64,8 +64,8 @@ export const UserSummary = (props: Props) => {
 
   const { loadingOverviews } = Functions.useUiSlice();
   const { currentUser, overviews } = Functions.useEntitiesSlice();
-  const overview = Functions.useFetchCurrentUserOverview();
-  const overviewGroups = Functions.useFetchCurrentUserOverviewGroups();
+  const overview = Functions.useGetCurrentUserOverview();
+  const overviewGroups = Functions.useGetCurrentUserOverviewGroups();
 
   const savedIncome = useSignal("");
   const totalSpent = useSignal("0.00");

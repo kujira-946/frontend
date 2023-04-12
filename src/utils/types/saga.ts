@@ -87,13 +87,11 @@ export type OverviewGroupUpdateData = Partial<OverviewGroupCreateData>;
 
 export type LogbookCreateData = {
   name: string;
-  totalSpent?: number;
   ownerId: number;
 };
 
 export type LogbookUpdateData = {
   name?: string;
-  totalSpent?: number;
 };
 
 // ========================================================================================= //
@@ -102,7 +100,7 @@ export type LogbookUpdateData = {
 
 export type LogbookEntryCreateData = {
   date: Date;
-  spent?: number;
+  totalSpent?: number;
   budget?: number;
   logbookId: number;
 };

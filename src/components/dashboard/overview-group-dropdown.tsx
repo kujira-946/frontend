@@ -133,8 +133,8 @@ const ExportedComponent = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
   const { purchases } = Functions.useEntitiesSlice();
-  const overviewGroup = Functions.useFetchOverviewGroup(props.overviewGroupId);
-  const overviewGroupPurchases = Functions.useFetchOverviewGroupPurchases(
+  const overviewGroup = Functions.useGetOverviewGroup(props.overviewGroupId);
+  const overviewGroupPurchases = Functions.useGetOverviewGroupPurchases(
     props.overviewGroupId
   );
 
