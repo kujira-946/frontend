@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { useMemo } from "react";
+import { useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
@@ -54,12 +56,14 @@ const Buttons = styled.section`
 
 type Props = {
   page: Types.DashboardPage;
-
-  navigation?: Types.DashboardNavigation[];
 };
 
 export const DashboardNavbar = (props: Props) => {
   console.log("Dashboard Navbar Rendered");
+
+  const logbooks = Functions.useGetCurrentUserLogbooks();
+
+  const selectedLogbook = useSignal("");
 
   function showInfo(): void {
     console.log("Show Info:", props.page);
@@ -69,28 +73,37 @@ export const DashboardNavbar = (props: Props) => {
     console.log("Create Logbook Entry:", props.page);
   }
 
+  const currentUserLogbooks = useMemo(() => {
+    if (logbooks) {
+      return (
+        <>
+          {logbooks.map((logbook: Types.Logbook, index: number) => {
+            return (
+              <Globals.NeutralPillButton
+                key={`dashboard-navbar-logbook-${logbook.id}-${index}`}
+                onClick={() => (selectedLogbook.value = logbook.name)}
+                size="smaller"
+                selected={selectedLogbook.value === logbook.name}
+                compact
+              >
+                {logbook.name}
+              </Globals.NeutralPillButton>
+            );
+          })}
+        </>
+      );
+    } else {
+      return null;
+    }
+  }, [logbooks, selectedLogbook.value]);
+
   return (
     <Container>
       <NavigationPillsAndErrorMessage>
-        {props.navigation && (
-          <NavigationPills>
-            {props.navigation.map((navigation: Types.DashboardNavigation) => {
-              const { text, onClick, selected } = navigation;
+        <NavigationPills>
+          {props.page === "Logbooks" && currentUserLogbooks}
+        </NavigationPills>
 
-              return (
-                <Globals.NeutralPillButton
-                  key={text}
-                  onClick={onClick}
-                  size="smaller"
-                  selected={selected}
-                  compact
-                >
-                  {text}
-                </Globals.NeutralPillButton>
-              );
-            })}
-          </NavigationPills>
-        )}
         <ErrorMessage>Error Message</ErrorMessage>
       </NavigationPillsAndErrorMessage>
 

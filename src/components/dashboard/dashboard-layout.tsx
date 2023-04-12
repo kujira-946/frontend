@@ -51,12 +51,6 @@ type Props = {
 };
 
 export const DashboardLayout = (props: Props) => {
-  const navigation: Types.DashboardNavigation[] = [
-    { text: "Mar. 2023", onClick: () => console.log("Foo"), selected: true },
-    { text: "Feb. 2023", onClick: () => console.log("Bar"), selected: false },
-    { text: "Mar. 2023", onClick: () => console.log("Baz"), selected: false },
-  ];
-
   return (
     <Container>
       <Overview>
@@ -66,7 +60,7 @@ export const DashboardLayout = (props: Props) => {
       </Overview>
 
       <Body>
-        <DashboardNavbar page={props.page} navigation={navigation} />
+        <DashboardNavbar page={props.page} />
         <Children>{props.children}</Children>
       </Body>
     </Container>
