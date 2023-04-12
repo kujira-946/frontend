@@ -6,6 +6,7 @@ import * as Types from "@/utils/types";
 import { ClientRoutes } from "@/utils/constants/routes";
 import { updateUserRequest } from "./users.saga";
 import { updateOverviewRequest } from "./overviews.saga";
+import { createLogbookRequest } from "./logbooks.saga";
 
 // ========================================================================================= //
 // [ ACTIONS ] ============================================================================= //
@@ -45,6 +46,12 @@ function* onboardNewUser(action: OnboardNewUserActions) {
       updateOverviewRequest(overviewId, {
         income,
         savings,
+      })
+    );
+    yield Saga.put(
+      createLogbookRequest({
+        name: Functions.generateFormattedDate(),
+        ownerId: currentUserId,
       })
     );
     yield Saga.put(updateUserRequest(currentUserId, { onboarded: true }));

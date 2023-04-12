@@ -18,21 +18,9 @@ const Logbooks: NextPageWithLayout = () => {
 
   useEffect(() => {
     if (currentUser) {
-      const userHasNoLogbooks =
-        currentUser.logbookIds.length === 0 &&
-        logbooks &&
-        Object.keys(logbooks).length === 0;
-
       if (!logbooks) {
         dispatch(Redux.uiActions.setLoadingLogbooks);
         dispatch(LogbooksSagas.fetchUserLogbooksRequest(currentUser.id));
-      } else if (userHasNoLogbooks) {
-        dispatch(
-          LogbooksSagas.createLogbookRequest({
-            name: Functions.generateFormattedDate(),
-            ownerId: currentUser.id,
-          })
-        );
       }
     }
   }, [currentUser, logbooks]);
