@@ -83,11 +83,12 @@ export const UserSummary = (props: Props) => {
   const updateSavings = Functions.debounce((cost: string) => {
     if (overview) {
       if (
-        Number(cost) &&
+        (Number(cost) || Number(cost) === 0) &&
         Number(cost) >= 0 &&
         Number(cost) <= 100 &&
         Number(cost) !== overview.savings
       ) {
+        console.log("Foo");
         dispatch(updateOverviewRequest(overview.id, { savings: Number(cost) }));
       }
     }
