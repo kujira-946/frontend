@@ -11,6 +11,10 @@ import { ThemeProps } from "../layout";
 // ========================================================================================= //
 
 const Container = styled.nav`
+  position: sticky;
+  top: 0;
+  right: 0;
+  left: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -49,7 +53,10 @@ const Buttons = styled.section`
 // ========================================================================================= //
 
 type Props = {
+  page: Types.DashboardPage;
+
   navigation?: Types.DashboardNavigation[];
+
   infoClick?: () => void;
   createClick?: () => void;
   createText?: string;
@@ -69,8 +76,9 @@ export const DashboardNavbar = (props: Props) => {
               return (
                 <Globals.NeutralPillButton
                   key={text}
-                  size="smaller"
                   onClick={onClick}
+                  size="smaller"
+                  selected={selected}
                 >
                   {text}
                 </Globals.NeutralPillButton>
