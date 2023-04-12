@@ -122,7 +122,7 @@ export const UserSummary = (props: Props) => {
           if (overviewGroup.name === "Incoming") {
             continue;
           } else {
-            overviewGroupsTotalSpent += overviewGroup.totalCost;
+            overviewGroupsTotalSpent += overviewGroup.totalSpent;
           }
         }
 

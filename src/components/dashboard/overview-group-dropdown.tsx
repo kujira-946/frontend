@@ -143,15 +143,15 @@ const ExportedComponent = (props: Props) => {
   const loadingPurchases = useSignal(false);
   const deleteConfirmationOpen = useSignal(false);
 
-  function calculateNewTotalCost(
-    oldTotalCost: number,
+  function calculateNewTotalSpent(
+    oldTotalSpent: number,
     oldPurchaseCost: number,
     newPurchaseCost: number
   ): number {
     const purchaseDelta = newPurchaseCost - oldPurchaseCost;
-    let newTotalCost = oldTotalCost + purchaseDelta;
-    if (newTotalCost < 0) newTotalCost = 0;
-    return Number(Functions.roundNumber(newTotalCost, 2));
+    let newTotalSpent = oldTotalSpent + purchaseDelta;
+    if (newTotalSpent < 0) newTotalSpent = 0;
+    return Number(Functions.roundNumber(newTotalSpent, 2));
   }
 
   const updatePurchase = useCallback(
@@ -169,15 +169,15 @@ const ExportedComponent = (props: Props) => {
               cost: Number(Functions.roundNumber(Number(cost), 2)),
             };
 
-            const newTotalCost = calculateNewTotalCost(
-              overviewGroup.totalCost,
+            const newTotalSpent = calculateNewTotalSpent(
+              overviewGroup.totalSpent,
               purchase?.cost || 0,
               Number(cost)
             );
             const overviewGroupUpdateData = {
               overviewGroup: {
                 id: overviewGroup.id,
-                totalCost: newTotalCost,
+                totalSpent: newTotalSpent,
               },
             };
 
@@ -201,8 +201,8 @@ const ExportedComponent = (props: Props) => {
       if (overviewGroup && purchases && purchases[purchaseId]) {
         const purchase = purchases[purchaseId];
         if (purchase.cost) {
-          const newTotalCost = calculateNewTotalCost(
-            overviewGroup.totalCost,
+          const newTotalSpent = calculateNewTotalSpent(
+            overviewGroup.totalSpent,
             purchase.cost,
             0
           );
@@ -211,7 +211,7 @@ const ExportedComponent = (props: Props) => {
             deletePurchaseRequest(purchaseId, {
               overviewGroup: {
                 id: props.overviewGroupId,
-                totalCost: newTotalCost,
+                totalSpent: newTotalSpent,
               },
             })
           );
@@ -256,7 +256,7 @@ const ExportedComponent = (props: Props) => {
               `(${overviewGroup.purchaseIds.length})`}
           </Title>
           <Total>
-            ${Functions.roundNumber(overviewGroup?.totalCost || 0, 2)}
+            ${Functions.roundNumber(overviewGroup?.totalSpent || 0, 2)}
           </Total>
         </Header>
 

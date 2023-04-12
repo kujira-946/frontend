@@ -100,7 +100,7 @@ const Onboarding = () => {
       effect(() => {
         if (Number(income.value)) {
           let remainingBudget =
-            Number(income.value) - recurringOverviewGroup.totalCost;
+            Number(income.value) - recurringOverviewGroup.totalSpent;
           if (Number(savings.value)) {
             remainingBudget -=
               (Number(income.value) * Number(savings.value)) / 100;
