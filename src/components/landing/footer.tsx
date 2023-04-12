@@ -124,13 +124,13 @@ function scrollToTop(): void {
 }
 
 export const Footer = () => {
-  const { ui } = Functions.useSignalsStore();
+  const { theme } = Functions.useSignalsStore().ui;
 
   return (
     <Container>
       <Content>
         <Body>
-          {ui.theme.value === "light" ? (
+          {theme.value === "light" ? (
             <Image
               src="/logo-text-outlined-light.svg"
               alt="Logo Text"

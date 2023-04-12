@@ -49,11 +49,11 @@ const links = [
 export const OverviewNavbar = () => {
   const router = useRouter();
 
-  const { ui } = Functions.useSignalsStore();
+  const { theme } = Functions.useSignalsStore().ui;
 
   return (
     <Container>
-      {ui.theme.value === "light" ? (
+      {theme.value === "light" ? (
         <Image
           src="/logo-symbol-light.svg"
           alt="Light Logo"
@@ -82,10 +82,10 @@ export const OverviewNavbar = () => {
                   height={16}
                   fill={
                     router.pathname === link
-                      ? Styles.text[ui.theme.value]
-                      : Styles.background[ui.theme.value].seven
+                      ? Styles.text[theme.value]
+                      : Styles.background[theme.value].seven
                   }
-                  hoveredFill={Styles.text[ui.theme.value]}
+                  hoveredFill={Styles.text[theme.value]}
                   addHover
                 />
               ) : link === Constants.ClientRoutes.REVIEWS ? (
@@ -93,10 +93,10 @@ export const OverviewNavbar = () => {
                   height={16}
                   fill={
                     router.pathname === link
-                      ? Styles.text[ui.theme.value]
-                      : Styles.background[ui.theme.value].seven
+                      ? Styles.text[theme.value]
+                      : Styles.background[theme.value].seven
                   }
-                  hoveredFill={Styles.text[ui.theme.value]}
+                  hoveredFill={Styles.text[theme.value]}
                   addHover
                 />
               ) : (
@@ -104,10 +104,10 @@ export const OverviewNavbar = () => {
                   height={16}
                   fill={
                     router.pathname === link
-                      ? Styles.text[ui.theme.value]
-                      : Styles.background[ui.theme.value].seven
+                      ? Styles.text[theme.value]
+                      : Styles.background[theme.value].seven
                   }
-                  hoveredFill={Styles.text[ui.theme.value]}
+                  hoveredFill={Styles.text[theme.value]}
                   addHover
                 />
               )}

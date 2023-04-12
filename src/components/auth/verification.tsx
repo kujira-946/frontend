@@ -85,7 +85,7 @@ type Props = {
 
 export const Verification = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
-  const { ui } = Functions.useSignalsStore();
+  const { theme } = Functions.useSignalsStore().ui;
   const { loginForThirtyDays } = Functions.useUiSlice();
 
   const verificationCode = useSignal("");
@@ -130,7 +130,7 @@ export const Verification = (props: Props) => {
   return (
     <Container>
       <Header>
-        {ui.theme.value === "light" ? (
+        {theme.value === "light" ? (
           <Image
             src="/logo-full-vertical-light.svg"
             alt="Logo"

@@ -142,7 +142,7 @@ type Props = {
 const categories: Category[] = ["Need", "Planned", "Impulse", "Regret"];
 
 const ExportedComponent = (props: Props) => {
-  const { ui } = Functions.useSignalsStore();
+  const { theme } = Functions.useSignalsStore().ui;
 
   const checkboxActive = useSignal(false);
   const description = useSignal(props.description);
@@ -212,8 +212,8 @@ const ExportedComponent = (props: Props) => {
         <DragButton {...props.provided.dragHandleProps} tabIndex={-1}>
           <Icons.Drag
             height={12}
-            fill={Styles.background[ui.theme.value].six}
-            hoveredFill={Styles.background[ui.theme.value].eight}
+            fill={Styles.background[theme.value].six}
+            hoveredFill={Styles.background[theme.value].eight}
             addHover
           />
         </DragButton>
@@ -229,13 +229,13 @@ const ExportedComponent = (props: Props) => {
           {checkboxActive.value ? (
             <Icons.CheckboxActive
               height={20}
-              fill={Styles.secondary[ui.theme.value].main}
+              fill={Styles.secondary[theme.value].main}
             />
           ) : (
             <Icons.CheckboxInactive
               height={20}
-              fill={Styles.background[ui.theme.value].seven}
-              hoveredFill={Styles.text[ui.theme.value]}
+              fill={Styles.background[theme.value].seven}
+              hoveredFill={Styles.text[theme.value]}
               addHover
             />
           )}
@@ -298,8 +298,8 @@ const ExportedComponent = (props: Props) => {
         >
           <Icons.Close
             height={12}
-            fill={Styles.background[ui.theme.value].seven}
-            hoveredFill={Styles.text[ui.theme.value]}
+            fill={Styles.background[theme.value].seven}
+            hoveredFill={Styles.text[theme.value]}
             addHover
           />
         </DeleteButton>

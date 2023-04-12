@@ -75,7 +75,7 @@ type Props = {
 };
 
 export const OverviewDeleteConfirmation = (props: Props) => {
-  const { ui } = Functions.useSignalsStore();
+  const { theme } = Functions.useSignalsStore().ui;
 
   return (
     <Parent
@@ -91,8 +91,8 @@ export const OverviewDeleteConfirmation = (props: Props) => {
           <DeleteButton type="button" onClick={props.onClose}>
             <Icons.Close
               height={12}
-              fill={Styles.background[ui.theme.value].six}
-              hoveredFill={Styles.text[ui.theme.value]}
+              fill={Styles.background[theme.value].six}
+              hoveredFill={Styles.text[theme.value]}
               addHover
             />
           </DeleteButton>

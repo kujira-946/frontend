@@ -132,7 +132,6 @@ type Props = {
 const ExportedComponent = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
-  const { ui } = Functions.useSignalsStore();
   const { purchases } = Functions.useEntitiesSlice();
   const overviewGroup = Functions.useFetchOverviewGroup(props.overviewGroupId);
   const overviewGroupPurchases = Functions.useFetchOverviewGroupPurchases(

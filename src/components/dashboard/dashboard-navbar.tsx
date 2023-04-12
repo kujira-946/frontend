@@ -58,8 +58,6 @@ type Props = {
 export const DashboardNavbar = (props: Props) => {
   console.log("Dashboard Navbar Rendered");
 
-  const { theme } = Functions.useSignalsStore().ui;
-
   return (
     <Container>
       <NavigationPillsAndErrorMessage>

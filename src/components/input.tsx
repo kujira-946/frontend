@@ -122,7 +122,7 @@ type Props = {
 };
 
 export const Input = (props: Props) => {
-  const { ui } = Functions.useSignalsStore();
+  const { theme } = Functions.useSignalsStore().ui;
 
   const inputFieldRef = useRef<any>(null);
   const focused = useSignal(false);
@@ -183,8 +183,8 @@ export const Input = (props: Props) => {
             <IconContainer onClick={props.toggleHidden}>
               <Icons.Hidden
                 height={16}
-                fill={Styles.background[ui.theme.value].eight}
-                hoveredFill={Styles.text[ui.theme.value]}
+                fill={Styles.background[theme.value].eight}
+                hoveredFill={Styles.text[theme.value]}
                 addHover
               />
             </IconContainer>
@@ -192,8 +192,8 @@ export const Input = (props: Props) => {
             <IconContainer onClick={props.toggleHidden}>
               <Icons.Revealed
                 height={16}
-                fill={Styles.background[ui.theme.value].eight}
-                hoveredFill={Styles.text[ui.theme.value]}
+                fill={Styles.background[theme.value].eight}
+                hoveredFill={Styles.text[theme.value]}
                 addHover
               />
             </IconContainer>

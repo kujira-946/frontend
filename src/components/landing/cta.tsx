@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import * as Globals from "@/components";
 import * as Constants from "@/utils/constants";
-import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { ThemeProps } from "@/components/layout";
 
@@ -48,8 +47,6 @@ const CopyBody = styled.h2`
 // ========================================================================================= //
 
 export const CTA = () => {
-  const { ui } = Functions.useSignalsStore();
-
   return (
     <Container>
       <Globals.LazyLoad

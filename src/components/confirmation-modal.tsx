@@ -128,7 +128,7 @@ type Props = {
 };
 
 export const ConfirmationModal = (props: Props) => {
-  const { ui } = Functions.useSignalsStore();
+  const { theme } = Functions.useSignalsStore().ui;
 
   function submit(event: Types.Submit) {
     event.preventDefault();
@@ -148,7 +148,7 @@ export const ConfirmationModal = (props: Props) => {
             <HeaderButton type="button" onClick={props.backButtonAction}>
               <Icons.ChevronLeft
                 height={14}
-                fill={Styles.background[ui.theme.value].eight}
+                fill={Styles.background[theme.value].eight}
                 addHover
               />
             </HeaderButton>
@@ -159,7 +159,7 @@ export const ConfirmationModal = (props: Props) => {
             <HeaderButton type="button" onClick={props.closeButtonAction}>
               <Icons.Close
                 height={14}
-                fill={Styles.background[ui.theme.value].eight}
+                fill={Styles.background[theme.value].eight}
                 addHover
               />
             </HeaderButton>
@@ -186,8 +186,8 @@ export const ConfirmationModal = (props: Props) => {
           disabled={props.disableSubmit}
           size="medium"
           borderRadius="four"
-          background={Styles.primary[ui.theme.value].main}
-          hoverBackground={Styles.primary[ui.theme.value].darker}
+          background={Styles.primary[theme.value].main}
+          hoverBackground={Styles.primary[theme.value].darker}
           style={{
             marginTop: Styles.pxAsRem.four,
             opacity: props.disableSubmit ? 0.5 : 1,

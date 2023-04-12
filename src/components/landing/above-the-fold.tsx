@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 
 import * as Globals from "@/components";
-import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { ThemeProps } from "@/components/layout";
 
@@ -78,8 +77,6 @@ function scrollToAbout(): void {
 }
 
 export const AboveTheFold = () => {
-  const { ui } = Functions.useSignalsStore();
-
   return (
     <Container>
       <ATFContent>

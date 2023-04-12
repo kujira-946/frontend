@@ -51,7 +51,7 @@ type Props = {
 };
 
 export const CheckboxConfirmation = (props: Props) => {
-  const { ui } = Functions.useSignalsStore();
+  const { theme } = Functions.useSignalsStore().ui;
 
   return (
     <Container>
@@ -59,7 +59,7 @@ export const CheckboxConfirmation = (props: Props) => {
         <Icon onClick={() => (props.checkboxActive.value = false)}>
           <Icons.CheckboxActive
             height={20}
-            fill={Styles.secondary[ui.theme.value].main}
+            fill={Styles.secondary[theme.value].main}
             addHover
           />
         </Icon>
@@ -67,7 +67,7 @@ export const CheckboxConfirmation = (props: Props) => {
         <Icon onClick={() => (props.checkboxActive.value = true)}>
           <Icons.CheckboxInactive
             height={20}
-            fill={Styles.text[ui.theme.value]}
+            fill={Styles.text[theme.value]}
             addHover
           />
         </Icon>

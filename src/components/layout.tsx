@@ -308,7 +308,7 @@ type Props = { children: React.ReactNode };
 export const Layout = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
-  const { ui } = Functions.useSignalsStore();
+  const { theme } = Functions.useSignalsStore().ui;
   const { currentUser } = Functions.useEntitiesSlice();
   const { loadingUsers } = Functions.useUiSlice();
 
@@ -327,7 +327,7 @@ export const Layout = (props: Props) => {
   }, [currentUser]);
 
   return (
-    <ThemeProvider theme={themes[ui.theme.value]}>
+    <ThemeProvider theme={themes[theme.value]}>
       <GlobalStyles />
       <Portal id="app-portal" />
       <Notification />

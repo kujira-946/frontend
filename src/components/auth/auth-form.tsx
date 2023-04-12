@@ -115,7 +115,7 @@ type Props = {
 
 export const AuthForm = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
-  const { ui } = Functions.useSignalsStore();
+  const { theme } = Functions.useSignalsStore().ui;
 
   const username = useSignal("");
   const password = useSignal("");
@@ -225,7 +225,7 @@ export const AuthForm = (props: Props) => {
     <>
       <Container>
         <Header>
-          {ui.theme.value === "light" ? (
+          {theme.value === "light" ? (
             <Image
               src="/logo-full-vertical-light.svg"
               alt="Logo"
