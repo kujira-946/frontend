@@ -7,7 +7,6 @@ import { ThemeProps } from "../layout";
 import { OverviewNavbar } from "./overview-navbar";
 import { UserSummary } from "./user-summary";
 import { OverviewGroups } from "./overview-groups";
-import { DashboardHeader } from "./dashboard-header";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -30,16 +29,8 @@ const Overview = styled.section`
   overflow-y: auto;
 `;
 
-const Body = styled.section`
-  position: relative;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  overflow-y: auto;
-`;
-
 const Children = styled.section`
-  padding: ${Styles.pxAsRem.sixteen};
+  flex: 1;
 
   /* border: blue solid 1px; */
 `;
@@ -62,10 +53,7 @@ export const DashboardLayout = (props: Props) => {
         <OverviewGroups />
       </Overview>
 
-      <Body>
-        <DashboardHeader page={props.page} />
-        <Children>{props.children}</Children>
-      </Body>
+      <Children>{props.children}</Children>
     </Container>
   );
 };

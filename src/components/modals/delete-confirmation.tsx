@@ -33,7 +33,11 @@ const Parent = styled(motion.section)<ParentProps>`
   ${Styles.overlay};
 `;
 
-const Child = styled.article`
+type ChildProps = {
+  borderRadius?: Types.PxAsRem;
+};
+
+const Child = styled.article<ChildProps>`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -41,7 +45,11 @@ const Child = styled.article`
   gap: ${Styles.pxAsRem.sixteen};
   padding: ${Styles.pxAsRem.sixteen};
   background-color: ${(props: ThemeProps) => props.theme.backgroundThree};
-  border-radius: ${Styles.pxAsRem.four};
+  border-radius: ${(props) => {
+    return props.borderRadius
+      ? Styles.pxAsRem[props.borderRadius]
+      : Styles.pxAsRem.four;
+  }};
 `;
 
 const Header = styled.header`
@@ -77,6 +85,7 @@ type Props = {
   open: Signal<boolean>;
   onClose: () => void;
   onConfirm: () => void;
+  borderRadius?: Types.PxAsRem;
   fixed?: true;
 };
 
@@ -91,7 +100,10 @@ export const DeleteConfirmation = (props: Props) => {
       exit={Constants.staticFadeIn.exit}
       transition={Constants.staticFadeIn.transition}
     >
-      <Child onClick={(event: Types.OnClick) => event.stopPropagation()}>
+      <Child
+        onClick={(event: Types.OnClick) => event.stopPropagation()}
+        borderRadius={props.borderRadius}
+      >
         <Header>
           <Title>{props.title}</Title>
           <DeleteButton type="button" onClick={props.onClose}>

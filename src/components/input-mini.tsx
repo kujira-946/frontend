@@ -144,7 +144,8 @@ const ExportedComponent = (props: Props) => {
   const textareaRef = useRef<any>(null);
   const focused = useSignal(false);
 
-  function focusTextarea(): void {
+  function focusTextarea(event: Types.OnClick): void {
+    event.stopPropagation();
     textareaRef.current && textareaRef.current.focus();
     focused.value = true;
   }

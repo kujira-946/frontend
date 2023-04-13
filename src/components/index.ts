@@ -9,6 +9,7 @@ import { Loading } from "./loading";
 import { Shimmer } from "./shimmer";
 import { PurchaseCell } from "./purchase-cell";
 import { DropdownPurchases } from "./dropdown-purchases";
+import { PageHeader } from "./page-header";
 
 export {
   LazyLoad,
@@ -22,6 +23,7 @@ export {
   Shimmer,
   PurchaseCell,
   DropdownPurchases,
+  PageHeader,
 };
 
 export * from "./button";
