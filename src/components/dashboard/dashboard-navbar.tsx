@@ -7,6 +7,7 @@ import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { ThemeProps } from "../layout";
+import { createLogbookEntryRequest } from "@/sagas/logbook-entries.saga";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -61,16 +62,25 @@ type Props = {
 export const DashboardNavbar = (props: Props) => {
   console.log("Dashboard Navbar Rendered");
 
+  const dispatch = Functions.useAppDispatch();
+
   const logbooks = Functions.useGetCurrentUserLogbooks();
 
-  const selectedLogbook = useSignal("");
+  const selectedLogbook = useSignal<number | null>(null);
 
   function showInfo(): void {
     console.log("Show Info:", props.page);
   }
 
   function createLogbookEntry(): void {
-    console.log("Create Logbook Entry:", props.page);
+    if (selectedLogbook.value) {
+      dispatch(
+        createLogbookEntryRequest({
+          date: Functions.generateFormattedDate(new Date(), true),
+          logbookId: selectedLogbook.value,
+        })
+      );
+    }
   }
 
   const currentUserLogbooks = useMemo(() => {
@@ -78,12 +88,13 @@ export const DashboardNavbar = (props: Props) => {
       return (
         <>
           {logbooks.map((logbook: Types.Logbook, index: number) => {
+            if (index === 0) selectedLogbook.value = logbook.id;
             return (
               <Globals.NeutralPillButton
                 key={`dashboard-navbar-logbook-${logbook.id}-${index}`}
-                onClick={() => (selectedLogbook.value = logbook.name)}
+                onClick={() => (selectedLogbook.value = logbook.id)}
                 size="smaller"
-                selected={selectedLogbook.value === logbook.name}
+                selected={selectedLogbook.value === logbook.id}
                 compact
               >
                 {logbook.name}

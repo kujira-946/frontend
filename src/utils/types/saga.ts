@@ -99,7 +99,7 @@ export type LogbookUpdateData = {
 // ========================================================================================= //
 
 export type LogbookEntryCreateData = {
-  date: Date;
+  date: string;
   totalSpent?: number;
   budget?: number;
   logbookId: number;
