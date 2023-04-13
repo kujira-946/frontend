@@ -7,7 +7,6 @@ import { useSignal } from "@preact/signals-react";
 import * as Constants from "@/utils/constants";
 import { SignalsStoreContext } from "@/pages/_app";
 import { AppDispatch, RootState } from "@/store";
-import { updatePurchaseRequest } from "@/sagas/purchases.saga";
 
 // Use these instead of react-redux's `useDispatch` and `useSelector`,
 // as these come packed with the inferred types, found in @/store.ts.
