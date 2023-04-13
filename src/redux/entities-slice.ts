@@ -398,8 +398,18 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.logbookEntries) {
         const logbookEntriesCopy = Functions.deepCopy(state.logbookEntries);
-        delete logbookEntriesCopy[action.payload];
-        state.logbookEntries = logbookEntriesCopy;
+        if (state.logbooks) {
+          const logbookEntry = state.logbookEntries[action.payload];
+          const updatedLogbooks = Functions.deepCopy(state.logbooks);
+          const { logbookEntryIds } = updatedLogbooks[logbookEntry.logbookId];
+          if (logbookEntryIds) {
+            const logbookEntryIndex = logbookEntryIds.indexOf(action.payload);
+            logbookEntryIds.splice(logbookEntryIndex, 1);
+            state.logbooks = updatedLogbooks;
+          }
+          delete logbookEntriesCopy[action.payload];
+          state.logbookEntries = logbookEntriesCopy;
+        }
       }
     },
 
