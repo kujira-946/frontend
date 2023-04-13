@@ -48,7 +48,7 @@ const Child = styled.article<ChildProps>`
   border-radius: ${(props) => {
     return props.borderRadius
       ? Styles.pxAsRem[props.borderRadius]
-      : Styles.pxAsRem.four;
+      : Styles.pxAsRem.six;
   }};
 `;
 

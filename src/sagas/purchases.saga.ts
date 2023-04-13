@@ -112,7 +112,7 @@ export function bulkCreatePurchasesRequest(
 
 type Association = {
   overviewGroup?: { id: number; totalSpent: number };
-  logbookEntry?: { id: number };
+  logbookEntry?: { id: number; totalSpent: number };
 };
 
 type PurchaseUpdateAction = Types.SagaAction<{

@@ -136,83 +136,33 @@ const ExportedComponent = (props: Props) => {
   const loadingPurchases = useSignal(false);
   const deleteConfirmationOpen = useSignal(false);
 
-  function calculateNewTotalSpent(
-    oldTotalSpent: number,
-    oldPurchaseCost: number,
-    newPurchaseCost: number
-  ): number {
-    const purchaseDelta = newPurchaseCost - oldPurchaseCost;
-    let newTotalSpent = oldTotalSpent + purchaseDelta;
-    if (newTotalSpent < 0) newTotalSpent = 0;
-    return Number(Functions.roundNumber(newTotalSpent, 2));
-  }
-
   const updatePurchase = useCallback(
-    Functions.debounce(
-      (purchaseId: number, description: string, cost: string) => {
-        if (overviewGroup && purchases && purchases[purchaseId]) {
-          const purchase = purchases[purchaseId];
-          // On purchase description update
-          if (description !== purchase.description) {
-            dispatch(
-              PurchasesSagas.updatePurchaseRequest(purchaseId, { description })
-            );
-          }
-          // On purchase cost update
-          if (Number(cost) && Number(cost) !== purchase.cost) {
-            const purchaseUpdateData = {
-              cost: Number(Functions.roundNumber(Number(cost), 2)),
-            };
-
-            const newTotalSpent = calculateNewTotalSpent(
-              overviewGroup.totalSpent,
-              purchase?.cost || 0,
-              Number(cost)
-            );
-            const overviewGroupUpdateData = {
-              overviewGroup: {
-                id: overviewGroup.id,
-                totalSpent: newTotalSpent,
-              },
-            };
-
-            dispatch(
-              PurchasesSagas.updatePurchaseRequest(
-                purchaseId,
-                purchaseUpdateData,
-                overviewGroupUpdateData
-              )
-            );
-          }
-        }
-      },
-      500
-    ),
+    (purchaseId: number, description: string, cost: string) => {
+      if (overviewGroup && purchases && purchases[purchaseId]) {
+        return Functions.updatePurchase(
+          purchases[purchaseId],
+          description,
+          cost,
+          "overviewGroup",
+          overviewGroup.id,
+          overviewGroup.totalSpent,
+          dispatch
+        )();
+      }
+    },
     [overviewGroup, purchases]
   );
 
   const deletePurchase = useCallback(
     (purchaseId: number) => {
       if (overviewGroup && purchases && purchases[purchaseId]) {
-        const purchase = purchases[purchaseId];
-        if (purchase.cost) {
-          const newTotalSpent = calculateNewTotalSpent(
-            overviewGroup.totalSpent,
-            purchase.cost,
-            0
-          );
-
-          dispatch(
-            PurchasesSagas.deletePurchaseRequest(purchaseId, {
-              overviewGroup: {
-                id: props.overviewGroupId,
-                totalSpent: newTotalSpent,
-              },
-            })
-          );
-        } else {
-          dispatch(PurchasesSagas.deletePurchaseRequest(purchaseId));
-        }
+        return Functions.deletePurchase(
+          purchases[purchaseId],
+          "overviewGroup",
+          overviewGroup.id,
+          overviewGroup.totalSpent,
+          dispatch
+        );
       }
     },
     [overviewGroup, purchases]

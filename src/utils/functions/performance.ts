@@ -1,4 +1,4 @@
-export function debounce(callback: Function, delay: number = 300) {
+export function debounce(callback: Function, delay: number = 500) {
   let timeoutId: ReturnType<typeof setTimeout>;
 
   return function <This, Argument>(this: This, ...args: Argument[]) {

@@ -34,7 +34,7 @@ const Logbooks: NextPageWithLayout = () => {
   const dispatch = Functions.useAppDispatch();
 
   const { loadingLogbooks, loadingLogbookEntries } = Functions.useUiSlice();
-  const { currentUser, logbooks } = Functions.useEntitiesSlice();
+  const { currentUser, logbooks, purchases } = Functions.useEntitiesSlice();
 
   const selectedLogbookId = useSignal<number | null>(null);
 

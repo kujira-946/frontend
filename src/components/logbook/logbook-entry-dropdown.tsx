@@ -1,7 +1,7 @@
 import * as Drag from "react-beautiful-dnd";
 import dynamic from "next/dynamic";
 import styled from "styled-components";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -115,6 +115,7 @@ export const LogbookEntryDropdown = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
   const { theme } = Functions.useSignalsStore().ui;
+  const { purchases } = Functions.useEntitiesSlice();
   const logbookEntry = Functions.useGetLogbookEntry(props.logbookEntryId);
   const logbookEntryPurchases = Functions.useGetLogbookEntryPurchases(
     props.logbookEntryId
@@ -125,10 +126,37 @@ export const LogbookEntryDropdown = (props: Props) => {
   const confirmLogbookEntryDelete = useSignal(false);
   const confirmPurchasesDelete = useSignal(false);
 
-  function openDeleteConfirmation(event: Types.OnClick): void {
-    event.stopPropagation();
-    confirmLogbookEntryDelete.value = true;
-  }
+  const updatePurchase = useCallback(
+    (purchaseId: number, description: string, cost: string) => {
+      if (logbookEntry && purchases && purchases[purchaseId]) {
+        return Functions.updatePurchase(
+          purchases[purchaseId],
+          description,
+          cost,
+          "logbookEntry",
+          logbookEntry.id,
+          logbookEntry.totalSpent,
+          dispatch
+        )();
+      }
+    },
+    [logbookEntry, purchases]
+  );
+
+  const deletePurchase = useCallback(
+    (purchaseId: number) => {
+      if (logbookEntry && purchases && purchases[purchaseId]) {
+        return Functions.deletePurchase(
+          purchases[purchaseId],
+          "logbookEntry",
+          logbookEntry.id,
+          logbookEntry.totalSpent,
+          dispatch
+        );
+      }
+    },
+    [logbookEntry, purchases]
+  );
 
   useEffect(() => {
     if (opened.value && !logbookEntryPurchases) {
@@ -151,7 +179,6 @@ export const LogbookEntryDropdown = (props: Props) => {
               open={confirmLogbookEntryDelete}
               onClose={() => (confirmLogbookEntryDelete.value = false)}
               onConfirm={() => props.deleteLogbookEntry(props.logbookEntryId)}
-              borderRadius="six"
               fixed
             />
           )}
@@ -165,46 +192,48 @@ export const LogbookEntryDropdown = (props: Props) => {
                 open={confirmPurchasesDelete}
                 onClose={() => (confirmPurchasesDelete.value = false)}
                 onConfirm={() => props.deleteAllPurchases(props.logbookEntryId)}
+                borderRadius="four"
                 fixed
               />
             )}
           </AnimatePresence>
 
-          <Drag.DragDropContext onDragEnd={props.onDragEnd}>
-            <Header
-              onClick={() => (opened.value = !opened.value)}
-              opened={opened.value}
+          <Header
+            onClick={() => (opened.value = !opened.value)}
+            opened={opened.value}
+          >
+            {headerSections.map((section: typeof headerSections[number]) => {
+              return (
+                <HeaderSection key={`logbook-entry-dropdown-header-${section}`}>
+                  <HeaderSectionTitle>{section}</HeaderSectionTitle>
+                  <Globals.InputMini
+                    borderRadius="six"
+                    placeholder={section === "Date" ? "MM/DD/YYYY" : "Budget"}
+                    userInput=""
+                    setUserInput={() => console.log("foo")}
+                  />
+                </HeaderSection>
+              );
+            })}
+            <DeleteButton
+              type="button"
+              name="Logbook Entry Dropdown Delete Button"
+              tabIndex={-1}
+              onClick={(event: Types.OnClick) => {
+                event.stopPropagation();
+                confirmLogbookEntryDelete.value = true;
+              }}
             >
-              {headerSections.map((section: typeof headerSections[number]) => {
-                return (
-                  <HeaderSection
-                    key={`logbook-entry-dropdown-header-${section}`}
-                  >
-                    <HeaderSectionTitle>{section}</HeaderSectionTitle>
-                    <Globals.InputMini
-                      borderRadius="six"
-                      placeholder={section === "Date" ? "MM/DD/YYYY" : "Budget"}
-                      userInput=""
-                      setUserInput={() => console.log("foo")}
-                    />
-                  </HeaderSection>
-                );
-              })}
-              <DeleteButton
-                type="button"
-                name="Logbook Entry Dropdown Delete Button"
-                tabIndex={-1}
-                onClick={openDeleteConfirmation}
-              >
-                <Icons.Close
-                  height={12}
-                  fill={Styles.background[theme.value].seven}
-                  hoveredFill={Styles.text[theme.value]}
-                  addHover
-                />
-              </DeleteButton>
-            </Header>
+              <Icons.Close
+                height={12}
+                fill={Styles.background[theme.value].seven}
+                hoveredFill={Styles.text[theme.value]}
+                addHover
+              />
+            </DeleteButton>
+          </Header>
 
+          <Drag.DragDropContext onDragEnd={props.onDragEnd}>
             <AnimatePresence>
               {opened.value && (
                 <Body
@@ -236,6 +265,8 @@ export const LogbookEntryDropdown = (props: Props) => {
                             <Globals.DropdownPurchases
                               type="Logbook Entries"
                               purchases={logbookEntryPurchases}
+                              update={updatePurchase}
+                              delete={deletePurchase}
                             />
                           ) : null}
                         </PurchaseCells>
