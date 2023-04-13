@@ -66,11 +66,8 @@ export const DashboardNavbar = (props: Props) => {
 
   const logbooks = Functions.useGetCurrentUserLogbooks();
 
+  const showInfo = useSignal(false);
   const selectedLogbook = useSignal<number | null>(null);
-
-  function showInfo(): void {
-    console.log("Show Info:", props.page);
-  }
 
   function createLogbookEntry(): void {
     if (selectedLogbook.value) {
@@ -122,7 +119,7 @@ export const DashboardNavbar = (props: Props) => {
         {props.page !== "Settings" && (
           <Globals.NeutralButtonOutlined
             size="medium"
-            onClick={showInfo}
+            onClick={() => (showInfo.value = !showInfo.value)}
             compact
           >
             Info
