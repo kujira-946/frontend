@@ -3,9 +3,9 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect } from "react";
 import { effect, useSignal } from "@preact/signals-react";
 
+import * as Redux from "@/redux";
 import * as Globals from "@/components";
 import * as Components from "@/components/onboarding";
-import * as Redux from "@/redux";
 import * as OverviewsSagas from "@/sagas/overviews.saga";
 import * as OverviewGroupsSagas from "@/sagas/overview-groups.saga";
 import * as PurchasesSagas from "@/sagas/purchases.saga";

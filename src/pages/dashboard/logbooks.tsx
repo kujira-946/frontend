@@ -4,13 +4,13 @@ import { ReactElement, useCallback, useEffect, useMemo } from "react";
 
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
-import * as Dashboard from "@/components/dashboard";
 import * as Components from "@/components/logbook";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import * as LogbookEntrySagas from "@/sagas/logbook-entries.saga";
 import * as PurchasesSagas from "@/sagas/purchases.saga";
+import { DashboardLayout } from "@/components/dashboard";
 import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
 import { NextPageWithLayout } from "../_app";
 
@@ -157,11 +157,7 @@ const Logbooks: NextPageWithLayout = () => {
 };
 
 Logbooks.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <Dashboard.DashboardLayout page="Logbooks">
-      {page}
-    </Dashboard.DashboardLayout>
-  );
+  return <DashboardLayout page="Logbooks">{page}</DashboardLayout>;
 };
 
 export default Logbooks;
