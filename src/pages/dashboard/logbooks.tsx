@@ -20,6 +20,9 @@ import { useSignal } from "@preact/signals-react";
 // ========================================================================================= //
 
 const Body = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: ${Styles.pxAsRem.eight};
   padding: ${Styles.pxAsRem.sixteen};
 `;
 
@@ -30,7 +33,7 @@ const Body = styled.section`
 const Logbooks: NextPageWithLayout = () => {
   const dispatch = Functions.useAppDispatch();
 
-  const { loadingLogbooks } = Functions.useUiSlice();
+  const { loadingLogbooks, loadingLogbookEntries } = Functions.useUiSlice();
   const { currentUser, logbooks } = Functions.useEntitiesSlice();
 
   const selectedLogbookId = useSignal<number | null>(null);
@@ -39,31 +42,6 @@ const Logbooks: NextPageWithLayout = () => {
   const logbookEntries = Functions.useGetLogbookEntries(
     selectedLogbookId.value
   );
-
-  const logbookElements = useMemo(() => {
-    if (currentUserLogbooks) {
-      return (
-        <>
-          {currentUserLogbooks.map((logbook: Types.Logbook, index: number) => {
-            if (index === 0) selectedLogbookId.value = logbook.id;
-            return (
-              <Globals.NeutralPillButton
-                key={`dashboard-navbar-logbook-${logbook.id}-${index}`}
-                onClick={() => (selectedLogbookId.value = logbook.id)}
-                size="smaller"
-                selected={selectedLogbookId.value === logbook.id}
-                compact
-              >
-                {logbook.name}
-              </Globals.NeutralPillButton>
-            );
-          })}
-        </>
-      );
-    } else {
-      return null;
-    }
-  }, [currentUserLogbooks, selectedLogbookId.value]);
 
   function createLogbookEntry(): void {
     if (selectedLogbookId.value) {
@@ -107,6 +85,7 @@ const Logbooks: NextPageWithLayout = () => {
 
   useEffect(() => {
     if (selectedLogbookId.value) {
+      dispatch(Redux.uiActions.setLoadingLogbookEntries(true));
       dispatch(
         LogbookEntrySagas.fetchLogbookLogbookEntriesRequest(
           selectedLogbookId.value
@@ -134,11 +113,32 @@ const Logbooks: NextPageWithLayout = () => {
           createClick={createLogbookEntry}
           createText="Create Log Entry"
         >
-          {logbookElements}
+          {currentUserLogbooks &&
+            currentUserLogbooks.map((logbook: Types.Logbook, index: number) => {
+              if (index === 0) selectedLogbookId.value = logbook.id;
+              return (
+                <Globals.NeutralPillButton
+                  key={`dashboard-navbar-logbook-${logbook.id}-${index}`}
+                  onClick={() => (selectedLogbookId.value = logbook.id)}
+                  size="smaller"
+                  selected={selectedLogbookId.value === logbook.id}
+                  compact
+                >
+                  {logbook.name}
+                </Globals.NeutralPillButton>
+              );
+            })}
         </Globals.PageHeader>
 
         <Body>
-          {logbookEntries &&
+          {loadingLogbookEntries ? (
+            <>
+              <Globals.Shimmer height={78} borderRadius="six" />
+              <Globals.Shimmer height={78} borderRadius="six" />
+              <Globals.Shimmer height={78} borderRadius="six" />
+              <Globals.Shimmer height={78} borderRadius="six" />
+            </>
+          ) : logbookEntries ? (
             logbookEntries.map((logbookEntry: Types.LogbookEntry) => {
               return (
                 <Components.LogbookEntryDropdown
@@ -150,7 +150,8 @@ const Logbooks: NextPageWithLayout = () => {
                   addPurchase={addPurchase}
                 />
               );
-            })}
+            })
+          ) : null}
         </Body>
       </>
     );
