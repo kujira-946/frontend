@@ -101,10 +101,8 @@ const PurchaseCells = styled.div`
 // [ DYNAMIC IMPORT ] ====================================================================== //
 // ========================================================================================= //
 
-const DynamicOverviewDeleteConfirmation = dynamic(() =>
-  import("./overview-delete-confirmation").then(
-    (mod) => mod.OverviewDeleteConfirmation
-  )
+const DynamicDeleteConfirmation = dynamic(() =>
+  import("../modals/delete-confirmation").then((mod) => mod.DeleteConfirmation)
 );
 
 // ========================================================================================= //
@@ -235,7 +233,8 @@ const ExportedComponent = (props: Props) => {
     <Container borderRadius={props.borderRadius} opened={opened.value}>
       <AnimatePresence>
         {deleteConfirmationOpen.value && (
-          <DynamicOverviewDeleteConfirmation
+          <DynamicDeleteConfirmation
+            title="Delete all purchases for this group?"
             open={deleteConfirmationOpen}
             onClose={() => (deleteConfirmationOpen.value = false)}
             onConfirm={() => props.deleteAllPurchases(props.overviewGroupId)}
@@ -285,51 +284,14 @@ const ExportedComponent = (props: Props) => {
                           <Globals.Shimmer borderRadius="six" height={40} />
                         </>
                       ) : overviewGroupPurchases ? (
-                        overviewGroupPurchases.map(
-                          (purchase: Types.Purchase, index: number) => {
-                            return (
-                              <Drag.Draggable
-                                key={`overview-dropdown-purchase-${purchase.id}`}
-                                draggableId={`${purchase.id}`}
-                                index={index}
-                              >
-                                {(
-                                  provided: Drag.DraggableProvided,
-                                  snapshot: Drag.DraggableStateSnapshot
-                                ) => {
-                                  return (
-                                    <Globals.DraggablePortalItem
-                                      provided={provided}
-                                      snapshot={snapshot}
-                                      preventEntireElementDrag
-                                    >
-                                      <Globals.PurchaseCell
-                                        key={`overview-dropdown-purchase-cell-${purchase.id}-${index}`}
-                                        borderRadius="four"
-                                        provided={provided}
-                                        purchaseId={purchase.id}
-                                        description={purchase.description}
-                                        cost={
-                                          purchase.cost
-                                            ? Functions.roundNumber(
-                                                purchase.cost,
-                                                2
-                                              )
-                                            : ""
-                                        }
-                                        update={updatePurchase}
-                                        delete={deletePurchase}
-                                        costForwardText="$"
-                                        hideCheck
-                                        hideCategories
-                                      />
-                                    </Globals.DraggablePortalItem>
-                                  );
-                                }}
-                              </Drag.Draggable>
-                            );
-                          }
-                        )
+                        <Globals.DropdownPurchases
+                          type="Overview Groups"
+                          purchases={overviewGroupPurchases}
+                          update={updatePurchase}
+                          delete={deletePurchase}
+                          hideCheck
+                          hideCategories
+                        />
                       ) : null}
                     </PurchaseCells>
                   );

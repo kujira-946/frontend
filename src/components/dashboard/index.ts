@@ -1,5 +1,5 @@
 import { DashboardLayout } from "./dashboard-layout";
 import { OverviewGroupDropdown } from "./overview-group-dropdown";
-import { DashboardNavbar } from "./dashboard-navbar";
+import { DashboardHeader } from "./dashboard-header";
 
-export { DashboardLayout, OverviewGroupDropdown, DashboardNavbar };
+export { DashboardLayout, OverviewGroupDropdown, DashboardHeader };

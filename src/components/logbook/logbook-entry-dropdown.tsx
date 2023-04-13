@@ -52,10 +52,8 @@ const PurchaseCells = styled.div``;
 // [ DYNAMIC IMPORT ] ====================================================================== //
 // ========================================================================================= //
 
-const DynamicLogbookEntryDeleteConfirmation = dynamic(() =>
-  import("./logbook-entry-delete-confirmation").then(
-    (mod) => mod.LogbookEntryDeleteConfirmation
-  )
+const DynamicDeleteConfirmation = dynamic(() =>
+  import("../modals/delete-confirmation").then((mod) => mod.DeleteConfirmation)
 );
 
 // ========================================================================================= //
@@ -73,7 +71,8 @@ type Props = {
   addPurchase: (logbookEntryId: number) => void;
 };
 
-export const LogbookEntryDropdown = (props: Props) => { const dispatch = Functions.useAppDispatch();
+export const LogbookEntryDropdown = (props: Props) => {
+  const dispatch = Functions.useAppDispatch();
 
   const logbookEntry = Functions.useGetLogbookEntry(props.logbookEntryId);
   const logbookEntryPurchases = Functions.useGetLogbookEntryPurchases(
@@ -100,7 +99,13 @@ export const LogbookEntryDropdown = (props: Props) => { const dispatch = Functio
       <Container>
         <AnimatePresence>
           {deleteConfirmationOpen.value && (
-            <DynamicLogbookEntryDeleteConfirmation />
+            <DynamicDeleteConfirmation
+              title="Delete all purchases for this entry?"
+              open={deleteConfirmationOpen}
+              onClose={() => (deleteConfirmationOpen.value = false)}
+              onConfirm={() => props.deleteAllPurchases(props.logbookEntryId)}
+              fixed
+            />
           )}
         </AnimatePresence>
 
@@ -118,74 +123,35 @@ export const LogbookEntryDropdown = (props: Props) => { const dispatch = Functio
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0, delay: 0 }}
               >
-                {logbookEntryPurchases && logbookEntryPurchases.length > 0 && (
-                  <Drag.Droppable
-                    droppableId={Styles.logbookEntryDropdownDroppableId}
-                  >
-                    {(
-                      provided: Drag.DroppableProvided,
-                      snapshot: Drag.DroppableStateSnapshot
-                    ) => {
-                      return (
-                        <PurchaseCells
-                          {...provided.droppableProps}
-                          ref={provided.innerRef}
-                        >
-                          {loadingPurchases.value ? (
-                            <>
-                              <Globals.Shimmer borderRadius="six" height={40} />
-                              <Globals.Shimmer borderRadius="six" height={40} />
-                              <Globals.Shimmer borderRadius="six" height={40} />
-                              <Globals.Shimmer borderRadius="six" height={40} />
-                            </>
-                          ) : logbookEntryPurchases ? (
-                            logbookEntryPurchases.map(
-                              (purchase: Types.Purchase, index: number) => {
-                                return (
-                                  <Drag.Draggable
-                                    key={`logbook-entries-dropdown-purchase-${purchase.id}`}
-                                    draggableId={`${purchase.id}`}
-                                    index={index}
-                                  >
-                                    {(
-                                      provided: Drag.DraggableProvided,
-                                      snapshot: Drag.DraggableStateSnapshot
-                                    ) => {
-                                      return (
-                                        <Globals.DraggablePortalItem
-                                          provided={provided}
-                                          snapshot={snapshot}
-                                          preventEntireElementDrag
-                                        >
-                                          <Globals.PurchaseCell
-                                            key={`logbook-entry-dropdown-purchase-${purchase.id}`}
-                                            borderRadius="four"
-                                            provided={provided}
-                                            purchaseId={purchase.id}
-                                            description={purchase.description}
-                                            cost={
-                                              purchase.cost
-                                                ? Functions.roundNumber(
-                                                    purchase.cost,
-                                                    2
-                                                  )
-                                                : ""
-                                            }
-                                            costForwardText="$"
-                                          />
-                                        </Globals.DraggablePortalItem>
-                                      );
-                                    }}
-                                  </Drag.Draggable>
-                                );
-                              }
-                            )
-                          ) : null}
-                        </PurchaseCells>
-                      );
-                    }}
-                  </Drag.Droppable>
-                )}
+                <Drag.Droppable
+                  droppableId={Styles.logbookEntryDropdownDroppableId}
+                >
+                  {(
+                    provided: Drag.DroppableProvided,
+                    snapshot: Drag.DroppableStateSnapshot
+                  ) => {
+                    return (
+                      <PurchaseCells
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                      >
+                        {loadingPurchases.value ? (
+                          <>
+                            <Globals.Shimmer borderRadius="six" height={40} />
+                            <Globals.Shimmer borderRadius="six" height={40} />
+                            <Globals.Shimmer borderRadius="six" height={40} />
+                            <Globals.Shimmer borderRadius="six" height={40} />
+                          </>
+                        ) : logbookEntryPurchases ? (
+                          <Globals.DropdownPurchases
+                            type="Logbook Entries"
+                            purchases={logbookEntryPurchases}
+                          />
+                        ) : null}
+                      </PurchaseCells>
+                    );
+                  }}
+                </Drag.Droppable>
 
                 <Globals.NeutralButtonOutlined
                   onClick={() => (deleteConfirmationOpen.value = true)}

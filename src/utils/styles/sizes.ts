@@ -56,5 +56,5 @@ export const fontWeights = {
 export const zIndexes = {
   loading: 10,
   notification: 9,
-  overviewDeleteConfirmation: 2,
+  deleteConfirmation: 2,
 };

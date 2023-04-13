@@ -16,6 +16,10 @@ export function useErrorsSlice() {
   return useAppSelector((state) => state.errors);
 }
 
+// ========================================================================================= //
+// [ CURRENT USER ] ======================================================================== //
+// ========================================================================================= //
+
 const getCurrentUserOverview = createSelector(
   (state: GlobalState) => state.entities.currentUser,
   (state: GlobalState) => state.entities.overviews,
@@ -63,6 +67,10 @@ export function useGetCurrentUserLogbooks() {
   return useAppSelector(getCurrentUserLogbooks);
 }
 
+// ========================================================================================= //
+// [ OVERVIEW GROUPS ] ===================================================================== //
+// ========================================================================================= //
+
 const getOverviewGroup = createSelector(
   (state: GlobalState) => state.entities.overviewGroups,
   (state: GlobalState, overviewGroupId: number) => overviewGroupId,
@@ -95,12 +103,27 @@ export function useGetOverviewGroupPurchases(overviewGroupId: number) {
   );
 }
 
+// ========================================================================================= //
+// [ LOGBOOKS ] ============================================================================ //
+// ========================================================================================= //
+
+const getLogbook = createSelector(
+  (state: GlobalState) => state.entities.logbooks,
+  (state: GlobalState, logbookId: number | null) => logbookId,
+  (logbooks, logbookId) => {
+    if (logbooks && logbookId) return logbooks[logbookId];
+  }
+);
+export function useGetLogbook(logbookId: number | null) {
+  return useAppSelector((state) => getLogbook(state, logbookId));
+}
+
 const getLogbookEntries = createSelector(
   (state: GlobalState) => state.entities.logbooks,
-  (state: GlobalState, logbookId: number) => logbookId,
+  (state: GlobalState, logbookId: number | null) => logbookId,
   (state: GlobalState) => state.entities.logbookEntries,
   (logbooks, logbookId, logbookEntries) => {
-    if (logbooks && logbooks[logbookId] && logbookEntries) {
+    if (logbooks && logbookId && logbooks[logbookId] && logbookEntries) {
       const logbookEntryIds = logbooks[logbookId].logbookEntryIds;
       if (logbookEntryIds) {
         return logbookEntryIds.map((logbookEntryId: number) => {
@@ -110,7 +133,7 @@ const getLogbookEntries = createSelector(
     }
   }
 );
-export function useGetLogbookEntries(logbookId: number) {
+export function useGetLogbookEntries(logbookId: number | null) {
   return useAppSelector((state) => getLogbookEntries(state, logbookId));
 }
 

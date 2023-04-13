@@ -7,7 +7,7 @@ import { ThemeProps } from "../layout";
 import { OverviewNavbar } from "./overview-navbar";
 import { UserSummary } from "./user-summary";
 import { OverviewGroups } from "./overview-groups";
-import { DashboardNavbar } from "./dashboard-navbar";
+import { DashboardHeader } from "./dashboard-header";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -63,7 +63,7 @@ export const DashboardLayout = (props: Props) => {
       </Overview>
 
       <Body>
-        <DashboardNavbar page={props.page} />
+        <DashboardHeader page={props.page} />
         <Children>{props.children}</Children>
       </Body>
     </Container>

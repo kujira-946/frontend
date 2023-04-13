@@ -13,7 +13,7 @@ import { createLogbookEntryRequest } from "@/sagas/logbook-entries.saga";
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
-const Container = styled.nav`
+const Container = styled.header`
   position: sticky;
   top: 0;
   right: 0;
@@ -59,22 +59,20 @@ type Props = {
   page: Types.DashboardPage;
 };
 
-export const DashboardNavbar = (props: Props) => {
-  console.log("Dashboard Navbar Rendered");
-
+export const DashboardHeader = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
+  const { selectedLogbookId } = Functions.useSignalsStore().dashboard;
   const logbooks = Functions.useGetCurrentUserLogbooks();
 
   const showInfo = useSignal(false);
-  const selectedLogbook = useSignal<number | null>(null);
 
   function createLogbookEntry(): void {
-    if (selectedLogbook.value) {
+    if (selectedLogbookId.value) {
       dispatch(
         createLogbookEntryRequest({
           date: Functions.generateFormattedDate(new Date(), true),
-          logbookId: selectedLogbook.value,
+          logbookId: selectedLogbookId.value,
         })
       );
     }
@@ -85,13 +83,13 @@ export const DashboardNavbar = (props: Props) => {
       return (
         <>
           {logbooks.map((logbook: Types.Logbook, index: number) => {
-            if (index === 0) selectedLogbook.value = logbook.id;
+            if (index === 0) selectedLogbookId.value = logbook.id;
             return (
               <Globals.NeutralPillButton
                 key={`dashboard-navbar-logbook-${logbook.id}-${index}`}
-                onClick={() => (selectedLogbook.value = logbook.id)}
+                onClick={() => (selectedLogbookId.value = logbook.id)}
                 size="smaller"
-                selected={selectedLogbook.value === logbook.id}
+                selected={selectedLogbookId.value === logbook.id}
                 compact
               >
                 {logbook.name}
@@ -103,20 +101,22 @@ export const DashboardNavbar = (props: Props) => {
     } else {
       return null;
     }
-  }, [logbooks, selectedLogbook.value]);
+  }, [logbooks, selectedLogbookId.value]);
 
-  return (
-    <Container>
-      <NavigationPillsAndErrorMessage>
-        <NavigationPills>
-          {props.page === "Logbooks" && currentUserLogbooks}
-        </NavigationPills>
+  if (props.page === "Settings") {
+    return null;
+  } else {
+    return (
+      <Container>
+        <NavigationPillsAndErrorMessage>
+          <NavigationPills>
+            {props.page === "Logbooks" && currentUserLogbooks}
+          </NavigationPills>
 
-        <ErrorMessage>Error Message</ErrorMessage>
-      </NavigationPillsAndErrorMessage>
+          <ErrorMessage>Error Message</ErrorMessage>
+        </NavigationPillsAndErrorMessage>
 
-      <Buttons>
-        {props.page !== "Settings" && (
+        <Buttons>
           <Globals.NeutralButtonOutlined
             size="medium"
             onClick={() => (showInfo.value = !showInfo.value)}
@@ -124,17 +124,17 @@ export const DashboardNavbar = (props: Props) => {
           >
             Info
           </Globals.NeutralButtonOutlined>
-        )}
-        {props.page === "Logbooks" && (
-          <Globals.PrimaryButton
-            size="medium"
-            onClick={createLogbookEntry}
-            compact
-          >
-            Create Log Entry
-          </Globals.PrimaryButton>
-        )}
-      </Buttons>
-    </Container>
-  );
+          {props.page === "Logbooks" && (
+            <Globals.PrimaryButton
+              size="medium"
+              onClick={createLogbookEntry}
+              compact
+            >
+              Create Log Entry
+            </Globals.PrimaryButton>
+          )}
+        </Buttons>
+      </Container>
+    );
+  }
 };

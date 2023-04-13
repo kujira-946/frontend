@@ -1,18 +1,42 @@
 import Head from "next/head";
-import { ReactElement, useEffect } from "react";
+import { ReactElement, useCallback, useEffect } from "react";
 
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
-import * as Components from "@/components/dashboard";
-import * as LogbooksSagas from "@/sagas/logbooks.saga";
+import * as Dashboard from "@/components/dashboard";
+import * as Components from "@/components/logbook";
 import * as Functions from "@/utils/functions";
+import * as Types from "@/utils/types";
+import * as PurchasesSagas from "@/sagas/purchases.saga";
+import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
 import { NextPageWithLayout } from "../_app";
+import { fetchLogbookLogbookEntriesRequest } from "@/sagas/logbook-entries.saga";
 
 const Logbooks: NextPageWithLayout = () => {
   const dispatch = Functions.useAppDispatch();
 
+  const { selectedLogbookId } = Functions.useSignalsStore().dashboard;
   const { loadingLogbooks } = Functions.useUiSlice();
   const { currentUser, logbooks } = Functions.useEntitiesSlice();
+
+  const logbook = Functions.useGetLogbook(selectedLogbookId.value);
+  const logbookEntries = Functions.useGetLogbookEntries(
+    selectedLogbookId.value
+  );
+
+  const onDragEnd = useCallback(Functions.onDragEnd, []);
+
+  const deleteAllPurchases = useCallback((logbookEntryId: number): void => {
+    dispatch(
+      PurchasesSagas.deleteAssociatedPurchasesRequest({ logbookEntryId })
+    );
+  }, []);
+
+  const addPurchase = useCallback((logbookEntryId: number): void => {
+    dispatch(
+      PurchasesSagas.createPurchaseRequest({ placement: 0, logbookEntryId })
+    );
+  }, []);
 
   Functions.useDetectAuthorizedUser();
 
@@ -20,10 +44,16 @@ const Logbooks: NextPageWithLayout = () => {
     if (currentUser) {
       if (!logbooks) {
         dispatch(Redux.uiActions.setLoadingLogbooks);
-        dispatch(LogbooksSagas.fetchUserLogbooksRequest(currentUser.id));
+        dispatch(fetchUserLogbooksRequest(currentUser.id));
       }
     }
   }, [currentUser, logbooks]);
+
+  useEffect(() => {
+    if (selectedLogbookId.value) {
+      dispatch(fetchLogbookLogbookEntriesRequest(selectedLogbookId.value));
+    }
+  }, [selectedLogbookId.value]);
 
   if (!currentUser) {
     return null;
@@ -38,6 +68,19 @@ const Logbooks: NextPageWithLayout = () => {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
+
+        {logbookEntries &&
+          logbookEntries.map((logbookEntry: Types.LogbookEntry) => {
+            return (
+              <Components.LogbookEntryDropdown
+                key={`dashboard-logbooks-logbook-entry-dropdown-${logbookEntry.id}`}
+                logbookEntryId={logbookEntry.id}
+                onDragEnd={onDragEnd}
+                deleteAllPurchases={deleteAllPurchases}
+                addPurchase={addPurchase}
+              />
+            );
+          })}
       </>
     );
   }
@@ -45,9 +88,9 @@ const Logbooks: NextPageWithLayout = () => {
 
 Logbooks.getLayout = function getLayout(page: ReactElement) {
   return (
-    <Components.DashboardLayout page="Logbooks">
+    <Dashboard.DashboardLayout page="Logbooks">
       {page}
-    </Components.DashboardLayout>
+    </Dashboard.DashboardLayout>
   );
 };
 

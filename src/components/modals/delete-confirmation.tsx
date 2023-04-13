@@ -14,13 +14,17 @@ import { ThemeProps } from "../layout";
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
-const Parent = styled(motion.section)`
-  position: absolute;
+type ParentProps = {
+  fixed?: true;
+};
+
+const Parent = styled(motion.section)<ParentProps>`
+  position: ${(props) => (props.fixed ? "fixed" : "absolute")};
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: ${Styles.zIndexes.overviewDeleteConfirmation};
+  z-index: ${Styles.zIndexes.deleteConfirmation};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -69,12 +73,14 @@ const DeleteButton = styled.button`
 // ========================================================================================= //
 
 type Props = {
+  title: string;
   open: Signal<boolean>;
   onClose: () => void;
   onConfirm: () => void;
+  fixed?: true;
 };
 
-export const OverviewDeleteConfirmation = (props: Props) => {
+export const DeleteConfirmation = (props: Props) => {
   const { theme } = Functions.useSignalsStore().ui;
 
   return (
@@ -87,7 +93,7 @@ export const OverviewDeleteConfirmation = (props: Props) => {
     >
       <Child onClick={(event: Types.OnClick) => event.stopPropagation()}>
         <Header>
-          <Title>Delete all purchases for this group?</Title>
+          <Title>{props.title}</Title>
           <DeleteButton type="button" onClick={props.onClose}>
             <Icons.Close
               height={12}
@@ -106,7 +112,7 @@ export const OverviewDeleteConfirmation = (props: Props) => {
           size="medium"
           borderRadius="four"
         >
-          yes
+          Yes
         </Globals.PrimaryButton>
       </Child>
     </Parent>

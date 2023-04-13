@@ -8,6 +8,7 @@ import { Notification } from "./notification";
 import { Loading } from "./loading";
 import { Shimmer } from "./shimmer";
 import { PurchaseCell } from "./purchase-cell";
+import { DropdownPurchases } from "./dropdown-purchases";
 
 export {
   LazyLoad,
@@ -20,6 +21,7 @@ export {
   Loading,
   Shimmer,
   PurchaseCell,
+  DropdownPurchases,
 };
 
 export * from "./button";
