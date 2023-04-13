@@ -1,20 +1,7 @@
 import * as Drag from "react-beautiful-dnd";
-import styled from "styled-components";
-
 import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
-import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-
-// ========================================================================================= //
-// [ STYLED COMPONENTS ] =================================================================== //
-// ========================================================================================= //
-
-const Container = styled.article``;
-
-// ========================================================================================= //
-// [ EXPORTED COMPONENT ] ================================================================== //
-// ========================================================================================= //
 
 type Props = {
   type: "Overview Groups" | "Logbook Entries";
@@ -22,6 +9,8 @@ type Props = {
 
   update?: (purchaseId: number, description: string, cost: string) => void;
   delete?: (purchaseId: number) => void;
+  onCheckActive?: (purchaseId: number) => void;
+  onCheckInactive?: (purchaseId: number) => void;
 
   hideCheck?: true;
   hideCategories?: true;
@@ -29,7 +18,7 @@ type Props = {
 
 export const DropdownPurchases = (props: Props) => {
   return (
-    <Container>
+    <>
       {props.purchases.map((purchase: Types.Purchase, index: number) => {
         return (
           <Drag.Draggable
@@ -60,6 +49,8 @@ export const DropdownPurchases = (props: Props) => {
                     }
                     update={props.update}
                     delete={props.delete}
+                    onCheckActive={props.onCheckActive}
+                    onCheckInactive={props.onCheckInactive}
                     costForwardText="$"
                     hideCheck={props.hideCheck}
                     hideCategories={props.hideCategories}
@@ -70,6 +61,6 @@ export const DropdownPurchases = (props: Props) => {
           </Drag.Draggable>
         );
       })}
-    </Container>
+    </>
   );
 };

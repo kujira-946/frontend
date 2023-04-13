@@ -480,8 +480,22 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.purchases) {
         const purchasesCopy = Functions.deepCopy(state.purchases);
-        for (const purchaseId of action.payload) {
-          delete purchasesCopy[purchaseId];
+        if (state.logbookEntries) {
+          const updatedLogbookEntries = Functions.deepCopy(
+            state.logbookEntries
+          );
+          for (const purchaseId of action.payload) {
+            const { logbookEntryId } = purchasesCopy[purchaseId];
+            if (logbookEntryId) {
+              const { purchaseIds } = updatedLogbookEntries[logbookEntryId];
+              if (purchaseIds) {
+                const purchaseIndex = purchaseIds.indexOf(purchaseId);
+                purchaseIds.splice(purchaseIndex, 1);
+              }
+            }
+            delete purchasesCopy[purchaseId];
+          }
+          state.logbookEntries = updatedLogbookEntries;
         }
         state.purchases = purchasesCopy;
       }

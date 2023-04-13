@@ -2,7 +2,7 @@ import * as Drag from "react-beautiful-dnd";
 import dynamic from "next/dynamic";
 import styled from "styled-components";
 import { useCallback, useEffect } from "react";
-import { useSignal } from "@preact/signals-react";
+import { effect, useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import * as Globals from "@/components";
@@ -10,8 +10,8 @@ import * as Icons from "@/components/icons";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { ThemeProps } from "../layout";
 import { fetchLogbookEntryPurchasesRequest } from "@/sagas/purchases.saga";
+import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -83,7 +83,11 @@ const Body = styled(motion.article)`
   padding: ${Styles.pxAsRem.eight};
 `;
 
-const PurchaseCells = styled.div``;
+const PurchaseCells = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${Styles.pxAsRem.four};
+`;
 
 // ========================================================================================= //
 // [ DYNAMIC IMPORT ] ====================================================================== //
@@ -107,6 +111,7 @@ type Props = {
     provided: Drag.ResponderProvided
   ) => void;
   deleteLogbookEntry: (logbookEntryId: number) => void;
+  deleteSelectedPurchases: (logbookEntryIds: number[]) => void;
   deleteAllPurchases: (logbookEntryId: number) => void;
   addPurchase: (logbookEntryId: number) => void;
 };
@@ -125,6 +130,8 @@ export const LogbookEntryDropdown = (props: Props) => {
   const loadingPurchases = useSignal(false);
   const confirmLogbookEntryDelete = useSignal(false);
   const confirmPurchasesDelete = useSignal(false);
+  const selectedPurchaseIds = useSignal<{ [key: string]: number }>({});
+  const purchasesSelected = useSignal(false);
 
   const updatePurchase = useCallback(
     (purchaseId: number, description: string, cost: string) => {
@@ -157,6 +164,18 @@ export const LogbookEntryDropdown = (props: Props) => {
     },
     [logbookEntry, purchases]
   );
+
+  const onCheckActive = useCallback((purchaseId: number) => {
+    selectedPurchaseIds.value[purchaseId] = purchaseId;
+    purchasesSelected.value = true;
+  }, []);
+
+  const onCheckInactive = useCallback((purchaseId: number) => {
+    delete selectedPurchaseIds.value[purchaseId];
+    if (Object.values(selectedPurchaseIds.value).length === 0) {
+      purchasesSelected.value = false;
+    }
+  }, []);
 
   useEffect(() => {
     if (opened.value && !logbookEntryPurchases) {
@@ -267,12 +286,28 @@ export const LogbookEntryDropdown = (props: Props) => {
                               purchases={logbookEntryPurchases}
                               update={updatePurchase}
                               delete={deletePurchase}
+                              onCheckActive={onCheckActive}
+                              onCheckInactive={onCheckInactive}
                             />
                           ) : null}
                         </PurchaseCells>
                       );
                     }}
                   </Drag.Droppable>
+
+                  {purchasesSelected.value && (
+                    <Globals.NeutralButtonOutlined
+                      onClick={() =>
+                        props.deleteSelectedPurchases(
+                          Object.values(selectedPurchaseIds.value)
+                        )
+                      }
+                      size="medium"
+                      borderRadius="four"
+                    >
+                      Delete Selected
+                    </Globals.NeutralButtonOutlined>
+                  )}
 
                   <Globals.NeutralButtonOutlined
                     onClick={() => (confirmPurchasesDelete.value = true)}

@@ -16,6 +16,7 @@ import { ThemeProps } from "@/components/layout";
 
 type ContainerProps = {
   borderRadius?: Types.PxAsRem;
+  selected: boolean;
   isError?: boolean;
 };
 
@@ -24,10 +25,16 @@ const Container = styled.article<ContainerProps>`
   align-items: center;
   gap: ${Styles.pxAsRem.eight};
   padding: ${Styles.pxAsRem.six} ${Styles.pxAsRem.eight};
-  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
+  background-color: ${(props: ContainerProps & ThemeProps) => {
+    return props.selected
+      ? props.theme.backgroundTwo
+      : props.theme.backgroundOne;
+  }};
   border: ${(props: ContainerProps & ThemeProps) => {
     return props.isError
       ? `${props.theme.failure} solid 1px`
+      : props.selected
+      ? `${props.theme.secondaryMain} solid 1px`
       : `${props.theme.backgroundFour} solid 1px`;
   }};
   border-radius: ${(props) => {
@@ -120,8 +127,8 @@ type Props = {
   costUpdate?: (cost: string, costError?: Signal<string>) => void;
   update?: (purchaseId: number, description: string, cost: string) => void;
   delete?: (purchaseId: number) => void;
-  onCheckActive?: () => void;
-  onCheckInactive?: () => void;
+  onCheckActive?: (purchaseId: number) => void;
+  onCheckInactive?: (purchaseId: number) => void;
 
   descriptionForwardText?: string;
   costForwardText?: string;
@@ -168,12 +175,14 @@ const ExportedComponent = (props: Props) => {
   }
 
   useEffect(() => {
-    if (checkboxActive.value && props.onCheckActive) {
-      props.onCheckActive();
-    } else if (!checkboxActive.value && props.onCheckInactive) {
-      props.onCheckInactive();
+    if (props.purchaseId) {
+      if (checkboxActive.value && props.onCheckActive) {
+        props.onCheckActive(props.purchaseId);
+      } else if (!checkboxActive.value && props.onCheckInactive) {
+        props.onCheckInactive(props.purchaseId);
+      }
     }
-  }, [checkboxActive.value, props.onCheckActive, props.onCheckInactive]);
+  }, [checkboxActive.value]);
 
   useEffect(() => {
     if (props.update && props.purchaseId) {
@@ -207,7 +216,11 @@ const ExportedComponent = (props: Props) => {
   });
 
   return (
-    <Container borderRadius={props.borderRadius} isError={props.isError}>
+    <Container
+      borderRadius={props.borderRadius}
+      selected={checkboxActive.value}
+      isError={props.isError}
+    >
       {!props.hideDrag && props.provided && (
         <DragButton {...props.provided.dragHandleProps} tabIndex={-1}>
           <Icons.Drag
@@ -230,6 +243,8 @@ const ExportedComponent = (props: Props) => {
             <Icons.CheckboxActive
               height={20}
               fill={Styles.secondary[theme.value].main}
+              hoveredFill={Styles.text[theme.value]}
+              addHover
             />
           ) : (
             <Icons.CheckboxInactive

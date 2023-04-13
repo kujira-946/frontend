@@ -1,6 +1,7 @@
 import Head from "next/head";
 import styled from "styled-components";
-import { ReactElement, useCallback, useEffect, useMemo } from "react";
+import { ReactElement, useCallback, useEffect } from "react";
+import { useSignal } from "@preact/signals-react";
 
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
@@ -13,7 +14,6 @@ import * as PurchasesSagas from "@/sagas/purchases.saga";
 import { DashboardLayout } from "@/components/dashboard";
 import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
 import { NextPageWithLayout } from "../_app";
-import { useSignal } from "@preact/signals-react";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -59,6 +59,13 @@ const Logbooks: NextPageWithLayout = () => {
   const deleteLogbookEntry = useCallback((logbookEntryId: number): void => {
     dispatch(LogbookEntrySagas.deleteLogbookEntryRequest(logbookEntryId));
   }, []);
+
+  const deleteSelectedPurchases = useCallback(
+    (logbookEntryIds: number[]): void => {
+      dispatch(PurchasesSagas.batchDeletePurchasesRequest(logbookEntryIds));
+    },
+    []
+  );
 
   const deleteAllPurchases = useCallback((logbookEntryId: number): void => {
     dispatch(
@@ -145,6 +152,7 @@ const Logbooks: NextPageWithLayout = () => {
                   key={`dashboard-logbooks-logbook-entry-dropdown-${logbookEntry.id}`}
                   logbookEntryId={logbookEntry.id}
                   onDragEnd={onDragEnd}
+                  deleteSelectedPurchases={deleteSelectedPurchases}
                   deleteLogbookEntry={deleteLogbookEntry}
                   deleteAllPurchases={deleteAllPurchases}
                   addPurchase={addPurchase}
