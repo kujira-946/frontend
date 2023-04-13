@@ -13,6 +13,7 @@ import * as PurchasesSagas from "@/sagas/purchases.saga";
 import { DashboardLayout } from "@/components/dashboard";
 import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
 import { NextPageWithLayout } from "../_app";
+import { useSignal } from "@preact/signals-react";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -29,12 +30,12 @@ const Body = styled.section`
 const Logbooks: NextPageWithLayout = () => {
   const dispatch = Functions.useAppDispatch();
 
-  const { selectedLogbookId } = Functions.useSignalsStore().dashboard;
   const { loadingLogbooks } = Functions.useUiSlice();
   const { currentUser, logbooks } = Functions.useEntitiesSlice();
 
-  const currentUserLogbooks = Functions.useGetCurrentUserLogbooks();
+  const selectedLogbookId = useSignal<number | null>(null);
 
+  const currentUserLogbooks = Functions.useGetCurrentUserLogbooks();
   const logbookEntries = Functions.useGetLogbookEntries(
     selectedLogbookId.value
   );
@@ -98,7 +99,7 @@ const Logbooks: NextPageWithLayout = () => {
   useEffect(() => {
     if (currentUser) {
       if (!logbooks) {
-        dispatch(Redux.uiActions.setLoadingLogbooks);
+        dispatch(Redux.uiActions.setLoadingLogbooks(true));
         dispatch(fetchUserLogbooksRequest(currentUser.id));
       }
     }
