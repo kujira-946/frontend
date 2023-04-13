@@ -5,7 +5,7 @@ export function generateFormattedDate(
   withDay: boolean = false
 ): string {
   const month = Constants.months[date.getMonth()];
-  const day = date.getDay();
+  const day = date.getDate();
   const year = date.getFullYear();
 
   if (withDay) return `${month} ${day}, ${year}`;
