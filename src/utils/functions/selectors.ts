@@ -3,6 +3,7 @@ import { createSelector } from "reselect";
 import { GlobalState } from "@/store";
 
 import { useAppSelector } from "./hooks";
+import { deepCopy } from "./data-structures";
 
 export function useUiSlice() {
   return useAppSelector((state) => state.ui);
@@ -126,7 +127,8 @@ const getLogbookEntries = createSelector(
     if (logbooks && logbookId && logbooks[logbookId] && logbookEntries) {
       const logbookEntryIds = logbooks[logbookId].logbookEntryIds;
       if (logbookEntryIds) {
-        return logbookEntryIds.map((logbookEntryId: number) => {
+        const sortedLogbookEntryIds = deepCopy(logbookEntryIds);
+        return sortedLogbookEntryIds.reverse().map((logbookEntryId: number) => {
           return logbookEntries[logbookEntryId];
         });
       }
