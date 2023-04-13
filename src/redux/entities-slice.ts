@@ -434,32 +434,29 @@ const entitiesSlice = createSlice({
       if (state.purchases) {
         const purchasesCopy = Functions.deepCopy(state.purchases);
         const purchase = purchasesCopy[action.payload];
+        // ↓↓↓ Overview Group ↓↓↓ //
         if (purchase.overviewGroupId && state.overviewGroups) {
           const updatedOverviewGroups = Functions.deepCopy(
             state.overviewGroups
           );
-          if (updatedOverviewGroups[purchase.overviewGroupId].purchaseIds) {
-            const purchaseIndex = updatedOverviewGroups[
-              purchase.overviewGroupId
-            ].purchaseIds.indexOf(action.payload);
-            updatedOverviewGroups[purchase.overviewGroupId].purchaseIds.splice(
-              purchaseIndex,
-              1
-            );
+          const { purchaseIds } =
+            updatedOverviewGroups[purchase.overviewGroupId];
+          if (purchaseIds) {
+            const purchaseIndex = purchaseIds.indexOf(action.payload);
+            purchaseIds.splice(purchaseIndex, 1);
             state.overviewGroups = updatedOverviewGroups;
           }
-        } else if (purchase.logbookEntryId && state.logbookEntries) {
+        }
+        // ↓↓↓ Logbook Entry ↓↓↓ //
+        else if (purchase.logbookEntryId && state.logbookEntries) {
           const updatedLogbookEntries = Functions.deepCopy(
             state.logbookEntries
           );
-          if (updatedLogbookEntries[purchase.logbookEntryId].purchaseIds) {
-            const purchaseIndex = updatedLogbookEntries[
-              purchase.logbookEntryId
-            ].purchaseIds.indexOf(action.payload);
-            updatedLogbookEntries[purchase.logbookEntryId].purchaseIds.splice(
-              purchaseIndex,
-              1
-            );
+          const { purchaseIds } =
+            updatedLogbookEntries[purchase.logbookEntryId];
+          if (purchaseIds) {
+            const purchaseIndex = purchaseIds.indexOf(action.payload);
+            purchaseIds.splice(purchaseIndex, 1);
             state.logbookEntries = updatedLogbookEntries;
           }
         }
@@ -488,35 +485,35 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.purchases) {
         const updatedPurchases = Functions.deepCopy(state.purchases);
-
-        if (state.overviewGroups) {
-          const { overviewGroupId } = action.payload;
+        const { overviewGroupId, logbookEntryId } = action.payload;
+        // ↓↓↓ Overview Groups ↓↓↓ //
+        if (overviewGroupId && state.overviewGroups) {
           if (overviewGroupId) {
             const updatedOverviewGroups = Functions.deepCopy(
               state.overviewGroups
             );
-            if (updatedOverviewGroups[overviewGroupId].purchaseIds) {
-              updatedOverviewGroups[overviewGroupId].purchaseIds.forEach(
-                (purchaseId: number) => {
-                  delete updatedPurchases[purchaseId];
-                }
-              );
+            const { purchaseIds } = updatedOverviewGroups[overviewGroupId];
+            if (purchaseIds) {
+              purchaseIds.forEach((purchaseId: number) => {
+                delete updatedPurchases[purchaseId];
+              });
               updatedOverviewGroups[overviewGroupId].purchaseIds = [];
               state.overviewGroups = updatedOverviewGroups;
             }
           }
-        } else if (state.logbookEntries) {
-          const { logbookEntryId } = action.payload;
+        }
+        // ↓↓↓ Logbook Entries ↓↓↓ //
+        else if (logbookEntryId && state.logbookEntries) {
           if (logbookEntryId) {
             const updatedLogbookEntries = Functions.deepCopy(
               state.logbookEntries
             );
-            if (updatedLogbookEntries[logbookEntryId].purchaseIds) {
-              updatedLogbookEntries[logbookEntryId].purchaseIds.forEach(
-                (purchaseId: number) => {
-                  delete updatedPurchases[purchaseId];
-                }
-              );
+            const { purchaseIds } = updatedLogbookEntries[logbookEntryId];
+            if (purchaseIds) {
+              purchaseIds.forEach((purchaseId: number) => {
+                delete updatedPurchases[purchaseId];
+              });
+              updatedLogbookEntries[logbookEntryId].purchaseIds = [];
               state.logbookEntries = updatedLogbookEntries;
             }
           }
