@@ -1,4 +1,5 @@
 import Head from "next/head";
+import styled from "styled-components";
 import { ReactElement, useCallback, useEffect, useMemo } from "react";
 
 import * as Redux from "@/redux";
@@ -12,7 +13,6 @@ import * as LogbookEntrySagas from "@/sagas/logbook-entries.saga";
 import * as PurchasesSagas from "@/sagas/purchases.saga";
 import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
 import { NextPageWithLayout } from "../_app";
-import styled from "styled-components";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //

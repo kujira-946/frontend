@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { ThemeProps } from "../layout";
 
@@ -31,8 +30,6 @@ const Overview = styled.section`
 
 const Children = styled.section`
   flex: 1;
-
-  /* border: blue solid 1px; */
 `;
 
 // ========================================================================================= //
