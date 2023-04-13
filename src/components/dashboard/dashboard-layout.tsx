@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { ThemeProps } from "../layout";
 
@@ -38,6 +39,8 @@ const Body = styled.section`
 `;
 
 const Children = styled.section`
+  padding: ${Styles.pxAsRem.sixteen};
+
   /* border: blue solid 1px; */
 `;
 

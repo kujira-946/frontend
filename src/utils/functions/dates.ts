@@ -8,6 +8,6 @@ export function generateFormattedDate(
   const day = date.getDay();
   const year = date.getFullYear();
 
-  if (withDay) return `${month} ${day} ${year}`;
+  if (withDay) return `${month} ${day}, ${year}`;
   else return `${month} ${year}`;
 }
