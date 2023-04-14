@@ -81,6 +81,7 @@ const Logbooks: NextPageWithLayout = () => {
 
   Functions.useDetectAuthorizedUser();
 
+  // ↓↓↓ Fetching current user's logbooks on load. ↓↓↓ //
   useEffect(() => {
     if (currentUser) {
       if (!logbooks) {
@@ -90,6 +91,7 @@ const Logbooks: NextPageWithLayout = () => {
     }
   }, [currentUser, logbooks]);
 
+  // ↓↓↓ Fetching the currently-selected logbook's associated logbook entries. ↓↓↓ //
   useEffect(() => {
     if (selectedLogbookId.value) {
       dispatch(Redux.uiActions.setLoadingLogbookEntries(true));

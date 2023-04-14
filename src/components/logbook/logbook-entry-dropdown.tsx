@@ -129,6 +129,7 @@ export const LogbookEntryDropdown = (props: Props) => {
     }
   }, []);
 
+  // ↓↓↓ Fetching logbook entry purchases when dropdown opened. ↓↓↓ //
   useEffect(() => {
     if (opened.value && !logbookEntryPurchases) {
       loadingPurchases.value = true;
