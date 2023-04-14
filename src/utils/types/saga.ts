@@ -101,7 +101,7 @@ export type LogbookUpdateData = {
 export type LogbookEntryCreateData = {
   date: string;
   totalSpent?: number;
-  budget?: number;
+  budget?: number | null;
   logbookId: number;
 };
 

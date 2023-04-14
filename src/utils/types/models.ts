@@ -49,9 +49,9 @@ export type Logbook = {
 
 export type LogbookEntry = {
   id: number;
-  date: string
+  date: string;
   totalSpent: number;
-  budget?: number;
+  budget?: number | null;
   purchaseIds?: number[]; // has many purchases
   logbookId: number; // belongs to a logbook
 } & Dates;

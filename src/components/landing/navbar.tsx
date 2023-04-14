@@ -1,14 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
-import { useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { ThemeProps } from "@/components/layout";
-import { signalsHelpers } from "@/signals";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //

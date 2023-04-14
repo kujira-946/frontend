@@ -69,11 +69,11 @@ export function createLogbookEntryRequest(
 
 type LogbookEntryUpdateAction = Types.SagaAction<{
   logbookEntryId: number;
-  updateData: Types.LogbookUpdateData;
+  updateData: Types.LogbookEntryUpdateData;
 }>;
 export function updateLogbookEntryRequest(
   logbookEntryId: number,
-  updateData: Types.LogbookUpdateData
+  updateData: Types.LogbookEntryUpdateData
 ): LogbookEntryUpdateAction {
   return {
     type: LogbookEntriesActionTypes.UPDATE_LOGBOOK_ENTRY,
