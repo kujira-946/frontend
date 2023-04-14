@@ -167,6 +167,8 @@ export const LogbookEntryDropdownHeader = (props: Props) => {
         } else {
           budgetError.value = "";
         }
+      } else {
+        budgetError.value = "";
       }
     }
   }, [overview, budget.value]);
