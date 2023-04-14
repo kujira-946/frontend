@@ -5,7 +5,6 @@ import * as Globals from "@/components";
 import * as PurchasesSagas from "@/sagas/purchases.saga";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
-import * as Types from "@/utils/types";
 import { deleteLogbookEntryRequest } from "@/sagas/logbook-entries.saga";
 
 import { LogbookEntryDropdown } from "./logbook-entry-dropdown";
@@ -19,8 +18,6 @@ const Container = styled.section`
   flex-direction: column;
   gap: ${Styles.pxAsRem.eight};
   padding: ${Styles.pxAsRem.sixteen};
-
-  border: red solid 1px;
 `;
 
 // ========================================================================================= //
@@ -35,7 +32,7 @@ export const LogbookEntries = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
   const { loadingLogbookEntries } = Functions.useUiSlice();
-  const logbookEntries = Functions.useGetLogbookEntries(props.logbookId);
+  const logbook = Functions.useGetLogbook(props.logbookId);
 
   const onDragEnd = useCallback(Functions.onDragEnd, []);
 
@@ -71,20 +68,22 @@ export const LogbookEntries = (props: Props) => {
           <Globals.Shimmer height={78} borderRadius="six" />
           <Globals.Shimmer height={78} borderRadius="six" />
         </>
-      ) : logbookEntries ? (
-        logbookEntries.map((logbookEntry: Types.LogbookEntry) => {
-          return (
-            <LogbookEntryDropdown
-              key={`dashboard-logbooks-logbook-entry-dropdown-${logbookEntry.id}`}
-              logbookEntryId={logbookEntry.id}
-              onDragEnd={onDragEnd}
-              deleteLogbookEntry={deleteLogbookEntry}
-              deleteSelectedPurchases={deleteSelectedPurchases}
-              deleteAllPurchases={deleteAllPurchases}
-              addPurchase={addPurchase}
-            />
-          );
-        })
+      ) : logbook && logbook.logbookEntryIds ? (
+        Functions.deepCopy(logbook.logbookEntryIds)
+          .reverse()
+          .map((logbookEntryId: number) => {
+            return (
+              <LogbookEntryDropdown
+                key={`dashboard-logbooks-logbook-entry-dropdown-${logbookEntryId}`}
+                logbookEntryId={logbookEntryId}
+                onDragEnd={onDragEnd}
+                deleteLogbookEntry={deleteLogbookEntry}
+                deleteSelectedPurchases={deleteSelectedPurchases}
+                deleteAllPurchases={deleteAllPurchases}
+                addPurchase={addPurchase}
+              />
+            );
+          })
       ) : null}
     </Container>
   );

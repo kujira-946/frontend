@@ -88,7 +88,6 @@ export const UserSummary = (props: Props) => {
         Number(cost) <= 100 &&
         Number(cost) !== overview.savings
       ) {
-        console.log("Foo");
         dispatch(updateOverviewRequest(overview.id, { savings: Number(cost) }));
       }
     }

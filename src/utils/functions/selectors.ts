@@ -3,7 +3,6 @@ import { createSelector } from "reselect";
 import { GlobalState } from "@/store";
 
 import { useAppSelector } from "./hooks";
-import { deepCopy } from "./data-structures";
 
 export function useUiSlice() {
   return useAppSelector((state) => state.ui);
@@ -110,33 +109,13 @@ export function useGetOverviewGroupPurchases(overviewGroupId: number) {
 
 const getLogbook = createSelector(
   (state: GlobalState) => state.entities.logbooks,
-  (state: GlobalState, logbookId: number | null) => logbookId,
+  (state: GlobalState, logbookId: number) => logbookId,
   (logbooks, logbookId) => {
     if (logbooks && logbookId) return logbooks[logbookId];
   }
 );
-export function useGetLogbook(logbookId: number | null) {
+export function useGetLogbook(logbookId: number) {
   return useAppSelector((state) => getLogbook(state, logbookId));
-}
-
-const getLogbookEntries = createSelector(
-  (state: GlobalState) => state.entities.logbooks,
-  (state: GlobalState, logbookId: number | null) => logbookId,
-  (state: GlobalState) => state.entities.logbookEntries,
-  (logbooks, logbookId, logbookEntries) => {
-    if (logbooks && logbookId && logbooks[logbookId] && logbookEntries) {
-      const logbookEntryIds = logbooks[logbookId].logbookEntryIds;
-      if (logbookEntryIds) {
-        const sortedLogbookEntryIds = deepCopy(logbookEntryIds);
-        return sortedLogbookEntryIds.reverse().map((logbookEntryId: number) => {
-          return logbookEntries[logbookEntryId];
-        });
-      }
-    }
-  }
-);
-export function useGetLogbookEntries(logbookId: number | null) {
-  return useAppSelector((state) => getLogbookEntries(state, logbookId));
 }
 
 const getLogbookEntry = createSelector(

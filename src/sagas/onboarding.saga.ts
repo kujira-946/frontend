@@ -50,7 +50,7 @@ function* onboardNewUser(action: OnboardNewUserActions) {
     );
     yield Saga.put(
       createLogbookRequest({
-        name: Functions.generateFormattedDate(),
+        name: Functions.generateFormattedDate(new Date()),
         ownerId: currentUserId,
       })
     );
