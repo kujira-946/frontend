@@ -1,47 +1,25 @@
 import Head from "next/head";
-import styled from "styled-components";
-import { ReactElement, useCallback, useEffect } from "react";
+import { ReactElement, useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
 import * as Components from "@/components/logbook";
-import * as Functions from "@/utils/functions";
-import * as Styles from "@/utils/styles";
-import * as Types from "@/utils/types";
 import * as LogbookEntrySagas from "@/sagas/logbook-entries.saga";
-import * as PurchasesSagas from "@/sagas/purchases.saga";
+import * as Functions from "@/utils/functions";
+import * as Types from "@/utils/types";
 import { DashboardLayout } from "@/components/dashboard";
 import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
 import { NextPageWithLayout } from "../_app";
 
-// ========================================================================================= //
-// [ STYLED COMPONENTS ] =================================================================== //
-// ========================================================================================= //
-
-const Body = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: ${Styles.pxAsRem.eight};
-  padding: ${Styles.pxAsRem.sixteen};
-`;
-
-// ========================================================================================= //
-// [ EXPORTED PAGE ] ======================================================================= //
-// ========================================================================================= //
-
 const Logbooks: NextPageWithLayout = () => {
   const dispatch = Functions.useAppDispatch();
 
-  const { loadingLogbooks, loadingLogbookEntries } = Functions.useUiSlice();
-  const { currentUser, logbooks, purchases } = Functions.useEntitiesSlice();
+  const { loadingLogbooks } = Functions.useUiSlice();
+  const { currentUser, logbooks } = Functions.useEntitiesSlice();
+  const currentUserLogbooks = Functions.useGetCurrentUserLogbooks();
 
   const selectedLogbookId = useSignal<number | null>(null);
-
-  const currentUserLogbooks = Functions.useGetCurrentUserLogbooks();
-  const logbookEntries = Functions.useGetLogbookEntries(
-    selectedLogbookId.value
-  );
 
   function createLogbookEntry(): void {
     if (selectedLogbookId.value) {
@@ -53,31 +31,6 @@ const Logbooks: NextPageWithLayout = () => {
       );
     }
   }
-
-  const onDragEnd = useCallback(Functions.onDragEnd, []);
-
-  const deleteLogbookEntry = useCallback((logbookEntryId: number): void => {
-    dispatch(LogbookEntrySagas.deleteLogbookEntryRequest(logbookEntryId));
-  }, []);
-
-  const deleteSelectedPurchases = useCallback(
-    (logbookEntryIds: number[]): void => {
-      dispatch(PurchasesSagas.batchDeletePurchasesRequest(logbookEntryIds));
-    },
-    []
-  );
-
-  const deleteAllPurchases = useCallback((logbookEntryId: number): void => {
-    dispatch(
-      PurchasesSagas.deleteAssociatedPurchasesRequest({ logbookEntryId })
-    );
-  }, []);
-
-  const addPurchase = useCallback((logbookEntryId: number): void => {
-    dispatch(
-      PurchasesSagas.createPurchaseRequest({ placement: 0, logbookEntryId })
-    );
-  }, []);
 
   Functions.useDetectAuthorizedUser();
 
@@ -120,7 +73,7 @@ const Logbooks: NextPageWithLayout = () => {
         <Globals.PageHeader
           infoClick={() => console.log("Logbooks Info Clicked")}
           createClick={createLogbookEntry}
-          createText="Create Log Entry"
+          createText="Create Logbook Entry"
         >
           {currentUserLogbooks &&
             currentUserLogbooks.map((logbook: Types.Logbook, index: number) => {
@@ -139,30 +92,9 @@ const Logbooks: NextPageWithLayout = () => {
             })}
         </Globals.PageHeader>
 
-        <Body>
-          {loadingLogbookEntries ? (
-            <>
-              <Globals.Shimmer height={78} borderRadius="six" />
-              <Globals.Shimmer height={78} borderRadius="six" />
-              <Globals.Shimmer height={78} borderRadius="six" />
-              <Globals.Shimmer height={78} borderRadius="six" />
-            </>
-          ) : logbookEntries ? (
-            logbookEntries.map((logbookEntry: Types.LogbookEntry) => {
-              return (
-                <Components.LogbookEntryDropdown
-                  key={`dashboard-logbooks-logbook-entry-dropdown-${logbookEntry.id}`}
-                  logbookEntryId={logbookEntry.id}
-                  onDragEnd={onDragEnd}
-                  deleteSelectedPurchases={deleteSelectedPurchases}
-                  deleteLogbookEntry={deleteLogbookEntry}
-                  deleteAllPurchases={deleteAllPurchases}
-                  addPurchase={addPurchase}
-                />
-              );
-            })
-          ) : null}
-        </Body>
+        {selectedLogbookId.value && (
+          <Components.LogbookEntries logbookId={selectedLogbookId.value} />
+        )}
       </>
     );
   }
