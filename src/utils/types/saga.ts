@@ -1,4 +1,4 @@
-import { Theme } from "@/signals/ui-signals";
+import { Theme } from "@/signals/ui.signals";
 
 import { Category } from "./models";
 

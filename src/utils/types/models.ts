@@ -49,7 +49,7 @@ export type Logbook = {
 
 export type LogbookEntry = {
   id: number;
-  date: Date;
+  date: string
   totalSpent: number;
   budget?: number;
   purchaseIds?: number[]; // has many purchases

@@ -17,6 +17,7 @@ type ContainerProps = {
   hasValue: boolean;
   error: boolean;
   frozen?: boolean;
+  removeSidePadding?: boolean;
 };
 
 const Container = styled.article<ContainerProps>`
@@ -24,7 +25,9 @@ const Container = styled.article<ContainerProps>`
   flex-direction: column;
   justify-content: flex-start;
   width: 100%;
-  padding: 0 ${Styles.pxAsRem.six};
+  padding: ${(props) => {
+    return !props.removeSidePadding ? `0 ${Styles.pxAsRem.six}` : `0 `;
+  }};
   color: ${(props: ThemeProps) => props.theme.text};
   background-color: ${(props: ContainerProps & ThemeProps) => {
     return props.frozen
@@ -37,7 +40,7 @@ const Container = styled.article<ContainerProps>`
     return props.error
       ? `${props.theme.failure} solid 1px`
       : props.frozen
-      ? `${props.theme.backgroundOne} solid 1px`
+      ? `transparent solid 1px`
       : props.focused
       ? `${props.theme.backgroundSix} solid 1px`
       : props.hasValue
@@ -82,7 +85,7 @@ const Body = styled.div`
 `;
 
 type TextProps = {
-  importance?: "Primary" | "Secondary";
+  importance?: Types.InputMiniImportance;
 };
 
 const textStyles = css<TextProps>`
@@ -91,6 +94,10 @@ const textStyles = css<TextProps>`
       ? props.theme.primaryMain
       : props.importance === "Secondary"
       ? props.theme.secondaryMain
+      : props.importance === "Failure"
+      ? props.theme.failure
+      : props.importance === "Pending"
+      ? props.theme.pending
       : "inherit";
   }};
   font-weight: ${(props) => {
@@ -135,9 +142,10 @@ type Props = {
   onFocus?: () => void;
 
   forwardText?: string;
-  importance?: "Primary" | "Secondary";
+  importance?: Types.InputMiniImportance;
   hasValue?: boolean;
   frozen?: boolean;
+  removeSidePadding?: boolean;
 };
 
 const ExportedComponent = (props: Props) => {
@@ -167,12 +175,13 @@ const ExportedComponent = (props: Props) => {
 
   return (
     <Container
+      onClick={focusTextarea}
       borderRadius={props.borderRadius}
       focused={focused.value}
       hasValue={props.userInput !== ""}
-      frozen={props.frozen}
       error={!!props.errorMessage}
-      onClick={focusTextarea}
+      frozen={props.frozen}
+      removeSidePadding={props.removeSidePadding}
     >
       {props.errorMessage && <ErrorMessage>{props.errorMessage}</ErrorMessage>}
 

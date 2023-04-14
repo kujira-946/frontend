@@ -2,16 +2,16 @@ import * as Drag from "react-beautiful-dnd";
 import dynamic from "next/dynamic";
 import styled from "styled-components";
 import { useCallback, useEffect } from "react";
-import { effect, useSignal } from "@preact/signals-react";
+import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import * as Globals from "@/components";
-import * as Icons from "@/components/icons";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
-import * as Types from "@/utils/types";
 import { fetchLogbookEntryPurchasesRequest } from "@/sagas/purchases.saga";
 import { ThemeProps } from "../layout";
+
+import { LogbookEntryDropdownHeader } from "./logbook-entry-dropdown-header";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -29,51 +29,6 @@ const Container = styled.section<SharedProps>`
   }};
   border-radius: ${Styles.pxAsRem.six};
   overflow: hidden;
-`;
-
-const Header = styled.header<SharedProps>`
-  position: sticky;
-  top: 0;
-  right: 0;
-  left: 0;
-  display: flex;
-  gap: ${Styles.pxAsRem.forty};
-  padding: ${Styles.pxAsRem.twelve};
-  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
-  border-bottom: ${(props: ThemeProps & SharedProps) => {
-    return props.opened
-      ? `${props.theme.backgroundFour} solid 1px`
-      : `transparent solid 1px`;
-  }};
-  cursor: pointer;
-
-  @media (hover: hover) {
-    :hover {
-      background-color: ${(props: ThemeProps) => props.theme.backgroundThree};
-    }
-  }
-`;
-
-const HeaderSection = styled.section`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: ${Styles.pxAsRem.four};
-`;
-
-const HeaderSectionTitle = styled.span`
-  display: block;
-  color: ${(props: ThemeProps) => props.theme.backgroundSeven};
-  font-size: ${Styles.pxAsRem.ten};
-  font-weight: ${Styles.fontWeights.bold};
-`;
-
-const DeleteButton = styled.button`
-  ${Styles.clearButton};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
 `;
 
 const Body = styled(motion.article)`
@@ -101,8 +56,6 @@ const DynamicDeleteConfirmation = dynamic(() =>
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-const headerSections = ["Date", "Spent", "Budget", "Status"] as const;
-
 type Props = {
   logbookEntryId: number;
 
@@ -119,7 +72,6 @@ type Props = {
 export const LogbookEntryDropdown = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
-  const { theme } = Functions.useSignalsStore().ui;
   const { purchases } = Functions.useEntitiesSlice();
   const logbookEntry = Functions.useGetLogbookEntry(props.logbookEntryId);
   const logbookEntryPurchases = Functions.useGetLogbookEntryPurchases(
@@ -217,40 +169,11 @@ export const LogbookEntryDropdown = (props: Props) => {
             )}
           </AnimatePresence>
 
-          <Header
-            onClick={() => (opened.value = !opened.value)}
-            opened={opened.value}
-          >
-            {headerSections.map((section: typeof headerSections[number]) => {
-              return (
-                <HeaderSection key={`logbook-entry-dropdown-header-${section}`}>
-                  <HeaderSectionTitle>{section}</HeaderSectionTitle>
-                  <Globals.InputMini
-                    borderRadius="six"
-                    placeholder={section === "Date" ? "MM/DD/YYYY" : "Budget"}
-                    userInput=""
-                    setUserInput={() => console.log("foo")}
-                  />
-                </HeaderSection>
-              );
-            })}
-            <DeleteButton
-              type="button"
-              name="Logbook Entry Dropdown Delete Button"
-              tabIndex={-1}
-              onClick={(event: Types.OnClick) => {
-                event.stopPropagation();
-                confirmLogbookEntryDelete.value = true;
-              }}
-            >
-              <Icons.Close
-                height={12}
-                fill={Styles.background[theme.value].seven}
-                hoveredFill={Styles.text[theme.value]}
-                addHover
-              />
-            </DeleteButton>
-          </Header>
+          <LogbookEntryDropdownHeader
+            opened={opened}
+            confirmLogbookEntryDelete={confirmLogbookEntryDelete}
+            logbookEntry={logbookEntry}
+          />
 
           <Drag.DragDropContext onDragEnd={props.onDragEnd}>
             <AnimatePresence>

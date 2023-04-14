@@ -62,14 +62,13 @@ type Props = {
 export const UserSummary = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
+  const { totalSpent, remainingBudget } = Functions.useSignalsStore().dashboard;
   const { loadingOverviews } = Functions.useUiSlice();
   const { currentUser, overviews } = Functions.useEntitiesSlice();
   const overview = Functions.useGetCurrentUserOverview();
   const overviewGroups = Functions.useGetCurrentUserOverviewGroups();
 
   const savedIncome = useSignal("");
-  const totalSpent = useSignal("0.00");
-  const remainingBudget = useSignal("");
   const errorMessage = useSignal("");
 
   const updateIncome = Functions.debounce((cost: string) => {
@@ -149,9 +148,7 @@ export const UserSummary = (props: Props) => {
     }
   }, [overview, totalSpent.value]);
 
-  // ↓↓↓ Setting `errorMessage` state when :        ↓↓↓ //
-  // ↓↓↓ `totalSpent` exceeds the overview income.  ↓↓↓ //
-  // ↓↓↓ `remainingBudget` is negative.             ↓↓↓ //
+  // ↓↓↓ Setting `errorMessage` state. ↓↓↓ //
   useEffect(() => {
     if (overview) {
       const overBudget = Number(totalSpent.value) > overview.income;
