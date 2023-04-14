@@ -75,6 +75,11 @@ const LoginButton = styled(Link)`
 export const Navbar = () => {
   const { theme } = Functions.useSignalsStore().ui;
 
+  function toggleTheme(): void {
+    if (theme.value === "light") theme.value = "dark";
+    else theme.value = "light";
+  }
+
   return (
     <Nav>
       <Main>
@@ -95,7 +100,7 @@ export const Navbar = () => {
         )}
 
         <Links>
-          <ThemeButton type="button" onClick={signalsHelpers.ui.toggleTheme}>
+          <ThemeButton type="button" onClick={toggleTheme}>
             {theme.value === "light" ? (
               <Icons.ThemeDark
                 height={12}
