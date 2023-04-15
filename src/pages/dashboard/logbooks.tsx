@@ -11,8 +11,6 @@ import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
 import { NextPageWithLayout } from "../_app";
 
 const Logbooks: NextPageWithLayout = () => {
-  // Functions.consoleLog("Logbook Page Rendered", false);
-
   const dispatch = Functions.useAppDispatch();
 
   const { loadingLogbooks } = Functions.useUiSlice();

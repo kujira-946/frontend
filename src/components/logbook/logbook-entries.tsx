@@ -28,8 +28,6 @@ type Props = {
 };
 
 const ExportedComponent = (props: Props) => {
-  Functions.consoleLog("Logbook Entries Loaded", false);
-
   const dispatch = Functions.useAppDispatch();
 
   const logbook = Functions.useGetLogbook(props.logbookId);
@@ -68,23 +66,23 @@ const ExportedComponent = (props: Props) => {
 
   return (
     <Container>
-      {logbook && logbook.logbookEntryIds
-        ? Functions.deepCopy(logbook.logbookEntryIds)
-            .reverse()
-            .map((logbookEntryId: number) => {
-              return (
-                <LogbookEntryDropdown
-                  key={`dashboard-logbooks-logbook-entry-dropdown-${logbookEntryId}`}
-                  logbookEntryId={logbookEntryId}
-                  onDragEnd={onDragEnd}
-                  deleteLogbookEntry={deleteLogbookEntry}
-                  deleteSelectedPurchases={deleteSelectedPurchases}
-                  deleteAllPurchases={deleteAllPurchases}
-                  addPurchase={addPurchase}
-                />
-              );
-            })
-        : null}
+      {logbook &&
+        logbook.logbookEntryIds &&
+        Functions.deepCopy(logbook.logbookEntryIds)
+          .reverse()
+          .map((logbookEntryId: number) => {
+            return (
+              <LogbookEntryDropdown
+                key={`dashboard-logbooks-logbook-entry-dropdown-${logbookEntryId}`}
+                logbookEntryId={logbookEntryId}
+                onDragEnd={onDragEnd}
+                deleteLogbookEntry={deleteLogbookEntry}
+                deleteSelectedPurchases={deleteSelectedPurchases}
+                deleteAllPurchases={deleteAllPurchases}
+                addPurchase={addPurchase}
+              />
+            );
+          })}
     </Container>
   );
 };

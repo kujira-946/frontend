@@ -66,8 +66,6 @@ type Props = {
 };
 
 export const LogbookEntryDropdown = (props: Props) => {
-  Functions.consoleLog("Logbook Entry Dropdown Loaded", false);
-
   const dispatch = Functions.useAppDispatch();
 
   const { purchases } = Functions.useEntitiesSlice();
@@ -178,28 +176,31 @@ export const LogbookEntryDropdown = (props: Props) => {
             {opened.value && (
               <Drag.DragDropContext onDragEnd={props.onDragEnd}>
                 <Body>
-                  {logbookEntryPurchases && logbookEntryPurchases.length > 0 ? (
-                    <>
-                      <Purchases
-                        opened={opened.value}
-                        loadingPurchases={loadingPurchases.value}
-                        logbookEntryPurchases={logbookEntryPurchases}
-                        onDragEnd={props.onDragEnd}
-                        update={updatePurchase}
-                        delete={deletePurchase}
-                        onCheckActive={onCheckActive}
-                        onCheckInactive={onCheckInactive}
-                      />
-                      <DeleteButtons
-                        purchasesSelected={purchasesSelected.value}
-                        selectedPurchaseIds={selectedPurchaseIds.value}
-                        confirmPurchasesDelete={confirmPurchasesDelete}
-                        logbookEntryId={props.logbookEntryId}
-                        deleteSelectedPurchases={props.deleteSelectedPurchases}
-                        addPurchase={props.addPurchase}
-                      />
-                    </>
-                  ) : null}
+                  {logbookEntryPurchases &&
+                    logbookEntryPurchases.length > 0 && (
+                      <>
+                        <Purchases
+                          opened={opened.value}
+                          loadingPurchases={loadingPurchases.value}
+                          logbookEntryPurchases={logbookEntryPurchases}
+                          onDragEnd={props.onDragEnd}
+                          update={updatePurchase}
+                          delete={deletePurchase}
+                          onCheckActive={onCheckActive}
+                          onCheckInactive={onCheckInactive}
+                        />
+                        <DeleteButtons
+                          purchasesSelected={purchasesSelected.value}
+                          selectedPurchaseIds={selectedPurchaseIds.value}
+                          confirmPurchasesDelete={confirmPurchasesDelete}
+                          logbookEntryId={props.logbookEntryId}
+                          deleteSelectedPurchases={
+                            props.deleteSelectedPurchases
+                          }
+                          addPurchase={props.addPurchase}
+                        />
+                      </>
+                    )}
 
                   <Globals.NeutralButton
                     onClick={() => props.addPurchase(props.logbookEntryId)}
