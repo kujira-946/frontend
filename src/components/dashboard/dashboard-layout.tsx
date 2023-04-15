@@ -29,6 +29,7 @@ const Overview = styled.section`
 `;
 
 const Children = styled.section`
+  position: relative;
   flex: 1;
 `;
 
