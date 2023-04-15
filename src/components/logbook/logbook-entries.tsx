@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useCallback } from "react";
+import { memo, useCallback } from "react";
 
 import * as Globals from "@/components";
 import * as PurchasesSagas from "@/sagas/purchases.saga";
@@ -28,7 +28,9 @@ type Props = {
   logbookId: number;
 };
 
-export const LogbookEntries = (props: Props) => {
+const ExportedComponent = (props: Props) => {
+  Functions.consoleLog("Logbook Entries Loaded", false);
+
   const dispatch = Functions.useAppDispatch();
 
   const { loadingLogbookEntries } = Functions.useUiSlice();
@@ -88,3 +90,5 @@ export const LogbookEntries = (props: Props) => {
     </Container>
   );
 };
+
+export const LogbookEntries = memo(ExportedComponent);
