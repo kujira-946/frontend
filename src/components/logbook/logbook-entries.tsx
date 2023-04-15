@@ -6,7 +6,7 @@ import * as PurchasesSagas from "@/sagas/purchases.saga";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 
-import { LogbookEntryDropdown } from "./logbook-entry-dropdown";
+import { LogbookEntryDropdown } from "./entry-dropdown";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //

@@ -31,3 +31,9 @@ export const Shimmer = styled.div<Props>`
   }};
   animation: ${effect} 2.2s linear infinite;
 `;
+
+export const PurchaseShimmer = (props: { borderRadius?: Types.PxAsRem }) => (
+  <Shimmer borderRadius={props.borderRadius || "four"} height={40} />
+);
+
+export const OverviewShimmer = () => <Shimmer borderRadius="six" height={44} />;

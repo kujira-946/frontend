@@ -170,10 +170,10 @@ export const UserSummary = (props: Props) => {
 
       {loadingOverviews ? (
         <>
-          <Globals.Shimmer borderRadius="six" height={44} />
-          <Globals.Shimmer borderRadius="six" height={44} />
-          <Globals.Shimmer borderRadius="six" height={44} />
-          <Globals.Shimmer borderRadius="six" height={44} />
+          <Globals.OverviewShimmer />
+          <Globals.OverviewShimmer />
+          <Globals.OverviewShimmer />
+          <Globals.OverviewShimmer />
         </>
       ) : overview ? (
         <>

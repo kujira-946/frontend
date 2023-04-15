@@ -5,14 +5,15 @@ import { useCallback, useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
+import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { fetchLogbookEntryPurchasesRequest } from "@/sagas/purchases.saga";
 import { ThemeProps } from "../layout";
 
-import { LogbookEntryDropdownHeader } from "./entry-dropdown-header";
-import { LogbookEntryDropdownPurchases } from "./entry-dropdown-purchases";
-import { LogbookEntryDropdownButtons } from "./entry-dropdown-buttons";
+import { Header } from "./entry-dropdown-header";
+import { Purchases } from "./entry-dropdown-purchases";
+import { DeleteButtons } from "./entry-dropdown-delete-buttons";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -167,7 +168,7 @@ export const LogbookEntryDropdown = (props: Props) => {
             )}
           </AnimatePresence>
 
-          <LogbookEntryDropdownHeader
+          <Header
             opened={opened}
             confirmLogbookEntryDelete={confirmLogbookEntryDelete}
             logbookEntry={logbookEntry}
@@ -177,27 +178,36 @@ export const LogbookEntryDropdown = (props: Props) => {
             {opened.value && (
               <Drag.DragDropContext onDragEnd={props.onDragEnd}>
                 <Body>
-                  {logbookEntryPurchases ? (
-                    <LogbookEntryDropdownPurchases
-                      opened={opened.value}
-                      loadingPurchases={loadingPurchases.value}
-                      logbookEntryPurchases={logbookEntryPurchases}
-                      onDragEnd={props.onDragEnd}
-                      update={updatePurchase}
-                      delete={deletePurchase}
-                      onCheckActive={onCheckActive}
-                      onCheckInactive={onCheckInactive}
-                    />
+                  {logbookEntryPurchases && logbookEntryPurchases.length > 0 ? (
+                    <>
+                      <Purchases
+                        opened={opened.value}
+                        loadingPurchases={loadingPurchases.value}
+                        logbookEntryPurchases={logbookEntryPurchases}
+                        onDragEnd={props.onDragEnd}
+                        update={updatePurchase}
+                        delete={deletePurchase}
+                        onCheckActive={onCheckActive}
+                        onCheckInactive={onCheckInactive}
+                      />
+                      <DeleteButtons
+                        purchasesSelected={purchasesSelected.value}
+                        selectedPurchaseIds={selectedPurchaseIds.value}
+                        confirmPurchasesDelete={confirmPurchasesDelete}
+                        logbookEntryId={props.logbookEntryId}
+                        deleteSelectedPurchases={props.deleteSelectedPurchases}
+                        addPurchase={props.addPurchase}
+                      />
+                    </>
                   ) : null}
 
-                  <LogbookEntryDropdownButtons
-                    purchasesSelected={purchasesSelected.value}
-                    selectedPurchaseIds={selectedPurchaseIds.value}
-                    confirmPurchasesDelete={confirmPurchasesDelete}
-                    logbookEntryId={props.logbookEntryId}
-                    deleteSelectedPurchases={props.deleteSelectedPurchases}
-                    addPurchase={props.addPurchase}
-                  />
+                  <Globals.NeutralButton
+                    onClick={() => props.addPurchase(props.logbookEntryId)}
+                    size="medium"
+                    borderRadius="four"
+                  >
+                    Add
+                  </Globals.NeutralButton>
                 </Body>
               </Drag.DragDropContext>
             )}

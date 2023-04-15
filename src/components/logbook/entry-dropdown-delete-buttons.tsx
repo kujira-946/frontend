@@ -12,7 +12,7 @@ type Props = {
   addPurchase: (logbookEntryId: number) => void;
 };
 
-export const LogbookEntryDropdownButtons = (props: Props) => {
+export const DeleteButtons = (props: Props) => {
   return (
     <>
       {props.purchasesSelected && (
@@ -36,14 +36,6 @@ export const LogbookEntryDropdownButtons = (props: Props) => {
       >
         Delete All
       </Globals.NeutralButtonOutlined>
-
-      <Globals.NeutralButton
-        onClick={() => props.addPurchase(props.logbookEntryId)}
-        size="medium"
-        borderRadius="four"
-      >
-        Add
-      </Globals.NeutralButton>
     </>
   );
 };

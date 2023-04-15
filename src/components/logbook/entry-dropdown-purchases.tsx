@@ -34,7 +34,7 @@ type Props = {
   onCheckInactive: (purchaseId: number) => void;
 };
 
-export const LogbookEntryDropdownPurchases = (props: Props) => {
+export const Purchases = (props: Props) => {
   return (
     <Drag.Droppable droppableId={Styles.logbookEntryDropdownDroppableId}>
       {(

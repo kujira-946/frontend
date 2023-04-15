@@ -75,7 +75,7 @@ type Props = {
   logbookEntry: Types.LogbookEntry;
 };
 
-export const LogbookEntryDropdownHeader = (props: Props) => {
+export const Header = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
   const { theme } = Functions.useSignalsStore().ui;
