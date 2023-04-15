@@ -5,13 +5,14 @@ import { useCallback, useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
-import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { fetchLogbookEntryPurchasesRequest } from "@/sagas/purchases.saga";
 import { ThemeProps } from "../layout";
 
-import { LogbookEntryDropdownHeader } from "./logbook-entry-dropdown-header";
+import { LogbookEntryDropdownHeader } from "./entry-dropdown-header";
+import { LogbookEntryDropdownPurchases } from "./entry-dropdown-purchases";
+import { LogbookEntryDropdownButtons } from "./entry-dropdown-buttons";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -36,12 +37,6 @@ const Body = styled(motion.article)`
   flex-direction: column;
   gap: ${Styles.pxAsRem.eight};
   padding: ${Styles.pxAsRem.eight};
-`;
-
-const PurchaseCells = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${Styles.pxAsRem.four};
 `;
 
 // ========================================================================================= //
@@ -70,6 +65,8 @@ type Props = {
 };
 
 export const LogbookEntryDropdown = (props: Props) => {
+  Functions.consoleLog("Logbook Entry Dropdown Loaded", false);
+
   const dispatch = Functions.useAppDispatch();
 
   const { purchases } = Functions.useEntitiesSlice();
@@ -176,82 +173,35 @@ export const LogbookEntryDropdown = (props: Props) => {
             logbookEntry={logbookEntry}
           />
 
-          <Drag.DragDropContext onDragEnd={props.onDragEnd}>
-            <AnimatePresence>
-              {opened.value && (
-                <Body
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0, delay: 0 }}
-                >
-                  <Drag.Droppable
-                    droppableId={Styles.logbookEntryDropdownDroppableId}
-                  >
-                    {(
-                      provided: Drag.DroppableProvided,
-                      snapshot: Drag.DroppableStateSnapshot
-                    ) => {
-                      return (
-                        <PurchaseCells
-                          {...provided.droppableProps}
-                          ref={provided.innerRef}
-                        >
-                          {loadingPurchases.value ? (
-                            <>
-                              <Globals.Shimmer borderRadius="six" height={40} />
-                              <Globals.Shimmer borderRadius="six" height={40} />
-                              <Globals.Shimmer borderRadius="six" height={40} />
-                              <Globals.Shimmer borderRadius="six" height={40} />
-                            </>
-                          ) : logbookEntryPurchases ? (
-                            <Globals.DropdownPurchases
-                              type="Logbook Entries"
-                              purchases={logbookEntryPurchases}
-                              update={updatePurchase}
-                              delete={deletePurchase}
-                              onCheckActive={onCheckActive}
-                              onCheckInactive={onCheckInactive}
-                            />
-                          ) : null}
-                        </PurchaseCells>
-                      );
-                    }}
-                  </Drag.Droppable>
+          <AnimatePresence>
+            {opened.value && (
+              <Drag.DragDropContext onDragEnd={props.onDragEnd}>
+                <Body>
+                  {logbookEntryPurchases ? (
+                    <LogbookEntryDropdownPurchases
+                      opened={opened.value}
+                      loadingPurchases={loadingPurchases.value}
+                      logbookEntryPurchases={logbookEntryPurchases}
+                      onDragEnd={props.onDragEnd}
+                      update={updatePurchase}
+                      delete={deletePurchase}
+                      onCheckActive={onCheckActive}
+                      onCheckInactive={onCheckInactive}
+                    />
+                  ) : null}
 
-                  {purchasesSelected.value && (
-                    <Globals.NeutralButtonOutlined
-                      onClick={() =>
-                        props.deleteSelectedPurchases(
-                          Object.values(selectedPurchaseIds.value)
-                        )
-                      }
-                      size="medium"
-                      borderRadius="four"
-                    >
-                      Delete Selected
-                    </Globals.NeutralButtonOutlined>
-                  )}
-
-                  <Globals.NeutralButtonOutlined
-                    onClick={() => (confirmPurchasesDelete.value = true)}
-                    size="medium"
-                    borderRadius="four"
-                  >
-                    Delete All
-                  </Globals.NeutralButtonOutlined>
-
-                  <Globals.NeutralButton
-                    onClick={() => props.addPurchase(props.logbookEntryId)}
-                    size="medium"
-                    borderRadius="four"
-                  >
-                    Add
-                  </Globals.NeutralButton>
+                  <LogbookEntryDropdownButtons
+                    purchasesSelected={purchasesSelected.value}
+                    selectedPurchaseIds={selectedPurchaseIds.value}
+                    confirmPurchasesDelete={confirmPurchasesDelete}
+                    logbookEntryId={props.logbookEntryId}
+                    deleteSelectedPurchases={props.deleteSelectedPurchases}
+                    addPurchase={props.addPurchase}
+                  />
                 </Body>
-              )}
-            </AnimatePresence>
-          </Drag.DragDropContext>
+              </Drag.DragDropContext>
+            )}
+          </AnimatePresence>
         </Container>
       </>
     );

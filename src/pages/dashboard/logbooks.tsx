@@ -5,7 +5,6 @@ import { useSignal } from "@preact/signals-react";
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
 import * as Components from "@/components/logbook";
-import * as LogbookEntrySagas from "@/sagas/logbook-entries.saga";
 import * as Functions from "@/utils/functions";
 import { DashboardLayout } from "@/components/dashboard";
 import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
