@@ -7,13 +7,12 @@ import * as Globals from "@/components";
 import * as Components from "@/components/logbook";
 import * as LogbookEntrySagas from "@/sagas/logbook-entries.saga";
 import * as Functions from "@/utils/functions";
-import * as Types from "@/utils/types";
 import { DashboardLayout } from "@/components/dashboard";
 import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
 import { NextPageWithLayout } from "../_app";
 
 const Logbooks: NextPageWithLayout = () => {
-  Functions.consoleLog("Logbook Page Rendered", false);
+  // Functions.consoleLog("Logbook Page Rendered", false);
 
   const dispatch = Functions.useAppDispatch();
 
@@ -33,18 +32,6 @@ const Logbooks: NextPageWithLayout = () => {
       }
     }
   }, [currentUser, logbooks]);
-
-  // ↓↓↓ Fetching the currently-selected logbook's associated logbook entries. ↓↓↓ //
-  useEffect(() => {
-    if (selectedLogbookId.value) {
-      dispatch(Redux.uiActions.setLoadingLogbookEntries(true));
-      dispatch(
-        LogbookEntrySagas.fetchLogbookLogbookEntriesRequest(
-          selectedLogbookId.value
-        )
-      );
-    }
-  }, [selectedLogbookId.value]);
 
   if (!currentUser) {
     return null;
