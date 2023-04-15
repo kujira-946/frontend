@@ -12,7 +12,6 @@ import { fetchLogbookEntryPurchasesRequest } from "@/sagas/purchases.saga";
 import { ThemeProps } from "../layout";
 
 import { Header } from "./entry-dropdown-header";
-import { Purchases } from "./entry-dropdown-purchases";
 import { DeleteButtons } from "./entry-dropdown-delete-buttons";
 
 // ========================================================================================= //
@@ -179,10 +178,11 @@ export const LogbookEntryDropdown = (props: Props) => {
                   {logbookEntryPurchases &&
                     logbookEntryPurchases.length > 0 && (
                       <>
-                        <Purchases
+                        <Globals.DropdownPurchases
+                          type="Logbook Entries"
                           opened={opened.value}
                           loadingPurchases={loadingPurchases.value}
-                          logbookEntryPurchases={logbookEntryPurchases}
+                          purchases={logbookEntryPurchases}
                           onDragEnd={props.onDragEnd}
                           update={updatePurchase}
                           delete={deletePurchase}

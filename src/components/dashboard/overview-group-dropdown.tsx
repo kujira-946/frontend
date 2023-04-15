@@ -192,71 +192,46 @@ const ExportedComponent = (props: Props) => {
         )}
       </AnimatePresence>
 
-      <Drag.DragDropContext onDragEnd={props.onDragEnd}>
-        <Header
-          onClick={() => (opened.value = !opened.value)}
-          opened={opened.value}
-        >
-          <Title>
-            {overviewGroup && overviewGroup.name}{" "}
-            {overviewGroup?.purchaseIds &&
-              overviewGroup.purchaseIds.length > 0 &&
-              `(${overviewGroup.purchaseIds.length})`}
-          </Title>
-          <Total>
-            ${Functions.roundNumber(overviewGroup?.totalSpent || 0, 2)}
-          </Total>
-        </Header>
+      <Header
+        onClick={() => (opened.value = !opened.value)}
+        opened={opened.value}
+      >
+        <Title>
+          {overviewGroup && overviewGroup.name}{" "}
+          {overviewGroup?.purchaseIds &&
+            overviewGroup.purchaseIds.length > 0 &&
+            `(${overviewGroup.purchaseIds.length})`}
+        </Title>
+        <Total>
+          ${Functions.roundNumber(overviewGroup?.totalSpent || 0, 2)}
+        </Total>
+      </Header>
 
-        <AnimatePresence>
-          {opened.value && (
-            <Body
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0, delay: 0 }}
-            >
-              <Drag.Droppable droppableId={Styles.overviewDropdownDroppableId}>
-                {(
-                  provided: Drag.DroppableProvided,
-                  snapshot: Drag.DroppableStateSnapshot
-                ) => {
-                  return (
-                    <PurchaseCells
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                    >
-                      {loadingPurchases.value ? (
-                        <>
-                          <Globals.Shimmer borderRadius="six" height={40} />
-                          <Globals.Shimmer borderRadius="six" height={40} />
-                          <Globals.Shimmer borderRadius="six" height={40} />
-                          <Globals.Shimmer borderRadius="six" height={40} />
-                        </>
-                      ) : overviewGroupPurchases ? (
-                        <Globals.DropdownPurchases
-                          type="Overview Groups"
-                          purchases={overviewGroupPurchases}
-                          update={updatePurchase}
-                          delete={deletePurchase}
-                          hideCheck
-                          hideCategories
-                        />
-                      ) : null}
-                    </PurchaseCells>
-                  );
-                }}
-              </Drag.Droppable>
-
-              {overviewGroup?.purchaseIds &&
-                overviewGroup.purchaseIds.length > 0 && (
+      <AnimatePresence>
+        {opened.value && (
+          <Drag.DragDropContext onDragEnd={props.onDragEnd}>
+            <Body>
+              {overviewGroupPurchases && overviewGroupPurchases.length > 0 && (
+                <>
+                  <Globals.DropdownPurchases
+                    type="Overview Groups"
+                    opened={opened.value}
+                    loadingPurchases={loadingPurchases.value}
+                    purchases={overviewGroupPurchases}
+                    onDragEnd={props.onDragEnd}
+                    update={updatePurchase}
+                    delete={deletePurchase}
+                    hideCheck
+                    hideCategories
+                  />
                   <Globals.NeutralButtonOutlined
                     onClick={() => (deleteConfirmationOpen.value = true)}
                     size="medium"
                   >
                     Delete All
                   </Globals.NeutralButtonOutlined>
-                )}
+                </>
+              )}
 
               <Globals.NeutralButton
                 onClick={() => props.addPurchase(props.overviewGroupId)}
@@ -266,9 +241,9 @@ const ExportedComponent = (props: Props) => {
                 Add
               </Globals.NeutralButton>
             </Body>
-          )}
-        </AnimatePresence>
-      </Drag.DragDropContext>
+          </Drag.DragDropContext>
+        )}
+      </AnimatePresence>
     </Container>
   );
 };
