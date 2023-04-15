@@ -13,24 +13,14 @@ import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
 import { NextPageWithLayout } from "../_app";
 
 const Logbooks: NextPageWithLayout = () => {
+  Functions.consoleLog("Logbook Page Rendered", false);
+
   const dispatch = Functions.useAppDispatch();
 
   const { loadingLogbooks } = Functions.useUiSlice();
   const { currentUser, logbooks } = Functions.useEntitiesSlice();
-  const currentUserLogbooks = Functions.useGetCurrentUserLogbooks();
 
   const selectedLogbookId = useSignal<number | null>(null);
-
-  function createLogbookEntry(): void {
-    if (selectedLogbookId.value) {
-      dispatch(
-        LogbookEntrySagas.createLogbookEntryRequest({
-          date: Functions.generateFormattedDate(new Date(), true),
-          logbookId: selectedLogbookId.value,
-        })
-      );
-    }
-  }
 
   Functions.useDetectAuthorizedUser();
 
@@ -70,27 +60,7 @@ const Logbooks: NextPageWithLayout = () => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <Globals.PageHeader
-          infoClick={() => console.log("Logbooks Info Clicked")}
-          createClick={createLogbookEntry}
-          createText="Create Logbook Entry"
-        >
-          {currentUserLogbooks &&
-            currentUserLogbooks.map((logbook: Types.Logbook, index: number) => {
-              if (index === 0) selectedLogbookId.value = logbook.id;
-              return (
-                <Globals.NeutralPillButton
-                  key={`dashboard-navbar-logbook-${logbook.id}-${index}`}
-                  onClick={() => (selectedLogbookId.value = logbook.id)}
-                  size="smaller"
-                  selected={selectedLogbookId.value === logbook.id}
-                  compact
-                >
-                  {logbook.name}
-                </Globals.NeutralPillButton>
-              );
-            })}
-        </Globals.PageHeader>
+        <Components.LogbooksHeader selectedLogbookId={selectedLogbookId} />
 
         {selectedLogbookId.value && (
           <Components.LogbookEntries logbookId={selectedLogbookId.value} />
