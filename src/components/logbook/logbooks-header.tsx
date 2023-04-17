@@ -1,19 +1,28 @@
-import { memo } from "react";
+import { useEffect } from "react";
 import { Signal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
+import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
 import { createLogbookEntryRequest } from "@/sagas/logbook-entries.saga";
 
 type Props = {
   selectedLogbookId: Signal<number | null>;
 };
 
-const ExportedComponent = (props: Props) => {
+export const LogbooksHeader = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
+  const { currentUser, logbooks } = Functions.useEntitiesSlice();
   const currentUserLogbooks = Functions.useGetCurrentUserLogbooks();
+
+  // ↓↓↓ Fetching current user's logbooks on load. ↓↓↓ //
+  useEffect(() => {
+    if (currentUser && !logbooks) {
+      dispatch(fetchUserLogbooksRequest(currentUser.id));
+    }
+  }, [currentUser, logbooks]);
 
   function createLogbookEntry(): void {
     if (props.selectedLogbookId.value) {
@@ -50,5 +59,3 @@ const ExportedComponent = (props: Props) => {
     </Globals.PageHeader>
   );
 };
-
-export const LogbooksHeader = memo(ExportedComponent);

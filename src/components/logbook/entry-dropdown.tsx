@@ -1,7 +1,7 @@
 import * as Drag from "react-beautiful-dnd";
 import dynamic from "next/dynamic";
 import styled from "styled-components";
-import { useCallback, useEffect } from "react";
+import { memo, useCallback, useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -64,7 +64,9 @@ type Props = {
   addPurchase: (logbookEntryId: number) => void;
 };
 
-export const LogbookEntryDropdown = (props: Props) => {
+const ExportedComponent = (props: Props) => {
+  // Functions.consoleLog("Logbook Entry Dropdown Rendered", false);
+
   const dispatch = Functions.useAppDispatch();
 
   const { purchases } = Functions.useEntitiesSlice();
@@ -218,3 +220,5 @@ export const LogbookEntryDropdown = (props: Props) => {
     );
   }
 };
+
+export const LogbookEntryDropdown = memo(ExportedComponent);
