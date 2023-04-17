@@ -2,16 +2,12 @@ import Head from "next/head";
 import { ReactElement } from "react";
 import { useSignal } from "@preact/signals-react";
 
-import * as Redux from "@/redux";
-import * as Globals from "@/components";
 import * as Components from "@/components/logbook";
 import * as Functions from "@/utils/functions";
 import { DashboardLayout } from "@/components/dashboard";
 import { NextPageWithLayout } from "../_app";
 
 const Logbooks: NextPageWithLayout = () => {
-  Functions.consoleLog("Logbooks Page Loaded", false);
-
   const selectedLogbookId = useSignal<number | null>(null);
 
   Functions.useDetectAuthorizedUser();
@@ -27,9 +23,9 @@ const Logbooks: NextPageWithLayout = () => {
 
       <Components.LogbooksHeader selectedLogbookId={selectedLogbookId} />
 
-      {/* {selectedLogbookId.value && (
+      {selectedLogbookId.value && (
         <Components.LogbookEntries logbookId={selectedLogbookId.value} />
-      )} */}
+      )}
     </>
   );
 };

@@ -54,16 +54,15 @@ export const DropdownPurchases = (props: Props) => {
       ) => {
         return (
           <PurchaseCells {...provided.droppableProps} ref={provided.innerRef}>
-            {props.loadingPurchases && (
+            {props.loadingPurchases ? (
               <>
                 <Globals.Shimmer borderRadius="six" height={40} />
                 <Globals.Shimmer borderRadius="six" height={40} />
                 <Globals.Shimmer borderRadius="six" height={40} />
                 <Globals.Shimmer borderRadius="six" height={40} />
               </>
-            )}
-
-            {props.purchases &&
+            ) : (
+              props.purchases &&
               props.purchases.map((purchase: Types.Purchase, index: number) => {
                 return (
                   <Drag.Draggable
@@ -105,7 +104,8 @@ export const DropdownPurchases = (props: Props) => {
                     }}
                   </Drag.Draggable>
                 );
-              })}
+              })
+            )}
           </PurchaseCells>
         );
       }}

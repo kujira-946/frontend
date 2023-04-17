@@ -14,9 +14,9 @@ import { ThemeProps } from "../layout";
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
-type SharedProps = { opened: boolean };
+type ContainerProps = { opened: boolean };
 
-const Container = styled.header<SharedProps>`
+const Container = styled.header<ContainerProps>`
   position: sticky;
   top: 0;
   right: 0;
@@ -25,7 +25,7 @@ const Container = styled.header<SharedProps>`
   gap: ${Styles.pxAsRem.forty};
   padding: ${Styles.pxAsRem.twelve};
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
-  border-bottom: ${(props: ThemeProps & SharedProps) => {
+  border-bottom: ${(props: ThemeProps & ContainerProps) => {
     return props.opened
       ? `${props.theme.backgroundFour} solid 1px`
       : `transparent solid 1px`;
@@ -70,9 +70,9 @@ const headerSections = ["Date*", "Spent", "Budget", "Status"] as const;
 type HeaderStatus = "-" | "Over Budget" | "Safe" | "No Budget Set";
 
 type Props = {
+  logbookEntryId: number;
   opened: Signal<boolean>;
   confirmLogbookEntryDelete: Signal<boolean>;
-  logbookEntry: Types.LogbookEntry;
 };
 
 export const Header = (props: Props) => {
@@ -80,6 +80,7 @@ export const Header = (props: Props) => {
 
   const { theme } = Functions.useSignalsStore().ui;
   const { remainingBudget } = Functions.useSignalsStore().dashboard;
+  const logbookEntry = Functions.useGetLogbookEntry(props.logbookEntryId);
 
   const date = useSignal("-");
   const spent = useSignal("-");
@@ -145,63 +146,71 @@ export const Header = (props: Props) => {
         !dateError.value &&
         date.value !== "" &&
         date.value !== formattedDate &&
-        date.value !== props.logbookEntry.date
+        logbookEntry &&
+        date.value !== logbookEntry.date
       ) {
         dispatch(
-          updateLogbookEntryRequest(props.logbookEntry.id, {
+          updateLogbookEntryRequest(logbookEntry.id, {
             date: formattedDate,
           })
         );
         date.value = formattedDate;
       }
     }),
-    []
+    [logbookEntry]
   );
 
   const updateBudget = useCallback(
     Functions.debounce(() => {
       if (!budgetError.value) {
-        if (budget.value === "" && props.logbookEntry.budget !== null) {
+        if (
+          budget.value === "" &&
+          logbookEntry &&
+          logbookEntry.budget !== null
+        ) {
           dispatch(
-            updateLogbookEntryRequest(props.logbookEntry.id, {
+            updateLogbookEntryRequest(logbookEntry.id, {
               budget: null,
             })
           );
         } else if (
           budget.value !== "" &&
-          Number(budget.value) !== props.logbookEntry.budget
+          logbookEntry &&
+          Number(budget.value) !== logbookEntry.budget
         ) {
           dispatch(
-            updateLogbookEntryRequest(props.logbookEntry.id, {
+            updateLogbookEntryRequest(logbookEntry.id, {
               budget: Number(budget.value),
             })
           );
         }
       }
     }),
-    [props.logbookEntry]
+    [logbookEntry]
   );
 
   // ↓↓↓ Initializing `date`, `spent`, `budget`, and `status` states. ↓↓↓ //
   useEffect(() => {
-    date.value = props.logbookEntry.date;
-    spent.value = Functions.formattedNumber(props.logbookEntry.totalSpent);
+    if (logbookEntry) {
+      date.value = logbookEntry.date;
+      spent.value = Functions.formattedNumber(logbookEntry.totalSpent);
 
-    if (props.logbookEntry.budget) {
-      budget.value = Functions.roundNumber(props.logbookEntry.budget, 2);
-      if (props.logbookEntry.totalSpent > props.logbookEntry.budget) {
-        status.value = "Over Budget";
-      } else if (props.logbookEntry.totalSpent < props.logbookEntry.budget) {
-        status.value = "Safe";
+      if (logbookEntry.budget) {
+        budget.value = Functions.roundNumber(logbookEntry.budget, 2);
+        if (logbookEntry.totalSpent > logbookEntry.budget) {
+          status.value = "Over Budget";
+        } else if (logbookEntry.totalSpent < logbookEntry.budget) {
+          status.value = "Safe";
+        }
+      } else {
+        status.value = "No Budget Set";
       }
-    } else {
-      status.value = "No Budget Set";
     }
-  }, []);
+  }, [logbookEntry]);
 
   // ↓↓↓ Setting `dateError` state. ↓↓↓ //
   useEffect(() => {
-    if (date.value !== props.logbookEntry.date) {
+    if (logbookEntry && date.value !== logbookEntry.date) {
       const month = Number(date.value.split("/")[0]);
       const day = Number(date.value.split("/")[1]);
       const year = Number(date.value.split("/")[2]);
@@ -211,7 +220,7 @@ export const Header = (props: Props) => {
     } else {
       dateError.value = "";
     }
-  }, [props.logbookEntry, date.value]);
+  }, [logbookEntry, date.value]);
 
   // ↓↓↓ Updating Logbook Entry `date`. ↓↓↓ //
   useEffect(() => {

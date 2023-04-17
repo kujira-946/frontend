@@ -28,8 +28,6 @@ type Props = {
 };
 
 const ExportedComponent = (props: Props) => {
-  // Functions.consoleLog("Logbook Entries Rendered", false);
-
   const dispatch = Functions.useAppDispatch();
 
   const logbook = Functions.useGetLogbook(props.logbookId);

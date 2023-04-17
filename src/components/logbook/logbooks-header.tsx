@@ -14,15 +14,15 @@ type Props = {
 export const LogbooksHeader = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
-  const { currentUser, logbooks } = Functions.useEntitiesSlice();
+  const { currentUser } = Functions.useEntitiesSlice();
   const currentUserLogbooks = Functions.useGetCurrentUserLogbooks();
 
   // ↓↓↓ Fetching current user's logbooks on load. ↓↓↓ //
   useEffect(() => {
-    if (currentUser && !logbooks) {
+    if (currentUser && currentUser.logbookIds.length === 0) {
       dispatch(fetchUserLogbooksRequest(currentUser.id));
     }
-  }, [currentUser, logbooks]);
+  }, [currentUser]);
 
   function createLogbookEntry(): void {
     if (props.selectedLogbookId.value) {
