@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { memo, useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 import * as LogbookEntriesSagas from "@/sagas/logbook-entries.saga";
 import * as PurchasesSagas from "@/sagas/purchases.saga";
@@ -27,7 +27,7 @@ type Props = {
   logbookId: number;
 };
 
-const ExportedComponent = (props: Props) => {
+export const LogbookEntries = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
   const logbook = Functions.useGetLogbook(props.logbookId);
@@ -86,5 +86,3 @@ const ExportedComponent = (props: Props) => {
     </Container>
   );
 };
-
-export const LogbookEntries = memo(ExportedComponent);

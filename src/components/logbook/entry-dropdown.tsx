@@ -5,12 +5,11 @@ import { memo } from "react";
 import { useSignal } from "@preact/signals-react";
 import { AnimatePresence } from "framer-motion";
 
-import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { ThemeProps } from "../layout";
 
 import { Header } from "./entry-dropdown-header";
-import { EntryDropdownBody } from "./entry-dropdown-body";
+import { Body } from "./entry-dropdown-body";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -96,7 +95,7 @@ const ExportedComponent = (props: Props) => {
 
         <AnimatePresence>
           {opened.value && (
-            <EntryDropdownBody
+            <Body
               logbookEntryId={props.logbookEntryId}
               opened={opened.value}
               confirmPurchasesDelete={confirmPurchasesDelete}

@@ -41,7 +41,7 @@ type Props = {
   addPurchase: (logbookEntryId: number) => void;
 };
 
-export const EntryDropdownBody = (props: Props) => {
+export const Body = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
   const { purchases } = Functions.useEntitiesSlice();
