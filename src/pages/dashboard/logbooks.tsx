@@ -3,14 +3,11 @@ import { ReactElement } from "react";
 import { useSignal } from "@preact/signals-react";
 
 import * as Components from "@/components/logbook";
-import * as Functions from "@/utils/functions";
 import { DashboardLayout } from "@/components/dashboard";
 import { NextPageWithLayout } from "../_app";
 
 const Logbooks: NextPageWithLayout = () => {
   const selectedLogbookId = useSignal<number | null>(null);
-
-  Functions.useDetectAuthorizedUser();
 
   return (
     <>

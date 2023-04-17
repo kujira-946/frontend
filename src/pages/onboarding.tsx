@@ -73,11 +73,11 @@ const Onboarding = () => {
     );
   }, []);
 
-  Functions.useDetectAuthorizedUser(() => {
+  useEffect(() => {
     if (currentUser && currentUser.onboarded) {
       router.push(Constants.ClientRoutes.LOGBOOKS);
     }
-  });
+  }, [currentUser]);
 
   useEffect(() => {
     if (currentUser && !overview) {
@@ -131,7 +131,7 @@ const Onboarding = () => {
     }
   });
 
-  if (!currentUser) {
+  if (currentUser && currentUser.onboarded) {
     return null;
   } else {
     return (

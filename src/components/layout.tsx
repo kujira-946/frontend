@@ -2,6 +2,7 @@ import localFont from "@next/font/local";
 import axios from "axios";
 import Cookies from "js-cookie";
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 import * as Redux from "@/redux";
@@ -12,6 +13,7 @@ import { logoutRequest } from "@/sagas/auth.saga";
 
 import { Notification } from "./notification";
 import { Loading } from "./loading";
+import { ClientRoutes } from "@/utils/constants";
 
 const poppins = localFont({
   src: [
@@ -303,17 +305,31 @@ if (jwtAccessToken) {
   axios.defaults.headers.common["Authorization"] = jwtAccessToken;
 }
 
+const authedRoutes: string[] = [
+  ClientRoutes.ONBOARDING,
+  ClientRoutes.LOGBOOKS,
+  ClientRoutes.REVIEWS,
+  ClientRoutes.SETTINGS,
+];
+
 type Props = { children: React.ReactNode };
 
 export const Layout = (props: Props) => {
+  console.log("Layout Rendered");
+
+  const router = useRouter();
   const dispatch = Functions.useAppDispatch();
 
   const { theme } = Functions.useSignalsStore().ui;
   const { currentUser } = Functions.useEntitiesSlice();
   const { loadingUsers } = Functions.useUiSlice();
 
+  const inAuthedRoute = authedRoutes.includes(router.pathname);
+
   useEffect(() => {
-    if (userId && !jwtAccessToken) {
+    if (!userId && !jwtAccessToken && inAuthedRoute) {
+      router.push("/");
+    } else if (userId && !jwtAccessToken) {
       Cookies.remove("id");
       dispatch(logoutRequest(Number(userId)));
     }
@@ -323,6 +339,9 @@ export const Layout = (props: Props) => {
     if (userId && !currentUser) {
       dispatch(Redux.uiActions.setLoadingUsers(true));
       dispatch(fetchUserRequest(Number(userId)));
+    } else if (!inAuthedRoute && currentUser) {
+      if (currentUser.onboarded) router.push(ClientRoutes.LOGBOOKS);
+      else router.push(ClientRoutes.ONBOARDING);
     }
   }, [currentUser]);
 
@@ -334,9 +353,9 @@ export const Layout = (props: Props) => {
 
       {loadingUsers ? (
         <Loading text="Loading your information..." />
-      ) : (
+      ) : (inAuthedRoute && currentUser) || (!inAuthedRoute && !currentUser) ? (
         props.children
-      )}
+      ) : null}
     </ThemeProvider>
   );
 };
