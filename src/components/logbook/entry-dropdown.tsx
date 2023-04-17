@@ -56,8 +56,6 @@ type Props = {
 };
 
 const ExportedComponent = (props: Props) => {
-  Functions.consoleLog(props.logbookEntryId, false);
-
   const opened = useSignal(false);
   const confirmLogbookEntryDelete = useSignal(false);
   const confirmPurchasesDelete = useSignal(false);
