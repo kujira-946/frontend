@@ -1,10 +1,32 @@
 import Head from "next/head";
+import styled from "styled-components";
 import { ReactElement } from "react";
+import { useSignal } from "@preact/signals-react";
 
-import * as Components from "@/components/dashboard";
+import * as Components from "@/components/settings";
+import * as Styles from "@/utils/styles";
+import * as Types from "@/utils/types";
+import { DashboardLayout } from "@/components/dashboard";
 import { NextPageWithLayout } from "../_app";
 
+// ========================================================================================= //
+// [ STYLED COMPONENTS ] =================================================================== //
+// ========================================================================================= //
+
+const Body = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${Styles.pxAsRem.sixteen};
+  padding: ${Styles.pxAsRem.sixteen};
+`;
+
+// ========================================================================================= //
+// [ PAGE ] ================================================================================ //
+// ========================================================================================= //
+
 const Settings: NextPageWithLayout = () => {
+  const currentTab = useSignal<Types.SettingsTab>("Personal Information");
+
   return (
     <>
       <Head>
@@ -13,17 +35,16 @@ const Settings: NextPageWithLayout = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      Settings Page
+
+      <Body>
+        <Components.SettingsHeader currentTab={currentTab} />
+      </Body>
     </>
   );
 };
 
 Settings.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <Components.DashboardLayout page="Settings">
-      {page}
-    </Components.DashboardLayout>
-  );
+  return <DashboardLayout page="Settings">{page}</DashboardLayout>;
 };
 
 export default Settings;
