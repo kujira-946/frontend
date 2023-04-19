@@ -45,8 +45,8 @@ export type VerificationData = {
 export type UserUpdateData = {
   email?: string;
   username?: string;
-  firstName?: string;
-  lastName?: string;
+  firstName?: string | null;
+  lastName?: string | null;
   birthday?: string;
   currency?: string;
   mobileNumber?: string;

@@ -6,6 +6,7 @@ import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
+import { updateUserRequest } from "@/sagas/users.saga";
 
 import { SubmitButton } from "../submit-button";
 
@@ -26,6 +27,8 @@ const Container = styled.form`
 // ========================================================================================= //
 
 export const PersonalInformation = () => {
+  const dispatch = Functions.useAppDispatch();
+
   const { currentUser } = Functions.useEntitiesSlice();
 
   const email = useSignal("");
@@ -56,24 +59,22 @@ export const PersonalInformation = () => {
   );
 
   function checkDisabled(): boolean {
-    if (currentUser) {
-      return (
-        email.value === currentUser.email ||
-        username.value === currentUser.username ||
-        (email.value === "" && username.value === "")
-      );
-    } else {
-      return true;
-    }
+    return email.value === "" && username.value === "";
   }
 
   function submit(event: Types.Submit): void {
     event.preventDefault();
-    console.log("Submit Personal Information");
-    Functions.consoleLog(email.value);
-    Functions.consoleLog(username.value);
-    Functions.consoleLog(firstName.value);
-    Functions.consoleLog(lastName.value);
+
+    if (!checkDisabled() && currentUser) {
+      dispatch(
+        updateUserRequest(currentUser.id, {
+          email: email.value,
+          username: username.value,
+          firstName: firstName.value || null,
+          lastName: lastName.value || null,
+        })
+      );
+    }
   }
 
   useEffect(() => {
