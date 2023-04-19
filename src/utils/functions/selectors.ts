@@ -40,7 +40,11 @@ const getCurrentUserOverviewGroups = createSelector(
   (currentUser, overviews, overviewGroups) => {
     if (currentUser && overviews && overviewGroups) {
       const overview = overviews[currentUser.overviewIds[0]];
-      if (overview.overviewGroupIds && overview.overviewGroupIds.length > 0) {
+      if (
+        overview &&
+        overview.overviewGroupIds &&
+        overview.overviewGroupIds.length > 0
+      ) {
         return overview.overviewGroupIds.map((overviewGroupId: number) => {
           return overviewGroups[overviewGroupId];
         });

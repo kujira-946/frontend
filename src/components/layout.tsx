@@ -331,15 +331,19 @@ export const Layout = (props: Props) => {
       Cookies.remove("id");
       dispatch(logoutRequest(Number(userId)));
     }
-  }, []);
 
-  useEffect(() => {
     if (userId && !currentUser) {
       dispatch(Redux.uiActions.setLoadingUsers(true));
       dispatch(fetchUserRequest(Number(userId)));
-    } else if (!inAuthedRoute && currentUser) {
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!inAuthedRoute && currentUser) {
       if (currentUser.onboarded) router.push(ClientRoutes.LOGBOOKS);
       else router.push(ClientRoutes.ONBOARDING);
+    } else if (inAuthedRoute && !currentUser) {
+      router.push(ClientRoutes.LANDING);
     }
   }, [currentUser]);
 

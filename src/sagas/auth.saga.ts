@@ -113,6 +113,7 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
       secure: true,
       expires: 30,
     });
+    axios.defaults.headers.common["Authorization"] = data.accessToken;
     yield Saga.put(Redux.entitiesActions.setCurrentUser(data.data));
     // yield Saga.put(Redux.entitiesActions.addUser(data.data));
     yield Saga.put(Redux.uiActions.setVerificationCodeSent(false));
@@ -165,6 +166,7 @@ function* verifyLogin(action: VerifyLoginAction) {
       secure: true,
       expires: thirtyDays ? 30 : 7,
     });
+    axios.defaults.headers.common["Authorization"] = data.accessToken;
     yield Saga.put(Redux.entitiesActions.setCurrentUser(data.data));
     // yield Saga.put(Redux.entitiesActions.addUser(data.data));
     yield Saga.put(Redux.uiActions.setVerificationCodeSent(false));

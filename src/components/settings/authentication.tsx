@@ -1,14 +1,14 @@
+import dynamic from "next/dynamic";
 import styled from "styled-components";
+import { useSignal } from "@preact/signals-react";
+import { AnimatePresence } from "framer-motion";
 
 import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
-import { ThemeProps } from "../layout";
-import { useSignal } from "@preact/signals-react";
-import { AnimatePresence } from "framer-motion";
-import dynamic from "next/dynamic";
-import { deleteUserRequest } from "@/sagas/users.saga";
 import { logoutRequest } from "@/sagas/auth.saga";
+import { deleteUserRequest } from "@/sagas/users.saga";
+import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
