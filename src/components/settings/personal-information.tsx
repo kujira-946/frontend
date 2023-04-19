@@ -8,8 +8,6 @@ import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { updateUserRequest } from "@/sagas/users.saga";
 
-import { SubmitButton } from "../submit-button";
-
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
@@ -59,7 +57,14 @@ export const PersonalInformation = () => {
   );
 
   function checkDisabled(): boolean {
-    return email.value === "" && username.value === "";
+    return (
+      email.value === "" ||
+      username.value === "" ||
+      !!emailError.value ||
+      !!usernameError.value ||
+      !!firstNameError.value ||
+      !!lastNameError.value
+    );
   }
 
   function submit(event: Types.Submit): void {
@@ -177,7 +182,9 @@ export const PersonalInformation = () => {
           setUserInput={setUserInput("Last Name")}
         />
 
-        <SubmitButton disabled={checkDisabled()}>Update</SubmitButton>
+        <Globals.SubmitButton disabled={checkDisabled()}>
+          Update
+        </Globals.SubmitButton>
       </Container>
     );
   }

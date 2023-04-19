@@ -23,6 +23,7 @@ enum UsersActionTypes {
   FETCH_USERS = "FETCH_USERS",
   FETCH_USER = "FETCH_USER",
   UPDATE_USER = "UPDATE_USER",
+  UPDATE_USER_PASSWORD = "UPDATE_USER_PASSWORD",
   DELETE_USER = "DELETE_USER",
 }
 
@@ -61,6 +62,24 @@ export function updateUserRequest(
   return {
     type: UsersActionTypes.UPDATE_USER,
     payload: { userId, updateData, forCurrentUser },
+  };
+}
+
+type PasswordUpdateData = {
+  oldPassword: string;
+  newPassword: string;
+};
+type UserUpdatePasswordAction = Types.SagaAction<{
+  userId: number;
+  updateData: PasswordUpdateData;
+}>;
+export function updateUserPasswordRequest(
+  userId: number,
+  updateData: PasswordUpdateData
+): UserUpdatePasswordAction {
+  return {
+    type: UsersActionTypes.UPDATE_USER_PASSWORD,
+    payload: { userId, updateData },
   };
 }
 
@@ -137,6 +156,26 @@ function* updateUser(action: UserUpdateAction) {
   }
 }
 
+function* updateUserPassword(action: UserUpdatePasswordAction) {
+  try {
+    const { userId, updateData } = action.payload;
+    const endpoint = ApiRoutes.USERS + `/${userId}/update-password`;
+    const { data } = yield Saga.call(axios.patch, endpoint, updateData);
+    yield Saga.put(
+      Redux.uiActions.setNotification({
+        title: "Success",
+        body: data.body,
+        type: "success",
+        timeout: 5000,
+      })
+    );
+    yield Saga.put(Redux.uiActions.setLoadingUsers(false));
+  } catch (error) {
+    yield Saga.put(Redux.uiActions.setLoadingUsers(false));
+    yield Functions.sagaError(error);
+  }
+}
+
 function* deleteUser(action: UserIdAction) {
   try {
     const { userId, forCurrentUser } = action.payload;
@@ -158,6 +197,7 @@ export function* usersSaga() {
     Saga.takeEvery(UsersActionTypes.FETCH_USERS, fetchUsers),
     Saga.takeEvery(UsersActionTypes.FETCH_USER, fetchUser),
     Saga.takeEvery(UsersActionTypes.UPDATE_USER, updateUser),
+    Saga.takeEvery(UsersActionTypes.UPDATE_USER_PASSWORD, updateUserPassword),
     Saga.takeEvery(UsersActionTypes.DELETE_USER, deleteUser),
   ]);
 }
