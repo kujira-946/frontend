@@ -315,8 +315,6 @@ const authedRoutes: string[] = [
 type Props = { children: React.ReactNode };
 
 export const Layout = (props: Props) => {
-  console.log("Layout Rendered");
-
   const router = useRouter();
   const dispatch = Functions.useAppDispatch();
 
