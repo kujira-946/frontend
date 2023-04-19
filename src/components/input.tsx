@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useRef } from "react";
+import { FocusEvent, useRef } from "react";
 import { useSignal } from "@preact/signals-react";
 import { motion } from "framer-motion";
 
@@ -137,7 +137,8 @@ export const Input = (props: Props) => {
     if (props.onBlur) props.onBlur();
   }
 
-  function onFocus(): void {
+  function onFocus(event: FocusEvent<HTMLInputElement>): void {
+    event.currentTarget.select();
     focused.value = true;
     if (props.onFocus) props.onFocus();
   }

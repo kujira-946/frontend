@@ -42,7 +42,7 @@ export const RegisterInputs = (props: Props) => {
   effect(() => {
     // Username error check
     if (props.username.value !== "") {
-      if (!Functions.checkValidCharacters(props.username.value)) {
+      if (!Functions.checkValidUsernameCharacters(props.username.value)) {
         props.usernameError.value = "Invalid character(s).";
       } else if (props.username.value.length < 6) {
         props.usernameError.value = "Too short.";

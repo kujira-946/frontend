@@ -79,7 +79,7 @@ export const SettingsHeader = (props: Props) => {
         <Copy>
           <CopyTitle>
             Good {hour > 0 && hour < 12 ? "morning" : "evening"},{" "}
-            {currentUser.username}.
+            {currentUser.firstName || currentUser.username}.
           </CopyTitle>
           <CopyBody>You can change your settings here.</CopyBody>
         </Copy>

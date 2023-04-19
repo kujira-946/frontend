@@ -292,18 +292,16 @@ export const AuthForm = (props: Props) => {
             </ResendContainer>
           )}
 
-          <Globals.PrimaryButton
-            type="submit"
+          <Globals.SubmitButton
             disabled={
               props.title === "Register"
                 ? !checkRegistrationErrors()
                 : !checkLoginErrors()
             }
-            size="medium"
             borderRadius="four"
           >
             {props.title}
-          </Globals.PrimaryButton>
+          </Globals.SubmitButton>
         </Form>
       </Container>
     </>

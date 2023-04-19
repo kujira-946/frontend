@@ -38,6 +38,14 @@ const Settings: NextPageWithLayout = () => {
 
       <Body>
         <Components.SettingsHeader currentTab={currentTab} />
+
+        {currentTab.value === "Personal Information" ? (
+          <Components.PersonalInformation />
+        ) : currentTab.value === "Security" ? (
+          <Components.Security />
+        ) : (
+          <Components.Authentication />
+        )}
       </Body>
     </>
   );
