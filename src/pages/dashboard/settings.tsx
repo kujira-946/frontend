@@ -14,9 +14,11 @@ import { NextPageWithLayout } from "../_app";
 // ========================================================================================= //
 
 const Body = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: ${Styles.pxAsRem.sixteen};
+  height: 100%;
   padding: ${Styles.pxAsRem.sixteen};
 `;
 

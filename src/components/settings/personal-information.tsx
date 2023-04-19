@@ -143,49 +143,45 @@ export const PersonalInformation = () => {
     }
   });
 
-  if (!currentUser) {
-    return null;
-  } else {
-    return (
-      <Container onSubmit={submit}>
-        <Globals.Input
-          key="settings-page-personal-information-tab-email"
-          title="*Email"
-          errorMessage={emailError.value}
-          userInput={email.value}
-          setUserInput={setUserInput("Email")}
-          required
-        />
+  return (
+    <Container onSubmit={submit}>
+      <Globals.Input
+        key="settings-page-personal-information-tab-email"
+        title="*Email"
+        errorMessage={emailError.value}
+        userInput={email.value}
+        setUserInput={setUserInput("Email")}
+        required
+      />
 
-        <Globals.Input
-          key="settings-page-personal-information-tab-username"
-          title="*Username"
-          errorMessage={usernameError.value}
-          userInput={username.value}
-          setUserInput={setUserInput("Username")}
-          required
-        />
+      <Globals.Input
+        key="settings-page-personal-information-tab-username"
+        title="*Username"
+        errorMessage={usernameError.value}
+        userInput={username.value}
+        setUserInput={setUserInput("Username")}
+        required
+      />
 
-        <Globals.Input
-          key="settings-page-personal-information-tab-first-name"
-          title="First Name"
-          errorMessage={firstNameError.value}
-          userInput={firstName.value}
-          setUserInput={setUserInput("First Name")}
-        />
+      <Globals.Input
+        key="settings-page-personal-information-tab-first-name"
+        title="First Name"
+        errorMessage={firstNameError.value}
+        userInput={firstName.value}
+        setUserInput={setUserInput("First Name")}
+      />
 
-        <Globals.Input
-          key="settings-page-personal-information-tab-last-name"
-          title="Last Name"
-          errorMessage={lastNameError.value}
-          userInput={lastName.value}
-          setUserInput={setUserInput("Last Name")}
-        />
+      <Globals.Input
+        key="settings-page-personal-information-tab-last-name"
+        title="Last Name"
+        errorMessage={lastNameError.value}
+        userInput={lastName.value}
+        setUserInput={setUserInput("Last Name")}
+      />
 
-        <Globals.SubmitButton disabled={checkDisabled()}>
-          Update
-        </Globals.SubmitButton>
-      </Container>
-    );
-  }
+      <Globals.SubmitButton disabled={checkDisabled()}>
+        Update
+      </Globals.SubmitButton>
+    </Container>
+  );
 };

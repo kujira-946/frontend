@@ -63,8 +63,16 @@ const Header = styled.header`
 const Title = styled.h2`
   margin: 0;
   color: ${(props: ThemeProps) => props.theme.text};
-  font-size: ${Styles.pxAsRem.fourteen};
+  font-size: ${Styles.pxAsRem.sixteen};
   font-weight: ${Styles.fontWeights.bold};
+`;
+
+const Body = styled.p`
+  width: 100%;
+  margin: 0;
+  color: ${(props: ThemeProps) => props.theme.text};
+  font-size: ${Styles.pxAsRem.fourteen};
+  font-weight: ${Styles.fontWeights.medium};
 `;
 
 const DeleteButton = styled.button`
@@ -82,6 +90,8 @@ const DeleteButton = styled.button`
 
 type Props = {
   title: string;
+  body?: string;
+  submitText?: string;
   open: Signal<boolean>;
   onClose: () => void;
   onConfirm: () => void;
@@ -116,6 +126,8 @@ export const DeleteConfirmation = (props: Props) => {
           </DeleteButton>
         </Header>
 
+        {props.body && <Body>{props.body}</Body>}
+
         <Globals.PrimaryButton
           onClick={() => {
             props.onConfirm();
@@ -124,7 +136,7 @@ export const DeleteConfirmation = (props: Props) => {
           size="medium"
           borderRadius="four"
         >
-          Yes
+          {props.submitText || "Yes"}
         </Globals.PrimaryButton>
       </Child>
     </Parent>

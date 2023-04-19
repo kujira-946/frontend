@@ -7,6 +7,7 @@ import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
+import { logoutRequest } from "./auth.saga";
 
 // ========================================================================================= //
 // [ SCHEMAS ] ============================================================================= //
@@ -183,6 +184,7 @@ function* deleteUser(action: UserIdAction) {
     yield Saga.call(axios.delete, endpoint);
     if (forCurrentUser) {
       yield Saga.put(Redux.entitiesActions.setCurrentUser(null));
+      yield Saga.put(logoutRequest(userId));
     }
     yield Saga.put(Redux.entitiesActions.deleteUser(userId));
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
