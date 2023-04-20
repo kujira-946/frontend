@@ -17,13 +17,13 @@ const Container = styled.section`
   gap: ${Styles.pxAsRem.twelve};
   font-size: ${Styles.pxAsRem.fourteen};
   font-weight: ${Styles.fontWeights.medium};
+  cursor: pointer;
 `;
 
 const Icon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
 `;
 
 const Text = styled.div`
@@ -54,9 +54,11 @@ export const CheckboxConfirmation = (props: Props) => {
   const { theme } = Functions.useSignalsStore().ui;
 
   return (
-    <Container>
+    <Container
+      onClick={() => (props.checkboxActive.value = !props.checkboxActive.value)}
+    >
       {props.checkboxActive.value ? (
-        <Icon onClick={() => (props.checkboxActive.value = false)}>
+        <Icon>
           <Icons.CheckboxActive
             height={20}
             fill={Styles.secondary[theme.value].main}
@@ -64,7 +66,7 @@ export const CheckboxConfirmation = (props: Props) => {
           />
         </Icon>
       ) : (
-        <Icon onClick={() => (props.checkboxActive.value = true)}>
+        <Icon>
           <Icons.CheckboxInactive
             height={20}
             fill={Styles.text[theme.value]}
