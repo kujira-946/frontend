@@ -171,14 +171,14 @@ function* verifyLogin(action: VerifyLoginAction) {
     // yield Saga.put(Redux.entitiesActions.addUser(data.data));
     yield Saga.put(Redux.uiActions.setVerificationCodeSent(false));
     yield Saga.put(Redux.uiActions.setLoginForThirtyDays(false));
-    yield Saga.put(
-      Redux.uiActions.setNotification({
-        title: "Verified!",
-        body: data.body,
-        type: "success",
-        timeout: 5000,
-      })
-    );
+    // yield Saga.put(
+    //   Redux.uiActions.setNotification({
+    //     title: "Verified!",
+    //     body: data.body,
+    //     type: "success",
+    //     timeout: 5000,
+    //   })
+    // );
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));

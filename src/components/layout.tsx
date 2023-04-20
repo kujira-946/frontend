@@ -326,7 +326,7 @@ export const Layout = (props: Props) => {
 
   useEffect(() => {
     if (!userId && !jwtAccessToken && inAuthedRoute) {
-      router.push("/");
+      router.push(ClientRoutes.LANDING);
     } else if (userId && !jwtAccessToken) {
       Cookies.remove("id");
       dispatch(logoutRequest(Number(userId)));
@@ -342,8 +342,6 @@ export const Layout = (props: Props) => {
     if (!inAuthedRoute && currentUser) {
       if (currentUser.onboarded) router.push(ClientRoutes.LOGBOOKS);
       else router.push(ClientRoutes.ONBOARDING);
-    } else if (inAuthedRoute && !currentUser) {
-      router.push(ClientRoutes.LANDING);
     }
   }, [currentUser]);
 
@@ -355,9 +353,9 @@ export const Layout = (props: Props) => {
 
       {loadingUsers ? (
         <Loading text="Loading your information..." />
-      ) : (inAuthedRoute && currentUser) || (!inAuthedRoute && !currentUser) ? (
+      ) : (
         props.children
-      ) : null}
+      )}
     </ThemeProvider>
   );
 };
