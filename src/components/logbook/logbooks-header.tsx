@@ -19,11 +19,7 @@ export const LogbooksHeader = (props: Props) => {
 
   // ↓↓↓ Fetching current user's logbooks on load. ↓↓↓ //
   useEffect(() => {
-    if (
-      currentUser &&
-      currentUser.logbookIds &&
-      currentUser.logbookIds.length === 0
-    ) {
+    if (currentUser && currentUser.logbookIds.length === 0) {
       dispatch(fetchUserLogbooksRequest(currentUser.id));
     }
   }, [currentUser]);

@@ -114,7 +114,13 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
       expires: 30,
     });
     axios.defaults.headers.common["Authorization"] = data.accessToken;
-    yield Saga.put(Redux.entitiesActions.setCurrentUser(data.data));
+    yield Saga.put(
+      Redux.entitiesActions.setCurrentUser({
+        ...data.data,
+        overviewIds: [],
+        logbookIds: [],
+      })
+    );
     // yield Saga.put(Redux.entitiesActions.addUser(data.data));
     yield Saga.put(Redux.uiActions.setVerificationCodeSent(false));
     yield Saga.put(Redux.uiActions.setLoginForThirtyDays(false));
@@ -167,7 +173,13 @@ function* verifyLogin(action: VerifyLoginAction) {
       expires: thirtyDays ? 30 : 7,
     });
     axios.defaults.headers.common["Authorization"] = data.accessToken;
-    yield Saga.put(Redux.entitiesActions.setCurrentUser(data.data));
+    yield Saga.put(
+      Redux.entitiesActions.setCurrentUser({
+        ...data.data,
+        overviewIds: [],
+        logbookIds: [],
+      })
+    );
     // yield Saga.put(Redux.entitiesActions.addUser(data.data));
     yield Saga.put(Redux.uiActions.setVerificationCodeSent(false));
     yield Saga.put(Redux.uiActions.setLoginForThirtyDays(false));

@@ -134,17 +134,19 @@ function* fetchUserOverviews(action: UserOverviewsAction) {
       Redux.entitiesActions.addOverview(overviews as Types.OverviewsEntity)
     );
     if (forCurrentUser) {
-      yield Saga.put(
-        Redux.entitiesActions.updateCurrentUserRelations({
-          relationalField: "overviewIds",
-          ids:
-            overviewIds.length > 0
-              ? overviewIds
-              : overviewIds.length === 1
-              ? [overviewIds]
-              : [],
-        })
-      );
+      yield Saga.put(Redux.entitiesActions.setOverview(data.data[0]));
+
+      // yield Saga.put(
+      //   Redux.entitiesActions.updateCurrentUserRelations({
+      //     relationalField: "overviewIds",
+      //     ids:
+      //       overviewIds.length > 0
+      //         ? overviewIds
+      //         : overviewIds.length === 1
+      //         ? [overviewIds]
+      //         : [],
+      //   })
+      // );
     }
     yield Saga.put(
       Redux.entitiesActions.updateUserRelations({

@@ -116,8 +116,9 @@ function* fetchUser(action: UserIdAction) {
     const { userId, forCurrentUser } = action.payload;
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     const { data } = yield Saga.call(axios.get, endpoint);
-    const normalizedData = normalize(data.data, userSchema);
-    const { user } = normalizedData.entities;
+    // const normalizedData = normalize(data.data, userSchema);
+    // const { user } = normalizedData.entities;
+    // yield Saga.put(Redux.entitiesActions.addUser(user as Types.UsersEntity));
     if (forCurrentUser) {
       yield Saga.put(
         Redux.entitiesActions.setCurrentUser({
@@ -127,7 +128,6 @@ function* fetchUser(action: UserIdAction) {
         })
       );
     }
-    // yield Saga.put(Redux.entitiesActions.addUser(user as Types.UsersEntity));
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));

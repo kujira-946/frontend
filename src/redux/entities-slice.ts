@@ -5,6 +5,7 @@ import * as Types from "@/utils/types";
 
 export type EntitiesState = {
   currentUser: Types.User | null;
+  overview: Types.Overview | null;
   users: Types.UsersEntity | null;
   overviews: Types.OverviewsEntity | null;
   overviewGroups: Types.OverviewGroupsEntity | null;
@@ -15,6 +16,7 @@ export type EntitiesState = {
 
 const initialState: EntitiesState = {
   currentUser: null,
+  overview: null,
   users: null,
   overviews: null,
   overviewGroups: null,
@@ -73,6 +75,17 @@ const entitiesSlice = createSlice({
         }
         state.currentUser = currentUserCopy;
       }
+    },
+
+    // ========================================================================================= //
+    // [ OVERVIEW ] ============================================================================ //
+    // ========================================================================================= //
+
+    setOverview: (
+      state: EntitiesState,
+      action: PayloadAction<Types.Overview | null>
+    ) => {
+      state.overview = action.payload;
     },
 
     // ========================================================================================= //
