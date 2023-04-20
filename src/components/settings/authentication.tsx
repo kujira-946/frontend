@@ -1,5 +1,7 @@
 import dynamic from "next/dynamic";
 import styled from "styled-components";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 import { AnimatePresence } from "framer-motion";
 
@@ -8,6 +10,7 @@ import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { logoutRequest } from "@/sagas/auth.saga";
 import { deleteUserRequest } from "@/sagas/users.saga";
+import { ClientRoutes } from "@/utils/constants";
 import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
@@ -58,11 +61,14 @@ const DynamicDeleteConfirmation = dynamic(() =>
 // ========================================================================================= //
 
 export const Authentication = () => {
+  const router = useRouter();
+
   const dispatch = Functions.useAppDispatch();
 
   const { currentUser } = Functions.useEntitiesSlice();
 
   const confirmAccountDelete = useSignal(false);
+  const loggedOut = useSignal(false);
 
   function logOut(): void {
     if (currentUser) {
@@ -73,8 +79,13 @@ export const Authentication = () => {
   function deleteAccount(): void {
     if (currentUser) {
       dispatch(deleteUserRequest(currentUser.id));
+      loggedOut.value = true;
     }
   }
+
+  useEffect(() => {
+    if (!loggedOut.value) router.push(ClientRoutes.LANDING);
+  }, [loggedOut.value]);
 
   return (
     <Container>
