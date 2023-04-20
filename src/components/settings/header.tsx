@@ -64,6 +64,7 @@ const tabs: Types.SettingsTab[] = [
   "Personal Information",
   "Security",
   "Authentication",
+  "Personalization",
 ];
 
 const hour = new Date().getHours();
