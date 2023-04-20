@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 import * as Globals from "@/components";
+import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { ThemeProps } from "./layout";
 
@@ -26,6 +27,13 @@ const NavigationPillsAndErrorMessage = styled.section`
   flex-direction: column;
 `;
 
+const TotalSpent = styled.p`
+  margin: 0 0 ${Styles.pxAsRem.four};
+  color: ${(props: ThemeProps) => props.theme.text};
+  font-size: ${Styles.pxAsRem.twelve};
+  font-weight: ${Styles.fontWeights.semiBold};
+`;
+
 const NavigationPills = styled.article`
   display: flex;
   gap: ${Styles.pxAsRem.eight};
@@ -42,6 +50,7 @@ const ErrorMessage = styled.p`
 
 const Buttons = styled.section`
   display: flex;
+  align-items: center;
   gap: ${Styles.pxAsRem.twelve};
   margin-left: ${Styles.pxAsRem.twelve};
 `;
@@ -58,10 +67,16 @@ type Props = {
   children: React.ReactNode;
 };
 
-export const PageHeader = (props: Props) => {
+export const DashboardPageHeader = (props: Props) => {
+  const { logbookTotalSpent } = Functions.useSignalsStore().dashboard;
+
   return (
     <Container>
       <NavigationPillsAndErrorMessage>
+        <TotalSpent>
+          Total Spent: ${Functions.formattedNumber(logbookTotalSpent.value)}
+        </TotalSpent>
+
         <NavigationPills>{props.children}</NavigationPills>
 
         {props.errorMessage && (

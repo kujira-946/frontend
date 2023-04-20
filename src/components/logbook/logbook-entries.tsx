@@ -30,7 +30,9 @@ type Props = {
 export const LogbookEntries = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
+  const { logbookTotalSpent } = Functions.useSignalsStore().dashboard;
   const logbook = Functions.useGetLogbook(props.logbookId);
+  const totalSpent = Functions.useGetLogbookTotalSpent(props.logbookId);
 
   const onDragEnd = useCallback(Functions.onDragEnd, []);
 
@@ -63,6 +65,10 @@ export const LogbookEntries = (props: Props) => {
       LogbookEntriesSagas.fetchLogbookLogbookEntriesRequest(props.logbookId)
     );
   }, []);
+
+  useEffect(() => {
+    if (totalSpent) logbookTotalSpent.value = totalSpent;
+  }, [totalSpent]);
 
   return (
     <Container>

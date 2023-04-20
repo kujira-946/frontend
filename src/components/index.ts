@@ -9,6 +9,6 @@ export * from "./loading";
 export * from "./shimmer";
 export * from "./purchase-cell";
 export * from "./dropdown-purchases";
-export * from "./page-header";
+export * from "./dashboard-page-header";
 export * from "./button";
 export * from "./submit-button";

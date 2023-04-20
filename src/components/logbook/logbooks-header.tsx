@@ -36,8 +36,7 @@ export const LogbooksHeader = (props: Props) => {
   }
 
   return (
-    <Globals.PageHeader
-      infoClick={() => console.log("Logbooks Info Clicked")}
+    <Globals.DashboardPageHeader
       createClick={createLogbookEntry}
       createText="Create Logbook Entry"
     >
@@ -55,6 +54,6 @@ export const LogbooksHeader = (props: Props) => {
             </Globals.NeutralPillButton>
           );
         })}
-    </Globals.PageHeader>
+    </Globals.DashboardPageHeader>
   );
 };
