@@ -63,14 +63,20 @@ export const Personalization = () => {
   return (
     <Container>
       <ThemeButton
-        onClick={() => (theme.value = "light")}
+        onClick={() => {
+          theme.value = "light";
+          localStorage.setItem("theme", theme.value);
+        }}
         selected={theme.value === "light"}
       >
         Light
       </ThemeButton>
 
       <ThemeButton
-        onClick={() => (theme.value = "dark")}
+        onClick={() => {
+          theme.value = "dark";
+          localStorage.setItem("theme", theme.value);
+        }}
         selected={theme.value === "dark"}
       >
         Dark

@@ -8,12 +8,13 @@ import { useEffect } from "react";
 import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
+import { Theme } from "@/signals/ui.signals";
 import { fetchUserRequest } from "@/sagas/users.saga";
 import { logoutRequest } from "@/sagas/auth.saga";
+import { ClientRoutes } from "@/utils/constants";
 
 import { Notification } from "./notification";
 import { Loading } from "./loading";
-import { ClientRoutes } from "@/utils/constants";
 
 const poppins = localFont({
   src: [
@@ -182,7 +183,6 @@ const GlobalStyles = createGlobalStyle`
     padding: 0;
     margin: 0;
     font-family: ${poppins.style.fontFamily};
-    transition: 0.1s ease-in;
   }
 `;
 
@@ -325,6 +325,15 @@ export const Layout = (props: Props) => {
   const inAuthedRoute = authedRoutes.includes(router.pathname);
 
   useEffect(() => {
+    if (!!window) {
+      if (!localStorage.getItem("theme")) {
+        theme.value = "dark";
+        localStorage.setItem("theme", "dark");
+      } else {
+        theme.value = localStorage.getItem("theme") as Theme;
+      }
+    }
+
     if (!userId && !jwtAccessToken && inAuthedRoute) {
       router.push(ClientRoutes.LANDING);
     } else if (userId && !jwtAccessToken) {
@@ -345,17 +354,21 @@ export const Layout = (props: Props) => {
     }
   }, [currentUser]);
 
-  return (
-    <ThemeProvider theme={themes[theme.value]}>
-      <GlobalStyles />
-      <Portal id="app-portal" />
-      <Notification />
+  if (!theme.value) {
+    return null;
+  } else {
+    return (
+      <ThemeProvider theme={themes[theme.value]}>
+        <GlobalStyles />
+        <Portal id="app-portal" />
+        <Notification />
 
-      {loadingUsers ? (
-        <Loading text="Loading your information..." />
-      ) : (
-        props.children
-      )}
-    </ThemeProvider>
-  );
+        {loadingUsers ? (
+          <Loading text="Loading your information..." />
+        ) : (
+          props.children
+        )}
+      </ThemeProvider>
+    );
+  }
 };
