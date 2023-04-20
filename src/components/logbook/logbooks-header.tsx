@@ -47,7 +47,6 @@ export const LogbooksHeader = (props: Props) => {
     >
       {currentUserLogbooks &&
         currentUserLogbooks.map((logbook: Types.Logbook, index: number) => {
-          if (index === 0) props.selectedLogbookId.value = logbook.id;
           return (
             <Globals.NeutralPillButton
               key={`dashboard-navbar-logbook-${logbook.id}-${index}`}
