@@ -1,9 +1,12 @@
 import styled from "styled-components";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { Signal } from "@preact/signals-react";
 
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { useEntitiesSlice } from "@/utils/functions";
+import { ClientRoutes } from "@/utils/constants";
 import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
@@ -70,7 +73,12 @@ const tabs: Types.SettingsTab[] = [
 const hour = new Date().getHours();
 
 export const SettingsHeader = (props: Props) => {
+  const router = useRouter();
   const { currentUser } = useEntitiesSlice();
+
+  useEffect(() => {
+    if (!currentUser) router.push(ClientRoutes.LANDING);
+  }, [currentUser]);
 
   if (!currentUser) {
     return null;
