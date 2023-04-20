@@ -35,6 +35,7 @@ const Container = styled(motion.main)<ContainerProps>`
   }};
   border-radius: ${Styles.pxAsRem.six};
   text-align: center;
+  cursor: pointer;
 
   ${(props: ThemeProps) => props.theme.shadowThree};
 `;
@@ -83,6 +84,9 @@ export const Notification = () => {
     <AnimatePresence>
       {!!notification.title && (
         <Container
+          onClick={() =>
+            dispatch(uiActions.setNotification(Constants.initialUINotification))
+          }
           initial={{
             opacity: 0,
             transform: "translateX(-50%) translateY(-12px)",
