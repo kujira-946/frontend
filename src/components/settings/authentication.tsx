@@ -62,30 +62,24 @@ const DynamicDeleteConfirmation = dynamic(() =>
 
 export const Authentication = () => {
   const router = useRouter();
-
   const dispatch = Functions.useAppDispatch();
 
   const { currentUser } = Functions.useEntitiesSlice();
 
   const confirmAccountDelete = useSignal(false);
-  const loggedOut = useSignal(false);
 
   function logOut(): void {
     if (currentUser) {
       dispatch(logoutRequest(currentUser.id));
+      router.push(ClientRoutes.LANDING);
     }
   }
 
   function deleteAccount(): void {
     if (currentUser) {
       dispatch(deleteUserRequest(currentUser.id));
-      loggedOut.value = true;
     }
   }
-
-  useEffect(() => {
-    if (!loggedOut.value) router.push(ClientRoutes.LANDING);
-  }, [loggedOut.value]);
 
   return (
     <Container>
