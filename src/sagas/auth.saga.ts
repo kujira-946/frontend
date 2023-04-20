@@ -117,7 +117,6 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
     yield Saga.put(
       Redux.entitiesActions.setCurrentUser({
         ...data.data,
-        overviewIds: [],
         logbookIds: [],
       })
     );
@@ -176,7 +175,6 @@ function* verifyLogin(action: VerifyLoginAction) {
     yield Saga.put(
       Redux.entitiesActions.setCurrentUser({
         ...data.data,
-        overviewIds: [],
         logbookIds: [],
       })
     );

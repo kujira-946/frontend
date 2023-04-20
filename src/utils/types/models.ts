@@ -19,7 +19,6 @@ export type User = {
   emailVerified: boolean;
   loggedIn: boolean;
   signedVerificationCode?: string;
-  overviewIds: number[]; // has many overviews
   logbookIds: number[]; // has many logbooks
 } & Dates;
 
@@ -27,8 +26,8 @@ export type Overview = {
   id: number;
   income: number;
   savings: number;
+  ownerId: number; // one to one with a user
   overviewGroupIds?: number[]; // has many overview groups
-  ownerId: number; // belongs to a user
 } & Dates;
 
 export type OverviewGroup = {

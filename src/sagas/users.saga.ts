@@ -123,7 +123,6 @@ function* fetchUser(action: UserIdAction) {
       yield Saga.put(
         Redux.entitiesActions.setCurrentUser({
           ...data.data,
-          overviewIds: [],
           logbookIds: [],
         })
       );
