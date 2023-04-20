@@ -137,7 +137,6 @@ function* fetchOverviewOverviewGroups(action: OverviewOverviewGroupsAction) {
     );
     yield Saga.put(
       Redux.entitiesActions.updateOverviewRelations({
-        overviewId,
         overviewGroupIds:
           overviewGroupIds.length > 0
             ? overviewGroupIds
@@ -208,7 +207,6 @@ function* createOverviewGroup(action: OverviewGroupCreateAction) {
     );
     yield Saga.put(
       Redux.entitiesActions.updateOverviewRelations({
-        overviewId: createData.overviewId,
         overviewGroupIds: [normalizedData.result],
       })
     );

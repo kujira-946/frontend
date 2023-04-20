@@ -6,8 +6,8 @@ import * as Types from "@/utils/types";
 export type EntitiesState = {
   currentUser: Types.User | null;
   overview: Types.Overview | null;
+
   users: Types.UsersEntity | null;
-  overviews: Types.OverviewsEntity | null;
   overviewGroups: Types.OverviewGroupsEntity | null;
   logbooks: Types.LogbooksEntity | null;
   logbookEntries: Types.LogbookEntriesEntity | null;
@@ -17,8 +17,8 @@ export type EntitiesState = {
 const initialState: EntitiesState = {
   currentUser: null,
   overview: null,
+
   users: null,
-  overviews: null,
   overviewGroups: null,
   logbooks: null,
   logbookEntries: null,
@@ -26,7 +26,7 @@ const initialState: EntitiesState = {
 };
 
 type UserRelations = {
-  relationalField: "overviewIds" | "logbookIds";
+  relationalField: "logbookIds";
   ids: number[];
 };
 
@@ -49,10 +49,9 @@ const entitiesSlice = createSlice({
       action: PayloadAction<Types.User>
     ) => {
       if (state.currentUser) {
-        const { overviewIds, logbookIds } = state.currentUser;
+        const { logbookIds } = state.currentUser;
         const updatedUser = action.payload;
-        if (overviewIds) updatedUser["overviewIds"] = overviewIds;
-        if (logbookIds) updatedUser["logbookIds"] = logbookIds;
+        if (logbookIds) updatedUser.logbookIds = logbookIds;
         state.currentUser = updatedUser;
       }
     },
@@ -63,7 +62,7 @@ const entitiesSlice = createSlice({
       if (state.currentUser) {
         const { relationalField, ids } = action.payload;
         const currentUserCopy = Functions.deepCopy(state.currentUser);
-        const relationalIds = currentUserCopy[relationalField];
+        const relationalIds = state.currentUser[relationalField];
         if (relationalIds) {
           currentUserCopy[relationalField] = Functions.sortArray(
             Functions.removeDuplicatesFromArray([...relationalIds, ...ids])
@@ -86,6 +85,43 @@ const entitiesSlice = createSlice({
       action: PayloadAction<Types.Overview | null>
     ) => {
       state.overview = action.payload;
+    },
+    updateOverview: (
+      state: EntitiesState,
+      action: PayloadAction<Types.Overview>
+    ) => {
+      if (state.overview) {
+        const { overviewGroupIds } = state.overview;
+        const updatedOverview = action.payload;
+        if (overviewGroupIds) {
+          updatedOverview.overviewGroupIds = overviewGroupIds;
+        }
+        state.overview = updatedOverview;
+      }
+    },
+    updateOverviewRelations: (
+      state: EntitiesState,
+      action: PayloadAction<{ overviewGroupIds: number[] }>
+    ) => {
+      if (state.overview) {
+        const { overviewGroupIds } = action.payload;
+        const overviewCopy = Functions.deepCopy(state.overview);
+        const relationalIds = state.overview.overviewGroupIds;
+
+        if (relationalIds) {
+          overviewCopy.overviewGroupIds = Functions.sortArray(
+            Functions.removeDuplicatesFromArray([
+              ...relationalIds,
+              ...overviewGroupIds,
+            ])
+          );
+        } else {
+          overviewCopy.overviewGroupIds = Functions.sortArray(
+            Functions.removeDuplicatesFromArray(overviewGroupIds)
+          );
+        }
+        state.overview = overviewCopy;
+      }
     },
 
     // ========================================================================================= //
@@ -112,9 +148,6 @@ const entitiesSlice = createSlice({
         const { userId, user } = action.payload;
         const updatedUsers = Functions.deepCopy(state.users);
         updatedUsers[userId] = user;
-        if (state.users[userId].overviewIds) {
-          updatedUsers[userId]["overviewIds"] = state.users[userId].overviewIds;
-        }
         if (state.users[userId].logbookIds) {
           updatedUsers[userId]["logbookIds"] = state.users[userId].logbookIds;
         }
@@ -147,71 +180,6 @@ const entitiesSlice = createSlice({
         const usersCopy = Functions.deepCopy(state.users);
         delete usersCopy[action.payload];
         state.users = usersCopy;
-      }
-    },
-
-    // ========================================================================================= //
-    // [ OVERVIEWS ] =========================================================================== //
-    // ========================================================================================= //
-
-    setOverviews: (
-      state: EntitiesState,
-      action: PayloadAction<Types.OverviewsEntity | null>
-    ) => {
-      state.overviews = action.payload;
-    },
-    addOverview: (
-      state: EntitiesState,
-      action: PayloadAction<Types.OverviewsEntity>
-    ) => {
-      state.overviews = { ...state.overviews, ...action.payload };
-    },
-    updateOverview: (
-      state: EntitiesState,
-      action: PayloadAction<{ overviewId: number; overview: Types.Overview }>
-    ) => {
-      if (state.overviews) {
-        const { overviewId, overview } = action.payload;
-        const updatedOverviews = Functions.deepCopy(state.overviews);
-        updatedOverviews[overviewId] = overview;
-        if (state.overviews[overviewId].overviewGroupIds) {
-          updatedOverviews[overviewId]["overviewGroupIds"] =
-            state.overviews[overviewId].overviewGroupIds;
-        }
-        state.overviews = updatedOverviews;
-      }
-    },
-    updateOverviewRelations: (
-      state: EntitiesState,
-      action: PayloadAction<{ overviewId: number; overviewGroupIds: number[] }>
-    ) => {
-      if (state.overviews) {
-        const { overviewId, overviewGroupIds } = action.payload;
-        const overviewsCopy = Functions.deepCopy(state.overviews);
-        const currentOverview = overviewsCopy[overviewId];
-        const relationalIds = currentOverview.overviewGroupIds;
-
-        if (relationalIds) {
-          currentOverview.overviewGroupIds = Functions.sortArray(
-            Functions.removeDuplicatesFromArray([
-              ...relationalIds,
-              ...overviewGroupIds,
-            ])
-          );
-        } else {
-          currentOverview.overviewGroupIds = Functions.sortArray(
-            Functions.removeDuplicatesFromArray(overviewGroupIds)
-          );
-        }
-        state.overviews = overviewsCopy;
-      }
-    },
-    deleteOverview: (state: EntitiesState, action: PayloadAction<number>) => {
-      if (state.overviews) {
-        const {} = action.payload;
-        const overviewsCopy = Functions.deepCopy(state.overviews);
-        delete overviewsCopy[action.payload];
-        state.overviews = overviewsCopy;
       }
     },
 

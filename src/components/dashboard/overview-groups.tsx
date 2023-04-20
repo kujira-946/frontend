@@ -29,8 +29,8 @@ export const OverviewGroups = () => {
   const dispatch = Functions.useAppDispatch();
 
   const { loadingOverviewGroups } = Functions.useUiSlice();
-  const overview = Functions.useGetCurrentUserOverview();
-  const overviewGroups = Functions.useGetCurrentUserOverviewGroups();
+  const { overview } = Functions.useEntitiesSlice();
+  const overviewGroups = Functions.useGetOverviewOverviewGroups();
 
   const onDragEnd = useCallback(Functions.onDragEnd, []);
 

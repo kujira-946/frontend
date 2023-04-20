@@ -27,7 +27,7 @@ export type Overview = {
   income: number;
   savings: number;
   ownerId: number; // one to one with a user
-  overviewGroupIds?: number[]; // has many overview groups
+  overviewGroupIds: number[]; // has many overview groups
 } & Dates;
 
 export type OverviewGroup = {

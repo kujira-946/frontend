@@ -20,42 +20,6 @@ export function useErrorsSlice() {
 // [ CURRENT USER ] ======================================================================== //
 // ========================================================================================= //
 
-const getCurrentUserOverview = createSelector(
-  (state: GlobalState) => state.entities.currentUser,
-  (state: GlobalState) => state.entities.overviews,
-  (currentUser, overviews) => {
-    if (currentUser && overviews) {
-      return overviews[currentUser.overviewIds[0]];
-    }
-  }
-);
-export function useGetCurrentUserOverview() {
-  return useAppSelector(getCurrentUserOverview);
-}
-
-const getCurrentUserOverviewGroups = createSelector(
-  (state: GlobalState) => state.entities.currentUser,
-  (state: GlobalState) => state.entities.overviews,
-  (state: GlobalState) => state.entities.overviewGroups,
-  (currentUser, overviews, overviewGroups) => {
-    if (currentUser && overviews && overviewGroups) {
-      const overview = overviews[currentUser.overviewIds[0]];
-      if (
-        overview &&
-        overview.overviewGroupIds &&
-        overview.overviewGroupIds.length > 0
-      ) {
-        return overview.overviewGroupIds.map((overviewGroupId: number) => {
-          return overviewGroups[overviewGroupId];
-        });
-      }
-    }
-  }
-);
-export function useGetCurrentUserOverviewGroups() {
-  return useAppSelector(getCurrentUserOverviewGroups);
-}
-
 const getCurrentUserLogbooks = createSelector(
   (state: GlobalState) => state.entities.currentUser,
   (state: GlobalState) => state.entities.logbooks,
@@ -69,6 +33,25 @@ const getCurrentUserLogbooks = createSelector(
 );
 export function useGetCurrentUserLogbooks() {
   return useAppSelector(getCurrentUserLogbooks);
+}
+
+// ========================================================================================= //
+// [ OVERVIEW ] ============================================================================ //
+// ========================================================================================= //
+
+const getOverviewOverviewGroups = createSelector(
+  (state: GlobalState) => state.entities.overview,
+  (state: GlobalState) => state.entities.overviewGroups,
+  (overview, overviewGroups) => {
+    if (overview && overviewGroups) {
+      return overview.overviewGroupIds.map((overviewGroupId: number) => {
+        return overviewGroups[overviewGroupId];
+      });
+    }
+  }
+);
+export function useGetOverviewOverviewGroups() {
+  return useAppSelector(getOverviewOverviewGroups);
 }
 
 // ========================================================================================= //

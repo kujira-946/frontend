@@ -17,9 +17,8 @@ const Onboarding = () => {
   const dispatch = Functions.useAppDispatch();
   const router = useRouter();
 
-  const { currentUser } = Functions.useEntitiesSlice();
-  const overview = Functions.useGetCurrentUserOverview();
-  const overviewGroups = Functions.useGetCurrentUserOverviewGroups();
+  const { currentUser, overview } = Functions.useEntitiesSlice();
+  const overviewGroups = Functions.useGetOverviewOverviewGroups();
 
   const currentPage = useSignal(1);
   const supportingText = useSignal("");
@@ -81,7 +80,7 @@ const Onboarding = () => {
 
   useEffect(() => {
     if (currentUser && !overview) {
-      dispatch(OverviewsSagas.fetchUserOverviewsRequest(currentUser.id));
+      dispatch(OverviewsSagas.fetchUserOverviewRequest(currentUser.id));
     }
   }, [currentUser, overview]);
 

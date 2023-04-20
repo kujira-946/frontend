@@ -8,7 +8,7 @@ import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import {
-  fetchUserOverviewsRequest,
+  fetchUserOverviewRequest,
   updateOverviewRequest,
 } from "@/sagas/overviews.saga";
 import { ThemeProps } from "../layout";
@@ -64,9 +64,8 @@ export const UserSummary = (props: Props) => {
 
   const { totalSpent, remainingBudget } = Functions.useSignalsStore().dashboard;
   const { loadingOverviews } = Functions.useUiSlice();
-  const { currentUser, overviews } = Functions.useEntitiesSlice();
-  const overview = Functions.useGetCurrentUserOverview();
-  const overviewGroups = Functions.useGetCurrentUserOverviewGroups();
+  const { currentUser, overview } = Functions.useEntitiesSlice();
+  const overviewGroups = Functions.useGetOverviewOverviewGroups();
 
   const savedIncome = useSignal("");
   const errorMessage = useSignal("");
@@ -93,13 +92,13 @@ export const UserSummary = (props: Props) => {
     }
   }, 500);
 
-  // ↓↓↓ Fetching the current user's overviews. ↓↓↓ //
+  // ↓↓↓ Fetching the current user's overview. ↓↓↓ //
   useEffect(() => {
-    if (currentUser && !overviews) {
+    if (currentUser && !overview) {
       dispatch(Redux.uiActions.setLoadingOverviews(true));
-      dispatch(fetchUserOverviewsRequest(currentUser.id));
+      dispatch(fetchUserOverviewRequest(currentUser.id));
     }
-  }, [currentUser, overviews]);
+  }, [currentUser, overview]);
 
   // ↓↓↓ Setting `savedIncome` state. ↓↓↓ //
   useEffect(() => {
