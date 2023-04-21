@@ -93,12 +93,6 @@ const Body = styled(motion.form)`
   background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
 `;
 
-const PurchaseCells = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${Styles.pxAsRem.four};
-`;
-
 // ========================================================================================= //
 // [ DYNAMIC IMPORT ] ====================================================================== //
 // ========================================================================================= //
@@ -139,19 +133,21 @@ const ExportedComponent = (props: Props) => {
   const deleteConfirmationOpen = useSignal(false);
 
   const updatePurchase = useCallback(
-    (purchaseId: number, description: string, cost: string) => {
-      if (overviewGroup && purchases && purchases[purchaseId]) {
-        return Functions.updatePurchase(
-          purchases[purchaseId],
-          description,
-          cost,
-          "overviewGroup",
-          overviewGroup.id,
-          overviewGroup.totalSpent,
-          dispatch
-        )();
+    Functions.debounce(
+      (purchaseId: number, description: string, cost: string) => {
+        if (overviewGroup && purchases && purchases[purchaseId]) {
+          Functions.updatePurchase(
+            purchases[purchaseId],
+            description,
+            cost,
+            "overviewGroup",
+            overviewGroup.id,
+            overviewGroup.totalSpent,
+            dispatch
+          );
+        }
       }
-    },
+    ),
     [overviewGroup, purchases]
   );
 

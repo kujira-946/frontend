@@ -45,32 +45,30 @@ export function updatePurchase(
   associationTotalSpent: number,
   dispatch: any
 ) {
-  return Functions.debounce((): void => {
-    // On purchase description update.
-    if (description !== purchase.description) {
-      dispatch(updatePurchaseRequest(purchase.id, { description }));
-    }
-    // On purchase cost update.
-    if (Number(cost) && Number(cost) !== purchase.cost) {
-      const formattedCost = Number(Functions.roundNumber(Number(cost), 2));
-      const purchaseUpdateData = { cost: formattedCost };
-      const newTotalSpent = calculateNewTotalSpent(
-        associationTotalSpent,
-        purchase.cost || 0,
-        Number(cost)
-      );
-      const associationUpdateData = {
-        [association]: { id: associationId, totalSpent: newTotalSpent },
-      };
-      dispatch(
-        updatePurchaseRequest(
-          purchase.id,
-          purchaseUpdateData,
-          associationUpdateData
-        )
-      );
-    }
-  });
+  // On purchase description update.
+  if (description !== purchase.description) {
+    dispatch(updatePurchaseRequest(purchase.id, { description }));
+  }
+  // On purchase cost update.
+  if (Number(cost) && Number(cost) !== purchase.cost) {
+    const formattedCost = Number(Functions.roundNumber(Number(cost), 2));
+    const purchaseUpdateData = { cost: formattedCost };
+    const newTotalSpent = calculateNewTotalSpent(
+      associationTotalSpent,
+      purchase.cost || 0,
+      Number(cost)
+    );
+    const associationUpdateData = {
+      [association]: { id: associationId, totalSpent: newTotalSpent },
+    };
+    dispatch(
+      updatePurchaseRequest(
+        purchase.id,
+        purchaseUpdateData,
+        associationUpdateData
+      )
+    );
+  }
 }
 
 export function deletePurchase(

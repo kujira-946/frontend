@@ -55,19 +55,21 @@ export const Body = (props: Props) => {
   const purchasesSelected = useSignal(false);
 
   const updatePurchase = useCallback(
-    (purchaseId: number, description: string, cost: string) => {
-      if (logbookEntry && purchases && purchases[purchaseId]) {
-        return Functions.updatePurchase(
-          purchases[purchaseId],
-          description,
-          cost,
-          "logbookEntry",
-          logbookEntry.id,
-          logbookEntry.totalSpent,
-          dispatch
-        )();
+    Functions.debounce(
+      (purchaseId: number, description: string, cost: string) => {
+        if (logbookEntry && purchases && purchases[purchaseId]) {
+          Functions.updatePurchase(
+            purchases[purchaseId],
+            description,
+            cost,
+            "logbookEntry",
+            logbookEntry.id,
+            logbookEntry.totalSpent,
+            dispatch
+          );
+        }
       }
-    },
+    ),
     [logbookEntry, purchases]
   );
 
