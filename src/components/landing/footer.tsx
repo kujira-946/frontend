@@ -137,14 +137,14 @@ export const Footer = () => {
               width={100}
               height={30.55}
             />
-          ) : (
+          ) : theme.value === "dark" ? (
             <Image
               src="/logo-text-outlined-dark.svg"
               alt="Logo Text"
               width={100}
               height={30.55}
             />
-          )}
+          ) : null}
 
           <BodyLinks>
             <BodyLinkGroup>
