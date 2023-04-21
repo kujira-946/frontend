@@ -144,7 +144,7 @@ export const ConfirmationModal = (props: Props) => {
         overlay={props.overlay}
       >
         <Header>
-          {props.showBackButton && props.backButtonAction && (
+          {props.showBackButton && props.backButtonAction && theme.value && (
             <HeaderButton type="button" onClick={props.backButtonAction}>
               <Icons.ChevronLeft
                 height={14}
@@ -155,7 +155,7 @@ export const ConfirmationModal = (props: Props) => {
           )}
           <Title>{props.title}</Title>
           {props.cornerText && <CornerText>{props.cornerText}</CornerText>}
-          {props.closeButtonAction && (
+          {props.closeButtonAction && theme.value && (
             <HeaderButton type="button" onClick={props.closeButtonAction}>
               <Icons.Close
                 height={14}
@@ -181,25 +181,27 @@ export const ConfirmationModal = (props: Props) => {
 
         {props.children}
 
-        <Button
-          type="submit"
-          disabled={props.disableSubmit}
-          size="medium"
-          borderRadius="four"
-          background={Styles.primary[theme.value].main}
-          hoverBackground={Styles.primary[theme.value].darker}
-          style={{
-            marginTop: Styles.pxAsRem.four,
-            opacity: props.disableSubmit ? 0.5 : 1,
-          }}
-        >
-          {props.submitButtonText}
-          {props.showSubmitArrow && (
-            <ArrowIconContainer>
-              <Icons.ArrowRight height={12} fill={Styles.text.button} />
-            </ArrowIconContainer>
-          )}
-        </Button>
+        {theme.value && (
+          <Button
+            type="submit"
+            disabled={props.disableSubmit}
+            size="medium"
+            borderRadius="four"
+            background={Styles.primary[theme.value].main}
+            hoverBackground={Styles.primary[theme.value].darker}
+            style={{
+              marginTop: Styles.pxAsRem.four,
+              opacity: props.disableSubmit ? 0.5 : 1,
+            }}
+          >
+            {props.submitButtonText}
+            {props.showSubmitArrow && (
+              <ArrowIconContainer>
+                <Icons.ArrowRight height={12} fill={Styles.text.button} />
+              </ArrowIconContainer>
+            )}
+          </Button>
+        )}
       </Child>
     </Parent>
   );

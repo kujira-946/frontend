@@ -221,7 +221,7 @@ const ExportedComponent = (props: Props) => {
       selected={checkboxActive.value}
       isError={props.isError}
     >
-      {!props.hideDrag && props.provided && (
+      {!props.hideDrag && props.provided && theme.value && (
         <DragButton {...props.provided.dragHandleProps} tabIndex={-1}>
           <Icons.Drag
             height={12}
@@ -232,7 +232,7 @@ const ExportedComponent = (props: Props) => {
         </DragButton>
       )}
 
-      {!props.hideCheck && (
+      {!props.hideCheck && theme.value && (
         <CheckButton
           tabIndex={-1}
           onClick={() => {
@@ -304,7 +304,7 @@ const ExportedComponent = (props: Props) => {
         />
       </Inputs>
 
-      {!props.hideClose && (
+      {!props.hideClose && theme.value && (
         <DeleteButton
           type="button"
           name="Purchase Cell Delete Button"

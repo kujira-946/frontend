@@ -180,6 +180,7 @@ export const Input = (props: Props) => {
         </InputFieldContainer>
 
         {props.password &&
+          theme.value &&
           (props.hidden ? (
             <IconContainer onClick={props.toggleHidden}>
               <Icons.Hidden

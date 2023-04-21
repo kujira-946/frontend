@@ -71,48 +71,52 @@ export const OverviewNavbar = () => {
 
       <NavbarLinks>
         {links.map((link: Constants.ClientRoutes, index: number) => {
-          return (
-            <NavbarLink
-              key={`overview-tab-${link}-${index}`}
-              href={link}
-              aria-label={`${link}-link-button`}
-            >
-              {link === Constants.ClientRoutes.LOGBOOKS ? (
-                <Icons.Dashboard
-                  height={16}
-                  fill={
-                    router.pathname === link
-                      ? Styles.text[theme.value]
-                      : Styles.background[theme.value].seven
-                  }
-                  hoveredFill={Styles.text[theme.value]}
-                  addHover
-                />
-              ) : link === Constants.ClientRoutes.REVIEWS ? (
-                <Icons.Reviews
-                  height={16}
-                  fill={
-                    router.pathname === link
-                      ? Styles.text[theme.value]
-                      : Styles.background[theme.value].seven
-                  }
-                  hoveredFill={Styles.text[theme.value]}
-                  addHover
-                />
-              ) : (
-                <Icons.Settings
-                  height={16}
-                  fill={
-                    router.pathname === link
-                      ? Styles.text[theme.value]
-                      : Styles.background[theme.value].seven
-                  }
-                  hoveredFill={Styles.text[theme.value]}
-                  addHover
-                />
-              )}
-            </NavbarLink>
-          );
+          if (theme.value) {
+            return (
+              <NavbarLink
+                key={`overview-tab-${link}-${index}`}
+                href={link}
+                aria-label={`${link}-link-button`}
+              >
+                {link === Constants.ClientRoutes.LOGBOOKS ? (
+                  <Icons.Dashboard
+                    height={16}
+                    fill={
+                      router.pathname === link
+                        ? Styles.text[theme.value]
+                        : Styles.background[theme.value].seven
+                    }
+                    hoveredFill={Styles.text[theme.value]}
+                    addHover
+                  />
+                ) : link === Constants.ClientRoutes.REVIEWS ? (
+                  <Icons.Reviews
+                    height={16}
+                    fill={
+                      router.pathname === link
+                        ? Styles.text[theme.value]
+                        : Styles.background[theme.value].seven
+                    }
+                    hoveredFill={Styles.text[theme.value]}
+                    addHover
+                  />
+                ) : (
+                  <Icons.Settings
+                    height={16}
+                    fill={
+                      router.pathname === link
+                        ? Styles.text[theme.value]
+                        : Styles.background[theme.value].seven
+                    }
+                    hoveredFill={Styles.text[theme.value]}
+                    addHover
+                  />
+                )}
+              </NavbarLink>
+            );
+          } else {
+            return null;
+          }
         })}
       </NavbarLinks>
     </Container>

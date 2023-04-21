@@ -74,8 +74,13 @@ export const Navbar = () => {
   const { theme } = Functions.useSignalsStore().ui;
 
   function toggleTheme(): void {
-    if (theme.value === "light") theme.value = "dark";
-    else theme.value = "light";
+    if (theme.value === "light") {
+      theme.value = "dark";
+      localStorage.setItem("theme", theme.value);
+    } else {
+      theme.value = "light";
+      localStorage.setItem("theme", theme.value);
+    }
   }
 
   return (
@@ -106,14 +111,14 @@ export const Navbar = () => {
                 hoveredFill={Styles.background[theme.value].eight}
                 addHover
               />
-            ) : (
+            ) : theme.value === "dark" ? (
               <Icons.ThemeLight
                 height={12}
                 fill={Styles.background[theme.value].six}
                 hoveredFill={Styles.background[theme.value].eight}
                 addHover
               />
-            )}
+            ) : null}
           </ThemeButton>
 
           <LoginButton href="/login">Log In</LoginButton>

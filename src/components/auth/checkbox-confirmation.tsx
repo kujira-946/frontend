@@ -57,23 +57,24 @@ export const CheckboxConfirmation = (props: Props) => {
     <Container
       onClick={() => (props.checkboxActive.value = !props.checkboxActive.value)}
     >
-      {props.checkboxActive.value ? (
-        <Icon>
-          <Icons.CheckboxActive
-            height={20}
-            fill={Styles.secondary[theme.value].main}
-            addHover
-          />
-        </Icon>
-      ) : (
-        <Icon>
-          <Icons.CheckboxInactive
-            height={20}
-            fill={Styles.text[theme.value]}
-            addHover
-          />
-        </Icon>
-      )}
+      {theme.value &&
+        (props.checkboxActive.value ? (
+          <Icon>
+            <Icons.CheckboxActive
+              height={20}
+              fill={Styles.secondary[theme.value].main}
+              addHover
+            />
+          </Icon>
+        ) : (
+          <Icon>
+            <Icons.CheckboxInactive
+              height={20}
+              fill={Styles.text[theme.value]}
+              addHover
+            />
+          </Icon>
+        ))}
 
       {props.isRegister ? (
         <Text>

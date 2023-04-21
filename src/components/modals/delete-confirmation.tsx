@@ -116,14 +116,16 @@ export const DeleteConfirmation = (props: Props) => {
       >
         <Header>
           <Title>{props.title}</Title>
-          <DeleteButton type="button" onClick={props.onClose}>
-            <Icons.Close
-              height={12}
-              fill={Styles.background[theme.value].six}
-              hoveredFill={Styles.text[theme.value]}
-              addHover
-            />
-          </DeleteButton>
+          {theme.value && (
+            <DeleteButton type="button" onClick={props.onClose}>
+              <Icons.Close
+                height={12}
+                fill={Styles.background[theme.value].six}
+                hoveredFill={Styles.text[theme.value]}
+                addHover
+              />
+            </DeleteButton>
+          )}
         </Header>
 
         {props.body && <Body>{props.body}</Body>}

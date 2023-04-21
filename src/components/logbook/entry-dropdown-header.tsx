@@ -279,22 +279,24 @@ export const Header = (props: Props) => {
         );
       })}
 
-      <DeleteButton
-        type="button"
-        name="Logbook Entry Dropdown Delete Button"
-        tabIndex={-1}
-        onClick={(event: Types.OnClick) => {
-          event.stopPropagation();
-          props.confirmLogbookEntryDelete.value = true;
-        }}
-      >
-        <Icons.Close
-          height={12}
-          fill={Styles.background[theme.value].seven}
-          hoveredFill={Styles.text[theme.value]}
-          addHover
-        />
-      </DeleteButton>
+      {theme.value && (
+        <DeleteButton
+          type="button"
+          name="Logbook Entry Dropdown Delete Button"
+          tabIndex={-1}
+          onClick={(event: Types.OnClick) => {
+            event.stopPropagation();
+            props.confirmLogbookEntryDelete.value = true;
+          }}
+        >
+          <Icons.Close
+            height={12}
+            fill={Styles.background[theme.value].seven}
+            hoveredFill={Styles.text[theme.value]}
+            addHover
+          />
+        </DeleteButton>
+      )}
     </Container>
   );
 };
