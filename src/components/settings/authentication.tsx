@@ -79,6 +79,7 @@ export const Authentication = () => {
   function deleteAccount(): void {
     if (currentUser) {
       dispatch(deleteUserRequest(currentUser.id));
+      router.push(ClientRoutes.LANDING);
     }
   }
 

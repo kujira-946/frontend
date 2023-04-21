@@ -184,9 +184,19 @@ function* deleteUser(action: UserIdAction) {
     const { userId, forCurrentUser } = action.payload;
     const endpoint = ApiRoutes.USERS + `/${userId}`;
     yield Saga.call(axios.delete, endpoint);
+
     if (forCurrentUser) {
+      Cookies.remove("id");
+      Cookies.remove("token");
       yield Saga.put(Redux.entitiesActions.setCurrentUser(null));
-      yield Saga.put(logoutRequest(userId));
+      yield Saga.put(
+        Redux.uiActions.setNotification({
+          title: "Account Deletion Successful",
+          body: "I'm sad to see you go, but I hope you enjoyed your time here! Just know that you're always welcome back :)",
+          type: "success",
+          timeout: 10000,
+        })
+      );
     }
     yield Saga.put(Redux.entitiesActions.deleteUser(userId));
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
