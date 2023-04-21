@@ -34,6 +34,8 @@ const Redirect = styled(Link)`
   color: ${(props: ThemeProps) => props.theme.secondaryMain};
   font-weight: ${Styles.fontWeights.semiBold};
 
+  ${Styles.transition};
+
   @media (hover: hover) {
     :hover {
       color: ${(props: ThemeProps) => props.theme.secondaryDark};

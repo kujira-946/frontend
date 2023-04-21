@@ -45,3 +45,7 @@ export const preventUserInteraction = css`
   -ms-user-select: none;
   user-select: none;
 `;
+
+export const transition = css`
+  transition: 0.1s ease-in;
+`;

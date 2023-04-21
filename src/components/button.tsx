@@ -86,6 +86,7 @@ export const Button = styled.button<Props>`
   cursor: pointer;
 
   ${(props) => props.disabled && Styles.preventUserInteraction};
+  ${Styles.transition};
 
   @media (hover: hover) {
     :hover {

@@ -57,6 +57,8 @@ const BodyLinkRegister = styled(Link)`
   font-size: ${Styles.pxAsRem.twelve};
   font-weight: ${Styles.fontWeights.medium};
 
+  ${Styles.transition};
+
   @media (hover: hover) {
     :hover {
       color: ${(props: ThemeProps) => props.theme.primaryDark};
@@ -68,6 +70,8 @@ const BodyLink = styled(Link)`
   color: ${(props: ThemeProps) => props.theme.backgroundEight};
   font-size: ${Styles.pxAsRem.twelve};
   font-weight: ${Styles.fontWeights.medium};
+
+  ${Styles.transition};
 
   @media (hover: hover) {
     :hover {
@@ -99,6 +103,8 @@ const LegalLink = styled(Link)`
   color: ${(props: ThemeProps) => props.theme.backgroundSeven};
   font-size: ${Styles.pxAsRem.ten};
   font-weight: ${Styles.fontWeights.medium};
+
+  ${Styles.transition};
 
   @media (hover: hover) {
     :hover {

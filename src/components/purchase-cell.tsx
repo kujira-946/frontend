@@ -86,6 +86,8 @@ const CategoryButton = styled.button<CategoryButtonProps & ThemeProps>`
   font-size: ${Styles.pxAsRem.ten};
   font-weight: ${Styles.fontWeights.semiBold};
 
+  ${Styles.transition};
+
   @media (hover: hover) {
     :hover {
       background-color: ${(props: ThemeProps) => props.theme.backgroundThree};

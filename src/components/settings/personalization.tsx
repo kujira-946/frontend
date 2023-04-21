@@ -41,6 +41,7 @@ const ThemeButton = styled.button<ThemeButtonProps>`
   cursor: pointer;
 
   ${(props) => props.disabled && Styles.preventUserInteraction};
+  ${Styles.transition};
 
   @media (hover: hover) {
     :hover {

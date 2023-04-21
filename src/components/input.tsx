@@ -30,6 +30,8 @@ const Container = styled.section<SharedProps>`
   }};
   cursor: pointer;
 
+  ${Styles.transition};
+
   @media (hover: hover) {
     :hover {
       border: ${(props: ThemeProps) => props.theme.backgroundSix} solid 1px;

@@ -30,6 +30,7 @@ export const SubmitButton = styled.button.attrs(() => ({
   cursor: pointer;
 
   ${(props) => props.disabled && Styles.preventUserInteraction};
+  ${Styles.transition};
 
   @media (hover: hover) {
     :hover {

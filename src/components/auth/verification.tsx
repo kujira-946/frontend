@@ -66,6 +66,8 @@ const ResendButton = styled.button`
   ${Styles.clearButton};
   color: ${(props: ThemeProps) => props.theme.secondaryMain};
   font-weight: ${Styles.fontWeights.semiBold};
+  
+  ${Styles.transition};
 
   @media (hover: hover) {
     :hover {

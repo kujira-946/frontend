@@ -64,6 +64,7 @@ const Caption = styled.p<{ resend?: true }>`
 
 const Redirect = styled(Link)`
   color: ${(props: ThemeProps) => props.theme.primaryMain};
+  ${Styles.transition};
 
   @media (hover: hover) {
     :hover {

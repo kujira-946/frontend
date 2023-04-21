@@ -36,6 +36,8 @@ const Container = styled.section<ContainerProps>`
   }};
   overflow-y: auto;
 
+  ${Styles.transition};
+
   @media (hover: hover) {
     :hover {
       border: ${(props: ThemeProps) => {

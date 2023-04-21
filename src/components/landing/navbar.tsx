@@ -47,6 +47,8 @@ const ThemeButton = styled.button`
   background-color: inherit;
   border-radius: 6px;
 
+  ${Styles.transition};
+
   @media (hover: hover) {
     :hover {
       background-color: ${(props: ThemeProps) => props.theme.backgroundThree};
@@ -58,6 +60,8 @@ const LoginButton = styled(Link)`
   color: ${(props: ThemeProps) => props.theme.backgroundEight};
   font-size: ${Styles.pxAsRem.twelve};
   font-weight: ${Styles.fontWeights.medium};
+
+  ${Styles.transition};
 
   @media (hover: hover) {
     :hover {
