@@ -1,13 +1,13 @@
 import Head from "next/head";
 import { ReactElement } from "react";
-import { useSignal } from "@preact/signals-react";
 
 import * as Components from "@/components/logbook";
 import { DashboardLayout } from "@/components/dashboard";
+import { useSignalsStore } from "@/utils/functions";
 import { NextPageWithLayout } from "../_app";
 
 const Logbooks: NextPageWithLayout = () => {
-  const selectedLogbookId = useSignal<number | null>(null);
+  const { selectedLogbookId } = useSignalsStore().dashboard;
 
   return (
     <>
