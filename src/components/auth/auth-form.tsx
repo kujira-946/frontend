@@ -78,31 +78,6 @@ const Form = styled.form`
   gap: ${Styles.pxAsRem.sixteen};
 `;
 
-const ResendContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const ResendButton = styled.button`
-  ${Styles.clearButton};
-  color: ${(props: ThemeProps) => props.theme.secondaryMain};
-  font-weight: ${Styles.fontWeights.semiBold};
-
-  @media (hover: hover) {
-    :hover {
-      color: ${(props: ThemeProps) => props.theme.secondaryDark};
-    }
-  }
-`;
-
-const ErrorMessage = styled.span`
-  display: block;
-  margin-bottom: ${Styles.pxAsRem.four};
-  color: ${(props: ThemeProps) => props.theme.failure};
-  font-size: ${Styles.pxAsRem.twelve};
-  font-weight: ${Styles.fontWeights.semiBold};
-`;
-
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
@@ -278,19 +253,6 @@ export const AuthForm = (props: Props) => {
             isRegister={props.title === "Register"}
             checkboxActive={checkboxActive}
           />
-
-          {props.title === "Log In" && (
-            <ResendContainer>
-              {verificationCodeError.value && (
-                <ErrorMessage>{verificationCodeError.value}</ErrorMessage>
-              )}
-              <Caption resend>
-                <ResendButton type="button" onClick={resendVerificationCode}>
-                  Request New Verification Code
-                </ResendButton>
-              </Caption>
-            </ResendContainer>
-          )}
 
           <Globals.SubmitButton
             disabled={
