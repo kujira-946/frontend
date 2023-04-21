@@ -32,6 +32,8 @@ const Container = styled.header<ContainerProps>`
   }};
   cursor: pointer;
 
+  ${Styles.transition};
+
   @media (hover: hover) {
     :hover {
       background-color: ${(props: ThemeProps) => props.theme.backgroundThree};
