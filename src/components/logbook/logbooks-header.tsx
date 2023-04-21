@@ -39,6 +39,7 @@ export const LogbooksHeader = (props: Props) => {
     <Globals.DashboardPageHeader
       createClick={createLogbookEntry}
       createText="Create Logbook Entry"
+      canCreate={!!props.selectedLogbookId.value}
     >
       {currentUserLogbooks &&
         currentUserLogbooks.map((logbook: Types.Logbook, index: number) => {

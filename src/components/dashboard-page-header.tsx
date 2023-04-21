@@ -64,6 +64,7 @@ type Props = {
   infoClick?: () => void;
   createClick?: () => void;
   createText?: string;
+  canCreate: boolean;
   children: React.ReactNode;
 };
 
@@ -94,7 +95,7 @@ export const DashboardPageHeader = (props: Props) => {
             Info
           </Globals.NeutralButtonOutlined>
         )}
-        {props.createClick && props.createText && (
+        {props.createClick && props.createText && props.canCreate && (
           <Globals.PrimaryButton
             size="medium"
             onClick={props.createClick}
