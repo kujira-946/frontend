@@ -126,6 +126,25 @@ export function useGetLogbookTotalSpent(logbookId: number) {
   return useAppSelector((state) => getLogbookTotalSpent(state, logbookId));
 }
 
+const getLogbookLogbookEntries = createSelector(
+  (state: GlobalState) => state.entities.logbooks,
+  (state: GlobalState) => state.entities.logbookEntries,
+  (state: GlobalState, logbookId: number) => logbookId,
+  (logbooks, logbookEntries, logbookId) => {
+    if (logbooks && logbooks[logbookId] && logbookEntries) {
+      const logbookEntryIds = logbooks[logbookId].logbookEntryIds;
+      if (logbookEntryIds) {
+        return logbookEntryIds.map((logbookEntryId: number) => {
+          return logbookEntries[logbookEntryId];
+        });
+      }
+    }
+  }
+);
+export function useGetLogbookLogbookEntries(logbookId: number) {
+  return useAppSelector((state) => getLogbookLogbookEntries(state, logbookId));
+}
+
 const getLogbookEntry = createSelector(
   (state: GlobalState) => state.entities.logbookEntries,
   (state: GlobalState, logbookEntryId: number) => logbookEntryId,

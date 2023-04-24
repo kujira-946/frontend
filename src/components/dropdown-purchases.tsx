@@ -32,6 +32,7 @@ type Props = {
   ) => void;
   update: (purchaseId: number, description: string, cost: string) => void;
   delete: (purchaseId: number) => void;
+  setPurchaseCategory?: (purchaseId: number, category: Types.Category) => void;
   onCheckActive?: (purchaseId: number) => void;
   onCheckInactive?: (purchaseId: number) => void;
 
@@ -85,12 +86,14 @@ export const DropdownPurchases = (props: Props) => {
                             borderRadius="four"
                             provided={provided}
                             purchaseId={purchase.id}
+                            category={purchase.category}
                             description={purchase.description}
                             cost={
                               purchase.cost
                                 ? Functions.roundNumber(purchase.cost, 2)
                                 : ""
                             }
+                            setPurchaseCategory={props.setPurchaseCategory}
                             update={props.update}
                             delete={props.delete}
                             onCheckActive={props.onCheckActive}

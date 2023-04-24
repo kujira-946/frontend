@@ -1,10 +1,15 @@
 import Head from "next/head";
 import { ReactElement } from "react";
 
-import * as Components from "@/components/dashboard";
+import * as Components from "@/components/reviews";
+import * as Logbook from "@/components/logbook";
+import { DashboardLayout } from "@/components/dashboard";
 import { NextPageWithLayout } from "../_app";
+import { useSignalsStore } from "@/utils/functions";
 
 const Reviews: NextPageWithLayout = () => {
+  const { selectedLogbookId } = useSignalsStore().dashboard;
+
   return (
     <>
       <Head>
@@ -13,17 +18,18 @@ const Reviews: NextPageWithLayout = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      Reviews Page
+
+      <Logbook.LogbooksHeader selectedLogbookId={selectedLogbookId} noCreate />
+
+      {selectedLogbookId.value && (
+        <Components.ReviewColumns logbookId={selectedLogbookId.value} />
+      )}
     </>
   );
 };
 
 Reviews.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <Components.DashboardLayout page="Reviews">
-      {page}
-    </Components.DashboardLayout>
-  );
+  return <DashboardLayout page="Reviews">{page}</DashboardLayout>;
 };
 
 export default Reviews;

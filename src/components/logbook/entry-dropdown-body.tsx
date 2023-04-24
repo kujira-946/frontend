@@ -7,7 +7,11 @@ import { motion } from "framer-motion";
 import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
-import { fetchLogbookEntryPurchasesRequest } from "@/sagas/purchases.saga";
+import * as Types from "@/utils/types";
+import {
+  fetchLogbookEntryPurchasesRequest,
+  updatePurchaseRequest,
+} from "@/sagas/purchases.saga";
 
 import { DeleteButtons } from "./entry-dropdown-delete-buttons";
 
@@ -53,6 +57,13 @@ export const Body = (props: Props) => {
   const loadingPurchases = useSignal(false);
   const selectedPurchaseIds = useSignal<{ [key: string]: number }>({});
   const purchasesSelected = useSignal(false);
+
+  const setPurchaseCategory = useCallback(
+    (purchaseId: number, category: Types.Category): void => {
+      dispatch(updatePurchaseRequest(purchaseId, { category }));
+    },
+    []
+  );
 
   const updatePurchase = useCallback(
     Functions.debounce(
@@ -123,6 +134,7 @@ export const Body = (props: Props) => {
               onDragEnd={props.onDragEnd}
               update={updatePurchase}
               delete={deletePurchase}
+              setPurchaseCategory={setPurchaseCategory}
               onCheckActive={onCheckActive}
               onCheckInactive={onCheckInactive}
             />

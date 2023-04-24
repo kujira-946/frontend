@@ -9,6 +9,7 @@ import { createLogbookEntryRequest } from "@/sagas/logbook-entries.saga";
 
 type Props = {
   selectedLogbookId: Signal<number | null>;
+  noCreate?: true;
 };
 
 export const LogbooksHeader = (props: Props) => {
@@ -37,7 +38,7 @@ export const LogbooksHeader = (props: Props) => {
 
   return (
     <Globals.DashboardPageHeader
-      createClick={createLogbookEntry}
+      createClick={props.noCreate ? undefined : createLogbookEntry}
       createText="Create Logbook Entry"
       canCreate={!!props.selectedLogbookId.value}
     >

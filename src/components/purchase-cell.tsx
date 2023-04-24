@@ -64,9 +64,10 @@ const CategoryButtons = styled.div`
   gap: ${Styles.pxAsRem.four};
 `;
 
-type Category = "Need" | "Planned" | "Impulse" | "Regret";
+type CategoryButtonProps = {
+  category: Types.Category;
+};
 
-type CategoryButtonProps = { category: Category };
 const CategoryButton = styled.button<CategoryButtonProps & ThemeProps>`
   ${Styles.clearButton};
   display: flex;
@@ -75,9 +76,9 @@ const CategoryButton = styled.button<CategoryButtonProps & ThemeProps>`
   width: 3.25rem;
   padding: ${Styles.pxAsRem.two} ${Styles.pxAsRem.four};
   color: ${(props: CategoryButtonProps & ThemeProps) => {
-    if (props.category === "Need") return props.theme.need;
-    else if (props.category === "Planned") return props.theme.planned;
-    else if (props.category === "Impulse") return props.theme.impulse;
+    if (props.category === "need") return props.theme.need;
+    else if (props.category === "planned") return props.theme.planned;
+    else if (props.category === "impulse") return props.theme.impulse;
     else return props.theme.regret;
   }};
   background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
@@ -118,6 +119,7 @@ type Props = {
   borderRadius?: keyof typeof Styles.pxAsRem;
   provided?: DraggableProvided;
   purchaseId?: number;
+  category?: Types.Category;
   description: string;
   cost: string;
 
@@ -126,6 +128,7 @@ type Props = {
   disableSubmit?: Signal<boolean>;
   isError?: boolean;
 
+  setPurchaseCategory?: (purchaseId: number, category: Types.Category) => void;
   costUpdate?: (cost: string, costError?: Signal<string>) => void;
   update?: (purchaseId: number, description: string, cost: string) => void;
   delete?: (purchaseId: number) => void;
@@ -148,7 +151,7 @@ type Props = {
   costFrozen?: true;
 };
 
-const categories: Category[] = ["Need", "Planned", "Impulse", "Regret"];
+const categories: Types.Category[] = ["need", "planned", "impulse"];
 
 const ExportedComponent = (props: Props) => {
   const { theme } = Functions.useSignalsStore().ui;
@@ -157,6 +160,7 @@ const ExportedComponent = (props: Props) => {
   const description = useSignal(props.description);
   const cost = useSignal(props.cost);
   const costError = useSignal("");
+  const selectCategories = useSignal(!props.category);
 
   function updateDescription(event: Types.Input): void {
     description.value = event.currentTarget.value;
@@ -259,21 +263,38 @@ const ExportedComponent = (props: Props) => {
         </CheckButton>
       )}
 
-      {!props.hideCategories && (
-        <CategoryButtons>
-          {categories.map((category: Category) => {
-            return (
-              <CategoryButton
-                key={`purchase-cell-${category}`}
-                tabIndex={-1}
-                category={category}
-              >
-                {category}
-              </CategoryButton>
-            );
-          })}
-        </CategoryButtons>
+      {!props.hideCategories && props.category && !selectCategories.value && (
+        <CategoryButton
+          tabIndex={-1}
+          onClick={() => (selectCategories.value = true)}
+          category={props.category}
+        >
+          {props.category.slice(0, 1).toUpperCase() + props.category.slice(1)}
+        </CategoryButton>
       )}
+
+      {!props.hideCategories &&
+        props.purchaseId &&
+        props.setPurchaseCategory &&
+        selectCategories.value && (
+          <CategoryButtons>
+            {categories.map((category: Types.Category) => {
+              return (
+                <CategoryButton
+                  key={`purchase-cell-${category}`}
+                  tabIndex={-1}
+                  onClick={() => {
+                    props.setPurchaseCategory(props.purchaseId, category);
+                    selectCategories.value = false;
+                  }}
+                  category={category}
+                >
+                  {category.slice(0, 1).toUpperCase() + category.slice(1)}
+                </CategoryButton>
+              );
+            })}
+          </CategoryButtons>
+        )}
 
       <Inputs>
         <Globals.InputMini
