@@ -5,5 +5,3 @@ export type InputMiniImportance =
   | "Secondary"
   | "Failure"
   | "Pending";
-
-export type PurchaseCategory = "Need" | "Planned" | "Impulse" | "Regret";

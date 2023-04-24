@@ -126,6 +126,17 @@ export function useGetLogbookTotalSpent(logbookId: number) {
   return useAppSelector((state) => getLogbookTotalSpent(state, logbookId));
 }
 
+const getLogbookEntry = createSelector(
+  (state: GlobalState) => state.entities.logbookEntries,
+  (state: GlobalState, logbookEntryId: number) => logbookEntryId,
+  (logbookEntries, logbookEntryId) => {
+    if (logbookEntries) return logbookEntries[logbookEntryId];
+  }
+);
+export function useGetLogbookEntry(logbookEntryId: number) {
+  return useAppSelector((state) => getLogbookEntry(state, logbookEntryId));
+}
+
 const getLogbookLogbookEntries = createSelector(
   (state: GlobalState) => state.entities.logbooks,
   (state: GlobalState) => state.entities.logbookEntries,
@@ -143,17 +154,6 @@ const getLogbookLogbookEntries = createSelector(
 );
 export function useGetLogbookLogbookEntries(logbookId: number) {
   return useAppSelector((state) => getLogbookLogbookEntries(state, logbookId));
-}
-
-const getLogbookEntry = createSelector(
-  (state: GlobalState) => state.entities.logbookEntries,
-  (state: GlobalState, logbookEntryId: number) => logbookEntryId,
-  (logbookEntries, logbookEntryId) => {
-    if (logbookEntries) return logbookEntries[logbookEntryId];
-  }
-);
-export function useGetLogbookEntry(logbookEntryId: number) {
-  return useAppSelector((state) => getLogbookEntry(state, logbookEntryId));
 }
 
 const getLogbookEntryPurchases = createSelector(

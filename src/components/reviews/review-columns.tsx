@@ -6,8 +6,13 @@ import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { fetchLogbookLogbookEntriesRequest } from "@/sagas/logbook-entries.saga";
-import { fetchLogbookEntryPurchasesRequest } from "@/sagas/purchases.saga";
+import {
+  fetchLogbookEntryPurchasesByCategoryRequest,
+  fetchLogbookEntryPurchasesRequest,
+} from "@/sagas/purchases.saga";
+
+import { ReviewColumn } from "./review-column";
+import axios from "axios";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -31,65 +36,80 @@ type Props = {
 export const ReviewColumns = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
-  const { purchases } = Functions.useEntitiesSlice();
+  const {
+    reviewsNeedPurchases,
+    reviewsPlannedPurchases,
+    reviewsImpulsePurchases,
+  } = Functions.useUiSlice();
   const logbookEntries = Functions.useGetLogbookLogbookEntries(props.logbookId);
 
   const purchasesLoading = useSignal(true);
-  const reviewsLoading = useSignal(true);
-  const needs = useSignal<Types.Purchase[]>([]);
-  const planned = useSignal<Types.Purchase[]>([]);
-  const impulse = useSignal<Types.Purchase[]>([]);
-
-  // ↓↓↓ Fetching the currently-selected logbook's associated logbook entries. ↓↓↓ //
-  useEffect(() => {
-    dispatch(fetchLogbookLogbookEntriesRequest(props.logbookId));
-  }, []);
 
   // ↓↓↓ Fetching logbook entry purchases. ↓↓↓ //
   useEffect(() => {
     if (logbookEntries && purchasesLoading.value) {
-      logbookEntries.forEach((logbookEntry: Types.LogbookEntry) => {
-        dispatch(fetchLogbookEntryPurchasesRequest(logbookEntry.id));
-      });
+      for (const logbookEntry of logbookEntries) {
+        dispatch(
+          fetchLogbookEntryPurchasesByCategoryRequest(logbookEntry.id, "need")
+        );
+        dispatch(
+          fetchLogbookEntryPurchasesByCategoryRequest(
+            logbookEntry.id,
+            "planned"
+          )
+        );
+        dispatch(
+          fetchLogbookEntryPurchasesByCategoryRequest(
+            logbookEntry.id,
+            "impulse"
+          )
+        );
+      }
       purchasesLoading.value = false;
     }
   }, [logbookEntries, purchasesLoading.value]);
 
-  // ↓↓↓ Separating all logbook purchases into their respective categories. ↓↓↓ //
-  useEffect(() => {
-    if (
-      purchases &&
-      logbookEntries &&
-      !purchasesLoading.value &&
-      reviewsLoading.value
-    ) {
-      logbookEntries.forEach((logbookEntry: Types.LogbookEntry) => {
-        if (logbookEntry.purchaseIds) {
-          logbookEntry.purchaseIds.forEach((purchaseId: number) => {
-            const purchase = purchases[purchaseId];
-            if (purchase.category === "need") {
-              needs.value = [...needs.value, purchase];
-            } else if (purchase.category === "planned") {
-              planned.value = [...planned.value, purchase];
-            } else if (purchase.category === "impulse") {
-              impulse.value = [...impulse.value, purchase];
-            }
-          });
-        }
-      });
-      reviewsLoading.value = false;
-    }
-  }, [purchases, logbookEntries, purchasesLoading.value, reviewsLoading.value]);
-
   return (
     <Container>
-      {reviewsLoading.value ? (
+      {purchasesLoading.value ? (
         <>
-          <Globals.Shimmer borderRadius="six" style={{ flex: 1 }} />
-          <Globals.Shimmer borderRadius="six" style={{ flex: 1 }} />
-          <Globals.Shimmer borderRadius="six" style={{ flex: 1 }} />
+          <Globals.Shimmer
+            key="dashboard-reviews-page-loading-shimmer-1"
+            borderRadius="six"
+            style={{ flex: 1 }}
+          />
+          <Globals.Shimmer
+            key="dashboard-reviews-page-loading-shimmer-2"
+            borderRadius="six"
+            style={{ flex: 1 }}
+          />
+          <Globals.Shimmer
+            key="dashboard-reviews-page-loading-shimmer-3"
+            borderRadius="six"
+            style={{ flex: 1 }}
+          />
         </>
-      ) : null}
+      ) : (
+        <>
+          <ReviewColumn
+            key="dashboard-reviews-page-review-column-need"
+            category="Need"
+            purchases={reviewsNeedPurchases}
+          />
+
+          <ReviewColumn
+            key="dashboard-reviews-page-review-column-planned"
+            category="Planned"
+            purchases={reviewsPlannedPurchases}
+          />
+
+          <ReviewColumn
+            key="dashboard-reviews-page-review-column-impulse"
+            category="Impulse"
+            purchases={reviewsImpulsePurchases}
+          />
+        </>
+      )}
     </Container>
   );
 };

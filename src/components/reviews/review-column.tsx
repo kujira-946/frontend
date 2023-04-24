@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { useEffect } from "react";
+import { useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
@@ -11,10 +13,12 @@ import { ThemeProps } from "../layout";
 // ========================================================================================= //
 
 const Container = styled.section`
+  flex: 1;
   height: 100%;
   background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
   border: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
   border-radius: ${Styles.pxAsRem.six};
+  overflow: hidden;
 `;
 
 const Header = styled.header`
@@ -22,16 +26,17 @@ const Header = styled.header`
   gap: ${Styles.pxAsRem.twelve};
   padding: ${Styles.pxAsRem.ten} ${Styles.pxAsRem.sixteen};
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
-  border-bottom: ${(props: ThemeProps) => props.theme.backgroundFour};
+  border-bottom: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
 `;
 
 const Descriptor = styled.section`
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: ${Styles.pxAsRem.four};
 `;
 
-type TitleProps = { category: Types.PurchaseCategory };
+type TitleProps = { category: Category };
 
 const Title = styled.h1<TitleProps>`
   margin: 0;
@@ -48,7 +53,7 @@ const Title = styled.h1<TitleProps>`
 
 type SpentProps = { price?: true };
 
-const Spent = styled.p<SpentProps>`
+const Spent = styled.span<SpentProps>`
   margin: 0;
   color: ${(props: SpentProps & ThemeProps) => {
     return props.price ? props.theme.primaryMain : "inherit";
@@ -62,7 +67,7 @@ const Spent = styled.p<SpentProps>`
 `;
 
 const Count = styled.span`
-  color: ${(props: ThemeProps) => props.theme.primaryMain};
+  color: ${(props: ThemeProps) => props.theme.secondaryMain};
   font-size: ${Styles.pxAsRem.fourteen};
   font-weight: ${Styles.fontWeights.semiBold};
 `;
@@ -79,23 +84,39 @@ const Purchases = styled.article`
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
+type Category = "Need" | "Planned" | "Impulse" | "Regret";
+
 type Props = {
-  category: Types.PurchaseCategory;
-  title: string;
-  spent: number;
+  category: Category;
   purchases: Types.Purchase[];
 };
 
 export const ReviewColumn = (props: Props) => {
+  const totalSpent = useSignal(0);
+
+  useEffect(() => {
+    let calculatedTotal = 0;
+    props.purchases.forEach((purchase: Types.Purchase) => {
+      if (purchase.cost) calculatedTotal += purchase.cost;
+    });
+    totalSpent.value = calculatedTotal;
+  }, []);
+
   return (
     <Container>
       <Header>
         <Descriptor>
-          <Title category={props.category}>{props.title}</Title>
+          <Title category={props.category}>{props.category}</Title>
           <Spent>
             You've spent{" "}
-            <Spent price>${Functions.formattedNumber(props.spent)}</Spent> on
-            needs.
+            <Spent price>${Functions.formattedNumber(totalSpent.value)}</Spent>{" "}
+            on{" "}
+            {props.category === "Need"
+              ? "need purchases"
+              : props.category === "Planned"
+              ? "planned purchases"
+              : "impulsive purchases"}
+            .
           </Spent>
         </Descriptor>
         <Count>{props.purchases.length}</Count>
@@ -110,6 +131,7 @@ export const ReviewColumn = (props: Props) => {
               purchaseId={purchase.id}
               description={purchase.description}
               cost={Functions.roundNumber(purchase.cost || 0, 2)}
+              costForwardText="$"
               hideDrag
               hideCheck
               hideCategories

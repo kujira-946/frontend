@@ -1,11 +1,14 @@
 import { useEffect } from "react";
-import { Signal } from "@preact/signals-react";
+import { Signal, effect } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
-import { createLogbookEntryRequest } from "@/sagas/logbook-entries.saga";
+import {
+  createLogbookEntryRequest,
+  fetchLogbookLogbookEntriesRequest,
+} from "@/sagas/logbook-entries.saga";
 
 type Props = {
   selectedLogbookId: Signal<number | null>;
@@ -24,6 +27,15 @@ export const LogbooksHeader = (props: Props) => {
       dispatch(fetchUserLogbooksRequest(currentUser.id));
     }
   }, [currentUser]);
+
+  // ↓↓↓ Fetching the currently-selected logbook's associated logbook entries. ↓↓↓ //
+  useEffect(() => {
+    if (props.selectedLogbookId.value) {
+      dispatch(
+        fetchLogbookLogbookEntriesRequest(props.selectedLogbookId.value)
+      );
+    }
+  }, [props.selectedLogbookId.value]);
 
   function createLogbookEntry(): void {
     if (props.selectedLogbookId.value) {

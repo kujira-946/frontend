@@ -23,6 +23,7 @@ enum PurchasesActionTypes {
   FETCH_PURCHASES = "FETCH_PURCHASES",
   FETCH_OVERVIEW_GROUP_PURCHASES = "FETCH_OVERVIEW_GROUP_PURCHASES",
   FETCH_LOGBOOK_ENTRY_PURCHASES = "FETCH_LOGBOOK_ENTRY_PURCHASES",
+  FETCH_LOGBOOK_ENTRY_PURCHASES_BY_CATEGORY = "FETCH_LOGBOOK_ENTRY_PURCHASES_BY_CATEGORY",
   BULK_FETCH_PURCHASES = "BULK_FETCH_PURCHASES",
   FETCH_PURCHASE = "FETCH_PURCHASE",
   CREATE_PURCHASE = "CREATE_PURCHASE",
@@ -59,6 +60,20 @@ export function fetchLogbookEntryPurchasesRequest(
   return {
     type: PurchasesActionTypes.FETCH_LOGBOOK_ENTRY_PURCHASES,
     payload: { logbookEntryId },
+  };
+}
+
+type LogbookEntryPurchasesByCategoryAction = Types.SagaAction<{
+  logbookEntryId: number;
+  category: Types.Category;
+}>;
+export function fetchLogbookEntryPurchasesByCategoryRequest(
+  logbookEntryId: number,
+  category: Types.Category
+): LogbookEntryPurchasesByCategoryAction {
+  return {
+    type: PurchasesActionTypes.FETCH_LOGBOOK_ENTRY_PURCHASES_BY_CATEGORY,
+    payload: { logbookEntryId, category },
   };
 }
 
@@ -237,6 +252,51 @@ function* fetchLogbookEntryPurchases(action: LogbookEntryPurchasesAction) {
       })
     );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+  } catch (error) {
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+    yield Functions.sagaError(error);
+  }
+}
+
+function* fetchLogbookEntryPurchasesByCategory(
+  action: LogbookEntryPurchasesByCategoryAction
+) {
+  try {
+    const { logbookEntryId, category } = action.payload;
+    const endpoint =
+      ApiRoutes.PURCHASES + `/fetch-logbook-entry-purchases-by-category`;
+    const { data } = yield Saga.call(axios.post, endpoint, {
+      logbookEntryId,
+      category,
+    });
+    const normalizedData = normalize(data.data, [purchasesSchema]);
+    const { purchases } = normalizedData.entities;
+    const purchaseIds = normalizedData.result;
+    if (category === "need") {
+      yield Saga.put(Redux.uiActions.setReviewsNeedPurchases(data.data));
+    } else if (category === "planned") {
+      yield Saga.put(Redux.uiActions.setReviewsPlannedPurchases(data.data));
+    } else {
+      yield Saga.put(Redux.uiActions.setReviewsImpulsePurchases(data.data));
+    }
+    yield Saga.put(
+      Redux.entitiesActions.addPurchase(purchases as Types.PurchasesEntity)
+    );
+    yield Saga.put(
+      Redux.entitiesActions.updateLogbookEntryRelations({
+        logbookEntryId,
+        purchaseIds:
+          purchaseIds.length > 0
+            ? purchaseIds
+            : purchaseIds.length === 1
+            ? [purchaseIds]
+            : [],
+      })
+    );
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+
+    console.log("Purchase:", purchases);
+    console.log("Purchase Ids:", purchaseIds);
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
     yield Functions.sagaError(error);
@@ -442,6 +502,10 @@ export function* purchasesSaga() {
     Saga.takeEvery(
       PurchasesActionTypes.FETCH_LOGBOOK_ENTRY_PURCHASES,
       fetchLogbookEntryPurchases
+    ),
+    Saga.takeEvery(
+      PurchasesActionTypes.FETCH_LOGBOOK_ENTRY_PURCHASES_BY_CATEGORY,
+      fetchLogbookEntryPurchasesByCategory
     ),
     Saga.takeEvery(
       PurchasesActionTypes.BULK_FETCH_PURCHASES,

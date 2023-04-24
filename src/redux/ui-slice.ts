@@ -1,12 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import * as Constants from "@/utils/constants";
-import { UINotification } from "@/utils/types";
+import { Purchase, UINotification } from "@/utils/types";
 
 export type UIState = {
   notification: UINotification;
   verificationCodeSent: boolean;
   loginForThirtyDays: boolean;
+
+  reviewsNeedPurchases: Purchase[];
+  reviewsPlannedPurchases: Purchase[];
+  reviewsImpulsePurchases: Purchase[];
 
   loadingUsers: boolean;
   loadingOverviews: boolean;
@@ -20,6 +24,10 @@ const initialState: UIState = {
   notification: Constants.initialUINotification,
   verificationCodeSent: false,
   loginForThirtyDays: false,
+
+  reviewsNeedPurchases: [],
+  reviewsPlannedPurchases: [],
+  reviewsImpulsePurchases: [],
 
   loadingUsers: false,
   loadingOverviews: false,
@@ -47,6 +55,29 @@ const uiSlice = createSlice({
     },
     setLoginForThirtyDays: (state: UIState, action: PayloadAction<boolean>) => {
       state.loginForThirtyDays = action.payload;
+    },
+
+    // ========================================================================================= //
+    // [ REVIEW PAGE ] ========================================================================= //
+    // ========================================================================================= //
+
+    setReviewsNeedPurchases: (
+      state: UIState,
+      action: PayloadAction<Purchase[]>
+    ) => {
+      state.reviewsNeedPurchases = action.payload;
+    },
+    setReviewsPlannedPurchases: (
+      state: UIState,
+      action: PayloadAction<Purchase[]>
+    ) => {
+      state.reviewsPlannedPurchases = action.payload;
+    },
+    setReviewsImpulsePurchases: (
+      state: UIState,
+      action: PayloadAction<Purchase[]>
+    ) => {
+      state.reviewsImpulsePurchases = action.payload;
     },
 
     // ========================================================================================= //

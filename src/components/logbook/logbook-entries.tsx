@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { useCallback, useEffect } from "react";
 
-import * as LogbookEntriesSagas from "@/sagas/logbook-entries.saga";
 import * as PurchasesSagas from "@/sagas/purchases.saga";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
+import { deleteLogbookEntryRequest } from "@/sagas/logbook-entries.saga";
 
 import { LogbookEntryDropdown } from "./entry-dropdown";
 
@@ -37,7 +37,7 @@ export const LogbookEntries = (props: Props) => {
   const onDragEnd = useCallback(Functions.onDragEnd, []);
 
   const deleteLogbookEntry = useCallback((logbookEntryId: number): void => {
-    dispatch(LogbookEntriesSagas.deleteLogbookEntryRequest(logbookEntryId));
+    dispatch(deleteLogbookEntryRequest(logbookEntryId));
   }, []);
 
   const deleteSelectedPurchases = useCallback(
@@ -56,13 +56,6 @@ export const LogbookEntries = (props: Props) => {
   const addPurchase = useCallback((logbookEntryId: number): void => {
     dispatch(
       PurchasesSagas.createPurchaseRequest({ placement: 0, logbookEntryId })
-    );
-  }, []);
-
-  // ↓↓↓ Fetching the currently-selected logbook's associated logbook entries. ↓↓↓ //
-  useEffect(() => {
-    dispatch(
-      LogbookEntriesSagas.fetchLogbookLogbookEntriesRequest(props.logbookId)
     );
   }, []);
 
