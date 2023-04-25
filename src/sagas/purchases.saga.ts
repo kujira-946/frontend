@@ -7,6 +7,7 @@ import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
 import { updateOverviewGroupRequest } from "./overview-groups.saga";
+import { updateLogbookEntryRequest } from "./logbook-entries.saga";
 
 // ========================================================================================= //
 // [ SCHEMAS ] ============================================================================= //
@@ -426,6 +427,8 @@ function* updatePurchase(action: PurchaseUpdateAction) {
       const { id, totalSpent } = association.overviewGroup;
       yield Saga.put(updateOverviewGroupRequest(id, { totalSpent }));
     } else if (association?.logbookEntry) {
+      const { id, totalSpent } = association.logbookEntry;
+      yield Saga.put(updateLogbookEntryRequest(id, { totalSpent }));
     }
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {

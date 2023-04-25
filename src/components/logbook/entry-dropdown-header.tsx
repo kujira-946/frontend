@@ -93,7 +93,7 @@ export const Header = (props: Props) => {
   const budgetError = useSignal("");
 
   const selectHeaderError = useCallback(
-    (section: typeof headerSections[number]): string => {
+    (section: (typeof headerSections)[number]): string => {
       if (section === "Date*") return dateError.value;
       else if (section === "Budget") return budgetError.value;
       else return "";
@@ -102,7 +102,7 @@ export const Header = (props: Props) => {
   );
 
   const selectHeaderValue = useCallback(
-    (section: typeof headerSections[number]): string => {
+    (section: (typeof headerSections)[number]): string => {
       if (section === "Date*") return date.value;
       else if (section === "Spent") return spent.value;
       else if (section === "Budget") return budget.value;
@@ -126,7 +126,7 @@ export const Header = (props: Props) => {
   }
 
   const selectHeaderValueSetter = useCallback(
-    (section: typeof headerSections[number]) => {
+    (section: (typeof headerSections)[number]) => {
       if (section === "Date*") {
         return setHeaderDate;
       } else if (section === "Budget") {
@@ -255,7 +255,7 @@ export const Header = (props: Props) => {
       onClick={() => (props.opened.value = !props.opened.value)}
       opened={props.opened.value}
     >
-      {headerSections.map((section: typeof headerSections[number]) => {
+      {headerSections.map((section: (typeof headerSections)[number]) => {
         return (
           <HeaderSection key={`logbook-entry-dropdown-header-${section}`}>
             <HeaderSectionTitle>{section}</HeaderSectionTitle>
