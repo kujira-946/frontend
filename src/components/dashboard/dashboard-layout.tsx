@@ -1,11 +1,13 @@
 import styled from "styled-components";
 
 import * as Types from "@/utils/types";
+import { useSignalsStore } from "@/utils/functions";
 import { ThemeProps } from "../layout";
 
 import { OverviewNavbar } from "./overview-navbar";
 import { UserSummary } from "./user-summary";
 import { OverviewGroups } from "./overview-groups";
+import { DashboardHeader } from "./dashboard-header";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -28,7 +30,13 @@ const Overview = styled.section`
   overflow-y: auto;
 `;
 
-const Children = styled.section`
+const Body = styled.section`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+`;
+
+const Children = styled.div`
   position: relative;
   flex: 1;
 `;
@@ -43,6 +51,8 @@ type Props = {
 };
 
 export const DashboardLayout = (props: Props) => {
+  const { selectedLogbookId } = useSignalsStore().dashboard;
+
   return (
     <Container>
       <Overview>
@@ -51,7 +61,13 @@ export const DashboardLayout = (props: Props) => {
         <OverviewGroups />
       </Overview>
 
-      <Children>{props.children}</Children>
+      <Body>
+        <DashboardHeader
+          selectedLogbookId={selectedLogbookId}
+          noCreate={props.page === "Reviews"}
+        />
+        <Children>{props.children}</Children>
+      </Body>
     </Container>
   );
 };

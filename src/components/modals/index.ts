@@ -1,3 +1,1 @@
-import { DeleteConfirmation } from "./delete-confirmation";
-
-export { DeleteConfirmation };
+export * from "./delete-confirmation";

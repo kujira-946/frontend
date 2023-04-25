@@ -1,5 +1,3 @@
-import { Income } from "./income";
-import { Purchases } from "./purchases";
-import { Savings } from "./savings";
-
-export { Income, Purchases, Savings };
+export * from "./income";
+export * from "./purchases";
+export * from "./savings";

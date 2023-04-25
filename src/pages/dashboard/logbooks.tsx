@@ -18,8 +18,6 @@ const Logbooks: NextPageWithLayout = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Components.LogbooksHeader selectedLogbookId={selectedLogbookId} />
-
       {selectedLogbookId.value && (
         <Components.LogbookEntries logbookId={selectedLogbookId.value} />
       )}

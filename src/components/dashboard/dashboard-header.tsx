@@ -12,10 +12,10 @@ import {
 
 type Props = {
   selectedLogbookId: Signal<number | null>;
-  noCreate?: true;
+  noCreate?: boolean;
 };
 
-export const LogbooksHeader = (props: Props) => {
+export const DashboardHeader = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
   const { currentUser } = Functions.useEntitiesSlice();

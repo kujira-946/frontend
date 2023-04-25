@@ -19,8 +19,6 @@ const Reviews: NextPageWithLayout = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Logbook.LogbooksHeader selectedLogbookId={selectedLogbookId} noCreate />
-
       {selectedLogbookId.value && (
         <Components.ReviewColumns logbookId={selectedLogbookId.value} />
       )}
