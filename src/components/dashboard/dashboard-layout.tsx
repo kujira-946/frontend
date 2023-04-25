@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 import * as Types from "@/utils/types";
-import { useSignalsStore } from "@/utils/functions";
 import { ThemeProps } from "../layout";
 
 import { OverviewNavbar } from "./overview-navbar";
@@ -51,8 +50,6 @@ type Props = {
 };
 
 export const DashboardLayout = (props: Props) => {
-  const { selectedLogbookId } = useSignalsStore().dashboard;
-
   return (
     <Container>
       <Overview>
@@ -62,10 +59,7 @@ export const DashboardLayout = (props: Props) => {
       </Overview>
 
       <Body>
-        <DashboardHeader
-          selectedLogbookId={selectedLogbookId}
-          noCreate={props.page === "Reviews"}
-        />
+        {props.page !== "Settings" && <DashboardHeader page={props.page} />}
         <Children>{props.children}</Children>
       </Body>
     </Container>

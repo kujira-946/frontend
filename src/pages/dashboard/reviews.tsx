@@ -2,7 +2,6 @@ import Head from "next/head";
 import { ReactElement } from "react";
 
 import * as Components from "@/components/reviews";
-import * as Logbook from "@/components/logbook";
 import { DashboardLayout } from "@/components/dashboard";
 import { NextPageWithLayout } from "../_app";
 import { useSignalsStore } from "@/utils/functions";
