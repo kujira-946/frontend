@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Signal, effect } from "@preact/signals-react";
+import { Signal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";

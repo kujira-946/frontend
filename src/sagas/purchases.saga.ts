@@ -294,9 +294,6 @@ function* fetchLogbookEntryPurchasesByCategory(
       })
     );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-
-    console.log("Purchase:", purchases);
-    console.log("Purchase Ids:", purchaseIds);
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
     yield Functions.sagaError(error);

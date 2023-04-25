@@ -1,16 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import * as Constants from "@/utils/constants";
-import { Purchase, UINotification } from "@/utils/types";
+import * as Types from "@/utils/types";
 
 export type UIState = {
-  notification: UINotification;
+  notification: Types.UINotification;
   verificationCodeSent: boolean;
   loginForThirtyDays: boolean;
 
-  reviewsNeedPurchases: Purchase[];
-  reviewsPlannedPurchases: Purchase[];
-  reviewsImpulsePurchases: Purchase[];
+  reviewsNeedPurchases: Types.Purchase[];
+  reviewsPlannedPurchases: Types.Purchase[];
+  reviewsImpulsePurchases: Types.Purchase[];
 
   loadingUsers: boolean;
   loadingOverviews: boolean;
@@ -43,7 +43,7 @@ const uiSlice = createSlice({
   reducers: {
     setNotification: (
       state: UIState,
-      action: PayloadAction<UINotification>
+      action: PayloadAction<Types.UINotification>
     ) => {
       state.notification = action.payload;
     },
@@ -63,19 +63,19 @@ const uiSlice = createSlice({
 
     setReviewsNeedPurchases: (
       state: UIState,
-      action: PayloadAction<Purchase[]>
+      action: PayloadAction<Types.Purchase[]>
     ) => {
       state.reviewsNeedPurchases = action.payload;
     },
     setReviewsPlannedPurchases: (
       state: UIState,
-      action: PayloadAction<Purchase[]>
+      action: PayloadAction<Types.Purchase[]>
     ) => {
       state.reviewsPlannedPurchases = action.payload;
     },
     setReviewsImpulsePurchases: (
       state: UIState,
-      action: PayloadAction<Purchase[]>
+      action: PayloadAction<Types.Purchase[]>
     ) => {
       state.reviewsImpulsePurchases = action.payload;
     },
