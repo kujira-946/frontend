@@ -8,8 +8,8 @@ import { AnimatePresence } from "framer-motion";
 import * as Styles from "@/utils/styles";
 import { ThemeProps } from "../layout";
 
-import { Header } from "./entry-dropdown-header";
-import { Body } from "./entry-dropdown-body";
+import { LogbookEntryDropdownHeader } from "./entry-dropdown-header";
+import { LogbookEntryDropdownBody } from "./entry-dropdown-body";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -49,7 +49,7 @@ type Props = {
     provided: Drag.ResponderProvided
   ) => void;
   deleteLogbookEntry: (logbookEntryId: number) => void;
-  deleteSelectedPurchases: (logbookEntryIds: number[]) => void;
+  deleteSelectedPurchases: (purchaseIds: number[]) => void;
   deleteAllPurchases: (logbookEntryId: number) => void;
   addPurchase: (logbookEntryId: number) => void;
 };
@@ -87,7 +87,7 @@ const ExportedComponent = (props: Props) => {
           )}
         </AnimatePresence>
 
-        <Header
+        <LogbookEntryDropdownHeader
           logbookEntryId={props.logbookEntryId}
           opened={opened}
           confirmLogbookEntryDelete={confirmLogbookEntryDelete}
@@ -95,7 +95,7 @@ const ExportedComponent = (props: Props) => {
 
         <AnimatePresence>
           {opened.value && (
-            <Body
+            <LogbookEntryDropdownBody
               logbookEntryId={props.logbookEntryId}
               opened={opened.value}
               confirmPurchasesDelete={confirmPurchasesDelete}

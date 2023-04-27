@@ -31,7 +31,7 @@ enum PurchasesActionTypes {
   BULK_CREATE_PURCHASES = "BULK_CREATE_PURCHASES",
   UPDATE_PURCHASE = "UPDATE_PURCHASE",
   DELETE_PURCHASE = "DELETE_PURCHASE",
-  BATCH_DELETE_PURCHASES = "BATCH_DELETE_PURCHASES",
+  BULK_DELETE_PURCHASES = "BULK_DELETE_PURCHASES",
   DELETE_ASSOCIATED_PURCHASES = "DELETE_ASSOCIATED_PURCHASES",
 }
 
@@ -166,7 +166,7 @@ export function batchDeletePurchasesRequest(
   purchaseIds: number[]
 ): PurchaseBatchDeleteAction {
   return {
-    type: PurchasesActionTypes.BATCH_DELETE_PURCHASES,
+    type: PurchasesActionTypes.BULK_DELETE_PURCHASES,
     payload: { purchaseIds },
   };
 }
@@ -447,6 +447,8 @@ function* deletePurchase(action: PurchaseDeleteAction) {
       const { id, totalSpent } = association.overviewGroup;
       yield Saga.put(updateOverviewGroupRequest(id, { totalSpent }));
     } else if (association?.logbookEntry) {
+      const { id, totalSpent } = association.logbookEntry;
+      yield Saga.put(updateLogbookEntryRequest(id, { totalSpent }));
     }
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
@@ -455,12 +457,13 @@ function* deletePurchase(action: PurchaseDeleteAction) {
   }
 }
 
-function* batchDeletePurchases(action: PurchaseBatchDeleteAction) {
+function* bulkDeletePurchases(action: PurchaseBatchDeleteAction) {
   try {
     const { purchaseIds } = action.payload;
-    const endpoint = ApiRoutes.PURCHASES + `/batch-delete`;
+    const endpoint = ApiRoutes.PURCHASES + `/bulk-delete`;
     yield Saga.call(axios.post, endpoint, { purchaseIds });
-    yield Saga.put(Redux.entitiesActions.batchDeletePurchases(purchaseIds));
+    yield Saga.put(Redux.entitiesActions.bulkDeletePurchases(purchaseIds));
+    // yield Saga.put(updateLogbookEntryRequest(logbookEntryId, { totalSpent }));
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
@@ -484,6 +487,9 @@ function* deleteAssociatedPurchases(action: PurchaseAssociationDeleteAction) {
         })
       );
     } else if (association.logbookEntryId) {
+      yield Saga.put(
+        updateLogbookEntryRequest(association.logbookEntryId, { totalSpent: 0 })
+      );
     }
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
@@ -520,8 +526,8 @@ export function* purchasesSaga() {
     Saga.takeEvery(PurchasesActionTypes.UPDATE_PURCHASE, updatePurchase),
     Saga.takeEvery(PurchasesActionTypes.DELETE_PURCHASE, deletePurchase),
     Saga.takeEvery(
-      PurchasesActionTypes.BATCH_DELETE_PURCHASES,
-      batchDeletePurchases
+      PurchasesActionTypes.BULK_DELETE_PURCHASES,
+      bulkDeletePurchases
     ),
     Saga.takeEvery(
       PurchasesActionTypes.DELETE_ASSOCIATED_PURCHASES,

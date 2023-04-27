@@ -40,12 +40,12 @@ type Props = {
     provided: Drag.ResponderProvided
   ) => void;
   deleteLogbookEntry: (logbookEntryId: number) => void;
-  deleteSelectedPurchases: (logbookEntryIds: number[]) => void;
+  deleteSelectedPurchases: (purchaseIds: number[]) => void;
   deleteAllPurchases: (logbookEntryId: number) => void;
   addPurchase: (logbookEntryId: number) => void;
 };
 
-export const Body = (props: Props) => {
+export const LogbookEntryDropdownBody = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
   const { purchases } = Functions.useEntitiesSlice();

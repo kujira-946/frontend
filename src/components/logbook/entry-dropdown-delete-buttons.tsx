@@ -8,7 +8,7 @@ type Props = {
   confirmPurchasesDelete: Signal<boolean>;
   logbookEntryId: number;
 
-  deleteSelectedPurchases: (logbookEntryIds: number[]) => void;
+  deleteSelectedPurchases: (purchaseIds: number[]) => void;
   addPurchase: (logbookEntryId: number) => void;
 };
 

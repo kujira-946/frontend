@@ -77,7 +77,7 @@ type Props = {
   confirmLogbookEntryDelete: Signal<boolean>;
 };
 
-export const Header = (props: Props) => {
+export const LogbookEntryDropdownHeader = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
   const { theme } = Functions.useSignalsStore().ui;

@@ -455,7 +455,7 @@ const entitiesSlice = createSlice({
         state.purchases = purchasesCopy;
       }
     },
-    batchDeletePurchases: (
+    bulkDeletePurchases: (
       state: EntitiesState,
       action: PayloadAction<number[]>
     ) => {

@@ -40,12 +40,9 @@ export const LogbookEntries = (props: Props) => {
     dispatch(deleteLogbookEntryRequest(logbookEntryId));
   }, []);
 
-  const deleteSelectedPurchases = useCallback(
-    (logbookEntryIds: number[]): void => {
-      dispatch(PurchasesSagas.batchDeletePurchasesRequest(logbookEntryIds));
-    },
-    []
-  );
+  const deleteSelectedPurchases = useCallback((purchaseIds: number[]): void => {
+    dispatch(PurchasesSagas.batchDeletePurchasesRequest(purchaseIds));
+  }, []);
 
   const deleteAllPurchases = useCallback((logbookEntryId: number): void => {
     dispatch(
