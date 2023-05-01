@@ -44,21 +44,7 @@ export const ReviewColumns = (props: Props) => {
   useEffect(() => {
     if (logbookEntries && purchasesLoading.value) {
       for (const logbookEntry of logbookEntries) {
-        dispatch(
-          fetchLogbookEntryPurchasesByCategoryRequest(logbookEntry.id, "need")
-        );
-        dispatch(
-          fetchLogbookEntryPurchasesByCategoryRequest(
-            logbookEntry.id,
-            "planned"
-          )
-        );
-        dispatch(
-          fetchLogbookEntryPurchasesByCategoryRequest(
-            logbookEntry.id,
-            "impulse"
-          )
-        );
+        dispatch(fetchLogbookEntryPurchasesByCategoryRequest(logbookEntry.id));
       }
       purchasesLoading.value = false;
     }
