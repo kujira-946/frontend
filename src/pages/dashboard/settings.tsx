@@ -37,8 +37,8 @@ const Settings: NextPageWithLayout = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Body>
+      Settings
+      {/* <Body>
         <Components.SettingsHeader currentTab={currentTab} />
 
         {currentTab.value === "Personal Information" ? (
@@ -50,7 +50,7 @@ const Settings: NextPageWithLayout = () => {
         ) : (
           <Components.Personalization />
         )}
-      </Body>
+      </Body> */}
     </>
   );
 };

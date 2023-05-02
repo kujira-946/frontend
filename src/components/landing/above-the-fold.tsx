@@ -96,18 +96,26 @@ export const AboveTheFold = () => {
 
           <Buttons>
             <Link href="/register" style={{ width: "100%" }}>
-              <Globals.PrimaryButton size="large">
+              <Globals.Button
+                type="button"
+                size="large"
+                borderRadius="eight"
+                primary
+              >
                 Register
-              </Globals.PrimaryButton>
+              </Globals.Button>
             </Link>
 
-            <Globals.PrimaryButtonOutlined
+            <Globals.Button
               onClick={scrollToAbout}
+              type="button"
               size="large"
-              borderThickness={2}
+              borderRadius="eight"
+              primary
+              outlined
             >
               Learn More
-            </Globals.PrimaryButtonOutlined>
+            </Globals.Button>
           </Buttons>
         </CopyAndButtons>
 

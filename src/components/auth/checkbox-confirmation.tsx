@@ -31,14 +31,13 @@ const Text = styled.div`
 `;
 
 const Redirect = styled(Link)`
-  color: ${(props: ThemeProps) => props.theme.secondaryMain};
-  font-weight: ${Styles.fontWeights.semiBold};
-
   ${Styles.transition};
+  color: ${(props: ThemeProps) => props.theme.primaryMain};
+  font-weight: ${Styles.fontWeights.semiBold};
 
   @media (hover: hover) {
     :hover {
-      color: ${(props: ThemeProps) => props.theme.secondaryDark};
+      color: ${(props: ThemeProps) => props.theme.primaryDark};
     }
   }
 `;
@@ -64,7 +63,7 @@ export const CheckboxConfirmation = (props: Props) => {
           <Icon>
             <Icons.CheckboxActive
               height={20}
-              fill={Styles.secondary[theme.value].main}
+              fill={Styles.primary[theme.value].main}
               addHover
             />
           </Icon>

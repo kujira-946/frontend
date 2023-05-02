@@ -34,13 +34,6 @@ export const widths = {
   content: 920,
 };
 
-export const heights = {
-  smallerButtonHeight: pxAsRem.twentySix,
-  smallButtonHeight: pxAsRem.thirtyTwo,
-  mediumButtonHeight: pxAsRem.thirtyEight,
-  largeButtonHeight: pxAsRem.fortyEight,
-};
-
 export const fontWeights = {
   thin: 100,
   extraLight: 200,

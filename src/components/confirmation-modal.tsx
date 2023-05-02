@@ -8,7 +8,7 @@ import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { ThemeProps } from "./layout";
 
-import { Button } from "./button";
+import { Button, IconButton } from "./button";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -16,7 +16,7 @@ import { Button } from "./button";
 
 type SharedProps = { overlay?: true };
 
-const Parent = styled.form<SharedProps>`
+const Parent = styled.main<SharedProps>`
   position: fixed;
   top: 0;
   right: 0;
@@ -34,75 +34,71 @@ const Parent = styled.form<SharedProps>`
   ${Styles.setMediaPaddings()};
 `;
 
-const Child = styled(motion.main)<SharedProps>`
+const Child = styled(motion.form)<SharedProps>`
   display: flex;
   flex-direction: column;
   gap: ${Styles.pxAsRem.twelve};
-  padding: ${Styles.pxAsRem.sixteen};
+  padding: ${Styles.pxAsRem.twenty};
   width: 100%;
   max-width: 600px;
-  max-height: 90%;
-  border-radius: ${Styles.pxAsRem.six};
+  border-radius: ${Styles.pxAsRem.eight};
 
   ${(props: SharedProps & ThemeProps) => {
-    return props.overlay ? props.theme.shadowOverlay : props.theme.shadowTwo;
+    return props.overlay ? props.theme.shadowOverlay : props.theme.shadowOne;
   }};
 `;
 
 const Header = styled.header`
   display: flex;
   align-items: center;
-  gap: 20px;
-  width: 100%;
+  gap: ${Styles.pxAsRem.twenty};
 `;
 
-const HeaderButton = styled.button`
-  ${Styles.clearButton};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
-  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
-  cursor: pointer;
-
-  @media (hover: hover) {
-    :hover {
-      background-color: ${(props: ThemeProps) => props.theme.backgroundThree};
-    }
-  }
-`;
-
-const Title = styled.h1`
-  flex: 1;
+const HeaderTitle = styled.h1`
+  margin: 0;
   color: ${(props: ThemeProps) => props.theme.text};
   font-size: ${Styles.pxAsRem.sixteen};
   font-weight: ${Styles.fontWeights.bold};
+  width: 100%;
 `;
 
-const CornerText = styled.span`
-  color: ${(props: ThemeProps) => props.theme.backgroundSeven};
-  font-size: ${Styles.pxAsRem.twelve};
+const HeaderSupportingText = styled.span`
+  color: ${(props: ThemeProps) => props.theme.backgroundEight};
+  font-size: ${Styles.pxAsRem.fourteen};
   font-weight: ${Styles.fontWeights.bold};
 `;
 
-const SupportingText = styled.p`
-  color: ${(props: ThemeProps) => props.theme.secondaryMain};
-  font-size: ${Styles.pxAsRem.twelve};
-  font-weight: ${Styles.fontWeights.bold};
+const Body = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: ${Styles.pxAsRem.four};
+  font-size: ${Styles.pxAsRem.fourteen};
+`;
+
+const BodySupportingText = styled.p`
+  margin: 0;
+  color: ${(props: ThemeProps) => props.theme.primaryMain};
+  font-weight: ${Styles.fontWeights.semiBold};
 `;
 
 const BodyText = styled.p`
+  margin: 0;
   color: ${(props: ThemeProps) => props.theme.text};
-  font-size: ${Styles.pxAsRem.fourteen};
   font-weight: ${Styles.fontWeights.regular};
 `;
 
-const ArrowIconContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const SubmitButton = styled(Button)`
+  svg {
+    ${Styles.transition};
+  }
+
+  @media (hover: hover) {
+    :hover {
+      svg {
+        transform: translateX(${Styles.pxAsRem.four});
+      }
+    }
+  }
 `;
 
 // ========================================================================================= //
@@ -115,15 +111,17 @@ type Props = {
 
   showBackButton?: boolean;
   backButtonAction?: () => void;
-  title: string;
-  cornerText?: string;
-  closeButtonAction?: () => void;
-  supportingText?: string;
-  bodyTexts?: string[];
 
-  submitButtonAction: () => void;
+  headerTitle: string;
+  headerSupportingText?: string;
+  bodySupportingText?: string;
+  bodyText: string[];
+
   submitButtonText: string;
-  disableSubmit?: boolean;
+  submitAction: () => void;
+  closeAction?: () => void;
+
+  disableSubmit: boolean;
   showSubmitArrow?: true;
 };
 
@@ -132,12 +130,13 @@ export const ConfirmationModal = (props: Props) => {
 
   function submit(event: Types.Submit) {
     event.preventDefault();
-    props.submitButtonAction();
+    props.submitAction();
   }
 
   return (
-    <Parent onSubmit={submit} overlay={props.overlay}>
+    <Parent overlay={props.overlay}>
       <Child
+        onSubmit={submit}
         initial={Constants.landingMotion.initial}
         animate={Constants.landingMotion.animate}
         transition={Constants.landingMotion.transition}
@@ -145,63 +144,69 @@ export const ConfirmationModal = (props: Props) => {
       >
         <Header>
           {props.showBackButton && props.backButtonAction && theme.value && (
-            <HeaderButton type="button" onClick={props.backButtonAction}>
+            <IconButton
+              type="button"
+              onClick={props.backButtonAction}
+              borderRadius="six"
+            >
               <Icons.ChevronLeft
-                height={14}
+                width={16}
+                height={16}
                 fill={Styles.background[theme.value].eight}
                 addHover
               />
-            </HeaderButton>
+            </IconButton>
           )}
-          <Title>{props.title}</Title>
-          {props.cornerText && <CornerText>{props.cornerText}</CornerText>}
-          {props.closeButtonAction && theme.value && (
-            <HeaderButton type="button" onClick={props.closeButtonAction}>
+          <HeaderTitle>{props.headerTitle}</HeaderTitle>
+          {props.headerSupportingText && (
+            <HeaderSupportingText>
+              {props.headerSupportingText}
+            </HeaderSupportingText>
+          )}
+          {props.closeAction && theme.value && (
+            <button type="button" onClick={props.closeAction}>
               <Icons.Close
+                width={14}
                 height={14}
                 fill={Styles.background[theme.value].eight}
+                hoveredFill={Styles.text[theme.value]}
                 addHover
               />
-            </HeaderButton>
+            </button>
           )}
         </Header>
 
-        {props.supportingText && (
-          <SupportingText>{props.supportingText}</SupportingText>
-        )}
-
-        {props.bodyTexts &&
-          props.bodyTexts.map((text: string, index: number) => {
+        <Body>
+          {props.bodySupportingText && (
+            <BodySupportingText>{props.bodySupportingText}</BodySupportingText>
+          )}
+          {props.bodyText.map((text: string, index: number) => {
             return (
-              <BodyText key={`confirmation-modal-${text}-${index}`}>
+              <BodyText key={`confirmation-modal-body-text-${text}-${index}`}>
                 {text}
               </BodyText>
             );
           })}
+        </Body>
 
         {props.children}
 
-        {theme.value && (
-          <Button
-            type="submit"
-            disabled={props.disableSubmit}
-            size="medium"
-            borderRadius="four"
-            background={Styles.primary[theme.value].main}
-            hoverBackground={Styles.primary[theme.value].darker}
-            style={{
-              marginTop: Styles.pxAsRem.four,
-              opacity: props.disableSubmit ? 0.5 : 1,
-            }}
-          >
-            {props.submitButtonText}
-            {props.showSubmitArrow && (
-              <ArrowIconContainer>
-                <Icons.ArrowRight height={12} fill={Styles.text.button} />
-              </ArrowIconContainer>
-            )}
-          </Button>
-        )}
+        <SubmitButton
+          type="submit"
+          size="large"
+          disabled={props.disableSubmit}
+          borderRadius="six"
+          primary
+        >
+          {props.submitButtonText}
+          {props.showSubmitArrow && (
+            <Icons.ArrowRight
+              width={16}
+              height={16}
+              fill={Styles.text.button}
+            />
+          )}
+        </SubmitButton>
       </Child>
     </Parent>
   );

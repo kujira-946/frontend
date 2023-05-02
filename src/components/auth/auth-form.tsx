@@ -63,8 +63,8 @@ const Caption = styled.p<{ resend?: true }>`
 `;
 
 const Redirect = styled(Link)`
-  color: ${(props: ThemeProps) => props.theme.primaryMain};
   ${Styles.transition};
+  color: ${(props: ThemeProps) => props.theme.primaryMain};
 
   @media (hover: hover) {
     :hover {
@@ -255,16 +255,19 @@ export const AuthForm = (props: Props) => {
             checkboxActive={checkboxActive}
           />
 
-          <Globals.SubmitButton
+          <Globals.Button
+            type="submit"
             disabled={
               props.title === "Register"
                 ? !checkRegistrationErrors()
                 : !checkLoginErrors()
             }
-            borderRadius="four"
+            size="large"
+            borderRadius="six"
+            primary
           >
             {props.title}
-          </Globals.SubmitButton>
+          </Globals.Button>
         </Form>
       </Container>
     </>

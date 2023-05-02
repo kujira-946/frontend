@@ -64,9 +64,9 @@ export const CTA = () => {
         </Copy>
 
         <Link href="/register">
-          <Globals.PrimaryButton size="large" maxWidth="600px">
+          <Globals.Button type="button" size="large" primary>
             Register
-          </Globals.PrimaryButton>
+          </Globals.Button>
         </Link>
       </Globals.LazyLoad>
     </Container>

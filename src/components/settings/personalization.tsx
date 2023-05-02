@@ -22,6 +22,7 @@ type ThemeButtonProps = {
 
 const ThemeButton = styled.button<ThemeButtonProps>`
   ${Styles.clearButton};
+  ${Styles.transition};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -41,7 +42,6 @@ const ThemeButton = styled.button<ThemeButtonProps>`
   cursor: pointer;
 
   ${(props) => props.disabled && Styles.preventUserInteraction};
-  ${Styles.transition};
 
   @media (hover: hover) {
     :hover {

@@ -17,6 +17,7 @@ import { ThemeProps } from "../layout";
 type ContainerProps = { opened: boolean };
 
 const Container = styled.header<ContainerProps>`
+  ${Styles.transition};
   position: sticky;
   top: 0;
   right: 0;
@@ -31,8 +32,6 @@ const Container = styled.header<ContainerProps>`
       : `transparent solid 1px`;
   }};
   cursor: pointer;
-
-  ${Styles.transition};
 
   @media (hover: hover) {
     :hover {

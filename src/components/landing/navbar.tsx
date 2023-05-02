@@ -38,16 +38,13 @@ const Links = styled.section`
 `;
 
 const ThemeButton = styled.button`
+  ${Styles.transition};
   ${Styles.clearButton};
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${Styles.heights.smallButtonHeight};
-  height: ${Styles.heights.smallButtonHeight};
   background-color: inherit;
   border-radius: 6px;
-
-  ${Styles.transition};
 
   @media (hover: hover) {
     :hover {
@@ -57,11 +54,10 @@ const ThemeButton = styled.button`
 `;
 
 const LoginButton = styled(Link)`
+  ${Styles.transition};
   color: ${(props: ThemeProps) => props.theme.backgroundEight};
   font-size: ${Styles.pxAsRem.twelve};
   font-weight: ${Styles.fontWeights.medium};
-
-  ${Styles.transition};
 
   @media (hover: hover) {
     :hover {
@@ -128,7 +124,9 @@ export const Navbar = () => {
           <LoginButton href="/login">Log In</LoginButton>
 
           <Link href="/register">
-            <Globals.PrimaryButton size="small">Register</Globals.PrimaryButton>
+            <Globals.Button type="button" size="large" primary>
+              Register
+            </Globals.Button>
           </Link>
         </Links>
       </Main>

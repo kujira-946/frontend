@@ -1,321 +1,144 @@
 import styled from "styled-components";
 
-import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
+import { ThemeProps } from "./layout";
 
-// ========================================================================================= //
-// [ STYLED COMPONENTS ] =================================================================== //
-// ========================================================================================= //
-
-type Size = "smaller" | "small" | "medium" | "large";
-type FontWeight = keyof typeof Styles.fontWeights;
-
-type SharedProps = {
-  size: Size;
-  maxWidth?: string;
+type ButtonProps = {
+  type: "button" | "submit";
+  size: "large" | "medium" | "small" | "smaller";
   borderRadius?: Types.PxAsRem;
-  borderThickness?: number;
-  fontWeight?: FontWeight;
+
+  textColor?: string;
+  textColorHover?: string;
+  backgroundColor?: string;
+  backgroundColorHover?: string;
+  borderColor?: string;
+  borderColorHover?: string;
+
   disabled?: boolean;
-  compact?: true;
+  primary?: true;
+  outlined?: true;
 };
 
-type Props = {
-  color?: string;
-  hoverColor?: string;
-
-  background?: string;
-  hoverBackground?: string;
-
-  border?: string;
-  hoverBorder?: string;
-} & SharedProps;
-
-export const Button = styled.button<Props>`
+export const Button = styled.button.attrs((props: ButtonProps) => ({
+  type: props.type || "button",
+}))<ButtonProps>`
+  ${Styles.clearButton};
+  ${Styles.transition};
   display: flex;
   justify-content: center;
   align-items: center;
   gap: ${Styles.pxAsRem.eight};
-
-  width: ${(props) => (props.compact ? "auto" : "100%")};
-  max-width: ${(props) => props.maxWidth};
-  height: ${(props) => {
-    if (props.size === "smaller") return Styles.pxAsRem.twentySix;
-    else if (props.size === "small") return Styles.pxAsRem.thirtyTwo;
-    else if (props.size === "medium") return Styles.pxAsRem.thirtyEight;
-    else return Styles.pxAsRem.fortyEight;
-  }};
-
-  margin: 0;
+  width: 100%;
   padding: ${(props) => {
-    if (props.size === "smaller") {
-      return `${Styles.pxAsRem.six} ${Styles.pxAsRem.ten}`;
-    } else if (props.size === "small") {
-      return `${Styles.pxAsRem.eight} ${Styles.pxAsRem.twelve}`;
+    if (props.size === "large") {
+      return `${Styles.pxAsRem.eight} ${Styles.pxAsRem.sixteen}`;
     } else if (props.size === "medium") {
-      return `${Styles.pxAsRem.ten} ${Styles.pxAsRem.fourteen}`;
+      return `${Styles.pxAsRem.eight} ${Styles.pxAsRem.fourteen}`;
+    } else if (props.size === "small") {
+      return `${Styles.pxAsRem.six} ${Styles.pxAsRem.ten}`;
     } else {
-      return `${Styles.pxAsRem.twelve} ${Styles.pxAsRem.eighteen}`;
+      return `${Styles.pxAsRem.four} ${Styles.pxAsRem.eight}`;
     }
   }};
-
-  color: ${(props) => props.color || Styles.text.button};
-  background-color: ${(props) => props.background || "transparent"};
-
-  border: ${(props) => {
-    return props.border
-      ? `${props.border} solid ${props.borderThickness || 1}px`
-      : `transparent solid ${props.borderThickness || 1}px`;
+  color: ${(props: ButtonProps & ThemeProps) => {
+    return props.textColor || props.theme.text;
+  }};
+  background-color: ${(props: ButtonProps & ThemeProps) => {
+    if (props.outlined) return "transparent";
+    else if (props.primary) return props.theme.primaryMain;
+    else if (props.backgroundColor) return props.backgroundColor;
+    else return props.theme.backgroundOne;
+  }};
+  border: ${(props: ButtonProps & ThemeProps) => {
+    if (props.outlined) {
+      if (props.primary) return `${props.theme.primaryMain} solid 1px`;
+      else if (props.borderColor) return `${props.borderColor} solid 1px`;
+      else return `${props.theme.text} solid 1px`;
+    } else {
+      return "transparent";
+    }
   }};
   border-radius: ${(props) => {
     return props.borderRadius
       ? Styles.pxAsRem[props.borderRadius]
-      : Styles.pxAsRem.six;
+      : Styles.pxAsRem.eight;
   }};
-
   font-size: ${(props) => {
-    if (props.size === "smaller") return Styles.pxAsRem.ten;
-    else if (props.size === "small") return Styles.pxAsRem.twelve;
-    else if (props.size === "medium") return Styles.pxAsRem.fourteen;
-    else return Styles.pxAsRem.eighteen;
+    return props.size === "large"
+      ? Styles.pxAsRem.sixteen
+      : props.size === "medium"
+      ? Styles.pxAsRem.fourteen
+      : props.size === "small"
+      ? Styles.pxAsRem.twelve
+      : Styles.pxAsRem.ten;
   }};
-  font-weight: ${(props) => props.fontWeight || Styles.fontWeights.semiBold};
-  opacity: ${(props) => (props.disabled ? 0.5 : 1)};
-  outline: none;
-  cursor: pointer;
+  font-weight: ${Styles.fontWeights.semiBold};
+  opacity: ${(props) => (props.disabled ? 0.2 : 1)};
 
   ${(props) => props.disabled && Styles.preventUserInteraction};
-  ${Styles.transition};
 
   @media (hover: hover) {
     :hover {
-      color: ${(props) => {
-        return props.hoverColor || props.color || Styles.text.button;
+      color: ${(props: ButtonProps & ThemeProps) => {
+        return props.textColorHover || props.theme.text;
       }};
-      background-color: ${(props) => {
-        return props.hoverBackground || props.background || "transparent";
+      background-color: ${(props: ButtonProps & ThemeProps) => {
+        if (props.outlined) return "transparent";
+        else if (props.primary) return props.theme.primaryDark;
+        else if (props.backgroundColorHover) return props.backgroundColorHover;
+        else return props.theme.backgroundTwo;
       }};
-      border: ${(props) => {
-        return props.hoverBorder
-          ? `${props.hoverBorder} solid ${props.borderThickness || 1}px`
-          : props.border
-          ? `${props.border} solid ${props.borderThickness || 1}px`
-          : `transparent solid ${props.borderThickness || 1}px`;
+      border: ${(props: ButtonProps & ThemeProps) => {
+        if (props.outlined) {
+          if (props.primary) {
+            return `${props.theme.primaryDark} solid 1px`;
+          } else if (props.borderColorHover) {
+            return `${props.borderColorHover} solid 1px`;
+          } else {
+            return `${props.theme.text} solid 1px`;
+          }
+        } else {
+          return "transparent";
+        }
       }};
     }
   }
 `;
 
-type ButtonProps = {
-  type?: "submit" | "button";
-  onClick?: () => void;
-  selected?: boolean;
-  children: React.ReactNode;
-} & SharedProps;
-
-export const NeutralButton = (props: ButtonProps) => {
-  const { theme } = Functions.useSignalsStore().ui;
-  if (theme.value) {
-    return (
-      <Button
-        type={props.type || "button"}
-        disabled={props.disabled}
-        onClick={props.onClick}
-        size={props.size}
-        maxWidth={props.maxWidth}
-        borderRadius={props.borderRadius}
-        borderThickness={props.borderThickness}
-        fontWeight={props.fontWeight}
-        color={Styles.background[theme.value].eight}
-        hoverColor={Styles.text[theme.value]}
-        background={Styles.background[theme.value].four}
-        hoverBackground={Styles.background[theme.value].five}
-        compact={props.compact}
-      >
-        {props.children}
-      </Button>
-    );
-  } else {
-    return null;
-  }
+type IconButtonProps = {
+  type: "button" | "submit";
+  backgroundColor?: string;
+  backgroundColorHover?: string;
+  borderRadius?: Types.PxAsRem;
 };
 
-export const NeutralButtonOutlined = (props: ButtonProps) => {
-  const { theme } = Functions.useSignalsStore().ui;
-  if (theme.value) {
-    return (
-      <Button
-        type={props.type || "button"}
-        disabled={props.disabled}
-        onClick={props.onClick}
-        size={props.size}
-        maxWidth={props.maxWidth}
-        borderRadius={props.borderRadius}
-        borderThickness={props.borderThickness}
-        color={Styles.background[theme.value].seven}
-        hoverColor={Styles.text[theme.value]}
-        background={Styles.background[theme.value].one}
-        hoverBackground={Styles.background[theme.value].two}
-        border={Styles.background[theme.value].four}
-        hoverBorder={Styles.background[theme.value].five}
-        compact={props.compact}
-      >
-        {props.children}
-      </Button>
-    );
-  } else {
-    return null;
-  }
-};
+export const IconButton = styled.button.attrs((props: IconButtonProps) => ({
+  type: props.type || "button",
+}))<IconButtonProps>`
+  ${Styles.clearButton};
+  ${Styles.transition};
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  width: ${Styles.pxAsRem.forty};
+  height: ${Styles.pxAsRem.forty};
+  background-color: ${(props: IconButtonProps & ThemeProps) => {
+    return props.backgroundColor || props.theme.backgroundOne;
+  }};
+  border-radius: ${(props) => {
+    return props.borderRadius
+      ? Styles.pxAsRem[props.borderRadius]
+      : Styles.pxAsRem.eight;
+  }};
 
-export const NeutralPillButton = (props: ButtonProps) => {
-  const { theme } = Functions.useSignalsStore().ui;
-  if (theme.value) {
-    return (
-      <Button
-        type={props.type || "button"}
-        disabled={props.disabled}
-        onClick={props.onClick}
-        size={props.size}
-        maxWidth={props.maxWidth}
-        borderRadius="fortyEight"
-        color={
-          props.selected
-            ? Styles.background[theme.value].one
-            : Styles.background[theme.value].seven
-        }
-        hoverColor={
-          props.selected
-            ? Styles.background[theme.value].one
-            : Styles.text[theme.value]
-        }
-        background={
-          props.selected
-            ? Styles.text[theme.value]
-            : Styles.background[theme.value].one
-        }
-        hoverBackground={
-          props.selected
-            ? Styles.text[theme.value]
-            : Styles.background[theme.value].three
-        }
-        border={
-          props.selected
-            ? Styles.text[theme.value]
-            : Styles.background[theme.value].four
-        }
-        hoverBorder={
-          props.selected
-            ? Styles.text[theme.value]
-            : Styles.background[theme.value].six
-        }
-        compact={props.compact}
-      >
-        {props.children}
-      </Button>
-    );
-  } else {
-    return null;
+  @media (hover: hover) {
+    :hover {
+      background-color: ${(props: IconButtonProps & ThemeProps) => {
+        return props.backgroundColorHover || props.theme.backgroundTwo;
+      }};
+    }
   }
-};
-
-export const PrimaryButton = (props: ButtonProps) => {
-  const { theme } = Functions.useSignalsStore().ui;
-  if (theme.value) {
-    return (
-      <Button
-        type={props.type || "button"}
-        disabled={props.disabled}
-        onClick={props.onClick}
-        size={props.size}
-        maxWidth={props.maxWidth}
-        borderRadius={props.borderRadius}
-        borderThickness={props.borderThickness}
-        color={Styles.text.button}
-        background={Styles.primary[theme.value].main}
-        hoverBackground={Styles.primary[theme.value].darker}
-        compact={props.compact}
-      >
-        {props.children}
-      </Button>
-    );
-  } else {
-    return null;
-  }
-};
-
-export const PrimaryButtonOutlined = (props: ButtonProps) => {
-  const { theme } = Functions.useSignalsStore().ui;
-  if (theme.value) {
-    return (
-      <Button
-        type={props.type || "button"}
-        disabled={props.disabled}
-        onClick={props.onClick}
-        size={props.size}
-        maxWidth={props.maxWidth}
-        borderRadius={props.borderRadius}
-        borderThickness={props.borderThickness}
-        color={Styles.primary[theme.value].main}
-        border={Styles.primary[theme.value].main}
-        hoverBorder={Styles.primary[theme.value].darker}
-        compact={props.compact}
-      >
-        {props.children}
-      </Button>
-    );
-  } else {
-    return null;
-  }
-};
-
-export const SecondaryButton = (props: ButtonProps) => {
-  const { theme } = Functions.useSignalsStore().ui;
-  if (theme.value) {
-    return (
-      <Button
-        type={props.type || "button"}
-        disabled={props.disabled}
-        onClick={props.onClick}
-        size={props.size}
-        maxWidth={props.maxWidth}
-        borderRadius={props.borderRadius}
-        borderThickness={props.borderThickness}
-        color={Styles.text.button}
-        background={Styles.secondary[theme.value].main}
-        hoverBackground={Styles.secondary[theme.value].darker}
-        compact={props.compact}
-      >
-        {props.children}
-      </Button>
-    );
-  } else {
-    return null;
-  }
-};
-
-export const SecondaryButtonOutlined = (props: ButtonProps) => {
-  const { theme } = Functions.useSignalsStore().ui;
-  if (theme.value) {
-    return (
-      <Button
-        type={props.type || "button"}
-        disabled={props.disabled}
-        onClick={props.onClick}
-        size={props.size}
-        maxWidth={props.maxWidth}
-        borderRadius={props.borderRadius}
-        borderThickness={props.borderThickness}
-        color={Styles.primary[theme.value].main}
-        border={Styles.primary[theme.value].main}
-        hoverBorder={Styles.primary[theme.value].darker}
-        compact={props.compact}
-      >
-        {props.children}
-      </Button>
-    );
-  } else {
-    return null;
-  }
-};
+`;

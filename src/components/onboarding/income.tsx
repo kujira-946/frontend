@@ -17,10 +17,6 @@ type Props = {
 export const Income = (props: Props) => {
   const errorMessage = useSignal("");
 
-  const setUserInput = function (event: Types.Input): void {
-    props.income.value = event.currentTarget.value;
-  };
-
   function onBlur(): void {
     if (errorMessage.value === "" && props.income.value !== "") {
       props.income.value = Functions.roundNumber(Number(props.income.value), 2);
@@ -46,12 +42,15 @@ export const Income = (props: Props) => {
   }, [props.income, props.disableSubmit]);
 
   return (
-    <Globals.Input
-      title="Income ($)"
+    <Globals.FormInput
       userInput={props.income.value}
-      setUserInput={setUserInput}
+      setUserInput={(event: Types.Input): void => {
+        props.income.value = event.currentTarget.value;
+      }}
+      placeholder="Income ($)"
       errorMessage={errorMessage.value}
       onBlur={onBlur}
+      borderRadius="six"
       isCost
     />
   );

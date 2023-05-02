@@ -72,7 +72,7 @@ export const RegisterInputs = (props: Props) => {
       <Globals.Input
         borderRadius="four"
         type="email"
-        title="Email"
+        title="*Email"
         errorMessage={auth.includes("email") ? auth : props.emailError.value}
         userInput={props.email.value}
         setUserInput={(event: Types.Input) => {
@@ -87,7 +87,7 @@ export const RegisterInputs = (props: Props) => {
       {/* Username */}
       <Globals.Input
         borderRadius="four"
-        title="Username"
+        title="*Username"
         errorMessage={
           auth.includes("username") ? auth : props.usernameError.value
         }
@@ -105,7 +105,7 @@ export const RegisterInputs = (props: Props) => {
       <Globals.Input
         borderRadius="four"
         type={hidden.value ? "password" : "text"}
-        title="Password"
+        title="*Password"
         errorMessage={props.passwordError.value}
         userInput={props.password.value}
         setUserInput={(event: Types.Input) =>
@@ -121,7 +121,7 @@ export const RegisterInputs = (props: Props) => {
       <Globals.Input
         borderRadius="four"
         type={hidden.value ? "password" : "text"}
-        title="Confirm Password"
+        title="*Confirm Password"
         errorMessage={props.confirmPasswordError.value}
         userInput={props.confirmPassword.value}
         setUserInput={(event: Types.Input) =>

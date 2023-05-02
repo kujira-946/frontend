@@ -119,15 +119,16 @@ const Onboarding = () => {
 
   effect(() => {
     if (currentPage.value === 1) {
-      supportingText.value = "";
-      disableSubmit.value = false;
-    } else if (currentPage.value === 3) {
       disableSubmit.value = false;
     } else if (currentPage.value === 4) {
+      disableSubmit.value = false;
+    } else if (currentPage.value === 5) {
       disableSubmit.value = false;
     } else if (currentPage.value === 6) {
       disableSubmit.value = false;
     }
+
+    if (income.value === "") supportingText.value = "";
   });
 
   if (currentUser && currentUser.onboarded) {
@@ -145,22 +146,26 @@ const Onboarding = () => {
         <Globals.ConfirmationModal
           showBackButton={currentPage.value === 1 ? false : true}
           backButtonAction={toPreviousPage}
-          title={Constants.onboardingCopies[currentPage.value - 1].title}
-          cornerText={`${currentPage.value}/${Constants.onboardingCopies.length}`}
-          supportingText={supportingText.value}
-          bodyTexts={
-            Constants.onboardingCopies[currentPage.value - 1].bodyTexts
-          }
-          submitButtonAction={toNextPage}
+          headerTitle={Constants.onboardingCopies[currentPage.value - 1].title}
+          headerSupportingText={`${currentPage.value}/${Constants.onboardingCopies.length}`}
+          bodySupportingText={supportingText.value}
+          bodyText={Constants.onboardingCopies[currentPage.value - 1].bodyTexts}
           submitButtonText={
             Constants.onboardingCopies[currentPage.value - 1].submitButtonText
           }
+          submitAction={toNextPage}
           disableSubmit={disableSubmit.value}
           showSubmitArrow
         >
           {currentPage.value === 2 ? (
             <Components.Income income={income} disableSubmit={disableSubmit} />
-          ) : overviewGroups && currentPage.value === 3 ? (
+          ) : currentPage.value === 3 ? (
+            <Components.Savings
+              income={Number(income.value)}
+              savings={savings}
+              disableSubmit={disableSubmit}
+            />
+          ) : overviewGroups && currentPage.value === 4 ? (
             <Components.Purchases
               key="onboarding-overview-group-recurring-purchases-dropdown"
               type="Recurring"
@@ -169,7 +174,7 @@ const Onboarding = () => {
               deleteAllPurchases={deleteAllPurchases}
               addPurchase={addPurchase}
             />
-          ) : overviewGroups && currentPage.value === 4 ? (
+          ) : overviewGroups && currentPage.value === 5 ? (
             <Components.Purchases
               key="onboarding-overview-group-incoming-purchases-dropdown"
               type="Incoming"
@@ -177,12 +182,6 @@ const Onboarding = () => {
               onDragEnd={onDragEnd}
               deleteAllPurchases={deleteAllPurchases}
               addPurchase={addPurchase}
-            />
-          ) : currentPage.value === 5 ? (
-            <Components.Savings
-              income={Number(income.value)}
-              savings={savings}
-              disableSubmit={disableSubmit}
             />
           ) : null}
         </Globals.ConfirmationModal>

@@ -28,10 +28,6 @@ export const Savings = (props: Props) => {
     }
   }
 
-  function setUserInput(event: Types.Input): void {
-    props.savings.value = event.currentTarget.value;
-  }
-
   useEffect(() => {
     effect(() => {
       if (props.savings.value.length === 0) {
@@ -54,11 +50,14 @@ export const Savings = (props: Props) => {
   }, [props.savings, props.disableSubmit]);
 
   return (
-    <Globals.Input
-      title={`Savings (%) ${calculateIncomeSaved()}`}
+    <Globals.FormInput
       userInput={props.savings.value}
-      setUserInput={setUserInput}
+      setUserInput={(event: Types.Input): void => {
+        props.savings.value = event.currentTarget.value;
+      }}
+      placeholder={`Savings(%) ${calculateIncomeSaved()}`}
       errorMessage={errorMessage.value}
+      borderRadius="six"
     />
   );
 };

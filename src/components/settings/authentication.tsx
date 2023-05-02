@@ -27,6 +27,7 @@ const Container = styled.section`
 
 const DeleteAccountButton = styled.button`
   ${Styles.clearButton};
+  ${Styles.transition};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,7 +40,6 @@ const DeleteAccountButton = styled.button`
   cursor: pointer;
 
   ${(props) => props.disabled && Styles.preventUserInteraction};
-  ${Styles.transition};
 
   @media (hover: hover) {
     :hover {

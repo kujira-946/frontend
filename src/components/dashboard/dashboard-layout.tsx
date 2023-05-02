@@ -52,14 +52,14 @@ type Props = {
 export const DashboardLayout = (props: Props) => {
   return (
     <Container>
-      <Overview>
+      {/* <Overview>
         <OverviewNavbar />
         <UserSummary page={props.page} />
         <OverviewGroups />
-      </Overview>
+      </Overview> */}
 
       <Body>
-        {props.page !== "Settings" && <DashboardHeader page={props.page} />}
+        {/* {props.page !== "Settings" && <DashboardHeader page={props.page} />} */}
         <Children>{props.children}</Children>
       </Body>
     </Container>

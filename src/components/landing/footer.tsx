@@ -53,11 +53,10 @@ const BodyLinkHeader = styled.h5`
 `;
 
 const BodyLinkRegister = styled(Link)`
+  ${Styles.transition};
   color: ${(props: ThemeProps) => props.theme.primaryMain};
   font-size: ${Styles.pxAsRem.twelve};
   font-weight: ${Styles.fontWeights.medium};
-
-  ${Styles.transition};
 
   @media (hover: hover) {
     :hover {
@@ -67,11 +66,10 @@ const BodyLinkRegister = styled(Link)`
 `;
 
 const BodyLink = styled(Link)`
+  ${Styles.transition};
   color: ${(props: ThemeProps) => props.theme.backgroundEight};
   font-size: ${Styles.pxAsRem.twelve};
   font-weight: ${Styles.fontWeights.medium};
-
-  ${Styles.transition};
 
   @media (hover: hover) {
     :hover {
@@ -100,11 +98,10 @@ const LegalLinks = styled.div`
 `;
 
 const LegalLink = styled(Link)`
+  ${Styles.transition};
   color: ${(props: ThemeProps) => props.theme.backgroundSeven};
   font-size: ${Styles.pxAsRem.ten};
   font-weight: ${Styles.fontWeights.medium};
-
-  ${Styles.transition};
 
   @media (hover: hover) {
     :hover {
@@ -161,14 +158,14 @@ export const Footer = () => {
           </BodyLinks>
         </Body>
 
-        <Globals.NeutralButtonOutlined
+        <Globals.Button
           onClick={scrollToTop}
-          size="small"
-          fontWeight="medium"
-          compact
+          type="button"
+          size="medium"
+          primary
         >
           Back To Top
-        </Globals.NeutralButtonOutlined>
+        </Globals.Button>
 
         <CopyrightAndLegal>
           <Copyright>© 2023 Kujira. All rights reserved.</Copyright>

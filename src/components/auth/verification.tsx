@@ -57,21 +57,21 @@ const Form = styled.form`
 
 const Caption = styled.p`
   margin: 0;
-  font-size: ${Styles.pxAsRem.fourteen};
+  font-size: ${Styles.pxAsRem.sixteen};
   font-weight: ${Styles.fontWeights.medium};
   text-align: center;
 `;
 
 const ResendButton = styled.button`
   ${Styles.clearButton};
-  color: ${(props: ThemeProps) => props.theme.secondaryMain};
-  font-weight: ${Styles.fontWeights.semiBold};
-  
   ${Styles.transition};
+  color: ${(props: ThemeProps) => props.theme.primaryMain};
+  font-size: ${Styles.pxAsRem.sixteen};
+  font-weight: ${Styles.fontWeights.semiBold};
 
   @media (hover: hover) {
     :hover {
-      color: ${(props: ThemeProps) => props.theme.secondaryDark};
+      color: ${(props: ThemeProps) => props.theme.primaryDark};
     }
   }
 `;
@@ -172,14 +172,15 @@ export const Verification = (props: Props) => {
           </ResendButton>
         </Caption>
 
-        <Globals.PrimaryButton
+        <Globals.Button
           type="submit"
           disabled={verificationCode.value === ""}
-          size="medium"
-          borderRadius="four"
+          size="large"
+          borderRadius="six"
+          primary
         >
           Confirm
-        </Globals.PrimaryButton>
+        </Globals.Button>
       </Form>
     </Container>
   );

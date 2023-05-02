@@ -1,96 +1,87 @@
 export const text = {
+  dark: "#E8E8E8",
   light: "#262626",
-  dark: "#CECECE",
   button: "#FFFFFF",
 };
 
 export const background = {
+  dark: {
+    one: "#141414",
+    two: "#1A1A1A",
+    three: "#1F1F1F",
+    four: "#262626",
+    five: "#2B2B2B",
+    six: "#363636",
+    seven: "#545454",
+    eight: "#616161",
+    nine: "#929292",
+    ten: "#A3A3A3",
+  },
   light: {
     one: "#FFFFFF",
-    two: "#FCFCFC",
+    two: "#FAFAFA",
     three: "#F5F5F5",
-    four: "#F0F0F0",
-    five: "#E6E6E6",
-    six: "#C4C4C4",
-    seven: "#B7B7B7",
-    eight: "#757575",
+    four: "#EBEBEB",
+    five: "#E0E0E0",
+    six: "#C7C7C7",
+    seven: "#B8B8B8",
+    eight: "#ADADAD",
+    nine: "#858585",
+    ten: "#707070",
   },
-  dark: {
-    one: "#171717",
-    two: "#1A1A1A",
-    three: "#262626",
-    four: "#2B2B2B",
-    five: "#363636",
-    six: "#545454",
-    seven: "#616161",
-    eight: "#A3A3A3",
-  },
-};
-
-export const pending = {
-  light: "#A3B4C2",
-  dark: "#46759D",
-};
-
-export const success = {
-  light: "#2CD379",
-  dark: "#117B68",
-};
-
-export const failure = {
-  light: "#EA2A2A",
-  dark: "#BC5454",
-};
-
-export const warning = {
-  light: "#F4BF58",
-  dark: "#E4A427",
 };
 
 export const primary = {
+  dark: {
+    lighter: "#1CB590",
+    main: "#189D7D",
+    darker: "#148066",
+  },
   light: {
     lighter: "#9CE3D1",
     main: "#4CCCAD",
     darker: "#278B73",
   },
-  dark: {
-    lighter: "#38E1B8",
-    main: "#189D7D",
-    darker: "#0A4235",
-  },
-};
-
-export const secondary = {
-  light: {
-    lighter: "#C3DFF9",
-    main: "#68AEEF",
-    darker: "#177BD9",
-  },
-  dark: {
-    lighter: "#9BB6CF",
-    main: "#5784AF",
-    darker: "#405F7C",
-  },
 };
 
 export const need = {
-  light: "#4BC320",
   dark: "#6CBC4F",
+  light: "#4EC025",
 };
 
 export const planned = {
-  light: "#9246CE",
-  dark: "#AD66E5",
+  dark: "#67A8E4",
+  light: "#348EE0",
 };
 
 export const impulse = {
-  light: "#EE8320",
   dark: "#C8803E",
+  light: "#E77B18",
 };
 
 export const regret = {
-  light: "#E254A9",
   dark: "#C469A0",
+  light: "#CE3575",
+};
+
+export const pending = {
+  dark: "#46759D",
+  light: "#A3B4C2",
+};
+
+export const success = {
+  dark: "#117B68",
+  light: "#2CD379",
+};
+
+export const failure = {
+  dark: "#E05959",
+  light: "#EA2A2A",
+};
+
+export const warning = {
+  dark: "#E4A427",
+  light: "#F4BF58",
 };
 
 export const shadow = {
@@ -110,7 +101,6 @@ export const shadow = {
   },
 };
 
-// export const overlay = "box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.7)";
 export const overlay = "background-color: rgba(0, 0, 0, 0.7)";
 
 export const shadowOverlay = {

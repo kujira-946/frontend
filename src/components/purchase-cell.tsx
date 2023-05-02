@@ -70,6 +70,7 @@ type CategoryButtonProps = {
 
 const CategoryButton = styled.button<CategoryButtonProps & ThemeProps>`
   ${Styles.clearButton};
+  ${Styles.transition};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -87,7 +88,6 @@ const CategoryButton = styled.button<CategoryButtonProps & ThemeProps>`
   font-size: ${Styles.pxAsRem.ten};
   font-weight: ${Styles.fontWeights.semiBold};
 
-  ${Styles.transition};
 
   @media (hover: hover) {
     :hover {

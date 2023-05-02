@@ -42,19 +42,19 @@ const Container = styled(motion.main)<ContainerProps>`
 
 const Title = styled.h1`
   margin: 0;
-  font-size: ${Styles.pxAsRem.sixteen};
+  font-size: ${Styles.pxAsRem.eighteen};
   font-weight: ${Styles.fontWeights.bold};
 `;
 
 const Body = styled.p`
   margin: 0;
-  font-size: ${Styles.pxAsRem.fourteen};
+  font-size: ${Styles.pxAsRem.sixteen};
   font-weight: ${Styles.fontWeights.medium};
 `;
 
 const Footnote = styled.p`
   margin: 0;
-  font-size: ${Styles.pxAsRem.ten};
+  font-size: ${Styles.pxAsRem.twelve};
   font-weight: ${Styles.fontWeights.semiBold};
 `;
 

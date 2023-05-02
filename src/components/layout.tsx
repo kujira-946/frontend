@@ -198,20 +198,19 @@ type ThemeContents = {
   backgroundSix: string;
   backgroundSeven: string;
   backgroundEight: string;
-  pending: string;
-  success: string;
-  failure: string;
-  warning: string;
+  backgroundNine: string;
+  backgroundTen: string;
   primaryLight: string;
   primaryMain: string;
   primaryDark: string;
-  secondaryLight: string;
-  secondaryMain: string;
-  secondaryDark: string;
   need: string;
   planned: string;
   impulse: string;
   regret: string;
+  pending: string;
+  success: string;
+  failure: string;
+  warning: string;
   shadowOne: string;
   shadowTwo: string;
   shadowThree: string;
@@ -221,42 +220,11 @@ type ThemeContents = {
 };
 
 type Themes = {
-  light: ThemeContents;
   dark: ThemeContents;
+  light: ThemeContents;
 };
 
 const themes: Themes = {
-  light: {
-    text: Styles.text.light,
-    backgroundOne: Styles.background.light.one,
-    backgroundTwo: Styles.background.light.two,
-    backgroundThree: Styles.background.light.three,
-    backgroundFour: Styles.background.light.four,
-    backgroundFive: Styles.background.light.five,
-    backgroundSix: Styles.background.light.six,
-    backgroundSeven: Styles.background.light.seven,
-    backgroundEight: Styles.background.light.eight,
-    pending: Styles.pending.light,
-    success: Styles.success.light,
-    failure: Styles.failure.light,
-    warning: Styles.warning.light,
-    primaryLight: Styles.primary.light.lighter,
-    primaryMain: Styles.primary.light.main,
-    primaryDark: Styles.primary.light.darker,
-    secondaryLight: Styles.secondary.light.lighter,
-    secondaryMain: Styles.secondary.light.main,
-    secondaryDark: Styles.secondary.light.darker,
-    need: Styles.need.light,
-    planned: Styles.planned.light,
-    impulse: Styles.impulse.light,
-    regret: Styles.regret.light,
-    shadowOne: Styles.shadow.light.one,
-    shadowTwo: Styles.shadow.light.two,
-    shadowThree: Styles.shadow.light.three,
-    shadowFour: Styles.shadow.light.four,
-    shadowFive: Styles.shadow.light.five,
-    shadowOverlay: Styles.shadowOverlay.light,
-  },
   dark: {
     text: Styles.text.dark,
     backgroundOne: Styles.background.dark.one,
@@ -267,26 +235,55 @@ const themes: Themes = {
     backgroundSix: Styles.background.dark.six,
     backgroundSeven: Styles.background.dark.seven,
     backgroundEight: Styles.background.dark.eight,
-    pending: Styles.pending.dark,
-    success: Styles.success.dark,
-    failure: Styles.failure.dark,
-    warning: Styles.warning.dark,
+    backgroundNine: Styles.background.dark.nine,
+    backgroundTen: Styles.background.dark.ten,
     primaryLight: Styles.primary.dark.lighter,
     primaryMain: Styles.primary.dark.main,
     primaryDark: Styles.primary.dark.darker,
-    secondaryLight: Styles.secondary.dark.lighter,
-    secondaryMain: Styles.secondary.dark.main,
-    secondaryDark: Styles.secondary.dark.darker,
     need: Styles.need.dark,
     planned: Styles.planned.dark,
     impulse: Styles.impulse.dark,
     regret: Styles.regret.dark,
+    pending: Styles.pending.dark,
+    success: Styles.success.dark,
+    failure: Styles.failure.dark,
+    warning: Styles.warning.dark,
     shadowOne: Styles.shadow.dark.one,
     shadowTwo: Styles.shadow.dark.two,
     shadowThree: Styles.shadow.dark.three,
     shadowFour: Styles.shadow.dark.four,
     shadowFive: Styles.shadow.dark.five,
     shadowOverlay: Styles.shadowOverlay.dark,
+  },
+  light: {
+    text: Styles.text.light,
+    backgroundOne: Styles.background.light.one,
+    backgroundTwo: Styles.background.light.two,
+    backgroundThree: Styles.background.light.three,
+    backgroundFour: Styles.background.light.four,
+    backgroundFive: Styles.background.light.five,
+    backgroundSix: Styles.background.light.six,
+    backgroundSeven: Styles.background.light.seven,
+    backgroundEight: Styles.background.light.eight,
+    backgroundNine: Styles.background.light.nine,
+    backgroundTen: Styles.background.light.ten,
+    primaryLight: Styles.primary.light.lighter,
+    primaryMain: Styles.primary.light.main,
+    primaryDark: Styles.primary.light.darker,
+    need: Styles.need.light,
+    planned: Styles.planned.light,
+    impulse: Styles.impulse.light,
+    regret: Styles.regret.light,
+    pending: Styles.pending.light,
+    success: Styles.success.light,
+    failure: Styles.failure.light,
+    warning: Styles.warning.light,
+    shadowOne: Styles.shadow.light.one,
+    shadowTwo: Styles.shadow.light.two,
+    shadowThree: Styles.shadow.light.three,
+    shadowFour: Styles.shadow.light.four,
+    shadowFive: Styles.shadow.light.five,
+    shadowOverlay: Styles.shadowOverlay.light,
   },
 };
 

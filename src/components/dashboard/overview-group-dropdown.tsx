@@ -22,6 +22,7 @@ type ContainerProps = {
 };
 
 const Container = styled.section<ContainerProps>`
+  ${Styles.transition};
   position: relative;
   width: 100%;
   border: ${(props: ThemeProps & ContainerProps) => {
@@ -35,8 +36,6 @@ const Container = styled.section<ContainerProps>`
       : Styles.pxAsRem.six;
   }};
   overflow-y: auto;
-
-  ${Styles.transition};
 
   @media (hover: hover) {
     :hover {
