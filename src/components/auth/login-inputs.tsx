@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Signal, useSignal } from "@preact/signals-react";
+import { Signal } from "@preact/signals-react";
 
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
@@ -34,16 +34,11 @@ export const LoginInputs = (props: Props) => {
   const dispatch = useAppDispatch();
   const { auth } = Selectors.useErrorsSlice();
 
-  const hidden = useSignal(true);
-
   return (
     <Container>
       {/* Email */}
-      <Globals.Input
-        borderRadius="four"
+      <Globals.FormInput
         type="email"
-        title="*Email"
-        errorMessage={auth.includes("register") ? auth : props.emailError.value}
         userInput={props.email.value}
         setUserInput={(event: Types.Input) => {
           props.email.value = event.currentTarget.value;
@@ -51,24 +46,24 @@ export const LoginInputs = (props: Props) => {
             dispatch(Redux.errorsActions.setAuth(""));
           }
         }}
+        placeholder="*Email"
+        errorMessage={auth.includes("register") ? auth : props.emailError.value}
+        borderRadius="six"
         required
       />
 
       {/* Password */}
-      <Globals.Input
-        borderRadius="four"
-        type={hidden.value ? "password" : "text"}
-        title="*Password"
-        errorMessage={
-          auth.includes("password") ? auth : props.passwordError.value
-        }
+      <Globals.FormInput
+        type="password"
         userInput={props.password.value}
         setUserInput={(event: Types.Input) =>
           (props.password.value = event.currentTarget.value)
         }
-        hidden={hidden.value}
-        toggleHidden={() => (hidden.value = !hidden.value)}
-        password
+        placeholder="*Password"
+        errorMessage={
+          auth.includes("password") ? auth : props.passwordError.value
+        }
+        borderRadius="six"
         required
       />
     </Container>

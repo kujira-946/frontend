@@ -38,20 +38,28 @@ const Onboarding = () => {
       Number(income.value) &&
       Number(savings.value)
     ) {
-      dispatch(Redux.uiActions.setLoadingUsers(true));
-      dispatch(
-        onboardNewUserRequest(
-          overview.id,
-          Number(income.value),
-          Number(savings.value),
-          currentUser.id
-        )
-      );
+      Functions.consoleLog(overview.id);
+      Functions.consoleLog(income.value);
+      Functions.consoleLog(savings.value);
+      Functions.consoleLog(currentUser.id);
+
+      // dispatch(Redux.uiActions.setLoadingUsers(true));
+      // dispatch(
+      //   onboardNewUserRequest(
+      //     overview.id,
+      //     Number(income.value),
+      //     Number(savings.value),
+      //     currentUser.id
+      //   )
+      // );
     }
   }
 
   function toNextPage(): void {
     if (currentPage.value + 1 <= Constants.onboardingCopies.length) {
+      if (currentPage.value === 2 && Number(income.value)) {
+        income.value = Functions.roundNumber(Number(income.value), 2);
+      }
       currentPage.value += 1;
     } else {
       completeOnboarding();
@@ -72,18 +80,21 @@ const Onboarding = () => {
     );
   }, []);
 
+  // ↓↓↓ Auth redirection ↓↓↓ //
   useEffect(() => {
     if (currentUser && currentUser.onboarded) {
       router.push(Constants.ClientRoutes.LOGBOOKS);
     }
   }, [currentUser]);
 
+  // ↓↓↓ Fetching over's overview ↓↓↓ //
   useEffect(() => {
     if (currentUser && !overview) {
       dispatch(OverviewsSagas.fetchUserOverviewRequest(currentUser.id));
     }
   }, [currentUser, overview]);
 
+  // ↓↓↓ Fetching user overview's overview groups ↓↓↓ //
   useEffect(() => {
     if (overview && !overviewGroups) {
       dispatch(Redux.uiActions.setLoadingOverviewGroups(true));

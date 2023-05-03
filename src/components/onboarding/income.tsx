@@ -43,6 +43,7 @@ export const Income = (props: Props) => {
 
   return (
     <Globals.FormInput
+      type="text"
       userInput={props.income.value}
       setUserInput={(event: Types.Input): void => {
         props.income.value = event.currentTarget.value;
@@ -52,6 +53,7 @@ export const Income = (props: Props) => {
       onBlur={onBlur}
       borderRadius="six"
       isCost
+      required
     />
   );
 };

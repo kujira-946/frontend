@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useRef } from "react";
+import { FocusEvent, useRef } from "react";
 import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -24,6 +24,7 @@ const Container = styled.section<ContainerProps>`
   display: flex;
   flex-direction: column;
   gap: ${Styles.pxAsRem.four};
+  width: 100%;
   padding: ${Styles.pxAsRem.twelve};
   background-color: ${(props: ContainerProps & ThemeProps) => {
     return props.focused
@@ -33,6 +34,8 @@ const Container = styled.section<ContainerProps>`
   border: ${(props: ContainerProps & ThemeProps) => {
     return props.error
       ? `${props.theme.failure} solid 1px`
+      : props.focused
+      ? `${props.theme.backgroundSix} solid 1px`
       : `${props.theme.backgroundFour} solid 1px`;
   }};
   cursor: pointer;
@@ -97,6 +100,7 @@ const Input = styled.input`
 // ========================================================================================= //
 
 type Props = {
+  type: "text" | "email" | "password";
   userInput: string;
   setUserInput: (event: Types.Input) => void;
   placeholder: string;
@@ -107,7 +111,7 @@ type Props = {
 
   borderRadius: Types.PxAsRem;
   isCost?: true;
-  isPassword?: true;
+  required?: true;
 };
 
 export const FormInput = (props: Props) => {
@@ -163,7 +167,11 @@ export const FormInput = (props: Props) => {
           <Input
             ref={inputRef}
             type={
-              props.isPassword ? (show.value ? "text" : "password") : "text"
+              props.type === "password"
+                ? show.value
+                  ? "text"
+                  : "password"
+                : props.type
             }
             value={props.userInput}
             placeholder={props.placeholder}
@@ -172,14 +180,16 @@ export const FormInput = (props: Props) => {
               focused.value = false;
               if (props.onBlur) props.onBlur();
             }}
-            onFocus={(): void => {
+            onFocus={(event: FocusEvent<HTMLInputElement>): void => {
+              event.currentTarget.select();
               focused.value = true;
               if (props.onFocus) props.onFocus();
             }}
+            required={props.required}
           />
         </InputContainer>
 
-        {props.isPassword &&
+        {props.type === "password" &&
           theme.value &&
           (show.value ? (
             <Globals.IconContainer onClick={() => (show.value = false)}>

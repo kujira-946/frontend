@@ -51,6 +51,7 @@ export const Savings = (props: Props) => {
 
   return (
     <Globals.FormInput
+      type="text"
       userInput={props.savings.value}
       setUserInput={(event: Types.Input): void => {
         props.savings.value = event.currentTarget.value;
@@ -58,6 +59,7 @@ export const Savings = (props: Props) => {
       placeholder={`Savings(%) ${calculateIncomeSaved()}`}
       errorMessage={errorMessage.value}
       borderRadius="six"
+      required
     />
   );
 };

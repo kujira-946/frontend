@@ -25,31 +25,19 @@ export const Purchases = (props: Props) => {
 
   if (loadingOverviewGroups) {
     return <Globals.Shimmer borderRadius="four" height={200} />;
-  } else {
+  } else if (overviewGroup) {
     return (
       <Dropdowns.PurchaseDropdown
         type="overview"
         title={`${props.type} ${purchases?.length || ""}`}
-        totalSpent={overviewGroup?.totalSpent || 0}
-        associationId={props.overviewGroupId}
+        associationId={overviewGroup.id}
+        associationTotalSpent={overviewGroup.totalSpent}
+        purchases={purchases || []}
         deleteSelectedPurchases={() => console.log("delete selected purchases")}
         deleteAllPurchases={props.deleteAllPurchases}
         addPurchase={props.addPurchase}
         startOpened
-      >
-        {/* <div>Purchase</div> */}
-        <Globals.PurchaseCellNew
-          description="Foo"
-          setDescription={() => console.log("Set Description")}
-          cost="Bar"
-          setCost={() => console.log("Set Cost")}
-          deletePurchase={() => console.log("Delete Purchase")}
-          showDrag
-          showCheck
-          showCategories
-          showDelete
-        />
-      </Dropdowns.PurchaseDropdown>
+      />
 
       // <Dashboard.OverviewGroupDropdown
       //   borderRadius="four"
@@ -60,5 +48,7 @@ export const Purchases = (props: Props) => {
       //   initiallyOpen
       // />
     );
+  } else {
+    return null;
   }
 };

@@ -37,8 +37,6 @@ export const RegisterInputs = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
   const { auth } = Functions.useErrorsSlice();
 
-  const hidden = useSignal(true);
-
   effect(() => {
     // Username error check
     if (props.username.value !== "") {
@@ -69,11 +67,8 @@ export const RegisterInputs = (props: Props) => {
   return (
     <Container>
       {/* Email */}
-      <Globals.Input
-        borderRadius="four"
+      <Globals.FormInput
         type="email"
-        title="*Email"
-        errorMessage={auth.includes("email") ? auth : props.emailError.value}
         userInput={props.email.value}
         setUserInput={(event: Types.Input) => {
           props.email.value = event.currentTarget.value;
@@ -81,16 +76,15 @@ export const RegisterInputs = (props: Props) => {
             dispatch(Redux.errorsActions.setAuth(""));
           }
         }}
+        placeholder="*Email"
+        errorMessage={auth.includes("email") ? auth : props.emailError.value}
+        borderRadius="six"
         required
       />
 
       {/* Username */}
-      <Globals.Input
-        borderRadius="four"
-        title="*Username"
-        errorMessage={
-          auth.includes("username") ? auth : props.usernameError.value
-        }
+      <Globals.FormInput
+        type="text"
         userInput={props.username.value}
         setUserInput={(event: Types.Input) => {
           props.username.value = event.currentTarget.value;
@@ -98,38 +92,37 @@ export const RegisterInputs = (props: Props) => {
             dispatch(Redux.errorsActions.setAuth(""));
           }
         }}
+        placeholder="*Username"
+        errorMessage={
+          auth.includes("username") ? auth : props.usernameError.value
+        }
+        borderRadius="six"
         required
       />
 
       {/* Password */}
-      <Globals.Input
-        borderRadius="four"
-        type={hidden.value ? "password" : "text"}
-        title="*Password"
-        errorMessage={props.passwordError.value}
+      <Globals.FormInput
+        type="password"
         userInput={props.password.value}
         setUserInput={(event: Types.Input) =>
           (props.password.value = event.currentTarget.value)
         }
-        hidden={hidden.value}
-        toggleHidden={() => (hidden.value = !hidden.value)}
-        password
+        placeholder="*Password"
+        errorMessage={props.passwordError.value}
+        borderRadius="six"
         required
       />
 
       {/* Confirm Password */}
-      <Globals.Input
-        borderRadius="four"
-        type={hidden.value ? "password" : "text"}
-        title="*Confirm Password"
-        errorMessage={props.confirmPasswordError.value}
+      <Globals.FormInput
+        type="password"
         userInput={props.confirmPassword.value}
         setUserInput={(event: Types.Input) =>
           (props.confirmPassword.value = event.currentTarget.value)
         }
-        hidden={hidden.value}
-        toggleHidden={() => (hidden.value = !hidden.value)}
-        password
+        placeholder="*Confirm Password"
+        errorMessage={props.confirmPasswordError.value}
+        borderRadius="six"
         required
       />
     </Container>

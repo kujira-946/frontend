@@ -1,9 +1,17 @@
 import styled, { css } from "styled-components";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
+import * as Globals from "@/components";
+import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
+import * as Types from "@/utils/types";
+import {
+  deletePurchaseRequest,
+  fetchLogbookEntryPurchasesRequest,
+  fetchOverviewGroupPurchasesRequest,
+} from "@/sagas/purchases.saga";
 import { ThemeProps } from "../layout";
 
 import { OverviewHeader } from "./overview-header";
@@ -18,6 +26,7 @@ type ContainerProps = { open: boolean };
 const Container = styled.section<ContainerProps>`
   display: flex;
   flex-direction: column;
+  gap: ${Styles.pxAsRem.twelve};
   border: ${(props: ContainerProps & ThemeProps) => {
     return props.open
       ? `${props.theme.backgroundEight} solid 1px`
@@ -39,6 +48,9 @@ const Header = styled.button<HeaderProps>`
 `;
 
 const Body = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  gap: ${Styles.pxAsRem.twelve};
   padding: 0 ${Styles.pxAsRem.twelve};
 `;
 
@@ -46,7 +58,6 @@ const PurchaseCells = styled.article`
   display: flex;
   flex-direction: column;
   gap: ${Styles.pxAsRem.four};
-  padding: ${Styles.pxAsRem.twelve};
 `;
 
 const Buttons = styled.article`
@@ -64,6 +75,8 @@ const buttonStyles = css`
   align-items: center;
   padding: ${Styles.pxAsRem.eight} ${Styles.pxAsRem.fourteen};
   border-radius: ${Styles.pxAsRem.six};
+  font-size: ${Styles.pxAsRem.fourteen};
+  font-weight: ${Styles.fontWeights.semiBold};
 `;
 
 const DeleteButton = styled.button`
@@ -73,7 +86,7 @@ const DeleteButton = styled.button`
 
   @media (hover: hover) {
     :hover {
-      color: ${(props: ThemeProps) => props.theme.text};
+      color: ${(props: ThemeProps) => props.theme.backgroundTen};
       border: ${(props: ThemeProps) => {
         return `${props.theme.backgroundEight} solid 1px;`;
       }};
@@ -101,18 +114,22 @@ const AddButton = styled.button`
 type Props = {
   type: "overview" | "logbook";
   title: string;
-  totalSpent: number;
   associationId: number; // overview group or logbook entry
+  associationTotalSpent: number;
+  purchases: Types.Purchase[];
+
   deleteSelectedPurchases: (purchaseIds: number[]) => void;
   deleteAllPurchases: (associationId: number) => void;
   addPurchase: (associationId: number) => void;
+
   startOpened?: true;
-  children: React.ReactNode;
 };
 
 type PurchaseIds = { [key: string]: number };
 
 export const PurchaseDropdown = (props: Props) => {
+  const dispatch = Functions.useAppDispatch();
+
   const open = useSignal(props.startOpened || false);
   const selectedPurchases = useSignal<PurchaseIds>({});
 
@@ -124,6 +141,27 @@ export const PurchaseDropdown = (props: Props) => {
     }
   }, []);
 
+  const deletePurchase = useCallback((purchaseId: number): void => {
+    dispatch(
+      deletePurchaseRequest(purchaseId, {
+        logbookEntry: {
+          id: props.associationId,
+          totalSpent: props.associationTotalSpent,
+        },
+      })
+    );
+  }, []);
+
+  useEffect(() => {
+    if (open.value) {
+      if (props.type === "overview") {
+        dispatch(fetchOverviewGroupPurchasesRequest(props.associationId));
+      } else {
+        dispatch(fetchLogbookEntryPurchasesRequest(props.associationId));
+      }
+    }
+  }, [open.value]);
+
   return (
     <Container open={open.value}>
       <Header
@@ -132,7 +170,10 @@ export const PurchaseDropdown = (props: Props) => {
         open={open.value}
       >
         {props.type === "overview" ? (
-          <OverviewHeader title={props.title} totalSpent={props.totalSpent} />
+          <OverviewHeader
+            title={props.title}
+            totalSpent={props.associationTotalSpent}
+          />
         ) : (
           <LogbookHeader />
         )}
@@ -141,7 +182,32 @@ export const PurchaseDropdown = (props: Props) => {
       <AnimatePresence>
         {open.value && (
           <Body>
-            <PurchaseCells>{props.children}</PurchaseCells>
+            {props.purchases.length > 0 && (
+              <PurchaseCells>
+                {props.purchases.map(
+                  (purchase: Types.Purchase, index: number) => {
+                    return (
+                      <Globals.PurchaseCellNew
+                        key={`${props.type}-purchase-dropdown-purchases-${purchase.id}-${index}`}
+                        purchaseId={purchase.id}
+                        selectAction={
+                          props.type === "logbook" ? selectPurchase : undefined
+                        }
+                        description={purchase.description}
+                        setDescription={() => console.log("Set Description")}
+                        cost={purchase.cost ? purchase.cost.toString() : ""}
+                        setCost={() => console.log("Set Cost")}
+                        deletePurchase={deletePurchase}
+                        showDrag={props.type === "logbook"}
+                        showCheck={props.type === "logbook"}
+                        showCategories={props.type === "logbook"}
+                        showDelete
+                      />
+                    );
+                  }
+                )}
+              </PurchaseCells>
+            )}
 
             <Buttons>
               {Object.keys(selectedPurchases.value).length > 0 && (

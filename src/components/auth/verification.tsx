@@ -154,14 +154,15 @@ export const Verification = (props: Props) => {
       </Header>
 
       <Form onSubmit={submitVerificationCode}>
-        <Globals.Input
-          borderRadius="four"
-          title="Enter verification code"
-          errorMessage={verificationCodeError.value}
+        <Globals.FormInput
+          type="text"
           userInput={verificationCode.value}
           setUserInput={(event: Types.Input) => {
             verificationCode.value = event.currentTarget.value;
           }}
+          placeholder="Enter verification code"
+          errorMessage={verificationCodeError.value}
+          borderRadius="six"
           required
         />
 

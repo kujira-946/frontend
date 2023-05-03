@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import TextareaAutosize from "react-textarea-autosize";
+import { FocusEvent, useRef } from "react";
+import { useSignal } from "@preact/signals-react";
 
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { ThemeProps } from "./layout";
-import { useSignal } from "@preact/signals-react";
-import { FocusEvent, useRef } from "react";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -105,7 +105,7 @@ type Props = {
   userInput: string;
   setUserInput: (event: Types.Input) => void;
   placeholder: string;
-  errorMessage?: string;
+  error?: boolean;
 
   onFocus?: () => void;
   onBlur?: () => void;
@@ -118,10 +118,9 @@ type Props = {
 
 export const MiniInput = (props: Props) => {
   const textareaRef = useRef<any>(null);
-  const userInput = useSignal(props.userInput);
   const focused = useSignal(false);
 
-  function preventEnterKey(event: Types.KeyPress): void {
+  function preventEnterPress(event: Types.KeyPress): void {
     if (event.key === "Enter") event.preventDefault();
   }
 
@@ -134,15 +133,16 @@ export const MiniInput = (props: Props) => {
       }}
       type={props.type}
       focused={focused.value}
-      hasContent={userInput.value.length > 0}
-      error={!!props.errorMessage}
+      hasContent={props.userInput.length > 0}
+      error={!!props.error}
       frozen={props.frozen}
     >
       {props.isCost && props.userInput.length > 0 && "$"}
       <Textarea
         ref={textareaRef}
-        value={userInput.value}
+        value={props.userInput}
         placeholder={props.placeholder}
+        tabIndex={props.frozen ? -1 : 0}
         onChange={props.setUserInput}
         onFocus={(event: FocusEvent<HTMLTextAreaElement>) => {
           event.currentTarget.select();
@@ -153,7 +153,7 @@ export const MiniInput = (props: Props) => {
           focused.value = false;
           if (props.onBlur) props.onBlur();
         }}
-        onKeyPress={preventEnterKey}
+        onKeyPress={preventEnterPress}
         type={props.type}
         style={{
           borderRadius: props.borderRadius
