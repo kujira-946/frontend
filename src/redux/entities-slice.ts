@@ -452,7 +452,11 @@ const entitiesSlice = createSlice({
           }
         }
         delete purchasesCopy[action.payload];
-        state.purchases = purchasesCopy;
+        if (Object.keys(purchasesCopy).length === 0) {
+          state.purchases = null;
+        } else {
+          state.purchases = purchasesCopy;
+        }
       }
     },
     bulkDeletePurchases: (
@@ -478,12 +482,21 @@ const entitiesSlice = createSlice({
           }
           state.logbookEntries = updatedLogbookEntries;
         }
-        state.purchases = purchasesCopy;
+
+        for (const purchaseId of action.payload) {
+          delete purchasesCopy[purchaseId];
+        }
+        if (Object.keys(purchasesCopy).length === 0) {
+          state.purchases = null;
+        } else {
+          state.purchases = purchasesCopy;
+        }
       }
     },
     deleteAssociatedPurchases: (
       state: EntitiesState,
       action: PayloadAction<{
+        purchaseIds: number[];
         overviewGroupId?: number;
         logbookEntryId?: number;
       }>
@@ -491,6 +504,10 @@ const entitiesSlice = createSlice({
       if (state.purchases) {
         const updatedPurchases = Functions.deepCopy(state.purchases);
         const { overviewGroupId, logbookEntryId } = action.payload;
+        for (const purchaseId of action.payload.purchaseIds) {
+          delete updatedPurchases[purchaseId];
+        }
+
         // ↓↓↓ Overview Groups ↓↓↓ //
         if (overviewGroupId && state.overviewGroups) {
           if (overviewGroupId) {
@@ -522,6 +539,11 @@ const entitiesSlice = createSlice({
               state.logbookEntries = updatedLogbookEntries;
             }
           }
+        }
+        if (Object.keys(updatedPurchases).length === 0) {
+          state.purchases = null;
+        } else {
+          state.purchases = updatedPurchases;
         }
       }
     },

@@ -1,7 +1,6 @@
 import * as Drag from "react-beautiful-dnd";
 
 import * as Globals from "@/components";
-import * as Dashboard from "@/components/dashboard";
 import * as Dropdowns from "@/components/dropdowns";
 import * as Functions from "@/utils/functions";
 
@@ -12,7 +11,7 @@ type Props = {
     result: Drag.DropResult,
     provided: Drag.ResponderProvided
   ) => void;
-  deleteAllPurchases: (overviewGroupId: number) => void;
+  deleteAllPurchases: (purchaseIds: number[], overviewGroupId: number) => void;
   addPurchase: (overviewGroupId: number) => void;
 };
 
@@ -29,24 +28,17 @@ export const Purchases = (props: Props) => {
     return (
       <Dropdowns.PurchaseDropdown
         type="overview"
-        title={`${props.type} ${purchases?.length || ""}`}
+        title={`${props.type} ${
+          purchases && purchases.length ? `(${purchases.length})` : ""
+        }`}
         associationId={overviewGroup.id}
         associationTotalSpent={overviewGroup.totalSpent}
         purchases={purchases || []}
-        deleteSelectedPurchases={() => console.log("delete selected purchases")}
+        purchaseIds={overviewGroup.purchaseIds || []}
         deleteAllPurchases={props.deleteAllPurchases}
         addPurchase={props.addPurchase}
         startOpened
       />
-
-      // <Dashboard.OverviewGroupDropdown
-      //   borderRadius="four"
-      //   overviewGroupId={props.overviewGroupId}
-      //   onDragEnd={props.onDragEnd}
-      //   deleteAllPurchases={props.deleteAllPurchases}
-      //   addPurchase={props.addPurchase}
-      //   initiallyOpen
-      // />
     );
   } else {
     return null;

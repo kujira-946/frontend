@@ -176,14 +176,14 @@ export const FormInput = (props: Props) => {
             value={props.userInput}
             placeholder={props.placeholder}
             onChange={props.setUserInput}
-            onBlur={(): void => {
-              focused.value = false;
-              if (props.onBlur) props.onBlur();
-            }}
             onFocus={(event: FocusEvent<HTMLInputElement>): void => {
               event.currentTarget.select();
               focused.value = true;
               if (props.onFocus) props.onFocus();
+            }}
+            onBlur={(): void => {
+              focused.value = false;
+              if (props.onBlur) props.onBlur();
             }}
             required={props.required}
           />

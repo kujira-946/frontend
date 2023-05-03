@@ -37,7 +37,9 @@ export function calculateNewTotalSpent(
 }
 
 export function updatePurchase(
-  purchase: Types.Purchase,
+  purchaseId: number,
+  purchaseDescription: string,
+  purchaseCost: number,
   description: string,
   cost: string,
   association: "overviewGroup" | "logbookEntry",
@@ -46,16 +48,16 @@ export function updatePurchase(
   dispatch: any
 ) {
   // On purchase description update.
-  if (description !== purchase.description) {
-    dispatch(updatePurchaseRequest(purchase.id, { description }));
+  if (description !== purchaseDescription) {
+    dispatch(updatePurchaseRequest(purchaseId, { description }));
   }
   // On purchase cost update.
-  if (Number(cost) && Number(cost) !== purchase.cost) {
+  if (Number(cost) && Number(cost) !== purchaseCost) {
     const formattedCost = Number(Functions.roundNumber(Number(cost), 2));
     const purchaseUpdateData = { cost: formattedCost };
     const newTotalSpent = calculateNewTotalSpent(
       associationTotalSpent,
-      purchase.cost || 0,
+      purchaseCost,
       Number(cost)
     );
     const associationUpdateData = {
@@ -63,7 +65,7 @@ export function updatePurchase(
     };
     dispatch(
       updatePurchaseRequest(
-        purchase.id,
+        purchaseId,
         purchaseUpdateData,
         associationUpdateData
       )
@@ -72,27 +74,24 @@ export function updatePurchase(
 }
 
 export function deletePurchase(
-  purchase: Types.Purchase,
+  purchaseId: number,
+  purchaseCost: number,
   association: "overviewGroup" | "logbookEntry",
   associationId: number,
   associationTotalSpent: number,
   dispatch: any
 ) {
-  if (purchase.cost) {
-    const newTotalSpent = calculateNewTotalSpent(
-      associationTotalSpent,
-      purchase.cost,
-      0
-    );
-    dispatch(
-      deletePurchaseRequest(purchase.id, {
-        [association]: {
-          id: associationId,
-          totalSpent: newTotalSpent,
-        },
-      })
-    );
-  } else {
-    dispatch(deletePurchaseRequest(purchase.id));
-  }
+  const newTotalSpent = calculateNewTotalSpent(
+    associationTotalSpent,
+    purchaseCost,
+    0
+  );
+  dispatch(
+    deletePurchaseRequest(purchaseId, {
+      [association]: {
+        id: associationId,
+        totalSpent: newTotalSpent,
+      },
+    })
+  );
 }

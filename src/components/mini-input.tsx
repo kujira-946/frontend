@@ -29,20 +29,21 @@ const Container = styled.section<ContainerProps>`
   width: 100%;
   padding: 0 ${Styles.pxAsRem.six};
   background-color: ${(props: ContainerProps & ThemeProps) => {
-    if (props.hasContent) return props.theme.backgroundThree;
-    else if (props.frozen) return "transparent";
+    if (props.frozen) return "transparent";
+    else if (props.hasContent) return props.theme.backgroundThree;
+    else if (props.focused) return props.theme.backgroundFour;
     else if (props.type === "large") return props.theme.backgroundOne;
     else return props.theme.backgroundTwo;
   }};
   border: ${(props: ContainerProps & ThemeProps) => {
     if (props.error) {
       return `${props.theme.failure} solid 1px`;
+    } else if (props.frozen) {
+      return "transparent";
     } else if (props.hasContent) {
       return `${props.theme.backgroundThree} solid 1px`;
     } else if (props.focused) {
       return `${props.theme.backgroundSix} solid 1px`;
-    } else if (props.frozen) {
-      return "transparent";
     } else if (props.type === "large") {
       return `${props.theme.backgroundFour} solid 1px`;
     } else {
@@ -87,7 +88,11 @@ const Textarea = styled(TextareaAutosize)<TextareaProps>`
       ? Styles.pxAsRem.sixteen
       : Styles.pxAsRem.fourteen;
   }};
-  font-weight: ${Styles.fontWeights.semiBold};
+  font-weight: ${(props) => {
+    return props.type === "large"
+      ? Styles.fontWeights.semiBold
+      : Styles.fontWeights.regular;
+  }};
   outline: none;
   resize: none;
   cursor: pointer;
@@ -139,10 +144,10 @@ export const MiniInput = (props: Props) => {
     >
       {props.isCost && props.userInput.length > 0 && "$"}
       <Textarea
-        ref={textareaRef}
         value={props.userInput}
         placeholder={props.placeholder}
         tabIndex={props.frozen ? -1 : 0}
+        ref={textareaRef}
         onChange={props.setUserInput}
         onFocus={(event: FocusEvent<HTMLTextAreaElement>) => {
           event.currentTarget.select();

@@ -38,20 +38,15 @@ const Onboarding = () => {
       Number(income.value) &&
       Number(savings.value)
     ) {
-      Functions.consoleLog(overview.id);
-      Functions.consoleLog(income.value);
-      Functions.consoleLog(savings.value);
-      Functions.consoleLog(currentUser.id);
-
-      // dispatch(Redux.uiActions.setLoadingUsers(true));
-      // dispatch(
-      //   onboardNewUserRequest(
-      //     overview.id,
-      //     Number(income.value),
-      //     Number(savings.value),
-      //     currentUser.id
-      //   )
-      // );
+      dispatch(Redux.uiActions.setLoadingUsers(true));
+      dispatch(
+        onboardNewUserRequest(
+          overview.id,
+          Number(income.value),
+          Number(savings.value),
+          currentUser.id
+        )
+      );
     }
   }
 
@@ -68,11 +63,16 @@ const Onboarding = () => {
 
   const onDragEnd = useCallback(Functions.onDragEnd, []);
 
-  const deleteAllPurchases = useCallback((overviewGroupId: number): void => {
-    dispatch(
-      PurchasesSagas.deleteAssociatedPurchasesRequest({ overviewGroupId })
-    );
-  }, []);
+  const deleteAllPurchases = useCallback(
+    (purchaseIds: number[], overviewGroupId: number): void => {
+      dispatch(
+        PurchasesSagas.deleteAssociatedPurchasesRequest(purchaseIds, {
+          overviewGroupId,
+        })
+      );
+    },
+    []
+  );
 
   const addPurchase = useCallback((overviewGroupId: number): void => {
     dispatch(

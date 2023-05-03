@@ -170,15 +170,19 @@ export function batchDeletePurchasesRequest(
 }
 
 type PurchaseAssociationDeleteAction = Types.SagaAction<{
+  purchaseIds: number[];
   association: { overviewGroupId?: number; logbookEntryId?: number };
 }>;
-export function deleteAssociatedPurchasesRequest(association: {
-  overviewGroupId?: number;
-  logbookEntryId?: number;
-}): PurchaseAssociationDeleteAction {
+export function deleteAssociatedPurchasesRequest(
+  purchaseIds: number[],
+  association: {
+    overviewGroupId?: number;
+    logbookEntryId?: number;
+  }
+): PurchaseAssociationDeleteAction {
   return {
     type: PurchasesActionTypes.DELETE_ASSOCIATED_PURCHASES,
-    payload: { association },
+    payload: { purchaseIds, association },
   };
 }
 
@@ -512,12 +516,15 @@ function* bulkDeletePurchases(action: PurchaseBatchDeleteAction) {
 
 function* deleteAssociatedPurchases(action: PurchaseAssociationDeleteAction) {
   try {
-    const { association } = action.payload;
+    const { purchaseIds, association } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/delete-associated-purchases`;
     yield Saga.call(axios.post, endpoint, association);
     // yield Saga.put(Redux.entitiesActions.setPurchases(null));
     yield Saga.put(
-      Redux.entitiesActions.deleteAssociatedPurchases(association)
+      Redux.entitiesActions.deleteAssociatedPurchases({
+        purchaseIds,
+        ...association,
+      })
     );
     if (association.overviewGroupId) {
       yield Saga.put(

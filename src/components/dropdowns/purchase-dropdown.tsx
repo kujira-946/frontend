@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { useCallback, useEffect } from "react";
+import { memo, useCallback, useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -8,7 +8,6 @@ import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import {
-  deletePurchaseRequest,
   fetchLogbookEntryPurchasesRequest,
   fetchOverviewGroupPurchasesRequest,
 } from "@/sagas/purchases.saga";
@@ -117,9 +116,10 @@ type Props = {
   associationId: number; // overview group or logbook entry
   associationTotalSpent: number;
   purchases: Types.Purchase[];
+  purchaseIds: number[];
 
-  deleteSelectedPurchases: (purchaseIds: number[]) => void;
-  deleteAllPurchases: (associationId: number) => void;
+  deleteSelectedPurchases?: (purchaseIds: number[]) => void;
+  deleteAllPurchases: (purchaseIds: number[], associationId: number) => void;
   addPurchase: (associationId: number) => void;
 
   startOpened?: true;
@@ -127,10 +127,10 @@ type Props = {
 
 type PurchaseIds = { [key: string]: number };
 
-export const PurchaseDropdown = (props: Props) => {
+const ExportedComponent = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
-  const open = useSignal(props.startOpened || false);
+  const open = useSignal(!!props.startOpened);
   const selectedPurchases = useSignal<PurchaseIds>({});
 
   const selectPurchase = useCallback((purchaseId: number): void => {
@@ -141,16 +141,44 @@ export const PurchaseDropdown = (props: Props) => {
     }
   }, []);
 
-  const deletePurchase = useCallback((purchaseId: number): void => {
-    dispatch(
-      deletePurchaseRequest(purchaseId, {
-        logbookEntry: {
-          id: props.associationId,
-          totalSpent: props.associationTotalSpent,
-        },
-      })
-    );
-  }, []);
+  const updatePurchase = useCallback(
+    Functions.debounce(
+      (
+        purchaseId: number,
+        purchaseDescription: string,
+        purchaseCost: number,
+        description: string,
+        cost: string
+      ) => {
+        return Functions.updatePurchase(
+          purchaseId,
+          purchaseDescription,
+          purchaseCost,
+          description,
+          cost,
+          props.type === "overview" ? "overviewGroup" : "logbookEntry",
+          props.associationId,
+          props.associationTotalSpent,
+          dispatch
+        );
+      }
+    ),
+    [props.associationTotalSpent]
+  );
+
+  const deletePurchase = useCallback(
+    (purchaseId: number, purchaseCost: number) => {
+      return Functions.deletePurchase(
+        purchaseId,
+        purchaseCost,
+        props.type === "overview" ? "overviewGroup" : "logbookEntry",
+        props.associationId,
+        props.associationTotalSpent,
+        dispatch
+      );
+    },
+    [props.associationTotalSpent]
+  );
 
   useEffect(() => {
     if (open.value) {
@@ -187,16 +215,15 @@ export const PurchaseDropdown = (props: Props) => {
                 {props.purchases.map(
                   (purchase: Types.Purchase, index: number) => {
                     return (
-                      <Globals.PurchaseCellNew
+                      <Globals.PurchaseCell
                         key={`${props.type}-purchase-dropdown-purchases-${purchase.id}-${index}`}
                         purchaseId={purchase.id}
                         selectAction={
                           props.type === "logbook" ? selectPurchase : undefined
                         }
                         description={purchase.description}
-                        setDescription={() => console.log("Set Description")}
-                        cost={purchase.cost ? purchase.cost.toString() : ""}
-                        setCost={() => console.log("Set Cost")}
+                        cost={purchase.cost ? purchase.cost : 0}
+                        updatePurchase={updatePurchase}
                         deletePurchase={deletePurchase}
                         showDrag={props.type === "logbook"}
                         showCheck={props.type === "logbook"}
@@ -210,22 +237,29 @@ export const PurchaseDropdown = (props: Props) => {
             )}
 
             <Buttons>
-              {Object.keys(selectedPurchases.value).length > 0 && (
-                <DeleteButton
-                  type="button"
-                  onClick={() =>
-                    props.deleteSelectedPurchases(
-                      Object.values(selectedPurchases.value)
-                    )
-                  }
-                >
-                  Delete Selected
-                </DeleteButton>
-              )}
+              {Object.keys(selectedPurchases.value).length > 0 &&
+                props.deleteSelectedPurchases && (
+                  <DeleteButton
+                    type="button"
+                    onClick={() => {
+                      if (props.deleteSelectedPurchases)
+                        props.deleteSelectedPurchases(
+                          Object.values(selectedPurchases.value)
+                        );
+                    }}
+                  >
+                    Delete Selected
+                  </DeleteButton>
+                )}
 
               <DeleteButton
                 type="button"
-                onClick={() => props.deleteAllPurchases(props.associationId)}
+                onClick={() =>
+                  props.deleteAllPurchases(
+                    props.purchaseIds,
+                    props.associationId
+                  )
+                }
               >
                 Delete All
               </DeleteButton>
@@ -243,3 +277,5 @@ export const PurchaseDropdown = (props: Props) => {
     </Container>
   );
 };
+
+export const PurchaseDropdown = memo(ExportedComponent);
