@@ -66,11 +66,11 @@ const Spent = styled.span<SpentProps>`
   }};
 `;
 
-const Count = styled.span`
-  color: ${(props: ThemeProps) => props.theme.secondaryMain};
-  font-size: ${Styles.pxAsRem.fourteen};
-  font-weight: ${Styles.fontWeights.semiBold};
-`;
+// const Count = styled.span`
+//   color: ${(props: ThemeProps) => props.theme.secondaryMain};
+//   font-size: ${Styles.pxAsRem.fourteen};
+//   font-weight: ${Styles.fontWeights.semiBold};
+// `;
 
 const Purchases = styled.article`
   display: flex;
@@ -104,7 +104,7 @@ export const ReviewColumn = (props: Props) => {
 
   return (
     <Container>
-      <Header>
+      {/* <Header>
         <Descriptor>
           <Title category={props.category}>{props.category}</Title>
           <Spent>
@@ -141,7 +141,7 @@ export const ReviewColumn = (props: Props) => {
             />
           );
         })}
-      </Purchases>
+      </Purchases> */}
     </Container>
   );
 };

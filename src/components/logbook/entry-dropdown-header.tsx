@@ -254,7 +254,7 @@ export const LogbookEntryDropdownHeader = (props: Props) => {
       onClick={() => (props.opened.value = !props.opened.value)}
       opened={props.opened.value}
     >
-      {headerSections.map((section: (typeof headerSections)[number]) => {
+      {/* {headerSections.map((section: (typeof headerSections)[number]) => {
         return (
           <HeaderSection key={`logbook-entry-dropdown-header-${section}`}>
             <HeaderSectionTitle>{section}</HeaderSectionTitle>
@@ -297,7 +297,7 @@ export const LogbookEntryDropdownHeader = (props: Props) => {
             addHover
           />
         </DeleteButton>
-      )}
+      )} */}
     </Container>
   );
 };

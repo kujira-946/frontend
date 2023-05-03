@@ -8,7 +8,6 @@ export * from "./shimmer";
 export * from "./dropdown-purchases";
 
 export * from "./icon-container";
-export * from "./confirmation-modal";
 export * from "./purchase-cell";
 export * from "./form-input";
 export * from "./mini-input";

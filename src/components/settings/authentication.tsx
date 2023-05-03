@@ -85,7 +85,7 @@ export const Authentication = () => {
 
   return (
     <Container>
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {confirmAccountDelete.value && (
           <DynamicDeleteConfirmation
             title="Are you sure you want to delete your account?"
@@ -102,7 +102,7 @@ export const Authentication = () => {
       <Globals.SubmitButton onClick={logOut}>Log Out</Globals.SubmitButton>
       <DeleteAccountButton onClick={() => (confirmAccountDelete.value = true)}>
         Delete Account
-      </DeleteAccountButton>
+      </DeleteAccountButton> */}
     </Container>
   );
 };

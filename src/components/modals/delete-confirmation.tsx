@@ -110,7 +110,7 @@ export const DeleteConfirmation = (props: Props) => {
       exit={Constants.staticFadeIn.exit}
       transition={Constants.staticFadeIn.transition}
     >
-      <Child
+      {/* <Child
         onClick={(event: Types.OnClick) => event.stopPropagation()}
         borderRadius={props.borderRadius}
       >
@@ -140,7 +140,7 @@ export const DeleteConfirmation = (props: Props) => {
         >
           {props.submitText || "Yes"}
         </Globals.PrimaryButton>
-      </Child>
+      </Child> */}
     </Parent>
   );
 };

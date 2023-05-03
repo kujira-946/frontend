@@ -117,7 +117,7 @@ export const Security = () => {
 
   return (
     <Container onSubmit={submit}>
-      <Globals.Input
+      {/* <Globals.Input
         key="settings-page-security-password"
         type={hidden.value ? "password" : "text"}
         title="*Password"
@@ -158,7 +158,7 @@ export const Security = () => {
 
       <Globals.SubmitButton disabled={checkDisabled()}>
         Update
-      </Globals.SubmitButton>
+      </Globals.SubmitButton> */}
     </Container>
   );
 };

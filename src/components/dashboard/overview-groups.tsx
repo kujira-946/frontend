@@ -34,11 +34,11 @@ export const OverviewGroups = () => {
 
   const onDragEnd = useCallback(Functions.onDragEnd, []);
 
-  const deleteAllPurchases = useCallback((overviewGroupId: number): void => {
-    dispatch(
-      PurchasesSagas.deleteAssociatedPurchasesRequest({ overviewGroupId })
-    );
-  }, []);
+  // const deleteAllPurchases = useCallback((overviewGroupId: number): void => {
+  //   dispatch(
+  //     PurchasesSagas.deleteAssociatedPurchasesRequest({ overviewGroupId })
+  //   );
+  // }, []);
 
   const addPurchase = useCallback((overviewGroupId: number): void => {
     dispatch(
@@ -57,7 +57,7 @@ export const OverviewGroups = () => {
 
   return (
     <Container>
-      {loadingOverviewGroups ? (
+      {/* {loadingOverviewGroups ? (
         <>
           <Globals.Shimmer borderRadius="six" height={40} />
           <Globals.Shimmer borderRadius="six" height={40} />
@@ -89,7 +89,7 @@ export const OverviewGroups = () => {
             }
           })}
         </>
-      ) : null}
+      ) : null} */}
     </Container>
   );
 };

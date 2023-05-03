@@ -5,6 +5,7 @@ import { effect, useSignal } from "@preact/signals-react";
 
 import * as Redux from "@/redux";
 import * as Globals from "@/components";
+import * as Modals from "@/components/modals";
 import * as Components from "@/components/onboarding";
 import * as OverviewsSagas from "@/sagas/overviews.saga";
 import * as OverviewGroupsSagas from "@/sagas/overview-groups.saga";
@@ -154,7 +155,7 @@ const Onboarding = () => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <Globals.ConfirmationModal
+        <Modals.ConfirmationModal
           showBackButton={currentPage.value === 1 ? false : true}
           backButtonAction={toPreviousPage}
           headerTitle={Constants.onboardingCopies[currentPage.value - 1].title}
@@ -195,7 +196,7 @@ const Onboarding = () => {
               addPurchase={addPurchase}
             />
           ) : null}
-        </Globals.ConfirmationModal>
+        </Modals.ConfirmationModal>
       </>
     );
   }

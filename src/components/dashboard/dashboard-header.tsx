@@ -107,7 +107,7 @@ export const DashboardHeader = (props: Props) => {
 
   return (
     <Container>
-      <NavigationPillsAndErrorMessage>
+      {/* <NavigationPillsAndErrorMessage>
         <TotalSpent>
           Total Spent: ${Functions.formattedNumber(logbookTotalSpent.value)}
         </TotalSpent>
@@ -154,7 +154,7 @@ export const DashboardHeader = (props: Props) => {
             Create Logbook Entry
           </Globals.PrimaryButton>
         )}
-      </Buttons>
+      </Buttons> */}
     </Container>
   );
 };

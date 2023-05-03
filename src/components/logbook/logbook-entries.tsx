@@ -36,19 +36,19 @@ export const LogbookEntries = (props: Props) => {
 
   const onDragEnd = useCallback(Functions.onDragEnd, []);
 
-  const deleteLogbookEntry = useCallback((logbookEntryId: number): void => {
-    dispatch(deleteLogbookEntryRequest(logbookEntryId));
-  }, []);
+  // const deleteLogbookEntry = useCallback((logbookEntryId: number): void => {
+  //   dispatch(deleteLogbookEntryRequest(logbookEntryId));
+  // }, []);
 
-  const deleteSelectedPurchases = useCallback((purchaseIds: number[]): void => {
-    dispatch(PurchasesSagas.batchDeletePurchasesRequest(purchaseIds));
-  }, []);
+  // const deleteSelectedPurchases = useCallback((purchaseIds: number[]): void => {
+  //   dispatch(PurchasesSagas.batchDeletePurchasesRequest(purchaseIds));
+  // }, []);
 
-  const deleteAllPurchases = useCallback((logbookEntryId: number): void => {
-    dispatch(
-      PurchasesSagas.deleteAssociatedPurchasesRequest({ logbookEntryId })
-    );
-  }, []);
+  // const deleteAllPurchases = useCallback((logbookEntryId: number): void => {
+  //   dispatch(
+  //     PurchasesSagas.deleteAssociatedPurchasesRequest({ logbookEntryId })
+  //   );
+  // }, []);
 
   const addPurchase = useCallback((logbookEntryId: number): void => {
     dispatch(
@@ -62,7 +62,7 @@ export const LogbookEntries = (props: Props) => {
 
   return (
     <Container>
-      {logbook &&
+      {/* {logbook &&
         logbook.logbookEntryIds &&
         Functions.deepCopy(logbook.logbookEntryIds)
           .reverse()
@@ -78,7 +78,7 @@ export const LogbookEntries = (props: Props) => {
                 addPurchase={addPurchase}
               />
             );
-          })}
+          })} */}
     </Container>
   );
 };

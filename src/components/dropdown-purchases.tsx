@@ -42,76 +42,78 @@ type Props = {
 
 export const DropdownPurchases = (props: Props) => {
   return (
-    <Drag.Droppable
-      droppableId={
-        props.type === "Overview Groups"
-          ? Styles.overviewDropdownDroppableId
-          : Styles.logbookEntryDropdownDroppableId
-      }
-    >
-      {(
-        provided: Drag.DroppableProvided,
-        snapshot: Drag.DroppableStateSnapshot
-      ) => {
-        return (
-          <PurchaseCells {...provided.droppableProps} ref={provided.innerRef}>
-            {props.loadingPurchases ? (
-              <>
-                <Globals.Shimmer borderRadius="six" height={40} />
-                <Globals.Shimmer borderRadius="six" height={40} />
-                <Globals.Shimmer borderRadius="six" height={40} />
-                <Globals.Shimmer borderRadius="six" height={40} />
-              </>
-            ) : (
-              props.purchases &&
-              props.purchases.map((purchase: Types.Purchase, index: number) => {
-                return (
-                  <Drag.Draggable
-                    key={`${props.type}-dropdown-purchase-${purchase.id}`}
-                    draggableId={`${purchase.id}`}
-                    index={index}
-                  >
-                    {(
-                      provided: Drag.DraggableProvided,
-                      snapshot: Drag.DraggableStateSnapshot
-                    ) => {
-                      return (
-                        <Globals.DraggablePortalItem
-                          provided={provided}
-                          snapshot={snapshot}
-                          preventEntireElementDrag
-                        >
-                          <Globals.PurchaseCell
-                            key={`${props.type}-dropdown-purchase-cell-${purchase.id}-${index}`}
-                            borderRadius="four"
-                            provided={provided}
-                            purchaseId={purchase.id}
-                            category={purchase.category}
-                            description={purchase.description}
-                            cost={
-                              purchase.cost
-                                ? Functions.roundNumber(purchase.cost, 2)
-                                : ""
-                            }
-                            setPurchaseCategory={props.setPurchaseCategory}
-                            update={props.update}
-                            delete={props.delete}
-                            onCheckActive={props.onCheckActive}
-                            onCheckInactive={props.onCheckInactive}
-                            costForwardText="$"
-                            hideCheck={props.hideCheck}
-                            hideCategories={props.hideCategories}
-                          />
-                        </Globals.DraggablePortalItem>
-                      );
-                    }}
-                  </Drag.Draggable>
-                );
-              })
-            )}
-          </PurchaseCells>
-        );
-      }}
-    </Drag.Droppable>
+    <></>
+
+    // <Drag.Droppable
+    //   droppableId={
+    //     props.type === "Overview Groups"
+    //       ? Styles.overviewDropdownDroppableId
+    //       : Styles.logbookEntryDropdownDroppableId
+    //   }
+    // >
+    //   {(
+    //     provided: Drag.DroppableProvided,
+    //     snapshot: Drag.DroppableStateSnapshot
+    //   ) => {
+    //     return (
+    //       <PurchaseCells {...provided.droppableProps} ref={provided.innerRef}>
+    //         {props.loadingPurchases ? (
+    //           <>
+    //             <Globals.Shimmer borderRadius="six" height={40} />
+    //             <Globals.Shimmer borderRadius="six" height={40} />
+    //             <Globals.Shimmer borderRadius="six" height={40} />
+    //             <Globals.Shimmer borderRadius="six" height={40} />
+    //           </>
+    //         ) : (
+    //           props.purchases &&
+    //           props.purchases.map((purchase: Types.Purchase, index: number) => {
+    //             return (
+    //               <Drag.Draggable
+    //                 key={`${props.type}-dropdown-purchase-${purchase.id}`}
+    //                 draggableId={`${purchase.id}`}
+    //                 index={index}
+    //               >
+    //                 {(
+    //                   provided: Drag.DraggableProvided,
+    //                   snapshot: Drag.DraggableStateSnapshot
+    //                 ) => {
+    //                   return (
+    //                     <Globals.DraggablePortalItem
+    //                       provided={provided}
+    //                       snapshot={snapshot}
+    //                       preventEntireElementDrag
+    //                     >
+    //                       <Globals.PurchaseCell
+    //                         key={`${props.type}-dropdown-purchase-cell-${purchase.id}-${index}`}
+    //                         borderRadius="four"
+    //                         provided={provided}
+    //                         purchaseId={purchase.id}
+    //                         category={purchase.category}
+    //                         description={purchase.description}
+    //                         cost={
+    //                           purchase.cost
+    //                             ? Functions.roundNumber(purchase.cost, 2)
+    //                             : ""
+    //                         }
+    //                         setPurchaseCategory={props.setPurchaseCategory}
+    //                         update={props.update}
+    //                         delete={props.delete}
+    //                         onCheckActive={props.onCheckActive}
+    //                         onCheckInactive={props.onCheckInactive}
+    //                         costForwardText="$"
+    //                         hideCheck={props.hideCheck}
+    //                         hideCategories={props.hideCategories}
+    //                       />
+    //                     </Globals.DraggablePortalItem>
+    //                   );
+    //                 }}
+    //               </Drag.Draggable>
+    //             );
+    //           })
+    //         )}
+    //       </PurchaseCells>
+    //     );
+    //   }}
+    // </Drag.Droppable>
   );
 };

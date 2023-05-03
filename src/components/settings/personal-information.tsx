@@ -145,7 +145,7 @@ export const PersonalInformation = () => {
 
   return (
     <Container onSubmit={submit}>
-      <Globals.Input
+      {/* <Globals.Input
         key="settings-page-personal-information-tab-email"
         title="*Email"
         errorMessage={emailError.value}
@@ -181,7 +181,7 @@ export const PersonalInformation = () => {
 
       <Globals.SubmitButton disabled={checkDisabled()}>
         Update
-      </Globals.SubmitButton>
+      </Globals.SubmitButton> */}
     </Container>
   );
 };

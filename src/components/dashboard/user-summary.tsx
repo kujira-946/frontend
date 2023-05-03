@@ -160,7 +160,7 @@ export const UserSummary = (props: Props) => {
 
   return (
     <Container>
-      <Heading>
+      {/* <Heading>
         <HeadingTitle>February 2023 Overview</HeadingTitle>
         <HeadingCaption>{props.page}</HeadingCaption>
       </Heading>
@@ -239,7 +239,7 @@ export const UserSummary = (props: Props) => {
             costFrozen
           />
         </>
-      ) : null}
+      ) : null} */}
     </Container>
   );
 };

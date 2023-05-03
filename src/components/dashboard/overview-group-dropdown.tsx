@@ -131,39 +131,39 @@ const ExportedComponent = (props: Props) => {
   const loadingPurchases = useSignal(false);
   const deleteConfirmationOpen = useSignal(false);
 
-  const updatePurchase = useCallback(
-    Functions.debounce(
-      (purchaseId: number, description: string, cost: string) => {
-        if (overviewGroup && purchases && purchases[purchaseId]) {
-          Functions.updatePurchase(
-            purchases[purchaseId],
-            description,
-            cost,
-            "overviewGroup",
-            overviewGroup.id,
-            overviewGroup.totalSpent,
-            dispatch
-          );
-        }
-      }
-    ),
-    [overviewGroup, purchases]
-  );
+  // const updatePurchase = useCallback(
+  //   Functions.debounce(
+  //     (purchaseId: number, description: string, cost: string) => {
+  //       if (overviewGroup && purchases && purchases[purchaseId]) {
+  //         Functions.updatePurchase(
+  //           purchases[purchaseId],
+  //           description,
+  //           cost,
+  //           "overviewGroup",
+  //           overviewGroup.id,
+  //           overviewGroup.totalSpent,
+  //           dispatch
+  //         );
+  //       }
+  //     }
+  //   ),
+  //   [overviewGroup, purchases]
+  // );
 
-  const deletePurchase = useCallback(
-    (purchaseId: number) => {
-      if (overviewGroup && purchases && purchases[purchaseId]) {
-        return Functions.deletePurchase(
-          purchases[purchaseId],
-          "overviewGroup",
-          overviewGroup.id,
-          overviewGroup.totalSpent,
-          dispatch
-        );
-      }
-    },
-    [overviewGroup, purchases]
-  );
+  // const deletePurchase = useCallback(
+  //   (purchaseId: number) => {
+  //     if (overviewGroup && purchases && purchases[purchaseId]) {
+  //       return Functions.deletePurchase(
+  //         purchases[purchaseId],
+  //         "overviewGroup",
+  //         overviewGroup.id,
+  //         overviewGroup.totalSpent,
+  //         dispatch
+  //       );
+  //     }
+  //   },
+  //   [overviewGroup, purchases]
+  // );
 
   useEffect(() => {
     if (opened.value && !overviewGroupPurchases) {
@@ -178,7 +178,7 @@ const ExportedComponent = (props: Props) => {
 
   return (
     <Container borderRadius={props.borderRadius} opened={opened.value}>
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {deleteConfirmationOpen.value && (
           <DynamicDeleteConfirmation
             title="Delete all purchases for this group?"
@@ -240,7 +240,7 @@ const ExportedComponent = (props: Props) => {
             </Body>
           </Drag.DragDropContext>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </Container>
   );
 };

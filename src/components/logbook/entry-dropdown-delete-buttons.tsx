@@ -15,7 +15,7 @@ type Props = {
 export const DeleteButtons = (props: Props) => {
   return (
     <>
-      {props.purchasesSelected && (
+      {/* {props.purchasesSelected && (
         <Globals.NeutralButtonOutlined
           onClick={() =>
             props.deleteSelectedPurchases(
@@ -35,7 +35,7 @@ export const DeleteButtons = (props: Props) => {
         borderRadius="four"
       >
         Delete All
-      </Globals.NeutralButtonOutlined>
+      </Globals.NeutralButtonOutlined> */}
     </>
   );
 };

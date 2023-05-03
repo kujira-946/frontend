@@ -65,39 +65,39 @@ export const LogbookEntryDropdownBody = (props: Props) => {
     []
   );
 
-  const updatePurchase = useCallback(
-    Functions.debounce(
-      (purchaseId: number, description: string, cost: string) => {
-        if (logbookEntry && purchases && purchases[purchaseId]) {
-          Functions.updatePurchase(
-            purchases[purchaseId],
-            description,
-            cost,
-            "logbookEntry",
-            logbookEntry.id,
-            logbookEntry.totalSpent,
-            dispatch
-          );
-        }
-      }
-    ),
-    [logbookEntry, purchases]
-  );
+  // const updatePurchase = useCallback(
+  //   Functions.debounce(
+  //     (purchaseId: number, description: string, cost: string) => {
+  //       if (logbookEntry && purchases && purchases[purchaseId]) {
+  //         Functions.updatePurchase(
+  //           purchases[purchaseId],
+  //           description,
+  //           cost,
+  //           "logbookEntry",
+  //           logbookEntry.id,
+  //           logbookEntry.totalSpent,
+  //           dispatch
+  //         );
+  //       }
+  //     }
+  //   ),
+  //   [logbookEntry, purchases]
+  // );
 
-  const deletePurchase = useCallback(
-    (purchaseId: number) => {
-      if (logbookEntry && purchases && purchases[purchaseId]) {
-        return Functions.deletePurchase(
-          purchases[purchaseId],
-          "logbookEntry",
-          logbookEntry.id,
-          logbookEntry.totalSpent,
-          dispatch
-        );
-      }
-    },
-    [logbookEntry, purchases]
-  );
+  // const deletePurchase = useCallback(
+  //   (purchaseId: number) => {
+  //     if (logbookEntry && purchases && purchases[purchaseId]) {
+  //       return Functions.deletePurchase(
+  //         purchases[purchaseId],
+  //         "logbookEntry",
+  //         logbookEntry.id,
+  //         logbookEntry.totalSpent,
+  //         dispatch
+  //       );
+  //     }
+  //   },
+  //   [logbookEntry, purchases]
+  // );
 
   const onCheckActive = useCallback((purchaseId: number) => {
     selectedPurchaseIds.value[purchaseId] = purchaseId;
@@ -123,7 +123,7 @@ export const LogbookEntryDropdownBody = (props: Props) => {
 
   return (
     <Container>
-      <Drag.DragDropContext onDragEnd={props.onDragEnd}>
+      {/* <Drag.DragDropContext onDragEnd={props.onDragEnd}>
         {logbookEntryPurchases && logbookEntryPurchases.length > 0 && (
           <>
             <Globals.DropdownPurchases
@@ -156,7 +156,7 @@ export const LogbookEntryDropdownBody = (props: Props) => {
         >
           Add
         </Globals.NeutralButton>
-      </Drag.DragDropContext>
+      </Drag.DragDropContext> */}
     </Container>
   );
 };
