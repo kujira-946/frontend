@@ -115,7 +115,7 @@ type Props = {
   title: string;
   associationId: number; // overview group or logbook entry
   associationTotalSpent: number;
-  purchases: Types.Purchase[];
+  purchases: Types.Purchase[] | undefined;
   purchaseIds: number[];
 
   deleteSelectedPurchases?: (purchaseIds: number[]) => void;
@@ -127,10 +127,11 @@ type Props = {
 
 type PurchaseIds = { [key: string]: number };
 
-const ExportedComponent = (props: Props) => {
+export const PurchaseDropdown = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
   const open = useSignal(!!props.startOpened);
+  const loadingPurchases = useSignal(false);
   const selectedPurchases = useSignal<PurchaseIds>({});
 
   const selectPurchase = useCallback((purchaseId: number): void => {
@@ -182,6 +183,7 @@ const ExportedComponent = (props: Props) => {
 
   useEffect(() => {
     if (open.value) {
+      loadingPurchases.value = true;
       if (props.type === "overview") {
         dispatch(fetchOverviewGroupPurchasesRequest(props.associationId));
       } else {
@@ -189,6 +191,12 @@ const ExportedComponent = (props: Props) => {
       }
     }
   }, [open.value]);
+
+  useEffect(() => {
+    if (props.purchases && loadingPurchases.value) {
+      loadingPurchases.value = false;
+    }
+  }, [props.purchases]);
 
   return (
     <Container open={open.value}>
@@ -210,30 +218,41 @@ const ExportedComponent = (props: Props) => {
       <AnimatePresence>
         {open.value && (
           <Body>
-            {props.purchases.length > 0 && (
+            {loadingPurchases.value ? (
               <PurchaseCells>
-                {props.purchases.map(
-                  (purchase: Types.Purchase, index: number) => {
-                    return (
-                      <Globals.PurchaseCell
-                        key={`${props.type}-purchase-dropdown-purchases-${purchase.id}-${index}`}
-                        purchaseId={purchase.id}
-                        selectAction={
-                          props.type === "logbook" ? selectPurchase : undefined
-                        }
-                        description={purchase.description}
-                        cost={purchase.cost ? purchase.cost : 0}
-                        updatePurchase={updatePurchase}
-                        deletePurchase={deletePurchase}
-                        showDrag={props.type === "logbook"}
-                        showCheck={props.type === "logbook"}
-                        showCategories={props.type === "logbook"}
-                        showDelete
-                      />
-                    );
-                  }
-                )}
+                <Globals.PurchaseShimmer borderRadius="six" />
+                <Globals.PurchaseShimmer borderRadius="six" />
+                <Globals.PurchaseShimmer borderRadius="six" />
               </PurchaseCells>
+            ) : (
+              props.purchases &&
+              props.purchases.length > 0 && (
+                <PurchaseCells>
+                  {props.purchases.map(
+                    (purchase: Types.Purchase, index: number) => {
+                      return (
+                        <Globals.PurchaseCell
+                          key={`${props.type}-purchase-dropdown-purchases-${purchase.id}-${index}`}
+                          purchaseId={purchase.id}
+                          selectAction={
+                            props.type === "logbook"
+                              ? selectPurchase
+                              : undefined
+                          }
+                          description={purchase.description}
+                          cost={purchase.cost ? purchase.cost : 0}
+                          updatePurchase={updatePurchase}
+                          deletePurchase={deletePurchase}
+                          showDrag={props.type === "logbook"}
+                          showCheck={props.type === "logbook"}
+                          showCategories={props.type === "logbook"}
+                          showDelete
+                        />
+                      );
+                    }
+                  )}
+                </PurchaseCells>
+              )
             )}
 
             <Buttons>
@@ -277,5 +296,3 @@ const ExportedComponent = (props: Props) => {
     </Container>
   );
 };
-
-export const PurchaseDropdown = memo(ExportedComponent);

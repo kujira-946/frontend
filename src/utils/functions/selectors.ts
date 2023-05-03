@@ -1,19 +1,30 @@
+import createCachedSelector from "re-reselect";
+import { shallowEqual } from "react-redux";
 import { createSelector } from "reselect";
 
 import { GlobalState } from "@/store";
 
 import { useAppSelector } from "./hooks";
 
-export function useUiSlice() {
-  return useAppSelector((state) => state.ui);
+export function useUiSlice(shallow: boolean = false) {
+  return useAppSelector(
+    (state) => state.ui,
+    shallow ? shallowEqual : undefined
+  );
 }
 
-export function useEntitiesSlice() {
-  return useAppSelector((state) => state.entities);
+export function useEntitiesSlice(shallow: boolean = false) {
+  return useAppSelector(
+    (state) => state.entities,
+    shallow ? shallowEqual : undefined
+  );
 }
 
-export function useErrorsSlice() {
-  return useAppSelector((state) => state.errors);
+export function useErrorsSlice(shallow: boolean = false) {
+  return useAppSelector(
+    (state) => state.errors,
+    shallow ? shallowEqual : undefined
+  );
 }
 
 // ========================================================================================= //
@@ -58,18 +69,18 @@ export function useGetOverviewOverviewGroups() {
 // [ OVERVIEW GROUPS ] ===================================================================== //
 // ========================================================================================= //
 
-const getOverviewGroup = createSelector(
+const getOverviewGroup = createCachedSelector(
   (state: GlobalState) => state.entities.overviewGroups,
   (state: GlobalState, overviewGroupId: number) => overviewGroupId,
   (overviewGroups, overviewGroupId) => {
     if (overviewGroups) return overviewGroups[overviewGroupId];
   }
-);
+)((_state_: GlobalState, overviewGroupId: number) => overviewGroupId);
 export function useGetOverviewGroup(overviewGroupId: number) {
   return useAppSelector((state) => getOverviewGroup(state, overviewGroupId));
 }
 
-const getOverviewGroupPurchases = createSelector(
+const getOverviewGroupPurchases = createCachedSelector(
   (state: GlobalState) => state.entities.overviewGroups,
   (state: GlobalState, overviewGroupId: number) => overviewGroupId,
   (state: GlobalState) => state.entities.purchases,
@@ -83,7 +94,7 @@ const getOverviewGroupPurchases = createSelector(
       }
     }
   }
-);
+)((_state_: GlobalState, overviewGroupId: number) => overviewGroupId);
 export function useGetOverviewGroupPurchases(overviewGroupId: number) {
   return useAppSelector((state) =>
     getOverviewGroupPurchases(state, overviewGroupId)
@@ -94,18 +105,18 @@ export function useGetOverviewGroupPurchases(overviewGroupId: number) {
 // [ LOGBOOKS ] ============================================================================ //
 // ========================================================================================= //
 
-const getLogbook = createSelector(
+const getLogbook = createCachedSelector(
   (state: GlobalState) => state.entities.logbooks,
   (state: GlobalState, logbookId: number) => logbookId,
   (logbooks, logbookId) => {
     if (logbooks && logbookId) return logbooks[logbookId];
   }
-);
+)((_state_: GlobalState, logbookId: number) => logbookId);
 export function useGetLogbook(logbookId: number) {
   return useAppSelector((state) => getLogbook(state, logbookId));
 }
 
-const getLogbookTotalSpent = createSelector(
+const getLogbookTotalSpent = createCachedSelector(
   (state: GlobalState) => state.entities.logbooks,
   (state: GlobalState, logbookId: number) => logbookId,
   (state: GlobalState) => state.entities.logbookEntries,
@@ -121,23 +132,23 @@ const getLogbookTotalSpent = createSelector(
       }
     }
   }
-);
+)((_state_: GlobalState, logbookId: number) => logbookId);
 export function useGetLogbookTotalSpent(logbookId: number) {
   return useAppSelector((state) => getLogbookTotalSpent(state, logbookId));
 }
 
-const getLogbookEntry = createSelector(
+const getLogbookEntry = createCachedSelector(
   (state: GlobalState) => state.entities.logbookEntries,
   (state: GlobalState, logbookEntryId: number) => logbookEntryId,
   (logbookEntries, logbookEntryId) => {
     if (logbookEntries) return logbookEntries[logbookEntryId];
   }
-);
+)((_state_: GlobalState, logbookEntryId: number) => logbookEntryId);
 export function useGetLogbookEntry(logbookEntryId: number) {
   return useAppSelector((state) => getLogbookEntry(state, logbookEntryId));
 }
 
-const getLogbookLogbookEntries = createSelector(
+const getLogbookLogbookEntries = createCachedSelector(
   (state: GlobalState) => state.entities.logbooks,
   (state: GlobalState) => state.entities.logbookEntries,
   (state: GlobalState, logbookId: number) => logbookId,
@@ -151,12 +162,12 @@ const getLogbookLogbookEntries = createSelector(
       }
     }
   }
-);
+)((_state_: GlobalState, logbookId: number) => logbookId);
 export function useGetLogbookLogbookEntries(logbookId: number) {
   return useAppSelector((state) => getLogbookLogbookEntries(state, logbookId));
 }
 
-const getLogbookEntryPurchases = createSelector(
+const getLogbookEntryPurchases = createCachedSelector(
   (state: GlobalState) => state.entities.logbookEntries,
   (state: GlobalState, logbookEntryId: number) => logbookEntryId,
   (state: GlobalState) => state.entities.purchases,
@@ -170,7 +181,7 @@ const getLogbookEntryPurchases = createSelector(
       }
     }
   }
-);
+)((_state_: GlobalState, logbookEntryId: number) => logbookEntryId);
 export function useGetLogbookEntryPurchases(logbookEntryId: number) {
   return useAppSelector((state) =>
     getLogbookEntryPurchases(state, logbookEntryId)

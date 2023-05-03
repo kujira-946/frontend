@@ -33,7 +33,7 @@ export const Purchases = (props: Props) => {
         }`}
         associationId={overviewGroup.id}
         associationTotalSpent={overviewGroup.totalSpent}
-        purchases={purchases || []}
+        purchases={purchases}
         purchaseIds={overviewGroup.purchaseIds || []}
         deleteAllPurchases={props.deleteAllPurchases}
         addPurchase={props.addPurchase}

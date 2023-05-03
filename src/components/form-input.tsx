@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FocusEvent, useRef } from "react";
+import { FocusEvent, useEffect, useRef } from "react";
 import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -121,12 +121,15 @@ export const FormInput = (props: Props) => {
   const show = useSignal(false);
   const focused = useSignal(false);
 
+  useEffect(() => {
+    if (focused.value && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [focused.value]);
+
   return (
     <Container
-      onClick={(): void => {
-        inputRef.current && inputRef.current.focus();
-        focused.value = true;
-      }}
+      onClick={() => (focused.value = true)}
       focused={focused.value}
       error={!!props.errorMessage}
       style={{

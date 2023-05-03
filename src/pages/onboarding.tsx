@@ -4,7 +4,6 @@ import { useCallback, useEffect } from "react";
 import { effect, useSignal } from "@preact/signals-react";
 
 import * as Redux from "@/redux";
-import * as Globals from "@/components";
 import * as Modals from "@/components/modals";
 import * as Components from "@/components/onboarding";
 import * as OverviewsSagas from "@/sagas/overviews.saga";
@@ -18,7 +17,7 @@ const Onboarding = () => {
   const dispatch = Functions.useAppDispatch();
   const router = useRouter();
 
-  const { currentUser, overview } = Functions.useEntitiesSlice();
+  const { currentUser, overview } = Functions.useEntitiesSlice(true);
   const overviewGroups = Functions.useGetOverviewOverviewGroups();
 
   const currentPage = useSignal(1);
@@ -53,10 +52,10 @@ const Onboarding = () => {
 
   function toNextPage(): void {
     if (currentPage.value + 1 <= Constants.onboardingCopies.length) {
+      currentPage.value += 1;
       if (currentPage.value === 2 && Number(income.value)) {
         income.value = Functions.roundNumber(Number(income.value), 2);
       }
-      currentPage.value += 1;
     } else {
       completeOnboarding();
     }
