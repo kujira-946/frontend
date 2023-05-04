@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { effect, useSignal } from "@preact/signals-react";
 
 import * as Functions from "@/utils/functions";
@@ -19,28 +19,29 @@ const Container = styled.section`
   gap: ${Styles.pxAsRem.twelve};
   padding: ${Styles.pxAsRem.twelve};
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
+  border-bottom: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
 `;
 
-const UserSummaryHeader = styled.header`
+const Header = styled.header`
   display: flex;
   flex-direction: column;
 `;
 
-const UserSummaryHeaderTitle = styled.h2`
+const HeaderTitle = styled.h2`
   margin: 0;
   color: ${(props: ThemeProps) => props.theme.text};
   font-size: ${Styles.pxAsRem.sixteen};
   font-weight: ${Styles.fontWeights.semiBold};
 `;
 
-const UserSummaryHeaderErrorMessage = styled.p`
+const ErrorMessage = styled.p`
   margin: 0;
   color: ${(props: ThemeProps) => props.theme.failure};
   font-size: ${Styles.pxAsRem.twelve};
   font-weight: ${Styles.fontWeights.semiBold};
 `;
 
-const UserInformation = styled.article`
+const InfoCells = styled.article`
   display: flex;
   flex-direction: column;
   gap: ${Styles.pxAsRem.four};
@@ -65,48 +66,61 @@ export const UserSummary = () => {
   const savingsError = useSignal(false);
   const errorMessages = useSignal<string[]>([]);
 
-  const updateOverviewIncome = Functions.debounce(
-    (overviewId: number): void => {
+  const updateOverviewIncome = useCallback(
+    Functions.debounce((overviewId: number): void => {
       dispatch(
         updateOverviewRequest(overviewId, { income: Number(income.value) })
       );
-    }
+    }),
+    []
   );
 
-  const updateOverviewSavings = Functions.debounce(
-    (overviewId: number): void => {
+  const updateOverviewSavings = useCallback(
+    Functions.debounce((overviewId: number): void => {
       dispatch(
         updateOverviewRequest(overviewId, { savings: Number(savings.value) })
       );
-    }
+    }),
+    []
   );
 
   // ↓↓↓ Updating Overview Income ↓↓↓ //
   useEffect(() => {
-    if (overview && !incomeError.value) {
-      // updateOverviewIncome(overview.id);
+    if (
+      overview &&
+      income.value !== "..." &&
+      !incomeError.value &&
+      Number(income.value) !== overview.income
+    ) {
+      updateOverviewIncome(overview.id);
     }
   }, [overview, incomeError.value, income.value]);
 
   // ↓↓↓ Updating Overview Savings ↓↓↓ //
   useEffect(() => {
-    if (overview && !savingsError.value) {
-      // updateOverviewSavings(overview.id);
+    if (
+      overview &&
+      savings.value !== "..." &&
+      !savingsError.value &&
+      Number(savings.value) !== overview.savings
+    ) {
+      updateOverviewSavings(overview.id);
     }
   }, [overview, savingsError.value, savings.value]);
 
+  // ↓↓↓ Initializations and calculations. ↓↓↓ //
   useEffect(() => {
     if (overview && overviewGroups) {
-      // ↓↓↓ Setting initial income and savings states. ↓↓↓ //
+      // Setting initial income and savings states.
       income.value = Functions.roundNumber(overview.income, 2);
       savings.value = String(overview.savings);
 
-      // ↓↓↓ Calculating & setting total spent. ↓↓↓ //
+      // Calculating & setting total spent.
       const recurringOverviewGroupTotalSpent = overviewGroups[0].totalSpent;
       const spent = logbookTotalSpent.value + recurringOverviewGroupTotalSpent;
       totalSpent.value = String(spent);
 
-      // ↓↓↓ Calculating & setting remaining budget. ↓↓↓ //
+      // Calculating & setting remaining budget.
       const savedIncome = overview.income * (overview.savings / 100);
       const budget =
         overview.income - recurringOverviewGroupTotalSpent - savedIncome;
@@ -172,24 +186,24 @@ export const UserSummary = () => {
 
   return (
     <Container>
-      <UserSummaryHeader>
-        <UserSummaryHeaderTitle>Your Overview</UserSummaryHeaderTitle>
+      <Header>
+        <HeaderTitle>Your Overview</HeaderTitle>
         {errorMessages.value.length > 0 && (
           <>
             {errorMessages.value.map((errorMessage: string, index: number) => {
               return (
-                <UserSummaryHeaderErrorMessage
+                <ErrorMessage
                   key={`dashboard-layout-overview-error-message-${errorMessage}-${index}`}
                 >
                   {errorMessage}
-                </UserSummaryHeaderErrorMessage>
+                </ErrorMessage>
               );
             })}
           </>
         )}
-      </UserSummaryHeader>
+      </Header>
 
-      <UserInformation>
+      <InfoCells>
         {/* Income */}
         <LogbooksOverviewUserInfoCell
           description="Income"
@@ -230,7 +244,7 @@ export const UserSummary = () => {
           cost={`$${Functions.formattedNumber(Number(remainingBudget.value))}`}
           inputError={false}
         />
-      </UserInformation>
+      </InfoCells>
     </Container>
   );
 };

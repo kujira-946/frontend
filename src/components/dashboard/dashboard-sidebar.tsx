@@ -14,6 +14,7 @@ import { SettingsSidebar } from "./settings-sidebar";
 import { useEffect } from "react";
 import { fetchUserOverviewRequest } from "@/sagas/overviews.saga";
 import { fetchOverviewOverviewGroupsRequest } from "@/sagas/overview-groups.saga";
+import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -42,7 +43,7 @@ type Props = {
 
 export const DashboardSidebar = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
-  const { currentUser, overview, overviewGroups } =
+  const { currentUser, overview, overviewGroups, logbooks } =
     Functions.useEntitiesSlice(true);
 
   // ↓↓↓ Fetching current user's overview. ↓↓↓ //
@@ -58,6 +59,13 @@ export const DashboardSidebar = (props: Props) => {
       dispatch(fetchOverviewOverviewGroupsRequest(overview.id));
     }
   }, [overview, overviewGroups]);
+
+  // ↓↓↓ Fetching current user's logbooks. ↓↓↓ //
+  useEffect(() => {
+    if (currentUser && !logbooks) {
+      dispatch(fetchUserLogbooksRequest(currentUser.id));
+    }
+  }, [currentUser, logbooks]);
 
   return (
     <Container page={props.page}>

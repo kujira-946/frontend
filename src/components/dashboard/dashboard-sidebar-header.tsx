@@ -1,22 +1,30 @@
 import styled from "styled-components";
+import { Signal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { createLogbookEntryRequest } from "@/sagas/logbook-entries.saga";
 import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
-const Container = styled.section`
+type ContainerProps = { standalone?: true };
+
+const Container = styled.section<ContainerProps>`
   display: flex;
   flex-direction: column;
   gap: ${Styles.pxAsRem.twelve};
-  padding: ${Styles.pxAsRem.twelve};
+  width: 100%;
+  padding: ${(props) => (props.standalone ? 0 : Styles.pxAsRem.twelve)};
+  border-bottom: ${(props: ContainerProps & ThemeProps) => {
+    return props.standalone
+      ? "transparent"
+      : `${props.theme.backgroundFour} solid 1px`;
+  }};
 `;
 
 const Header = styled.header`
@@ -60,18 +68,17 @@ const FilterButton = styled(Globals.IconButton)`
 // ========================================================================================= //
 
 type Props = {
-  title: Types.DashboardPage;
+  title: Types.DashboardPage | "Logbooks Filter";
   caption: string;
+  openModal?: () => void;
+  standalone?: true;
 };
 
 export const DashboardSidebarHeader = (props: Props) => {
-  const dispatch = Functions.useAppDispatch();
-
   const { theme } = Functions.useSignalsStore().ui;
-  const { selectedLogbookId } = Functions.useSignalsStore().dashboard;
 
   return (
-    <Container>
+    <Container standalone={props.standalone}>
       <Header>
         <TitleAndCaption>
           <Title>{props.title}</Title>
@@ -79,7 +86,7 @@ export const DashboardSidebarHeader = (props: Props) => {
         </TitleAndCaption>
 
         {theme.value && props.title === "Logbooks" && (
-          <FilterButton borderRadius="six">
+          <FilterButton onClick={props.openModal} borderRadius="six">
             <Icons.Filter
               width={16}
               height={16}
@@ -89,27 +96,6 @@ export const DashboardSidebarHeader = (props: Props) => {
           </FilterButton>
         )}
       </Header>
-
-      {props.title === "Logbooks" && (
-        <Globals.Button
-          type="button"
-          onClick={() => {
-            if (selectedLogbookId.value) {
-              dispatch(
-                createLogbookEntryRequest({
-                  date: Functions.generateFormattedDate(new Date(), true),
-                  logbookId: selectedLogbookId.value,
-                })
-              );
-            }
-          }}
-          size="medium"
-          borderRadius="six"
-          primary
-        >
-          Create Logbook Entry
-        </Globals.Button>
-      )}
     </Container>
   );
 };

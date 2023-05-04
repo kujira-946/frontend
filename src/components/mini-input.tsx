@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import TextareaAutosize from "react-textarea-autosize";
-import { FocusEvent, memo, useRef } from "react";
+import { FocusEvent, useRef } from "react";
 import { useSignal } from "@preact/signals-react";
 
 import * as Styles from "@/utils/styles";

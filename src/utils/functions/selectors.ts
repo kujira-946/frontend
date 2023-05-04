@@ -105,14 +105,29 @@ export function useGetOverviewGroupPurchases(overviewGroupId: number) {
 // [ LOGBOOKS ] ============================================================================ //
 // ========================================================================================= //
 
+const getUserLogbooks = createSelector(
+  (state: GlobalState) => state.entities.currentUser,
+  (state: GlobalState) => state.entities.logbooks,
+  (currentUser, logbooks) => {
+    if (currentUser && currentUser.logbookIds && logbooks) {
+      return currentUser.logbookIds.map((logbookId: number) => {
+        return logbooks[logbookId];
+      });
+    }
+  }
+);
+export function useGetUserLogbooks() {
+  return useAppSelector(getUserLogbooks);
+}
+
 const getLogbook = createCachedSelector(
   (state: GlobalState) => state.entities.logbooks,
-  (state: GlobalState, logbookId: number | null) => logbookId,
+  (state: GlobalState, logbookId: number) => logbookId,
   (logbooks, logbookId) => {
     if (logbooks && logbookId) return logbooks[logbookId];
   }
-)((_state_: GlobalState, logbookId: number | null) => logbookId);
-export function useGetLogbook(logbookId: number | null) {
+)((_state_: GlobalState, logbookId: number) => logbookId);
+export function useGetLogbook(logbookId: number) {
   return useAppSelector((state) => getLogbook(state, logbookId));
 }
 
