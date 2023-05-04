@@ -122,7 +122,7 @@ type Props = {
   deleteAllPurchases: (purchaseIds: number[], associationId: number) => void;
   addPurchase: (associationId: number) => void;
 
-  startOpened?: true;
+  startOpened?: boolean;
 };
 
 type PurchaseIds = { [key: string]: number };

@@ -37,7 +37,7 @@ export const Purchases = (props: Props) => {
         purchaseIds={overviewGroup.purchaseIds || []}
         deleteAllPurchases={props.deleteAllPurchases}
         addPurchase={props.addPurchase}
-        startOpened
+        startOpened={true}
       />
     );
   } else {
