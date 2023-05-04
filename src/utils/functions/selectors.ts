@@ -107,12 +107,12 @@ export function useGetOverviewGroupPurchases(overviewGroupId: number) {
 
 const getLogbook = createCachedSelector(
   (state: GlobalState) => state.entities.logbooks,
-  (state: GlobalState, logbookId: number) => logbookId,
+  (state: GlobalState, logbookId: number | null) => logbookId,
   (logbooks, logbookId) => {
     if (logbooks && logbookId) return logbooks[logbookId];
   }
-)((_state_: GlobalState, logbookId: number) => logbookId);
-export function useGetLogbook(logbookId: number) {
+)((_state_: GlobalState, logbookId: number | null) => logbookId);
+export function useGetLogbook(logbookId: number | null) {
   return useAppSelector((state) => getLogbook(state, logbookId));
 }
 

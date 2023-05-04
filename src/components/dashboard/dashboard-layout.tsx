@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { ThemeProps } from "../layout";
 
@@ -7,6 +8,8 @@ import { OverviewNavbar } from "./overview-navbar";
 import { UserSummary } from "./user-summary";
 import { OverviewGroups } from "./overview-groups";
 import { DashboardHeader } from "./dashboard-header";
+import { DashboardNavbar } from "./dashboard-navbar";
+import { DashboardSidebar } from "./dashboard-sidebar";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -19,6 +22,20 @@ const Container = styled.main`
   bottom: 0;
   left: 0;
   display: flex;
+  gap: ${Styles.pxAsRem.twenty};
+  max-width: ${Styles.widths.desktop}px;
+  width: 100%;
+  margin: 0 auto;
+  padding: ${Styles.pxAsRem.twenty} 0;
+
+  ${Styles.setMediaPaddings()};
+`;
+
+const Sidebar = styled.section`
+  display: flex;
+  border: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
+  border-radius: ${Styles.pxAsRem.eight};
+  overflow: hidden;
 `;
 
 const Overview = styled.section`
@@ -52,6 +69,11 @@ type Props = {
 export const DashboardLayout = (props: Props) => {
   return (
     <Container>
+      <Sidebar>
+        <DashboardNavbar page={props.page} />
+        <DashboardSidebar page={props.page} />
+      </Sidebar>
+
       {/* <Overview>
         <OverviewNavbar />
         <UserSummary page={props.page} />

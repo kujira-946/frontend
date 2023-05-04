@@ -24,6 +24,7 @@ type ContainerProps = {
 const Container = styled.section<ContainerProps>`
   ${Styles.transition};
   display: flex;
+  flex: 1;
   justify-content: flex-start;
   align-items: center;
   width: 100%;
@@ -108,7 +109,7 @@ const Textarea = styled(TextareaAutosize)<TextareaProps>`
 
 type Props = {
   userInput: string;
-  setUserInput: (event: Types.Input) => void;
+  setUserInput?: (event: Types.Input) => void;
   placeholder: string;
   error?: boolean;
 
@@ -118,7 +119,7 @@ type Props = {
   borderRadius?: Types.PxAsRem;
   type: Type;
   frozen?: boolean;
-  isCost?: true;
+  isCost?: boolean;
 };
 
 export const MiniInput = (props: Props) => {

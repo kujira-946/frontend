@@ -11,4 +11,4 @@ export * from "./icon-container";
 export * from "./purchase-cell";
 export * from "./form-input";
 export * from "./mini-input";
-export * from "./button";
+export * from "./buttons";

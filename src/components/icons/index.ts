@@ -1,43 +1,20 @@
-import { ThemeLight } from "./theme-light";
-import { ThemeDark } from "./theme-dark";
-
-import { CheckboxActive } from "./checkbox-active";
-import { CheckboxInactive } from "./checkbox-inactive";
-
-import { Revealed } from "./revealed";
-import { Hidden } from "./hidden";
-
-import { Help } from "./help";
-import { Info } from "./info";
-
-import { Drag } from "./drag";
-import { Add } from "./add";
-import { Close } from "./close";
-
-import { ChevronLeft } from "./chevron-left";
-import { ChevronRight } from "./chevron-right";
-import { ArrowRight } from "./arrow-right";
-
-import { Dashboard } from "./dashboard";
-import { Reviews } from "./reviews";
-import { Settings } from "./settings";
-
-export {
-  ThemeLight,
-  ThemeDark,
-  CheckboxActive,
-  CheckboxInactive,
-  Revealed,
-  Hidden,
-  Help,
-  Info,
-  Drag,
-  Add,
-  Close,
-  ChevronLeft,
-  ChevronRight,
-  ArrowRight,
-  Dashboard,
-  Reviews,
-  Settings,
-};
+export * from "./theme-light";
+export * from "./theme-dark";
+export * from "./cookies";
+export * from "./checkbox-active";
+export * from "./checkbox-inactive";
+export * from "./revealed";
+export * from "./hidden";
+export * from "./help";
+export * from "./info";
+export * from "./drag";
+export * from "./add";
+export * from "./close";
+export * from "./chevron-left";
+export * from "./chevron-right";
+export * from "./arrow-right";
+export * from "./dashboard";
+export * from "./reviews";
+export * from "./settings";
+export * from "./bug-report";
+export * from "./filter";

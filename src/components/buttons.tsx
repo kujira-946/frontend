@@ -109,8 +109,6 @@ export const Button = styled.button.attrs((props: ButtonProps) => ({
 
 type IconButtonProps = {
   type: "button" | "submit";
-  backgroundColor?: string;
-  backgroundColorHover?: string;
   borderRadius?: Types.PxAsRem;
 };
 
@@ -125,9 +123,7 @@ export const IconButton = styled.button.attrs((props: IconButtonProps) => ({
   align-items: center;
   width: ${Styles.pxAsRem.forty};
   height: ${Styles.pxAsRem.forty};
-  background-color: ${(props: IconButtonProps & ThemeProps) => {
-    return props.backgroundColor || props.theme.backgroundOne;
-  }};
+  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
   border-radius: ${(props) => {
     return props.borderRadius
       ? Styles.pxAsRem[props.borderRadius]
@@ -136,9 +132,7 @@ export const IconButton = styled.button.attrs((props: IconButtonProps) => ({
 
   @media (hover: hover) {
     :hover {
-      background-color: ${(props: IconButtonProps & ThemeProps) => {
-        return props.backgroundColorHover || props.theme.backgroundTwo;
-      }};
+      background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
     }
   }
 `;
