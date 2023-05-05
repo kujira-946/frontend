@@ -17,6 +17,7 @@ export const SettingsSidebar = () => {
       <DashboardSidebarHeader
         title="Settings"
         caption="Navigate your settings below."
+        standalone
       />
     </Container>
   );

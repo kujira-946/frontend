@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Signal } from "@preact/signals-react";
+import { motion } from "framer-motion";
 
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
@@ -7,20 +8,19 @@ import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { ThemeProps } from "../layout";
-import { motion } from "framer-motion";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
 const Parent = styled(motion.section)`
+  ${Styles.overlay};
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   padding: ${Styles.pxAsRem.twelve};
-  ${Styles.overlay};
 `;
 
 const Child = styled.article`
@@ -72,6 +72,19 @@ const FilterButton = styled(Globals.Button)<FilterButtonProps>`
       ? props.theme.backgroundThree
       : props.theme.backgroundOne;
   }};
+
+  @media (hover: hover) {
+    :hover {
+      color: ${(props: FilterButtonProps & ThemeProps) => {
+        return props.selected ? props.theme.text : props.theme.backgroundEight;
+      }};
+      background-color: ${(props: FilterButtonProps & ThemeProps) => {
+        return props.selected
+          ? props.theme.backgroundThree
+          : props.theme.backgroundTwo;
+      }};
+    }
+  }
 `;
 
 // ========================================================================================= //
@@ -80,11 +93,11 @@ const FilterButton = styled(Globals.Button)<FilterButtonProps>`
 
 type Props = {
   open: Signal<boolean>;
-  selectedLogbookId: Signal<number | null>;
 };
 
 export const LogbooksFiltersModal = (props: Props) => {
   const { theme } = Functions.useSignalsStore().ui;
+  const { selectedLogbookId } = Functions.useSignalsStore().dashboard;
 
   const logbooks = Functions.useGetUserLogbooks();
 
@@ -106,8 +119,8 @@ export const LogbooksFiltersModal = (props: Props) => {
           {theme.value && (
             <Globals.IconContainer onClick={() => (props.open.value = false)}>
               <Icons.Close
-                width={14}
-                height={14}
+                width={16}
+                height={16}
                 fill={Styles.background[theme.value].ten}
                 hoveredFill={Styles.text[theme.value]}
                 addHover
@@ -123,10 +136,10 @@ export const LogbooksFiltersModal = (props: Props) => {
                 <FilterButton
                   key={`logbooks-filters-modals-filter-button-${logbook.id}-${index}`}
                   type="button"
-                  onClick={() => (props.selectedLogbookId.value = logbook.id)}
+                  onClick={() => (selectedLogbookId.value = logbook.id)}
                   size="medium"
                   borderRadius="six"
-                  selected={props.selectedLogbookId.value === logbook.id}
+                  selected={selectedLogbookId.value === logbook.id}
                 >
                   {logbook.name}
                 </FilterButton>

@@ -17,6 +17,7 @@ export const ReviewsSidebar = () => {
       <DashboardSidebarHeader
         title="Reviews"
         caption="Select a logbook below to review your purchasing habits."
+        standalone
       />
     </Container>
   );

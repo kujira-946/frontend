@@ -16,19 +16,13 @@ type ContainerProps = { standalone?: true };
 
 const Container = styled.section<ContainerProps>`
   display: flex;
-  flex-direction: column;
-  gap: ${Styles.pxAsRem.twelve};
   width: 100%;
-  padding: ${(props) => (props.standalone ? 0 : Styles.pxAsRem.twelve)};
+  padding: ${(props) => (props.standalone ? Styles.pxAsRem.twelve : 0)};
   border-bottom: ${(props: ContainerProps & ThemeProps) => {
     return props.standalone
-      ? "transparent"
-      : `${props.theme.backgroundFour} solid 1px`;
+      ? `${props.theme.backgroundFour} solid 1px`
+      : "transparent";
   }};
-`;
-
-const Header = styled.header`
-  display: flex;
 `;
 
 const TitleAndCaption = styled.div`
@@ -68,7 +62,7 @@ const FilterButton = styled(Globals.IconButton)`
 // ========================================================================================= //
 
 type Props = {
-  title: Types.DashboardPage | "Logbooks Filter";
+  title: Types.DashboardPage;
   caption: string;
   openModal?: () => void;
   standalone?: true;
@@ -79,23 +73,21 @@ export const DashboardSidebarHeader = (props: Props) => {
 
   return (
     <Container standalone={props.standalone}>
-      <Header>
-        <TitleAndCaption>
-          <Title>{props.title}</Title>
-          <Caption>{props.caption}</Caption>
-        </TitleAndCaption>
+      <TitleAndCaption>
+        <Title>{props.title}</Title>
+        <Caption>{props.caption}</Caption>
+      </TitleAndCaption>
 
-        {theme.value && props.title === "Logbooks" && (
-          <FilterButton onClick={props.openModal} borderRadius="six">
-            <Icons.Filter
-              width={16}
-              height={16}
-              fill={Styles.background[theme.value].ten}
-              addHover
-            />
-          </FilterButton>
-        )}
-      </Header>
+      {theme.value && props.title === "Logbooks" && (
+        <FilterButton onClick={props.openModal} borderRadius="six">
+          <Icons.Filter
+            width={16}
+            height={16}
+            fill={Styles.background[theme.value].ten}
+            addHover
+          />
+        </FilterButton>
+      )}
     </Container>
   );
 };

@@ -67,10 +67,9 @@ export const LogbooksOverviewHeader = (props: Props) => {
         caption={
           logbooks && selectedLogbookId.value
             ? logbooks[selectedLogbookId.value].name
-            : "Select a logbook."
+            : "Select a logbook using the button to the right."
         }
         openModal={() => (props.filtersOpen.value = true)}
-        standalone
       />
       {selectedLogbookId.value && (
         <Globals.Button
