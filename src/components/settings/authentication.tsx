@@ -22,29 +22,18 @@ const Container = styled.section`
   flex-direction: column;
   gap: ${Styles.pxAsRem.eight};
   width: 100%;
-  max-width: 400px;
 `;
 
-const DeleteAccountButton = styled.button`
-  ${Styles.clearButton};
-  ${Styles.transition};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: ${Styles.pxAsRem.fortyFour};
+const DeleteAccountButton = styled(Globals.Button)`
   color: ${(props: ThemeProps) => props.theme.backgroundSix};
-  border: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
-  border-radius: ${Styles.pxAsRem.six};
-  font-size: ${Styles.pxAsRem.fourteen};
-  font-weight: ${Styles.fontWeights.semiBold};
-  cursor: pointer;
-
-  ${(props) => props.disabled && Styles.preventUserInteraction};
+  border: ${(props: ThemeProps) => `${props.theme.backgroundFour} solid 1px`};
 
   @media (hover: hover) {
     :hover {
       color: ${(props: ThemeProps) => props.theme.text};
-      border: ${(props: ThemeProps) => props.theme.backgroundSix} solid 1px;
+      border: ${(props: ThemeProps) => {
+        return `${props.theme.backgroundSix} solid 1px`;
+      }};
     }
   }
 `;
@@ -85,7 +74,7 @@ export const Authentication = () => {
 
   return (
     <Container>
-      {/* <AnimatePresence>
+      <AnimatePresence>
         {confirmAccountDelete.value && (
           <DynamicDeleteConfirmation
             title="Are you sure you want to delete your account?"
@@ -99,10 +88,18 @@ export const Authentication = () => {
         )}
       </AnimatePresence>
 
-      <Globals.SubmitButton onClick={logOut}>Log Out</Globals.SubmitButton>
-      <DeleteAccountButton onClick={() => (confirmAccountDelete.value = true)}>
+      <Globals.Button type="button" onClick={logOut} size="large" primary>
+        Log Out
+      </Globals.Button>
+
+      <DeleteAccountButton
+        type="button"
+        onClick={() => (confirmAccountDelete.value = true)}
+        size="large"
+        outlined
+      >
         Delete Account
-      </DeleteAccountButton> */}
+      </DeleteAccountButton>
     </Container>
   );
 };

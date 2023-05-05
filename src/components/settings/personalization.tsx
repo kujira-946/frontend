@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { updateUserRequest } from "@/sagas/users.saga";
@@ -20,13 +21,7 @@ type ThemeButtonProps = {
   selected: boolean;
 };
 
-const ThemeButton = styled.button<ThemeButtonProps>`
-  ${Styles.clearButton};
-  ${Styles.transition};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: ${Styles.pxAsRem.fortyFour};
+const ThemeButton = styled(Globals.Button)<ThemeButtonProps>`
   color: ${(props: ThemeButtonProps & ThemeProps) => {
     if (props.selected) return props.theme.text;
     else return props.theme.backgroundSix;
@@ -35,17 +30,15 @@ const ThemeButton = styled.button<ThemeButtonProps>`
     if (props.selected) return props.theme.backgroundFour;
     else return "transparent";
   }};
-  border: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
-  border-radius: ${Styles.pxAsRem.six};
-  font-size: ${Styles.pxAsRem.fourteen};
-  font-weight: ${Styles.fontWeights.semiBold};
-  cursor: pointer;
-
-  ${(props) => props.disabled && Styles.preventUserInteraction};
+  border: ${(props: ThemeProps) => `${props.theme.backgroundFour} solid 1px`};
 
   @media (hover: hover) {
     :hover {
       color: ${(props: ThemeProps) => props.theme.text};
+      background-color: ${(props: ThemeButtonProps & ThemeProps) => {
+        if (props.selected) return props.theme.backgroundFour;
+        else return "transparent";
+      }};
       border: ${(props: ThemeButtonProps & ThemeProps) => {
         if (props.selected) return `${props.theme.backgroundFour} solid 1px`;
         else return `${props.theme.backgroundSix} solid 1px`;
@@ -80,11 +73,23 @@ export const Personalization = () => {
 
   return (
     <Container>
-      <ThemeButton onClick={setThemeLight} selected={theme.value === "light"}>
+      <ThemeButton
+        type="button"
+        onClick={setThemeLight}
+        size="large"
+        selected={theme.value === "light"}
+        outlined
+      >
         Light
       </ThemeButton>
 
-      <ThemeButton onClick={setThemeDark} selected={theme.value === "dark"}>
+      <ThemeButton
+        type="button"
+        onClick={setThemeDark}
+        size="large"
+        selected={theme.value === "dark"}
+        outlined
+      >
         Dark
       </ThemeButton>
     </Container>
