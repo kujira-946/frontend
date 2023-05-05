@@ -70,8 +70,8 @@ export const LogbooksOverview = () => {
     dispatch(createPurchaseRequest({ placement: 0, overviewGroupId }));
   }, []);
 
-  return (
-    <Container>
+    return (
+      <Container>
       <LogbooksOverviewHeader filtersOpen={filtersOpen} />
 
       <UserSummary />

@@ -60,33 +60,6 @@ const FilterButtons = styled.div`
   padding: ${Styles.pxAsRem.twelve};
 `;
 
-type FilterButtonProps = { selected: boolean };
-
-const FilterButton = styled(Globals.Button)<FilterButtonProps>`
-  justify-content: flex-start;
-  color: ${(props: FilterButtonProps & ThemeProps) => {
-    return props.selected ? props.theme.text : props.theme.backgroundEight;
-  }};
-  background-color: ${(props: FilterButtonProps & ThemeProps) => {
-    return props.selected
-      ? props.theme.backgroundThree
-      : props.theme.backgroundOne;
-  }};
-
-  @media (hover: hover) {
-    :hover {
-      color: ${(props: FilterButtonProps & ThemeProps) => {
-        return props.selected ? props.theme.text : props.theme.backgroundEight;
-      }};
-      background-color: ${(props: FilterButtonProps & ThemeProps) => {
-        return props.selected
-          ? props.theme.backgroundThree
-          : props.theme.backgroundTwo;
-      }};
-    }
-  }
-`;
-
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
@@ -129,11 +102,11 @@ export const LogbooksFiltersModal = (props: Props) => {
           )}
         </Header>
 
-        {theme.value && logbooks && (
+        {logbooks && (
           <FilterButtons>
             {logbooks.map((logbook: Types.Logbook, index: number) => {
               return (
-                <FilterButton
+                <Globals.FilterButton
                   key={`logbooks-filters-modals-filter-button-${logbook.id}-${index}`}
                   type="button"
                   onClick={() => (selectedLogbookId.value = logbook.id)}
@@ -142,7 +115,7 @@ export const LogbooksFiltersModal = (props: Props) => {
                   selected={selectedLogbookId.value === logbook.id}
                 >
                   {logbook.name}
-                </FilterButton>
+                </Globals.FilterButton>
               );
             })}
           </FilterButtons>

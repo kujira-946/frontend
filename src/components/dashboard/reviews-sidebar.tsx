@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { DashboardSidebarHeader } from "./dashboard-sidebar-header";
 
+import * as Functions from "@/utils/functions";
+
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
@@ -12,6 +14,8 @@ const Container = styled.article``;
 // ========================================================================================= //
 
 export const ReviewsSidebar = () => {
+  const logbooks = Functions.useGetUserLogbooks();
+
   return (
     <Container>
       <DashboardSidebarHeader

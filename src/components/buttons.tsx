@@ -107,6 +107,33 @@ export const Button = styled.button.attrs((props: ButtonProps) => ({
   }
 `;
 
+type FilterButtonProps = { selected: boolean };
+
+export const FilterButton = styled(Button)<FilterButtonProps>`
+  justify-content: flex-start;
+  color: ${(props: FilterButtonProps & ThemeProps) => {
+    return props.selected ? props.theme.text : props.theme.backgroundEight;
+  }};
+  background-color: ${(props: FilterButtonProps & ThemeProps) => {
+    return props.selected
+      ? props.theme.backgroundThree
+      : props.theme.backgroundOne;
+  }};
+
+  @media (hover: hover) {
+    :hover {
+      color: ${(props: FilterButtonProps & ThemeProps) => {
+        return props.selected ? props.theme.text : props.theme.backgroundEight;
+      }};
+      background-color: ${(props: FilterButtonProps & ThemeProps) => {
+        return props.selected
+          ? props.theme.backgroundThree
+          : props.theme.backgroundTwo;
+      }};
+    }
+  }
+`;
+
 type IconButtonProps = {
   type: "button" | "submit";
   borderRadius?: Types.PxAsRem;
