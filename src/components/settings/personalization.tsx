@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
+import { updateUserRequest } from "@/sagas/users.saga";
 import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
@@ -13,7 +14,6 @@ const Container = styled.section`
   flex-direction: column;
   gap: ${Styles.pxAsRem.eight};
   width: 100%;
-  max-width: 400px;
 `;
 
 type ThemeButtonProps = {
@@ -59,27 +59,32 @@ const ThemeButton = styled.button<ThemeButtonProps>`
 // ========================================================================================= //
 
 export const Personalization = () => {
+  const dispatch = Functions.useAppDispatch();
+
   const { theme } = Functions.useSignalsStore().ui;
+  const { currentUser } = Functions.useEntitiesSlice();
+
+  function setThemeLight(): void {
+    if (currentUser) {
+      theme.value = "light";
+      dispatch(updateUserRequest(currentUser.id, { theme: "light" }));
+    }
+  }
+
+  function setThemeDark(): void {
+    if (currentUser) {
+      theme.value = "dark";
+      dispatch(updateUserRequest(currentUser.id, { theme: "dark" }));
+    }
+  }
 
   return (
     <Container>
-      <ThemeButton
-        onClick={() => {
-          theme.value = "light";
-          localStorage.setItem("theme", theme.value);
-        }}
-        selected={theme.value === "light"}
-      >
+      <ThemeButton onClick={setThemeLight} selected={theme.value === "light"}>
         Light
       </ThemeButton>
 
-      <ThemeButton
-        onClick={() => {
-          theme.value = "dark";
-          localStorage.setItem("theme", theme.value);
-        }}
-        selected={theme.value === "dark"}
-      >
+      <ThemeButton onClick={setThemeDark} selected={theme.value === "dark"}>
         Dark
       </ThemeButton>
     </Container>
