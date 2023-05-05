@@ -18,7 +18,7 @@ type ContainerProps = { selected: boolean };
 const Container = styled.section<ContainerProps>`
   ${Styles.transition};
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   gap: ${Styles.pxAsRem.eight};
   width: 100%;
   padding: ${Styles.pxAsRem.six} ${Styles.pxAsRem.eight};

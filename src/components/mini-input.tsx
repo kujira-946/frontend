@@ -26,7 +26,7 @@ const Container = styled.section<ContainerProps>`
   display: flex;
   flex: 1;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   padding: 0 ${Styles.pxAsRem.six};
   background-color: ${(props: ContainerProps & ThemeProps) => {
