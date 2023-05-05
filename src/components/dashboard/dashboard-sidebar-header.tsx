@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Signal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";

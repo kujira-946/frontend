@@ -79,6 +79,10 @@ export const LogbooksFiltersModal = (props: Props) => {
 
   const logbooks = Functions.useGetUserLogbooks();
 
+  function preventBubbling(event: Types.OnClick): void {
+    event.stopPropagation();
+  }
+
   return (
     <Parent
       onClick={() => (props.open.value = false)}
@@ -87,7 +91,7 @@ export const LogbooksFiltersModal = (props: Props) => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.1 }}
     >
-      <Child onClick={(event: Types.OnClick) => event.stopPropagation()}>
+      <Child onClick={preventBubbling}>
         <Header>
           <TitleAndCaption>
             <Title>Logbooks Filter</Title>

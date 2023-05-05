@@ -65,7 +65,6 @@ export const DashboardNavbar = (props: Props) => {
     return (
       <Container>
         <Header>
-          {/* Logo */}
           {theme.value === "light" ? (
             <Image
               width={28}
@@ -98,6 +97,7 @@ export const DashboardNavbar = (props: Props) => {
                 addHover
               />
             </NavigationButton>
+
             {/* Reviews Button */}
             <NavigationButton
               onClick={() => router.push(Constants.ClientRoutes.REVIEWS)}
@@ -113,6 +113,7 @@ export const DashboardNavbar = (props: Props) => {
                 addHover
               />
             </NavigationButton>
+
             {/* Settings Button */}
             <NavigationButton
               onClick={() => router.push(Constants.ClientRoutes.SETTINGS)}
@@ -131,7 +132,7 @@ export const DashboardNavbar = (props: Props) => {
           </Links>
         </Header>
 
-        <NavigationButton>
+        <NavigationButton onClick={() => console.log("Report Bug")}>
           <Icons.BugReport
             width={16}
             height={16}

@@ -16,10 +16,14 @@ import { ThemeProps } from "../layout";
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
-const Container = styled.article`
+type ContainerProps = { expanded: boolean };
+
+const Container = styled.article<ContainerProps>`
   display: flex;
   flex-direction: column;
-  width: ${Styles.widths.dashboardSidebar}px;
+  width: ${(props) => {
+    return props.expanded ? `${Styles.widths.dashboardSidebar}px` : "auto";
+  }};
   height: 100%;
   background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
 `;
@@ -93,7 +97,7 @@ export const ReviewsSidebar = () => {
   const sidebarExpanded = useSignal(true);
 
   return (
-    <Container>
+    <Container expanded={sidebarExpanded.value}>
       {sidebarExpanded.value && (
         <DashboardSidebarHeader
           title="Reviews"

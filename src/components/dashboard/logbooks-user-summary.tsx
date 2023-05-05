@@ -51,7 +51,7 @@ const InfoCells = styled.article`
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-export const UserSummary = () => {
+export const LogbooksUserSummary = () => {
   const dispatch = Functions.useAppDispatch();
 
   const { logbookTotalSpent, totalSpent, remainingBudget } =

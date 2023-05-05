@@ -143,6 +143,12 @@ export const PurchaseDropdown = (props: Props) => {
     }
   }, []);
 
+  function deleteSelectedPurchases(): void {
+    if (props.deleteSelectedPurchases) {
+      props.deleteSelectedPurchases(Object.values(selectedPurchases.value));
+    }
+  }
+
   const updatePurchase = useCallback(
     Functions.debounce(
       (
@@ -257,29 +263,20 @@ export const PurchaseDropdown = (props: Props) => {
             )}
 
             <Buttons>
-              {Object.keys(selectedPurchases.value).length > 0 &&
-                props.deleteSelectedPurchases && (
-                  <DeleteButton
-                    type="button"
-                    onClick={() => {
-                      if (props.deleteSelectedPurchases)
-                        props.deleteSelectedPurchases(
-                          Object.values(selectedPurchases.value)
-                        );
-                    }}
-                  >
-                    Delete Selected
-                  </DeleteButton>
-                )}
+              {Object.keys(selectedPurchases.value).length > 0 && (
+                <DeleteButton type="button" onClick={deleteSelectedPurchases}>
+                  Delete Selected
+                </DeleteButton>
+              )}
 
               <DeleteButton
                 type="button"
-                onClick={() =>
+                onClick={() => {
                   props.deleteAllPurchases(
                     props.purchaseIds,
                     props.associationId
-                  )
-                }
+                  );
+                }}
               >
                 Delete All
               </DeleteButton>

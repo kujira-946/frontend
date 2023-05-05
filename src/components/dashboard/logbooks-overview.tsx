@@ -14,7 +14,7 @@ import {
 import { ThemeProps } from "../layout";
 
 import { LogbooksOverviewHeader } from "./logbooks-overview-header";
-import { UserSummary } from "./user-summary-new";
+import { LogbooksUserSummary } from "./logbooks-user-summary";
 import { LogbooksOverviewGroup } from "./logbooks-overview-group";
 
 // ========================================================================================= //
@@ -70,11 +70,11 @@ export const LogbooksOverview = () => {
     dispatch(createPurchaseRequest({ placement: 0, overviewGroupId }));
   }, []);
 
-    return (
-      <Container>
+  return (
+    <Container>
       <LogbooksOverviewHeader filtersOpen={filtersOpen} />
 
-      <UserSummary />
+      <LogbooksUserSummary />
 
       {overviewGroups && (
         <OverviewGroups>

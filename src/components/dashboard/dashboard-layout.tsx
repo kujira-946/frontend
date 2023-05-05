@@ -1,20 +1,16 @@
 import styled from "styled-components";
+import { useEffect } from "react";
 
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { ThemeProps } from "../layout";
-
-import { OverviewNavbar } from "./overview-navbar";
-import { UserSummary } from "./user-summary";
-import { OverviewGroups } from "./overview-groups";
-import { DashboardHeader } from "./dashboard-header";
-import { DashboardNavbar } from "./dashboard-navbar";
-import { DashboardSidebar } from "./dashboard-sidebar";
-import { useEffect } from "react";
 import { fetchUserOverviewRequest } from "@/sagas/overviews.saga";
 import { fetchOverviewOverviewGroupsRequest } from "@/sagas/overview-groups.saga";
 import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
+import { ThemeProps } from "../layout";
+
+import { DashboardNavbar } from "./dashboard-navbar";
+import { DashboardSidebar } from "./dashboard-sidebar";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -105,14 +101,7 @@ export const DashboardLayout = (props: Props) => {
         <DashboardSidebar page={props.page} />
       </Sidebar>
 
-      {/* <Overview>
-        <OverviewNavbar />
-        <UserSummary page={props.page} />
-        <OverviewGroups />
-      </Overview> */}
-
       <Body>
-        {/* {props.page !== "Settings" && <DashboardHeader page={props.page} />} */}
         <Children>{props.children}</Children>
       </Body>
     </Container>

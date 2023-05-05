@@ -34,6 +34,17 @@ export const LogbooksOverviewHeader = (props: Props) => {
   const { selectedLogbookId } = Functions.useSignalsStore().dashboard;
   const { logbooks } = Functions.useEntitiesSlice(true);
 
+  function createLogbookEntry(): void {
+    if (selectedLogbookId.value) {
+      dispatch(
+        createLogbookEntryRequest({
+          date: Functions.generateFormattedDate(new Date(), true),
+          logbookId: selectedLogbookId.value,
+        })
+      );
+    }
+  }
+
   return (
     <Container>
       <DashboardSidebarHeader
@@ -49,16 +60,7 @@ export const LogbooksOverviewHeader = (props: Props) => {
       {selectedLogbookId.value && (
         <Globals.Button
           type="button"
-          onClick={() => {
-            if (selectedLogbookId.value) {
-              dispatch(
-                createLogbookEntryRequest({
-                  date: Functions.generateFormattedDate(new Date(), true),
-                  logbookId: selectedLogbookId.value,
-                })
-              );
-            }
-          }}
+          onClick={createLogbookEntry}
           size="medium"
           borderRadius="six"
           style={{ marginTop: Styles.pxAsRem.twelve }}
