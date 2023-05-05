@@ -3,7 +3,7 @@ import styled from "styled-components";
 import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
-import { DashboardSettingsPage } from "@/utils/types";
+import { DashboardSettingsTab } from "@/utils/types";
 import { ThemeProps } from "../layout";
 
 import { DashboardSidebarHeader } from "./dashboard-sidebar-header";
@@ -32,14 +32,15 @@ const FilterButtons = styled.div`
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-export const pages = [
+export const dashboardSettingsTabs = [
   "Personal Information",
   "Security",
+  "Personalization",
   "Authentication",
 ] as const;
 
 export const SettingsSidebar = () => {
-  const { currentSettingsPage } = Functions.useSignalsStore().dashboard;
+  const { currentSettingsTab } = Functions.useSignalsStore().dashboard;
 
   return (
     <Container>
@@ -50,20 +51,22 @@ export const SettingsSidebar = () => {
       />
 
       <FilterButtons>
-        {pages.map((page: DashboardSettingsPage, index: number) => {
-          return (
-            <Globals.FilterButton
-              key={`dashboard-settings-sidebar-filter-button-${page}-${index}`}
-              type="button"
-              onClick={() => (currentSettingsPage.value = page)}
-              size="medium"
-              borderRadius="six"
-              selected={currentSettingsPage.value === page}
-            >
-              {page}
-            </Globals.FilterButton>
-          );
-        })}
+        {dashboardSettingsTabs.map(
+          (page: DashboardSettingsTab, index: number) => {
+            return (
+              <Globals.FilterButton
+                key={`dashboard-settings-sidebar-filter-button-${page}-${index}`}
+                type="button"
+                onClick={() => (currentSettingsTab.value = page)}
+                size="medium"
+                borderRadius="six"
+                selected={currentSettingsTab.value === page}
+              >
+                {page}
+              </Globals.FilterButton>
+            );
+          }
+        )}
       </FilterButtons>
     </Container>
   );

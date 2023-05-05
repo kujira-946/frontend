@@ -17,7 +17,6 @@ const Container = styled.form`
   flex-direction: column;
   gap: ${Styles.pxAsRem.eight};
   width: 100%;
-  max-width: 400px;
 `;
 
 // ========================================================================================= //
@@ -38,23 +37,6 @@ export const PersonalInformation = () => {
   const usernameError = useSignal("");
   const firstNameError = useSignal("");
   const lastNameError = useSignal("");
-
-  const setUserInput = useCallback(
-    (type: "Email" | "Username" | "First Name" | "Last Name") => {
-      return (event: Types.Input): void => {
-        if (type === "Email") {
-          email.value = event.currentTarget.value;
-        } else if (type === "Username") {
-          username.value = event.currentTarget.value;
-        } else if (type === "First Name") {
-          firstName.value = event.currentTarget.value;
-        } else {
-          lastName.value = event.currentTarget.value;
-        }
-      };
-    },
-    []
-  );
 
   function checkDisabled(): boolean {
     return (
@@ -82,6 +64,7 @@ export const PersonalInformation = () => {
     }
   }
 
+  // ↓↓↓ Initial state setup. ↓↓↓ //
   useEffect(() => {
     if (currentUser) {
       email.value = currentUser.email;
@@ -91,12 +74,11 @@ export const PersonalInformation = () => {
     }
   }, [currentUser]);
 
+  // ↓↓↓ Error checks ↓↓↓ //
   effect(() => {
     // Email error check
     if (email.value !== "") {
-      if (!email.value.includes("@")) {
-        emailError.value = "Enter a valid email.";
-      } else if (!email.value.includes(".com")) {
+      if (!email.value.includes("@") || !email.value.includes(".com")) {
         emailError.value = "Enter a valid email.";
       } else {
         emailError.value = "";
@@ -145,43 +127,60 @@ export const PersonalInformation = () => {
 
   return (
     <Container onSubmit={submit}>
-      {/* <Globals.Input
-        key="settings-page-personal-information-tab-email"
-        title="*Email"
-        errorMessage={emailError.value}
+      <Globals.FormInput
+        key="dashboard-settings-page-personal-information-tab-email"
+        type="email"
         userInput={email.value}
-        setUserInput={setUserInput("Email")}
+        setUserInput={(event: Types.Input) => {
+          email.value = event.currentTarget.value;
+        }}
+        placeholder="*Email"
+        errorMessage={emailError.value}
         required
       />
 
-      <Globals.Input
-        key="settings-page-personal-information-tab-username"
-        title="*Username"
-        errorMessage={usernameError.value}
+      <Globals.FormInput
+        key="dashboard-settings-page-personal-information-tab-username"
+        type="text"
         userInput={username.value}
-        setUserInput={setUserInput("Username")}
+        setUserInput={(event: Types.Input) => {
+          username.value = event.currentTarget.value;
+        }}
+        placeholder="*Username"
+        errorMessage={usernameError.value}
         required
       />
 
-      <Globals.Input
-        key="settings-page-personal-information-tab-first-name"
-        title="First Name"
-        errorMessage={firstNameError.value}
+      <Globals.FormInput
+        key="dashboard-settings-page-personal-information-tab-first-name"
+        type="text"
         userInput={firstName.value}
-        setUserInput={setUserInput("First Name")}
+        setUserInput={(event: Types.Input) => {
+          firstName.value = event.currentTarget.value;
+        }}
+        placeholder="First Name"
+        errorMessage={firstNameError.value}
       />
 
-      <Globals.Input
-        key="settings-page-personal-information-tab-last-name"
-        title="Last Name"
-        errorMessage={lastNameError.value}
+      <Globals.FormInput
+        key="dashboard-settings-page-personal-information-tab-last-name"
+        type="text"
         userInput={lastName.value}
-        setUserInput={setUserInput("Last Name")}
+        setUserInput={(event: Types.Input) => {
+          lastName.value = event.currentTarget.value;
+        }}
+        placeholder="Last Name"
+        errorMessage={lastNameError.value}
       />
 
-      <Globals.SubmitButton disabled={checkDisabled()}>
+      <Globals.Button
+        type="submit"
+        disabled={checkDisabled()}
+        size="large"
+        primary
+      >
         Update
-      </Globals.SubmitButton> */}
+      </Globals.Button>
     </Container>
   );
 };

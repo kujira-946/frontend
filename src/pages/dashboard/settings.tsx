@@ -4,6 +4,7 @@ import { ReactElement } from "react";
 import { useSignal } from "@preact/signals-react";
 
 import * as Components from "@/components/settings";
+import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { DashboardLayout } from "@/components/dashboard";
@@ -27,7 +28,7 @@ const Body = styled.div`
 // ========================================================================================= //
 
 const Settings: NextPageWithLayout = () => {
-  const currentTab = useSignal<Types.SettingsTab>("Personal Information");
+  const { currentSettingsTab } = Functions.useSignalsStore().dashboard;
 
   return (
     <>
@@ -37,20 +38,18 @@ const Settings: NextPageWithLayout = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      Settings
-      {/* <Body>
-        <Components.SettingsHeader currentTab={currentTab} />
 
-        {currentTab.value === "Personal Information" ? (
-          <Components.PersonalInformation />
-        ) : currentTab.value === "Security" ? (
-          <Components.Security />
-        ) : currentTab.value === "Authentication" ? (
-          <Components.Authentication />
-        ) : (
-          <Components.Personalization />
-        )}
-      </Body> */}
+      {/* <Body> */}
+      {currentSettingsTab.value === "Personal Information" ? (
+        <Components.PersonalInformation />
+      ) : currentSettingsTab.value === "Security" ? (
+        <Components.Security />
+      ) : currentSettingsTab.value === "Authentication" ? (
+        <Components.Authentication />
+      ) : (
+        <Components.Personalization />
+      )}
+      {/* </Body> */}
     </>
   );
 };

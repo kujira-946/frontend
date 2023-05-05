@@ -1,8 +1,8 @@
-import { pages } from "@/components/dashboard/settings-sidebar";
+import { dashboardSettingsTabs } from "@/components/dashboard/settings-sidebar";
 
 export type DashboardPage = "Logbooks" | "Reviews" | "Settings";
 
-export type DashboardSettingsPage = (typeof pages)[number];
+export type DashboardSettingsTab = (typeof dashboardSettingsTabs)[number];
 
 export type InputMiniImportance =
   | "Primary"

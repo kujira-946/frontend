@@ -109,7 +109,7 @@ type Props = {
   onBlur?: () => void;
   onFocus?: () => void;
 
-  borderRadius: Types.PxAsRem;
+  borderRadius?: Types.PxAsRem;
   isCost?: true;
   required?: true;
 };
