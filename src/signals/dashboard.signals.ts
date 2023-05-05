@@ -1,5 +1,7 @@
 import { Signal, signal } from "@preact/signals-react";
 
+import { DashboardSettingsPage } from "@/utils/types";
+
 export type DashboardSignals = {
   // Dashboard Overview
   totalSpent: Signal<string>;
@@ -8,6 +10,9 @@ export type DashboardSignals = {
   // Dashboard Logbooks
   selectedLogbookId: Signal<number | null>;
   logbookTotalSpent: Signal<number>;
+
+  // Dashboard Settings
+  currentSettingsPage: Signal<DashboardSettingsPage>;
 };
 
 export const dashboardSignals: DashboardSignals = {
@@ -18,4 +23,7 @@ export const dashboardSignals: DashboardSignals = {
   // Dashboard Logbooks
   selectedLogbookId: signal<number | null>(null),
   logbookTotalSpent: signal<number>(0),
+
+  // Dashboard Settings
+  currentSettingsPage: signal<DashboardSettingsPage>("Personal Information"),
 };

@@ -19,8 +19,7 @@ import { ThemeProps } from "../layout";
 const Container = styled.article`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: ${Styles.widths.dashboardSidebar}px;
+  width: ${Styles.widths.dashboardSidebar}px;
   height: 100%;
   background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
 `;
