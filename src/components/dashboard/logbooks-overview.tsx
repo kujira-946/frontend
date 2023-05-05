@@ -51,7 +51,6 @@ const DynamicLogbookFiltersModal = dynamic(() =>
 export const LogbooksOverview = () => {
   const dispatch = Functions.useAppDispatch();
 
-  const { selectedLogbookId } = Functions.useSignalsStore().dashboard;
   const overviewGroups = Functions.useGetOverviewOverviewGroups();
 
   const filtersOpen = useSignal(false);

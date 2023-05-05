@@ -1,5 +1,5 @@
-import * as Dropdowns from "@/components/dropdowns";
 import * as Functions from "@/utils/functions";
+import { PurchaseDropdown } from "../dropdowns";
 
 type Props = {
   overviewGroupId: number;
@@ -17,7 +17,7 @@ export const LogbooksOverviewGroup = (props: Props) => {
   );
 
   return (
-    <Dropdowns.PurchaseDropdown
+    <PurchaseDropdown
       type="overview"
       title={`${props.overviewGroupName} ${
         purchases && purchases.length ? `(${purchases.length})` : ""

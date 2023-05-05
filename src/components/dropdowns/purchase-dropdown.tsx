@@ -26,6 +26,7 @@ const Container = styled.section<ContainerProps>`
   display: flex;
   flex-direction: column;
   gap: ${Styles.pxAsRem.twelve};
+  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
   border: ${(props: ContainerProps & ThemeProps) => {
     return props.open
       ? `${props.theme.backgroundEight} solid 1px`
