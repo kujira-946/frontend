@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { memo } from "react";
 
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
@@ -18,8 +19,8 @@ const Container = styled.section`
 `;
 
 type StaticCellProps = {
-  bold?: true;
   primary?: boolean;
+  bold?: true;
 };
 
 const StaticCell = styled.article<StaticCellProps>`
@@ -55,7 +56,7 @@ type Props = {
   inputError?: boolean;
 };
 
-export const LogbooksOverviewUserInfoCell = (props: Props) => {
+const ExportedComponent = (props: Props) => {
   return (
     <Container>
       <StaticCell>
@@ -65,14 +66,14 @@ export const LogbooksOverviewUserInfoCell = (props: Props) => {
 
       {props.description === "Total Spent" ||
       props.description === "Remaining" ? (
-        <StaticCell bold primary={props.description === "Remaining"}>
+        <StaticCell primary={props.description === "Remaining"} bold>
           {props.cost}
         </StaticCell>
       ) : (
         <MiniInput
           userInput={props.cost}
           setUserInput={props.setUserInput || undefined}
-          placeholder="Cost"
+          placeholder={props.description}
           error={props.inputError}
           type="medium"
           isCost={props.description !== "Savings (%)"}
@@ -81,3 +82,5 @@ export const LogbooksOverviewUserInfoCell = (props: Props) => {
     </Container>
   );
 };
+
+export const LogbooksOverviewUserInfoCell = memo(ExportedComponent);

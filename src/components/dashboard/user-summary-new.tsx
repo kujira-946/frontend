@@ -6,8 +6,8 @@ import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { updateOverviewRequest } from "@/sagas/overviews.saga";
-import { ThemeProps } from "../layout";
 import { LogbooksOverviewUserInfoCell } from "./logbooks-overview-user-info-cell";
+import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -84,6 +84,27 @@ export const UserSummary = () => {
     []
   );
 
+  // ↓↓↓ Initializations and calculations. ↓↓↓ //
+  useEffect(() => {
+    if (overview && overviewGroups) {
+      // Setting initial income and savings states.
+      income.value = Functions.roundNumber(overview.income, 2);
+      savings.value = String(overview.savings);
+
+      // Calculating & setting total spent.
+      const recurringOverviewGroupTotalSpent = overviewGroups[0].totalSpent;
+      const spent = logbookTotalSpent.value + recurringOverviewGroupTotalSpent;
+      totalSpent.value = String(spent);
+
+      // Calculating & setting remaining budget.
+      const savedIncome = overview.income * (overview.savings / 100);
+      const budget =
+        overview.income - recurringOverviewGroupTotalSpent - savedIncome;
+
+      remainingBudget.value = String(budget);
+    }
+  }, [overview, overviewGroups]);
+
   // ↓↓↓ Updating Overview Income ↓↓↓ //
   useEffect(() => {
     if (
@@ -107,27 +128,6 @@ export const UserSummary = () => {
       updateOverviewSavings(overview.id);
     }
   }, [overview, savingsError.value, savings.value]);
-
-  // ↓↓↓ Initializations and calculations. ↓↓↓ //
-  useEffect(() => {
-    if (overview && overviewGroups) {
-      // Setting initial income and savings states.
-      income.value = Functions.roundNumber(overview.income, 2);
-      savings.value = String(overview.savings);
-
-      // Calculating & setting total spent.
-      const recurringOverviewGroupTotalSpent = overviewGroups[0].totalSpent;
-      const spent = logbookTotalSpent.value + recurringOverviewGroupTotalSpent;
-      totalSpent.value = String(spent);
-
-      // Calculating & setting remaining budget.
-      const savedIncome = overview.income * (overview.savings / 100);
-      const budget =
-        overview.income - recurringOverviewGroupTotalSpent - savedIncome;
-
-      remainingBudget.value = String(budget);
-    }
-  }, [overview, overviewGroups]);
 
   // ↓↓↓ Error Handling ↓↓↓ //
   effect(() => {
@@ -188,19 +188,16 @@ export const UserSummary = () => {
     <Container>
       <Header>
         <HeaderTitle>Your Overview</HeaderTitle>
-        {errorMessages.value.length > 0 && (
-          <>
-            {errorMessages.value.map((errorMessage: string, index: number) => {
-              return (
-                <ErrorMessage
-                  key={`dashboard-layout-overview-error-message-${errorMessage}-${index}`}
-                >
-                  {errorMessage}
-                </ErrorMessage>
-              );
-            })}
-          </>
-        )}
+        {errorMessages.value.length > 0 &&
+          errorMessages.value.map((errorMessage: string, index: number) => {
+            return (
+              <ErrorMessage
+                key={`dashboard-layout-overview-error-message-${errorMessage}-${index}`}
+              >
+                {errorMessage}
+              </ErrorMessage>
+            );
+          })}
       </Header>
 
       <InfoCells>

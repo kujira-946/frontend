@@ -71,6 +71,7 @@ export const LogbooksOverviewHeader = (props: Props) => {
         }
         openModal={() => (props.filtersOpen.value = true)}
       />
+
       {selectedLogbookId.value && (
         <Globals.Button
           type="button"
