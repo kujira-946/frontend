@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
+import { uiActions } from "@/redux";
 import { fetchUserOverviewRequest } from "@/sagas/overviews.saga";
 import { fetchOverviewOverviewGroupsRequest } from "@/sagas/overview-groups.saga";
 import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
@@ -83,6 +84,7 @@ export const DashboardLayout = (props: Props) => {
   // ↓↓↓ Fetching overview overview groups. ↓↓↓ //
   useEffect(() => {
     if (overview && !overviewGroups) {
+      dispatch(uiActions.setLoadingOverviewGroups(true));
       dispatch(fetchOverviewOverviewGroupsRequest(overview.id));
     }
   }, [overview, overviewGroups]);

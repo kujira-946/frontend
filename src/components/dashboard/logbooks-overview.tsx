@@ -11,6 +11,7 @@ import {
   createPurchaseRequest,
   deleteAssociatedPurchasesRequest,
 } from "@/sagas/purchases.saga";
+import { OverviewShimmer } from "../shimmer";
 import { ThemeProps } from "../layout";
 
 import { LogbooksOverviewHeader } from "./logbooks-overview-header";
@@ -51,6 +52,7 @@ const DynamicLogbookFiltersModal = dynamic(() =>
 export const LogbooksOverview = () => {
   const dispatch = Functions.useAppDispatch();
 
+  const { loadingOverviewGroups } = Functions.useUiSlice();
   const overviewGroups = Functions.useGetOverviewOverviewGroups();
 
   const filtersOpen = useSignal(false);
@@ -78,21 +80,28 @@ export const LogbooksOverview = () => {
 
       {overviewGroups && (
         <OverviewGroups>
-          {overviewGroups.map(
-            (overviewGroup: Types.OverviewGroup, index: number) => {
-              return (
-                <LogbooksOverviewGroup
-                  key={`logbooks-overview-overview-group-${overviewGroup.id}-${index}`}
-                  overviewGroupId={overviewGroup.id}
-                  overviewGroupName={overviewGroup.name}
-                  overviewGroupTotalSpent={overviewGroup.totalSpent}
-                  overviewGroupPurchaseIds={overviewGroup.purchaseIds || []}
-                  deleteAllPurchases={deleteAllPurchases}
-                  addPurchase={addPurchase}
-                  startOpened={index === 0}
-                />
-              );
-            }
+          {loadingOverviewGroups ? (
+            <>
+              <OverviewShimmer />
+              <OverviewShimmer />
+            </>
+          ) : (
+            overviewGroups.map(
+              (overviewGroup: Types.OverviewGroup, index: number) => {
+                return (
+                  <LogbooksOverviewGroup
+                    key={`logbooks-overview-overview-group-${overviewGroup.id}-${index}`}
+                    overviewGroupId={overviewGroup.id}
+                    overviewGroupName={overviewGroup.name}
+                    overviewGroupTotalSpent={overviewGroup.totalSpent}
+                    overviewGroupPurchaseIds={overviewGroup.purchaseIds || []}
+                    deleteAllPurchases={deleteAllPurchases}
+                    addPurchase={addPurchase}
+                    startOpened={index === 0}
+                  />
+                );
+              }
+            )
           )}
         </OverviewGroups>
       )}
