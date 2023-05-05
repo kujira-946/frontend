@@ -1,12 +1,9 @@
 import Head from "next/head";
 import styled from "styled-components";
 import { ReactElement } from "react";
-import { useSignal } from "@preact/signals-react";
 
 import * as Components from "@/components/settings";
 import * as Functions from "@/utils/functions";
-import * as Styles from "@/utils/styles";
-import * as Types from "@/utils/types";
 import { DashboardLayout } from "@/components/dashboard";
 import { NextPageWithLayout } from "../_app";
 
@@ -16,11 +13,7 @@ import { NextPageWithLayout } from "../_app";
 
 const Body = styled.div`
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: ${Styles.pxAsRem.sixteen};
   height: 100%;
-  padding: ${Styles.pxAsRem.sixteen};
 `;
 
 // ========================================================================================= //
@@ -39,17 +32,17 @@ const Settings: NextPageWithLayout = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/* <Body> */}
-      {currentSettingsTab.value === "Personal Information" ? (
-        <Components.PersonalInformation />
-      ) : currentSettingsTab.value === "Security" ? (
-        <Components.Security />
-      ) : currentSettingsTab.value === "Authentication" ? (
-        <Components.Authentication />
-      ) : (
-        <Components.Personalization />
-      )}
-      {/* </Body> */}
+      <Body>
+        {currentSettingsTab.value === "Personal Information" ? (
+          <Components.PersonalInformation />
+        ) : currentSettingsTab.value === "Security" ? (
+          <Components.Security />
+        ) : currentSettingsTab.value === "Authentication" ? (
+          <Components.Authentication />
+        ) : (
+          <Components.Personalization />
+        )}
+      </Body>
     </>
   );
 };

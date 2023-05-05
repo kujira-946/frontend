@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 import { AnimatePresence } from "framer-motion";
 
@@ -81,7 +80,6 @@ export const Authentication = () => {
             body="Once deleted, your account cannot be recovered."
             submitText="Yes, delete my account."
             open={confirmAccountDelete}
-            onClose={() => (confirmAccountDelete.value = false)}
             onConfirm={deleteAccount}
             fixed
           />

@@ -19,6 +19,8 @@ type ParentProps = {
 };
 
 const Parent = styled(motion.section)<ParentProps>`
+  ${Styles.setMediaPaddings()};
+  ${Styles.overlay};
   position: ${(props) => (props.fixed ? "fixed" : "absolute")};
   top: 0;
   right: 0;
@@ -28,9 +30,6 @@ const Parent = styled(motion.section)<ParentProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: ${Styles.pxAsRem.sixteen};
-
-  ${Styles.overlay};
 `;
 
 type ChildProps = {
@@ -42,28 +41,26 @@ const Child = styled.article<ChildProps>`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: ${Styles.pxAsRem.sixteen};
-  padding: ${Styles.pxAsRem.sixteen};
-  background-color: ${(props: ThemeProps) => props.theme.backgroundThree};
-  border-radius: ${(props) => {
-    return props.borderRadius
-      ? Styles.pxAsRem[props.borderRadius]
-      : Styles.pxAsRem.six;
-  }};
+  gap: ${Styles.pxAsRem.twelve};
+  width: 100%;
+  max-width: 37.5rem;
+  padding: ${Styles.pxAsRem.twenty};
+  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
+  border-radius: ${Styles.pxAsRem.eight};
 `;
 
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: ${Styles.pxAsRem.twenty};
+  gap: ${Styles.pxAsRem.twelve};
   width: 100%;
 `;
 
-const Title = styled.h2`
+const Title = styled.h1`
   margin: 0;
   color: ${(props: ThemeProps) => props.theme.text};
-  font-size: ${Styles.pxAsRem.sixteen};
+  font-size: ${Styles.pxAsRem.eighteen};
   font-weight: ${Styles.fontWeights.bold};
 `;
 
@@ -72,7 +69,7 @@ const Body = styled.p`
   margin: 0;
   color: ${(props: ThemeProps) => props.theme.text};
   font-size: ${Styles.pxAsRem.fourteen};
-  font-weight: ${Styles.fontWeights.medium};
+  font-weight: ${Styles.fontWeights.regular};
 `;
 
 const DeleteButton = styled.button`
@@ -93,7 +90,6 @@ type Props = {
   body?: string;
   submitText?: string;
   open: Signal<boolean>;
-  onClose: () => void;
   onConfirm: () => void;
   borderRadius?: Types.PxAsRem;
   fixed?: true;
@@ -104,22 +100,25 @@ export const DeleteConfirmation = (props: Props) => {
 
   return (
     <Parent
-      onClick={props.onClose}
+      onClick={() => (props.open.value = false)}
       initial={Constants.staticFadeIn.initial}
       animate={Constants.staticFadeIn.animate}
       exit={Constants.staticFadeIn.exit}
       transition={Constants.staticFadeIn.transition}
     >
-      {/* <Child
+      <Child
         onClick={(event: Types.OnClick) => event.stopPropagation()}
         borderRadius={props.borderRadius}
       >
         <Header>
           <Title>{props.title}</Title>
           {theme.value && (
-            <DeleteButton type="button" onClick={props.onClose}>
+            <DeleteButton
+              type="button"
+              onClick={() => (props.open.value = false)}
+            >
               <Icons.Close
-                height={12}
+                height={16}
                 fill={Styles.background[theme.value].six}
                 hoveredFill={Styles.text[theme.value]}
                 addHover
@@ -130,17 +129,19 @@ export const DeleteConfirmation = (props: Props) => {
 
         {props.body && <Body>{props.body}</Body>}
 
-        <Globals.PrimaryButton
+        <Globals.Button
+          type="submit"
           onClick={() => {
             props.onConfirm();
             props.open.value = false;
           }}
-          size="medium"
-          borderRadius="four"
+          size="large"
+          borderRadius="six"
+          primary
         >
           {props.submitText || "Yes"}
-        </Globals.PrimaryButton>
-      </Child> */}
+        </Globals.Button>
+      </Child>
     </Parent>
   );
 };
