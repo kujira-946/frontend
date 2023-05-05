@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useCallback } from "react";
 import { effect, useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
@@ -17,7 +16,6 @@ const Container = styled.form`
   flex-direction: column;
   gap: ${Styles.pxAsRem.eight};
   width: 100%;
-  max-width: 400px;
 `;
 
 // ========================================================================================= //
@@ -29,8 +27,6 @@ export const Security = () => {
 
   const { currentUser } = Functions.useEntitiesSlice();
 
-  const hidden = useSignal(true);
-
   const password = useSignal("");
   const newPassword = useSignal("");
   const confirmNewPassword = useSignal("");
@@ -38,21 +34,6 @@ export const Security = () => {
   const passwordError = useSignal("");
   const newPasswordError = useSignal("");
   const confirmNewPasswordError = useSignal("");
-
-  const setUserInput = useCallback(
-    (type: "Password" | "New Password" | "Confirm New Password") => {
-      return (event: Types.Input): void => {
-        if (type === "Password") {
-          password.value = event.currentTarget.value;
-        } else if (type === "New Password") {
-          newPassword.value = event.currentTarget.value;
-        } else {
-          confirmNewPassword.value = event.currentTarget.value;
-        }
-      };
-    },
-    []
-  );
 
   function checkDisabled(): boolean {
     return (
@@ -78,6 +59,7 @@ export const Security = () => {
     }
   }
 
+  // ↓↓↓ Error checks ↓↓↓ //
   effect(() => {
     // Password error check
     if (password.value !== "") {
@@ -117,48 +99,50 @@ export const Security = () => {
 
   return (
     <Container onSubmit={submit}>
-      {/* <Globals.Input
-        key="settings-page-security-password"
-        type={hidden.value ? "password" : "text"}
-        title="*Password"
-        errorMessage={passwordError.value}
+      <Globals.FormInput
+        key="dashboard-settings-page-security-password"
+        type="password"
         userInput={password.value}
-        setUserInput={setUserInput("Password")}
-        hidden={hidden.value}
-        toggleHidden={() => (hidden.value = !hidden.value)}
-        password
+        setUserInput={(event: Types.Input) => {
+          password.value = event.currentTarget.value;
+        }}
+        placeholder="*Password"
+        errorMessage={passwordError.value}
         required
       />
 
-      <Globals.Input
-        key="settings-page-security-new-password"
-        type={hidden.value ? "password" : "text"}
-        title="*New Password"
-        errorMessage={newPasswordError.value}
+      <Globals.FormInput
+        key="dashboard-settings-page-security-new-password"
+        type="password"
         userInput={newPassword.value}
-        setUserInput={setUserInput("New Password")}
-        hidden={hidden.value}
-        toggleHidden={() => (hidden.value = !hidden.value)}
-        password
+        setUserInput={(event: Types.Input) => {
+          newPassword.value = event.currentTarget.value;
+        }}
+        placeholder="*New Password"
+        errorMessage={newPasswordError.value}
         required
       />
 
-      <Globals.Input
-        key="settings-page-security-confirm-new-password"
-        type={hidden.value ? "password" : "text"}
-        title="*Confirm New Password"
-        errorMessage={confirmNewPasswordError.value}
+      <Globals.FormInput
+        key="dashboard-settings-page-security-confirm-new-password"
+        type="password"
         userInput={confirmNewPassword.value}
-        setUserInput={setUserInput("Confirm New Password")}
-        hidden={hidden.value}
-        toggleHidden={() => (hidden.value = !hidden.value)}
-        password
+        setUserInput={(event: Types.Input) => {
+          confirmNewPassword.value = event.currentTarget.value;
+        }}
+        placeholder="*Confirm New Password"
+        errorMessage={confirmNewPasswordError.value}
         required
       />
 
-      <Globals.SubmitButton disabled={checkDisabled()}>
+      <Globals.Button
+        type="submit"
+        disabled={checkDisabled()}
+        size="large"
+        primary
+      >
         Update
-      </Globals.SubmitButton> */}
+      </Globals.Button>
     </Container>
   );
 };

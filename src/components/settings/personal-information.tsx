@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { effect, useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
