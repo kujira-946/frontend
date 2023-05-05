@@ -24,6 +24,8 @@ const Parent = styled(motion.section)`
 `;
 
 const Child = styled.article`
+  display: flex;
+  flex-direction: column;
   height: 100%;
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
   border-radius: ${Styles.pxAsRem.six};
@@ -57,7 +59,10 @@ const Caption = styled.span`
 
 const FilterButtons = styled.div`
   display: flex;
+  flex-direction: column;
+  height: 100%;
   padding: ${Styles.pxAsRem.twelve};
+  overflow-y: auto;
 `;
 
 // ========================================================================================= //
@@ -113,6 +118,7 @@ export const LogbooksFiltersModal = (props: Props) => {
                   size="medium"
                   borderRadius="six"
                   selected={selectedLogbookId.value === logbook.id}
+                  inModal
                 >
                   {logbook.name}
                 </Globals.FilterButton>

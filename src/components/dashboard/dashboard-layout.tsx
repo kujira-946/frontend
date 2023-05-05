@@ -73,6 +73,7 @@ type Props = {
 
 export const DashboardLayout = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
+
   const { currentUser, overview, overviewGroups, logbooks } =
     Functions.useEntitiesSlice(true);
 

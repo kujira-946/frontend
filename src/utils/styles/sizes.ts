@@ -32,6 +32,7 @@ export const widths = {
   mobile: 500,
 
   content: 920,
+  dashboardSidebar: 260,
 };
 
 export const fontWeights = {

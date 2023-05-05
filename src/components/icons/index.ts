@@ -18,3 +18,5 @@ export * from "./reviews";
 export * from "./settings";
 export * from "./bug-report";
 export * from "./filter";
+export * from "./sidebar-collapse";
+export * from "./sidebar-expand";

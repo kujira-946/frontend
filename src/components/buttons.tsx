@@ -107,7 +107,10 @@ export const Button = styled.button.attrs((props: ButtonProps) => ({
   }
 `;
 
-type FilterButtonProps = { selected: boolean };
+type FilterButtonProps = {
+  selected: boolean;
+  inModal?: true;
+};
 
 export const FilterButton = styled(Button)<FilterButtonProps>`
   justify-content: flex-start;
@@ -115,9 +118,15 @@ export const FilterButton = styled(Button)<FilterButtonProps>`
     return props.selected ? props.theme.text : props.theme.backgroundEight;
   }};
   background-color: ${(props: FilterButtonProps & ThemeProps) => {
-    return props.selected
-      ? props.theme.backgroundThree
-      : props.theme.backgroundOne;
+    if (props.inModal) {
+      return props.selected
+        ? props.theme.backgroundThree
+        : props.theme.backgroundOne;
+    } else {
+      return props.selected
+        ? props.theme.backgroundFour
+        : props.theme.backgroundTwo;
+    }
   }};
 
   @media (hover: hover) {
@@ -126,9 +135,15 @@ export const FilterButton = styled(Button)<FilterButtonProps>`
         return props.selected ? props.theme.text : props.theme.backgroundEight;
       }};
       background-color: ${(props: FilterButtonProps & ThemeProps) => {
-        return props.selected
-          ? props.theme.backgroundThree
-          : props.theme.backgroundTwo;
+        if (props.inModal) {
+          return props.selected
+            ? props.theme.backgroundThree
+            : props.theme.backgroundTwo;
+        } else {
+          return props.selected
+            ? props.theme.backgroundFour
+            : props.theme.backgroundThree;
+        }
       }};
     }
   }
