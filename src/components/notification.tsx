@@ -33,7 +33,7 @@ const Container = styled(motion.main)<ContainerProps>`
   border: ${(props: ThemeProps & ContainerProps) => {
     return `${props.theme[props.type]} solid 2px`;
   }};
-  border-radius: ${Styles.pxAsRem.six};
+  border-radius: ${Styles.pxAsRem.eight};
   text-align: center;
   cursor: pointer;
 

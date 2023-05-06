@@ -25,7 +25,6 @@ type ContainerProps = { open: boolean };
 const Container = styled.section<ContainerProps>`
   display: flex;
   flex-direction: column;
-  gap: ${Styles.pxAsRem.twelve};
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
   border: ${(props: ContainerProps & ThemeProps) => {
     return props.open
@@ -50,21 +49,25 @@ const Header = styled.button<HeaderProps>`
 const Body = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  gap: ${Styles.pxAsRem.twelve};
-  padding: 0 ${Styles.pxAsRem.twelve};
 `;
 
 const PurchaseCells = styled.article`
   display: flex;
   flex-direction: column;
   gap: ${Styles.pxAsRem.four};
+  padding: ${Styles.pxAsRem.twelve};
+  max-height: 400px;
+  overflow-y: auto;
 `;
 
 const Buttons = styled.article`
   display: flex;
   flex-direction: column;
   gap: ${Styles.pxAsRem.eight};
-  margin-bottom: ${Styles.pxAsRem.twelve};
+  padding: ${Styles.pxAsRem.twelve};
+  border-top: ${(props: ThemeProps) => {
+    return `${props.theme.backgroundFour} solid 1px`;
+  }};
 `;
 
 const buttonStyles = css`
