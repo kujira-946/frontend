@@ -5,6 +5,7 @@ import * as Components from "@/components/logbook";
 import { DashboardLayout } from "@/components/dashboard";
 import { useSignalsStore } from "@/utils/functions";
 import { NextPageWithLayout } from "../_app";
+import { LogbookEntries } from "@/components/logbooks";
 
 const Logbooks: NextPageWithLayout = () => {
   const { selectedLogbookId } = useSignalsStore().dashboard;
@@ -17,10 +18,10 @@ const Logbooks: NextPageWithLayout = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      Logbooks
-      {/* {selectedLogbookId.value && (
-        <Components.LogbookEntries logbookId={selectedLogbookId.value} />
-      )} */}
+
+      {selectedLogbookId.value && (
+        <LogbookEntries selectedLogbookId={selectedLogbookId.value} />
+      )}
     </>
   );
 };

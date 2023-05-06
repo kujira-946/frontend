@@ -14,7 +14,7 @@ import {
 import { ThemeProps } from "../layout";
 
 import { OverviewHeader } from "./overview-header";
-import { LogbookHeader } from "./logbook-header";
+import { LogbookEntryHeader } from "./logbook-entry-header";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -116,7 +116,7 @@ const AddButton = styled.button`
 
 type Props = {
   type: "overview" | "logbook";
-  title: string;
+  title?: string;
   associationId: number; // overview group or logbook entry
   associationTotalSpent: number;
   purchases: Types.Purchase[] | undefined;
@@ -215,13 +215,13 @@ export const PurchaseDropdown = (props: Props) => {
         onClick={() => (open.value = !open.value)}
         open={open.value}
       >
-        {props.type === "overview" ? (
+        {props.type === "overview" && props.title ? (
           <OverviewHeader
             title={props.title}
             totalSpent={props.associationTotalSpent}
           />
         ) : (
-          <LogbookHeader />
+          <LogbookEntryHeader logbookEntryId={props.associationId} />
         )}
       </Header>
 

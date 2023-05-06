@@ -37,3 +37,7 @@ export const PurchaseShimmer = (props: { borderRadius?: Types.PxAsRem }) => (
 );
 
 export const OverviewShimmer = () => <Shimmer borderRadius="six" height={44} />;
+
+export const LogbookEntryShimmer = () => (
+  <Shimmer borderRadius="eight" height={84} />
+);

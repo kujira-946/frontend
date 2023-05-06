@@ -26,9 +26,12 @@ const Container = styled.section<ContainerProps>`
   display: flex;
   flex: 1;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: center;
   width: 100%;
-  padding: 0 ${Styles.pxAsRem.six};
+  padding: ${(props) => (props.frozen ? 0 : `0 ${Styles.pxAsRem.six}`)};
+  color: ${(props: ContainerProps & ThemeProps) => {
+    return props.frozen ? props.theme.text : "inherit";
+  }};
   background-color: ${(props: ContainerProps & ThemeProps) => {
     if (props.frozen) return "transparent";
     else if (props.hasContent) return props.theme.backgroundThree;
@@ -53,6 +56,16 @@ const Container = styled.section<ContainerProps>`
   }};
   border-radius: ${(props) => {
     return props.type === "large" ? Styles.pxAsRem.six : Styles.pxAsRem.four;
+  }};
+  font-size: ${(props) => {
+    return props.type === "large"
+      ? Styles.pxAsRem.sixteen
+      : Styles.pxAsRem.fourteen;
+  }};
+  font-weight: ${(props) => {
+    return props.type === "large"
+      ? Styles.fontWeights.semiBold
+      : Styles.fontWeights.regular;
   }};
   cursor: pointer;
 
@@ -118,13 +131,30 @@ type Props = {
 
   borderRadius?: Types.PxAsRem;
   type: Type;
-  frozen?: boolean;
   isCost?: boolean;
+  frozen?: boolean;
 };
 
 export const MiniInput = (props: Props) => {
   const textareaRef = useRef<any>(null);
   const focused = useSignal(false);
+
+  function focusInput(event: Types.OnClick): void {
+    event.stopPropagation();
+    textareaRef.current && textareaRef.current.focus();
+    focused.value = true;
+  }
+
+  function textareaOnFocus(event: FocusEvent<HTMLTextAreaElement>): void {
+    event.currentTarget.select();
+    focused.value = true;
+    if (props.onFocus) props.onFocus();
+  }
+
+  function textareaOnBlur(): void {
+    focused.value = false;
+    if (props.onBlur) props.onBlur();
+  }
 
   function preventEnterPress(event: Types.KeyPress): void {
     if (event.key === "Enter") event.preventDefault();
@@ -132,11 +162,7 @@ export const MiniInput = (props: Props) => {
 
   return (
     <Container
-      onClick={(event: Types.OnClick): void => {
-        event.stopPropagation();
-        textareaRef.current && textareaRef.current.focus();
-        focused.value = true;
-      }}
+      onClick={focusInput}
       type={props.type}
       focused={focused.value}
       hasContent={props.userInput.length > 0}
@@ -150,15 +176,8 @@ export const MiniInput = (props: Props) => {
         tabIndex={props.frozen ? -1 : 0}
         ref={textareaRef}
         onChange={props.setUserInput}
-        onFocus={(event: FocusEvent<HTMLTextAreaElement>) => {
-          event.currentTarget.select();
-          focused.value = true;
-          if (props.onFocus) props.onFocus();
-        }}
-        onBlur={() => {
-          focused.value = false;
-          if (props.onBlur) props.onBlur();
-        }}
+        onFocus={textareaOnFocus}
+        onBlur={textareaOnBlur}
         onKeyPress={preventEnterPress}
         type={props.type}
         style={{

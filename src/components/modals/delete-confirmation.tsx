@@ -99,49 +99,51 @@ export const DeleteConfirmation = (props: Props) => {
   const { theme } = Functions.useSignalsStore().ui;
 
   return (
-    <Parent
-      onClick={() => (props.open.value = false)}
-      initial={Constants.staticFadeIn.initial}
-      animate={Constants.staticFadeIn.animate}
-      exit={Constants.staticFadeIn.exit}
-      transition={Constants.staticFadeIn.transition}
-    >
-      <Child
-        onClick={(event: Types.OnClick) => event.stopPropagation()}
-        borderRadius={props.borderRadius}
+    <Globals.Portal>
+      <Parent
+        onClick={() => (props.open.value = false)}
+        initial={Constants.staticFadeIn.initial}
+        animate={Constants.staticFadeIn.animate}
+        exit={Constants.staticFadeIn.exit}
+        transition={Constants.staticFadeIn.transition}
       >
-        <Header>
-          <Title>{props.title}</Title>
-          {theme.value && (
-            <DeleteButton
-              type="button"
-              onClick={() => (props.open.value = false)}
-            >
-              <Icons.Close
-                height={16}
-                fill={Styles.background[theme.value].six}
-                hoveredFill={Styles.text[theme.value]}
-                addHover
-              />
-            </DeleteButton>
-          )}
-        </Header>
-
-        {props.body && <Body>{props.body}</Body>}
-
-        <Globals.Button
-          type="submit"
-          onClick={() => {
-            props.onConfirm();
-            props.open.value = false;
-          }}
-          size="large"
-          borderRadius="six"
-          primary
+        <Child
+          onClick={(event: Types.OnClick) => event.stopPropagation()}
+          borderRadius={props.borderRadius}
         >
-          {props.submitText || "Yes"}
-        </Globals.Button>
-      </Child>
-    </Parent>
+          <Header>
+            <Title>{props.title}</Title>
+            {theme.value && (
+              <DeleteButton
+                type="button"
+                onClick={() => (props.open.value = false)}
+              >
+                <Icons.Close
+                  height={16}
+                  fill={Styles.background[theme.value].six}
+                  hoveredFill={Styles.text[theme.value]}
+                  addHover
+                />
+              </DeleteButton>
+            )}
+          </Header>
+
+          {props.body && <Body>{props.body}</Body>}
+
+          <Globals.Button
+            type="submit"
+            onClick={() => {
+              props.onConfirm();
+              props.open.value = false;
+            }}
+            size="large"
+            borderRadius="six"
+            primary
+          >
+            {props.submitText || "Yes"}
+          </Globals.Button>
+        </Child>
+      </Parent>
+    </Globals.Portal>
   );
 };

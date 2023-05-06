@@ -1,5 +1,6 @@
 export * from "./lazy-load";
 export * from "./no-interaction";
+export * from "./portal";
 export * from "./draggable-portal-item";
 export * from "./notification";
 export * from "./loading";
