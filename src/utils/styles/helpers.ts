@@ -3,18 +3,35 @@ import { css } from "styled-components";
 import * as Sizes from "./sizes";
 import { PxAsRem } from "../types";
 
-export function setMediaPaddings(verticalPadding?: PxAsRem) {
+export function setMediaPaddings(
+  desktopVerticalPadding?: PxAsRem,
+  tabletVerticalPadding?: PxAsRem,
+  mobileVerticalPadding?: PxAsRem
+) {
   return css`
     @media (max-width: ${Sizes.widths.desktop}px) {
-      padding: ${verticalPadding ? Sizes.pxAsRem[verticalPadding] : "0rem"} 24px;
+      padding: ${desktopVerticalPadding
+          ? Sizes.pxAsRem[desktopVerticalPadding]
+          : "0rem"}
+        ${Sizes.pxAsRem.twentyFour};
     }
 
     @media (max-width: ${Sizes.widths.tablet}px) {
-      padding: ${verticalPadding ? Sizes.pxAsRem[verticalPadding] : "0rem"} 20px;
+      padding: ${tabletVerticalPadding
+          ? Sizes.pxAsRem[tabletVerticalPadding]
+          : desktopVerticalPadding
+          ? Sizes.pxAsRem[desktopVerticalPadding]
+          : "0rem"}
+        ${Sizes.pxAsRem.twenty};
     }
 
     @media (max-width: ${Sizes.widths.mobile}px) {
-      padding: ${verticalPadding ? Sizes.pxAsRem[verticalPadding] : "0rem"} 14px;
+      padding: ${mobileVerticalPadding
+          ? Sizes.pxAsRem[mobileVerticalPadding]
+          : desktopVerticalPadding
+          ? Sizes.pxAsRem[desktopVerticalPadding]
+          : "0rem"}
+        ${Sizes.pxAsRem.fourteen};
     }
   `;
 }

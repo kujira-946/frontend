@@ -1,3 +1,4 @@
+import styled from "styled-components";
 import { useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 
@@ -9,13 +10,25 @@ import * as Types from "@/utils/types";
 
 import { MobileNavbarContainer } from "./mobile-navbar-container";
 
+// ========================================================================================= //
+// [ STYLED COMPONENTS ] =================================================================== //
+// ========================================================================================= //
+
+const Buttons = styled.div`
+  display: flex;
+`;
+
+// ========================================================================================= //
+// [ EXPORTED COMPONENT ] ================================================================== //
+// ========================================================================================= //
+
 type Props = {
   page: Types.DashboardPage;
 };
 
 export const DashboardMobileNavbar = (props: Props) => {
   const { theme } = Functions.useSignalsStore().ui;
-  const { mobileMenuOpen, selectedLogbookId } =
+  const { mobileFiltersOpen, mobileMenuOpen, selectedLogbookId } =
     Functions.useSignalsStore().dashboard;
   const { logbooks } = Functions.useEntitiesSlice();
 
@@ -42,17 +55,30 @@ export const DashboardMobileNavbar = (props: Props) => {
   return (
     <MobileNavbarContainer page={props.page} caption={caption.value}>
       {theme.value && (
-        <Globals.IconButton
-          type="button"
-          onClick={() => (mobileMenuOpen.value = true)}
-        >
-          <Icons.Hamburger
-            width={16}
-            height={16}
-            fill={Styles.background[theme.value].eight}
-            addHover
-          />
-        </Globals.IconButton>
+        <Buttons>
+          <Globals.IconButton
+            type="button"
+            onClick={() => (mobileFiltersOpen.value = true)}
+          >
+            <Icons.Filter
+              width={16}
+              height={16}
+              fill={Styles.background[theme.value].eight}
+              addHover
+            />
+          </Globals.IconButton>
+          <Globals.IconButton
+            type="button"
+            onClick={() => (mobileMenuOpen.value = true)}
+          >
+            <Icons.Hamburger
+              width={16}
+              height={16}
+              fill={Styles.background[theme.value].eight}
+              addHover
+            />
+          </Globals.IconButton>
+        </Buttons>
       )}
     </MobileNavbarContainer>
   );

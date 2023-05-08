@@ -13,7 +13,7 @@ const Container = styled.section`
   top: 0;
   right: 0;
   left: 0;
-  display: none;
+  display: flex;
   justify-content: space-between;
   align-items: center;
   gap: ${Styles.pxAsRem.twelve};
@@ -22,10 +22,6 @@ const Container = styled.section`
   border-bottom: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
 
   ${Styles.setMediaPaddings("eight")};
-
-  @media (max-width: ${Styles.breakpoints.navbarWidth}px) {
-    display: flex;
-  }
 `;
 
 const PageAndCaption = styled.section`

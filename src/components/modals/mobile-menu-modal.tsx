@@ -38,6 +38,14 @@ const Container = styled(motion.main)`
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
 `;
 
+const NavigationButtons = styled.section`
+  display: flex;
+  flex-direction: column;
+  padding: ${Styles.pxAsRem.twenty} ${Styles.pxAsRem.twentyFour};
+
+  ${Styles.setMediaPaddings("twenty", "twenty", "fourteen")};
+`;
+
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
@@ -81,7 +89,7 @@ export const MobileMenuModal = (props: Props) => {
           )}
         </MobileNavbarContainer>
 
-        {props.children}
+        <NavigationButtons>{props.children}</NavigationButtons>
       </Container>
     </Globals.Portal>
   );

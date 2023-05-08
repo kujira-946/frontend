@@ -1,9 +1,10 @@
 import { Signal, signal } from "@preact/signals-react";
 
-import { DashboardPage, DashboardSettingsTab } from "@/utils/types";
+import { DashboardSettingsTab } from "@/utils/types";
 
 export type DashboardSignals = {
   // Dashboard
+  mobileFiltersOpen: Signal<boolean>;
   mobileMenuOpen: Signal<boolean>;
 
   // Dashboard Overview
@@ -20,6 +21,7 @@ export type DashboardSignals = {
 
 export const dashboardSignals: DashboardSignals = {
   // Dashboard
+  mobileFiltersOpen: signal<boolean>(false),
   mobileMenuOpen: signal<boolean>(false),
 
   // Dashboard Overview

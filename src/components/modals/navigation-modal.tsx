@@ -1,7 +1,5 @@
-import styled from "styled-components";
 import { useRouter } from "next/router";
 
-import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { FilterButton } from "@/components/buttons";
 import { useSignalsStore } from "@/utils/functions";
@@ -12,14 +10,6 @@ import { MobileMenuModal } from "./mobile-menu-modal";
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
-
-const NavigationButtons = styled.section`
-  display: flex;
-  flex-direction: column;
-  padding: ${Styles.pxAsRem.twenty} 0rem;
-
-  ${Styles.setMediaPaddings("twenty")};
-`;
 
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
@@ -43,40 +33,38 @@ export const NavigationModal = (props: Props) => {
 
   return (
     <MobileMenuModal page="Navigation">
-      <NavigationButtons>
-        <FilterButton
-          key="dashboard-mobile-navigation-modal-logbooks-filter-button"
-          type="button"
-          onClick={() => sendToPage("Logbooks")}
-          size="medium"
-          selected={props.page === "Logbooks"}
-          inModal
-        >
-          Logbooks
-        </FilterButton>
+      <FilterButton
+        key="dashboard-mobile-navigation-modal-logbooks-filter-button"
+        type="button"
+        onClick={() => sendToPage("Logbooks")}
+        size="medium"
+        selected={props.page === "Logbooks"}
+        inModal
+      >
+        Logbooks
+      </FilterButton>
 
-        <FilterButton
-          key="dashboard-mobile-navigation-modal-reviews-filter-button"
-          type="button"
-          onClick={() => sendToPage("Reviews")}
-          size="medium"
-          selected={props.page === "Reviews"}
-          inModal
-        >
-          Reviews
-        </FilterButton>
+      <FilterButton
+        key="dashboard-mobile-navigation-modal-reviews-filter-button"
+        type="button"
+        onClick={() => sendToPage("Reviews")}
+        size="medium"
+        selected={props.page === "Reviews"}
+        inModal
+      >
+        Reviews
+      </FilterButton>
 
-        <FilterButton
-          key="dashboard-mobile-navigation-modal-settings-filter-button"
-          type="button"
-          onClick={() => sendToPage("Settings")}
-          size="medium"
-          selected={props.page === "Settings"}
-          inModal
-        >
-          Settings
-        </FilterButton>
-      </NavigationButtons>
+      <FilterButton
+        key="dashboard-mobile-navigation-modal-settings-filter-button"
+        type="button"
+        onClick={() => sendToPage("Settings")}
+        size="medium"
+        selected={props.page === "Settings"}
+        inModal
+      >
+        Settings
+      </FilterButton>
     </MobileMenuModal>
   );
 };

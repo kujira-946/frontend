@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import styled from "styled-components";
 import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
@@ -13,7 +14,6 @@ import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
 import { ThemeProps } from "../layout";
 
 import { DashboardSidebar } from "./dashboard-sidebar";
-import dynamic from "next/dynamic";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -37,6 +37,15 @@ const Main = styled.main`
   padding: ${Styles.pxAsRem.twenty} 0;
 
   ${Styles.setMediaPaddings("twenty")};
+`;
+
+const MobileNavbar = styled.div`
+  display: none;
+  flex-direction: column;
+
+  @media (max-width: ${Styles.breakpoints.navbarWidth}px) {
+    display: flex;
+  }
 `;
 
 const Sidebar = styled.section`
@@ -114,7 +123,9 @@ export const DashboardLayout = (props: Props) => {
       </AnimatePresence>
 
       <Container>
-        <Navbars.DashboardMobileNavbar page={props.page} />
+        <MobileNavbar>
+          <Navbars.DashboardMobileNavbar page={props.page} />
+        </MobileNavbar>
 
         <Main>
           <Sidebar>
