@@ -10,13 +10,11 @@ export function setMediaPaddings(verticalPadding?: PxAsRem) {
     }
 
     @media (max-width: ${Sizes.widths.tablet}px) {
-      padding: ${verticalPadding ? Sizes.pxAsRem[verticalPadding] : "0rem"}rem
-        20px;
+      padding: ${verticalPadding ? Sizes.pxAsRem[verticalPadding] : "0rem"} 20px;
     }
 
     @media (max-width: ${Sizes.widths.mobile}px) {
-      padding: ${verticalPadding ? Sizes.pxAsRem[verticalPadding] : "0rem"}rem
-        14px;
+      padding: ${verticalPadding ? Sizes.pxAsRem[verticalPadding] : "0rem"} 14px;
     }
   `;
 }
