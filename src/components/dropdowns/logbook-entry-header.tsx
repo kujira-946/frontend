@@ -104,6 +104,7 @@ export const LogbookEntryHeader = (props: Props) => {
               body="Once deleted, it can never be recovered."
               open={confirmLogbookEntryDelete}
               onConfirm={deleteLogbookEntry}
+              fixed
             />
           )}
         </AnimatePresence>

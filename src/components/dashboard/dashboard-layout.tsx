@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
 
 import * as Navbars from "@/components/navbars";
 import * as Functions from "@/utils/functions";
@@ -12,6 +13,7 @@ import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
 import { ThemeProps } from "../layout";
 
 import { DashboardSidebar } from "./dashboard-sidebar";
+import dynamic from "next/dynamic";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -60,6 +62,14 @@ const Children = styled.div`
 `;
 
 // ========================================================================================= //
+// [ DYNAMIC IMPORT ] ====================================================================== //
+// ========================================================================================= //
+
+const DynamicNavigationModal = dynamic(() =>
+  import("../modals/navigation-modal").then((mod) => mod.NavigationModal)
+);
+
+// ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
@@ -71,6 +81,7 @@ type Props = {
 export const DashboardLayout = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
+  const { mobileMenuOpen } = Functions.useSignalsStore().dashboard;
   const { currentUser, overview, overviewGroups, logbooks } =
     Functions.useEntitiesSlice(true);
 
@@ -97,19 +108,25 @@ export const DashboardLayout = (props: Props) => {
   }, [currentUser, logbooks]);
 
   return (
-    <Container>
-      <Navbars.DashboardMobileNavbar page={props.page} />
+    <>
+      <AnimatePresence>
+        {mobileMenuOpen.value && <DynamicNavigationModal page={props.page} />}
+      </AnimatePresence>
 
-      <Main>
-        <Sidebar>
-          <Navbars.DashboardDesktopNavbar page={props.page} />
-          <DashboardSidebar page={props.page} />
-        </Sidebar>
+      <Container>
+        <Navbars.DashboardMobileNavbar page={props.page} />
 
-        <Body>
-          <Children>{props.children}</Children>
-        </Body>
-      </Main>
-    </Container>
+        <Main>
+          <Sidebar>
+            <Navbars.DashboardDesktopNavbar page={props.page} />
+            <DashboardSidebar page={props.page} />
+          </Sidebar>
+
+          <Body>
+            <Children>{props.children}</Children>
+          </Body>
+        </Main>
+      </Container>
+    </>
   );
 };
