@@ -38,12 +38,16 @@ const Container = styled(motion.main)`
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
 `;
 
-const NavigationButtons = styled.section`
+type NavigationButtonsProps = { noHeader?: true };
+
+const NavigationButtons = styled.section<NavigationButtonsProps>`
   display: flex;
   flex-direction: column;
-  padding: ${Styles.pxAsRem.twenty} ${Styles.pxAsRem.twentyFour};
-
-  ${Styles.setMediaPaddings("twenty", "twenty", "fourteen")};
+  padding: ${(props) => {
+    return !props.noHeader
+      ? `${Styles.pxAsRem.twenty} ${Styles.pxAsRem.twentyFour}`
+      : "0rem";
+  }};
 `;
 
 // ========================================================================================= //
@@ -55,7 +59,7 @@ type Props = {
   caption?: string;
   closeAction: () => void;
   children: React.ReactNode;
-};
+} & NavigationButtonsProps;
 
 export const MobileMenuModal = (props: Props) => {
   const { theme } = Functions.useSignalsStore().ui;
@@ -75,20 +79,24 @@ export const MobileMenuModal = (props: Props) => {
         exit={Constants.mobileMenuMotion.initial}
         transition={{ delay: 0.1 }}
       >
-        <MobileNavbarContainer page={props.page} caption={props.caption}>
-          {theme.value && (
-            <Globals.IconButton type="button" onClick={props.closeAction}>
-              <Icons.Close
-                width={16}
-                height={16}
-                fill={Styles.background[theme.value].eight}
-                addHover
-              />
-            </Globals.IconButton>
-          )}
-        </MobileNavbarContainer>
+        {!props.noHeader && (
+          <MobileNavbarContainer page={props.page} caption={props.caption}>
+            {theme.value && (
+              <Globals.IconButton type="button" onClick={props.closeAction}>
+                <Icons.Close
+                  width={16}
+                  height={16}
+                  fill={Styles.background[theme.value].eight}
+                  addHover
+                />
+              </Globals.IconButton>
+            )}
+          </MobileNavbarContainer>
+        )}
 
-        <NavigationButtons>{props.children}</NavigationButtons>
+        <NavigationButtons noHeader={props.noHeader}>
+          {props.children}
+        </NavigationButtons>
       </Container>
     </Globals.Portal>
   );

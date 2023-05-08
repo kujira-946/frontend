@@ -1,7 +1,9 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { useCallback, useEffect } from "react";
 import { effect, useSignal } from "@preact/signals-react";
 
+import * as Globals from "@/components";
+import * as Icons from "@/components/icons";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
@@ -16,13 +18,36 @@ import { ThemeProps } from "../layout";
 const Container = styled.section`
   display: flex;
   flex-direction: column;
-  gap: ${Styles.pxAsRem.twelve};
-  padding: ${Styles.pxAsRem.twelve};
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
   border-bottom: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
 `;
 
-const Header = styled.header`
+type HeaderProps = { inModal?: true };
+
+const Header = styled.header<HeaderProps>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: ${Styles.pxAsRem.twelve};
+  padding: ${(props) => {
+    return !props.inModal
+      ? `${Styles.pxAsRem.twelve} ${Styles.pxAsRem.twelve} 0rem`
+      : `${Styles.pxAsRem.eight} ${Styles.pxAsRem.twelve}`;
+  }};
+
+  ${(props) => {
+    if (props.inModal) {
+      return css`
+        border-bottom: ${(props: ThemeProps) => props.theme.backgroundFour}
+          solid 1px;
+
+        ${Styles.setMediaPaddings("eight")};
+      `;
+    }
+  }}
+`;
+
+const HeaderText = styled.section`
   display: flex;
   flex-direction: column;
 `;
@@ -45,16 +70,18 @@ const InfoCells = styled.article`
   display: flex;
   flex-direction: column;
   gap: ${Styles.pxAsRem.four};
+  padding: ${Styles.pxAsRem.twelve};
 `;
 
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-export const LogbooksUserSummary = () => {
+export const LogbooksUserSummary = (props: HeaderProps) => {
   const dispatch = Functions.useAppDispatch();
 
-  const { logbookTotalSpent, totalSpent, remainingBudget } =
+  const { theme } = Functions.useSignalsStore().ui;
+  const { logbookTotalSpent, totalSpent, remainingBudget, mobileOverviewOpen } =
     Functions.useSignalsStore().dashboard;
   const { overview } = Functions.useEntitiesSlice();
   const overviewGroups = Functions.useGetOverviewOverviewGroups();
@@ -186,18 +213,33 @@ export const LogbooksUserSummary = () => {
 
   return (
     <Container>
-      <Header>
-        <HeaderTitle>Your Overview</HeaderTitle>
-        {errorMessages.value.length > 0 &&
-          errorMessages.value.map((errorMessage: string, index: number) => {
-            return (
-              <ErrorMessage
-                key={`dashboard-layout-overview-error-message-${errorMessage}-${index}`}
-              >
-                {errorMessage}
-              </ErrorMessage>
-            );
-          })}
+      <Header inModal={props.inModal}>
+        <HeaderText>
+          <HeaderTitle>Your Overview</HeaderTitle>
+          {errorMessages.value.length > 0 &&
+            errorMessages.value.map((errorMessage: string, index: number) => {
+              return (
+                <ErrorMessage
+                  key={`dashboard-layout-overview-error-message-${errorMessage}-${index}`}
+                >
+                  {errorMessage}
+                </ErrorMessage>
+              );
+            })}
+        </HeaderText>
+        {theme.value && props.inModal && (
+          <Globals.IconButton
+            type="button"
+            onClick={() => (mobileOverviewOpen.value = false)}
+          >
+            <Icons.Close
+              width={16}
+              height={16}
+              fill={Styles.background[theme.value].eight}
+              addHover
+            />
+          </Globals.IconButton>
+        )}
       </Header>
 
       <InfoCells>

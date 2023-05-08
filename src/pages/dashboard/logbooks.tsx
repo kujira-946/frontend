@@ -18,12 +18,19 @@ const DynamicFiltersModal = dynamic(() =>
   )
 );
 
+const DynamicMobileOverview = dynamic(() =>
+  import("../../components/modals/mobile-logbooks-overview").then(
+    (mod) => mod.MobileLogbooksOverview
+  )
+);
+
 // ========================================================================================= //
 // [ PAGE ] ================================================================================ //
 // ========================================================================================= //
 
 const Logbooks: NextPageWithLayout = () => {
-  const { selectedLogbookId, mobileFiltersOpen } = useSignalsStore().dashboard;
+  const { selectedLogbookId, mobileFiltersOpen, mobileOverviewOpen } =
+    useSignalsStore().dashboard;
 
   useEffect(() => {
     mobileFiltersOpen.value = false;
@@ -45,6 +52,10 @@ const Logbooks: NextPageWithLayout = () => {
             caption="Select a logbook below."
           />
         )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {mobileOverviewOpen.value && <DynamicMobileOverview />}
       </AnimatePresence>
 
       {selectedLogbookId.value && (
