@@ -72,7 +72,7 @@ export const LogbookEntryHeader = (props: Props) => {
   const budget = useSignal("...");
   const confirmLogbookEntryDelete = useSignal(false);
 
-  function openDeleteConfirmation(event: Types.OnClick): void {
+  function openDeleteConfirmationModal(event: Types.OnClick): void {
     event.stopPropagation();
     confirmLogbookEntryDelete.value = true;
   }
@@ -152,7 +152,7 @@ export const LogbookEntryHeader = (props: Props) => {
           </Section>
 
           {theme.value && (
-            <Globals.IconContainer onClick={openDeleteConfirmation}>
+            <Globals.IconContainer onClick={openDeleteConfirmationModal}>
               <Icons.Close
                 width={14}
                 height={14}
