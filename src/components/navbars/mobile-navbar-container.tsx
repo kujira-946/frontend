@@ -56,7 +56,7 @@ const Caption = styled.p`
 // ========================================================================================= //
 
 type Props = {
-  page: Types.DashboardPage | "Navigation";
+  page: Types.MobileNavbarPage;
   caption?: string;
   children: React.ReactNode; // Icon button
 };

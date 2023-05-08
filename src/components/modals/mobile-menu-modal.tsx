@@ -51,7 +51,7 @@ const NavigationButtons = styled.section`
 // ========================================================================================= //
 
 type Props = {
-  page: Types.DashboardPage | "Navigation" | "Logbooks Filter";
+  page: Types.MobileNavbarPage;
   caption?: string;
   closeAction: () => void;
   children: React.ReactNode;
