@@ -3,9 +3,9 @@ import Head from "next/head";
 import { ReactElement, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 
+import * as Components from "@/components/logbooks";
 import { DashboardLayout } from "@/components/dashboard";
 import { useSignalsStore } from "@/utils/functions";
-import { LogbookEntries } from "@/components/logbooks";
 import { NextPageWithLayout } from "../_app";
 
 // ========================================================================================= //
@@ -39,11 +39,18 @@ const Logbooks: NextPageWithLayout = () => {
       </Head>
 
       <AnimatePresence>
-        {mobileFiltersOpen.value && <DynamicFiltersModal />}
+        {mobileFiltersOpen.value && (
+          <DynamicFiltersModal
+            page="Logbooks Filter"
+            caption="Select a logbook below."
+          />
+        )}
       </AnimatePresence>
 
       {selectedLogbookId.value && (
-        <LogbookEntries selectedLogbookId={selectedLogbookId.value} />
+        <Components.LogbookEntries
+          selectedLogbookId={selectedLogbookId.value}
+        />
       )}
     </>
   );

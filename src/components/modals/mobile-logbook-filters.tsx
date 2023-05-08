@@ -7,7 +7,12 @@ import { useSignalsStore } from "@/utils/functions";
 
 import { MobileMenuModal } from "./mobile-menu-modal";
 
-export const MobileLogbookFilters = () => {
+type Props = {
+  page: Types.MobileNavbarPage;
+  caption: string;
+};
+
+export const MobileLogbookFilters = (props: Props) => {
   const { mobileFiltersOpen, selectedLogbookId } = useSignalsStore().dashboard;
 
   const logbooks = Functions.useGetUserLogbooks();
@@ -19,8 +24,8 @@ export const MobileLogbookFilters = () => {
 
   return (
     <MobileMenuModal
-      page="Logbooks Filter"
-      caption="Select a logbook below."
+      page={props.page}
+      caption={props.caption}
       closeAction={() => (mobileFiltersOpen.value = false)}
     >
       {logbooks &&
