@@ -98,7 +98,7 @@ export const DashboardLayout = (props: Props) => {
 
   return (
     <Container>
-      <Navbars.DashboardMobileNavbar page={props.page} caption="Foo" />
+      <Navbars.DashboardMobileNavbar page={props.page} />
 
       <Main>
         <Sidebar>

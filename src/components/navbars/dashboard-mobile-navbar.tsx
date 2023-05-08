@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
@@ -20,6 +19,7 @@ const Container = styled.nav`
   display: none;
   justify-content: space-between;
   align-items: center;
+  gap: ${Styles.pxAsRem.twelve};
   padding: ${Styles.pxAsRem.eight} ${Styles.pxAsRem.twenty};
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
   border-bottom: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
@@ -64,14 +64,12 @@ const Caption = styled.p`
 
 type Props = {
   page: Types.DashboardPage;
-  caption: string;
 };
 
 export const DashboardMobileNavbar = (props: Props) => {
   const { theme } = Functions.useSignalsStore().ui;
-  const { selectedLogbookId } = Functions.useSignalsStore().dashboard;
-
-  const menuOpen = useSignal(false);
+  const { menuOpen, selectedLogbookId } = Functions.useSignalsStore().dashboard;
+  const { logbooks } = Functions.useEntitiesSlice();
 
   function handlePageText(): string {
     if (menuOpen.value && props.page === "Logbooks") {
@@ -91,8 +89,17 @@ export const DashboardMobileNavbar = (props: Props) => {
         return "Navigate your settings below.";
       }
     } else {
-      if (props.page !== "Logbooks") return "";
-      else return props.caption;
+      if (props.page !== "Logbooks") {
+        return "Select a logbook using the button to the right.";
+      } else if (
+        logbooks &&
+        selectedLogbookId.value &&
+        logbooks[selectedLogbookId.value]
+      ) {
+        return logbooks[selectedLogbookId.value].name;
+      } else {
+        return "...";
+      }
     }
   }
 

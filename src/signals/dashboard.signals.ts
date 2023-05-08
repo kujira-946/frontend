@@ -3,6 +3,9 @@ import { Signal, signal } from "@preact/signals-react";
 import { DashboardSettingsTab } from "@/utils/types";
 
 export type DashboardSignals = {
+  // Dashboard
+  menuOpen: Signal<boolean>;
+
   // Dashboard Overview
   totalSpent: Signal<string>;
   remainingBudget: Signal<string>;
@@ -16,6 +19,9 @@ export type DashboardSignals = {
 };
 
 export const dashboardSignals: DashboardSignals = {
+  // Dashboard
+  menuOpen: signal<boolean>(false),
+
   // Dashboard Overview
   totalSpent: signal<string>("0"),
   remainingBudget: signal<string>("0"),
