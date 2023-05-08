@@ -1,11 +1,23 @@
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import styled from "styled-components";
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
 
 import * as Components from "@/components/settings";
 import * as Functions from "@/utils/functions";
 import { DashboardLayout } from "@/components/dashboard";
 import { NextPageWithLayout } from "../_app";
+
+// ========================================================================================= //
+// [ DYNAMIC IMPORT ] ====================================================================== //
+// ========================================================================================= //
+
+const DynamicFiltersModal = dynamic(() =>
+  import("../../components/modals/mobile-settings-filters").then(
+    (mod) => mod.MobileSettingsFilters
+  )
+);
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -21,7 +33,12 @@ const Body = styled.div`
 // ========================================================================================= //
 
 const Settings: NextPageWithLayout = () => {
-  const { currentSettingsTab } = Functions.useSignalsStore().dashboard;
+  const { currentSettingsTab, mobileFiltersOpen } =
+    Functions.useSignalsStore().dashboard;
+
+  useEffect(() => {
+    mobileFiltersOpen.value = false;
+  }, []);
 
   return (
     <>
@@ -31,6 +48,10 @@ const Settings: NextPageWithLayout = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <AnimatePresence>
+        {mobileFiltersOpen.value && <DynamicFiltersModal />}
+      </AnimatePresence>
 
       <Body>
         {currentSettingsTab.value === "Personal Information" ? (
