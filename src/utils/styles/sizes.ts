@@ -26,15 +26,6 @@ export const pxAsRem = {
   fortyEight: "3rem",
 };
 
-export const widths = {
-  desktop: 1200,
-  tablet: 1024,
-  mobile: 500,
-
-  content: 920,
-  dashboardSidebar: 260,
-};
-
 export const fontWeights = {
   thin: 100,
   extraLight: 200,
@@ -45,6 +36,19 @@ export const fontWeights = {
   bold: 700,
   extraBold: 800,
   black: 900,
+};
+
+export const widths = {
+  desktop: 1200,
+  tablet: 1024,
+  mobile: 500,
+
+  content: 920,
+  dashboardSidebar: 260,
+};
+
+export const breakpoints = {
+  navbar: 1000,
 };
 
 export const zIndexes = {

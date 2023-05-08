@@ -11,23 +11,29 @@ import { ThemeProps } from "../layout";
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
-type ContainerProps = { standalone?: true };
+const Container = styled.nav`
+  position: sticky;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  padding: ${Styles.pxAsRem.eight} ${Styles.pxAsRem.twenty};
+	background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
+  border-bottom: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
 
-const Container = styled.section<ContainerProps>`
-  display: flex;
-  width: 100%;
-  padding: ${(props) => (props.standalone ? Styles.pxAsRem.twelve : 0)};
-  border-bottom: ${(props: ContainerProps & ThemeProps) => {
-    return props.standalone
-      ? `${props.theme.backgroundFour} solid 1px`
-      : "transparent";
-  }};
+  ${Styles.setMediaPaddings("eight")};
+
+  @media (max-width: ${Styles.breakpoints.navbar}px) {
+    display: flex;
+  }
 `;
 
-const PageAndCaption = styled.div`
+const PageAndCaption = styled.section`
   display: flex;
-  flex-direction: column;
-  width: 100%;
+  align-items: center;
+  gap: ${Styles.pxAsRem.twenty};
 `;
 
 const Page = styled.h1`
@@ -37,23 +43,11 @@ const Page = styled.h1`
   font-weight: ${Styles.fontWeights.bold};
 `;
 
-const Caption = styled.span`
-  color: ${(props: ThemeProps) => props.theme.backgroundTen};
+const Caption = styled.p`
+  margin: 0;
+  color: ${(props: ThemeProps) => props.theme.backgroundEight};
   font-size: ${Styles.pxAsRem.fourteen};
   font-weight: ${Styles.fontWeights.regular};
-`;
-
-const FilterButton = styled(Globals.IconButton)`
-  margin-left: ${Styles.pxAsRem.twelve};
-  background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
-  border: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
-
-  @media (hover: hover) {
-    :hover {
-      background-color: ${(props: ThemeProps) => props.theme.backgroundThree};
-      border: ${(props: ThemeProps) => props.theme.backgroundSix} solid 1px;
-    }
-  }
 `;
 
 // ========================================================================================= //
@@ -63,29 +57,27 @@ const FilterButton = styled(Globals.IconButton)`
 type Props = {
   page: Types.DashboardPage;
   caption: string;
-  openModal?: () => void;
-  standalone?: true;
 };
 
-export const DashboardSidebarHeader = (props: Props) => {
+export const DashboardMobileNavbar = (props: Props) => {
   const { theme } = Functions.useSignalsStore().ui;
 
   return (
-    <Container standalone={props.standalone}>
+    <Container>
       <PageAndCaption>
         <Page>{props.page}</Page>
         <Caption>{props.caption}</Caption>
       </PageAndCaption>
 
-      {theme.value && props.page === "Logbooks" && (
-        <FilterButton onClick={props.openModal} borderRadius="six">
-          <Icons.Filter
+      {theme.value && (
+        <Globals.IconButton type="button">
+          <Icons.Hamburger
             width={16}
             height={16}
-            fill={Styles.background[theme.value].ten}
+            fill={Styles.background[theme.value].eight}
             addHover
           />
-        </FilterButton>
+        </Globals.IconButton>
       )}
     </Container>
   );

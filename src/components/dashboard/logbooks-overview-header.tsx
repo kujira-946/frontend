@@ -48,7 +48,7 @@ export const LogbooksOverviewHeader = (props: Props) => {
   return (
     <Container>
       <DashboardSidebarHeader
-        title="Logbooks"
+        page="Logbooks"
         caption={
           logbooks && selectedLogbookId.value
             ? logbooks[selectedLogbookId.value].name

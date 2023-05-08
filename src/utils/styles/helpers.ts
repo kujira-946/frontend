@@ -1,19 +1,22 @@
 import { css } from "styled-components";
 
 import * as Sizes from "./sizes";
+import { PxAsRem } from "../types";
 
-export function setMediaPaddings(verticalPadding?: number) {
+export function setMediaPaddings(verticalPadding?: PxAsRem) {
   return css`
     @media (max-width: ${Sizes.widths.desktop}px) {
-      padding: ${verticalPadding || 0}px 24px;
+      padding: ${verticalPadding ? Sizes.pxAsRem[verticalPadding] : "0rem"} 24px;
     }
 
     @media (max-width: ${Sizes.widths.tablet}px) {
-      padding: ${verticalPadding || 0}px 20px;
+      padding: ${verticalPadding ? Sizes.pxAsRem[verticalPadding] : "0rem"}rem
+        20px;
     }
 
     @media (max-width: ${Sizes.widths.mobile}px) {
-      padding: ${verticalPadding || 0}px 14px;
+      padding: ${verticalPadding ? Sizes.pxAsRem[verticalPadding] : "0rem"}rem
+        14px;
     }
   `;
 }

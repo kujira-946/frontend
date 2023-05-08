@@ -100,7 +100,7 @@ export const ReviewsSidebar = () => {
     <Container expanded={sidebarExpanded.value}>
       {sidebarExpanded.value && (
         <DashboardSidebarHeader
-          title="Reviews"
+          page="Reviews"
           caption="Select a logbook below to review your purchasing habits."
           standalone
         />

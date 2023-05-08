@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useEffect } from "react";
 
+import * as Navbars from "@/components/navbars";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
@@ -10,27 +11,30 @@ import { fetchOverviewOverviewGroupsRequest } from "@/sagas/overview-groups.saga
 import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
 import { ThemeProps } from "../layout";
 
-import { DashboardNavbar } from "./dashboard-navbar";
 import { DashboardSidebar } from "./dashboard-sidebar";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
-const Container = styled.main`
+const Container = styled.div`
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+`;
+
+const Main = styled.main`
   display: flex;
   gap: ${Styles.pxAsRem.twenty};
   max-width: ${Styles.widths.desktop}px;
   width: 100%;
+  height: 100%;
   margin: 0 auto;
   padding: ${Styles.pxAsRem.twenty} 0;
 
-  ${Styles.setMediaPaddings()};
+  ${Styles.setMediaPaddings("twenty")};
 `;
 
 const Sidebar = styled.section`
@@ -38,14 +42,10 @@ const Sidebar = styled.section`
   border: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
   border-radius: ${Styles.pxAsRem.eight};
   overflow: hidden;
-`;
 
-const Overview = styled.section`
-  position: relative;
-  width: 18.75rem;
-  height: 100%;
-  border-right: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
-  overflow-y: auto;
+  @media (max-width: ${Styles.breakpoints.navbar}px) {
+    display: none;
+  }
 `;
 
 const Body = styled.section`
@@ -98,14 +98,18 @@ export const DashboardLayout = (props: Props) => {
 
   return (
     <Container>
-      <Sidebar>
-        <DashboardNavbar page={props.page} />
-        <DashboardSidebar page={props.page} />
-      </Sidebar>
+      <Navbars.DashboardMobileNavbar page={props.page} caption="Foo" />
 
-      <Body>
-        <Children>{props.children}</Children>
-      </Body>
+      <Main>
+        <Sidebar>
+          <Navbars.DashboardDesktopNavbar page={props.page} />
+          <DashboardSidebar page={props.page} />
+        </Sidebar>
+
+        <Body>
+          <Children>{props.children}</Children>
+        </Body>
+      </Main>
     </Container>
   );
 };

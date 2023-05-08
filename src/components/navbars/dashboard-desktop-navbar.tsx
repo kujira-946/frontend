@@ -54,7 +54,7 @@ type Props = {
   page: Types.DashboardPage;
 };
 
-export const DashboardNavbar = (props: Props) => {
+export const DashboardDesktopNavbar = (props: Props) => {
   const router = useRouter();
 
   const { theme } = Functions.useSignalsStore().ui;

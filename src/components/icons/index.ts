@@ -20,3 +20,4 @@ export * from "./bug-report";
 export * from "./filter";
 export * from "./sidebar-collapse";
 export * from "./sidebar-expand";
+export * from "./hamburger";
