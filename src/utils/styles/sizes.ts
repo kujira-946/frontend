@@ -48,7 +48,8 @@ export const widths = {
 };
 
 export const breakpoints = {
-  navbar: 1000,
+  navbarWidth: 1000,
+  navbarHeight: 900,
 };
 
 export const zIndexes = {

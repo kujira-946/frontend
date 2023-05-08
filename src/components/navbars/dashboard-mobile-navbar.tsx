@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
@@ -20,20 +21,19 @@ const Container = styled.nav`
   justify-content: space-between;
   align-items: center;
   padding: ${Styles.pxAsRem.eight} ${Styles.pxAsRem.twenty};
-	background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
+  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
   border-bottom: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
 
   ${Styles.setMediaPaddings("eight")};
 
-  @media (max-width: ${Styles.breakpoints.navbar}px) {
+  @media (max-width: ${Styles.breakpoints.navbarWidth}px) {
     display: flex;
   }
 `;
 
 const PageAndCaption = styled.section`
   display: flex;
-  align-items: center;
-  gap: ${Styles.pxAsRem.twenty};
+  flex-direction: column;
 `;
 
 const Page = styled.h1`
@@ -41,6 +41,10 @@ const Page = styled.h1`
   color: ${(props: ThemeProps) => props.theme.text};
   font-size: ${Styles.pxAsRem.sixteen};
   font-weight: ${Styles.fontWeights.bold};
+
+  @media (max-height: ${Styles.breakpoints.navbarHeight}px) {
+    font-size: ${Styles.pxAsRem.fourteen};
+  }
 `;
 
 const Caption = styled.p`
@@ -48,6 +52,10 @@ const Caption = styled.p`
   color: ${(props: ThemeProps) => props.theme.backgroundEight};
   font-size: ${Styles.pxAsRem.fourteen};
   font-weight: ${Styles.fontWeights.regular};
+
+  @media (max-height: ${Styles.breakpoints.navbarHeight}px) {
+    font-size: ${Styles.pxAsRem.twelve};
+  }
 `;
 
 // ========================================================================================= //
@@ -61,24 +69,66 @@ type Props = {
 
 export const DashboardMobileNavbar = (props: Props) => {
   const { theme } = Functions.useSignalsStore().ui;
+  const { selectedLogbookId } = Functions.useSignalsStore().dashboard;
+
+  const menuOpen = useSignal(false);
+
+  function handlePageText(): string {
+    if (menuOpen.value && props.page === "Logbooks") {
+      return "Logbooks Filter";
+    } else {
+      return props.page;
+    }
+  }
+
+  function handleCaptionText(): string {
+    if (menuOpen.value) {
+      if (props.page === "Logbooks") {
+        return "Select a logbook below.";
+      } else if (props.page === "Reviews") {
+        return "Select a logbook below to review your purchasing habits.";
+      } else {
+        return "Navigate your settings below.";
+      }
+    } else {
+      if (props.page !== "Logbooks") return "";
+      else return props.caption;
+    }
+  }
 
   return (
     <Container>
       <PageAndCaption>
-        <Page>{props.page}</Page>
-        <Caption>{props.caption}</Caption>
+        <Page>{handlePageText()}</Page>
+        <Caption>{handleCaptionText()}</Caption>
       </PageAndCaption>
 
-      {theme.value && (
-        <Globals.IconButton type="button">
-          <Icons.Hamburger
-            width={16}
-            height={16}
-            fill={Styles.background[theme.value].eight}
-            addHover
-          />
-        </Globals.IconButton>
-      )}
+      {theme.value &&
+        (menuOpen.value ? (
+          <Globals.IconButton
+            type="button"
+            onClick={() => (menuOpen.value = false)}
+          >
+            <Icons.Close
+              width={16}
+              height={16}
+              fill={Styles.background[theme.value].eight}
+              addHover
+            />
+          </Globals.IconButton>
+        ) : (
+          <Globals.IconButton
+            type="button"
+            onClick={() => (menuOpen.value = true)}
+          >
+            <Icons.Hamburger
+              width={16}
+              height={16}
+              fill={Styles.background[theme.value].eight}
+              addHover
+            />
+          </Globals.IconButton>
+        ))}
     </Container>
   );
 };

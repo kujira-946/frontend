@@ -43,7 +43,7 @@ const Sidebar = styled.section`
   border-radius: ${Styles.pxAsRem.eight};
   overflow: hidden;
 
-  @media (max-width: ${Styles.breakpoints.navbar}px) {
+  @media (max-width: ${Styles.breakpoints.navbarWidth}px) {
     display: none;
   }
 `;
