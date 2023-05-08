@@ -14,6 +14,7 @@ import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
 import { ThemeProps } from "../layout";
 
 import { DashboardSidebar } from "./dashboard-sidebar";
+import { MobileLogbooksOverviewHeader } from "./mobile-logbooks-overview-header";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -39,7 +40,11 @@ const Main = styled.main`
   ${Styles.setMediaPaddings("twenty")};
 `;
 
-const MobileNavbar = styled.div`
+const Mobile = styled.div`
+  position: sticky;
+  top: 0;
+  right: 0;
+  left: 0;
   display: none;
   flex-direction: column;
 
@@ -127,9 +132,10 @@ export const DashboardLayout = (props: Props) => {
       </AnimatePresence>
 
       <Container>
-        <MobileNavbar>
+        <Mobile>
           <Navbars.DashboardMobileNavbar page={props.page} />
-        </MobileNavbar>
+          <MobileLogbooksOverviewHeader />
+        </Mobile>
 
         <Main>
           <Sidebar>

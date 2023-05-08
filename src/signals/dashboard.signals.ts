@@ -6,6 +6,7 @@ export type DashboardSignals = {
   // Dashboard
   mobileFiltersOpen: Signal<boolean>;
   mobileMenuOpen: Signal<boolean>;
+  mobileOverviewOpen: Signal<boolean>;
 
   // Dashboard Overview
   totalSpent: Signal<string>;
@@ -23,6 +24,7 @@ export const dashboardSignals: DashboardSignals = {
   // Dashboard
   mobileFiltersOpen: signal<boolean>(false),
   mobileMenuOpen: signal<boolean>(false),
+  mobileOverviewOpen: signal<boolean>(false),
 
   // Dashboard Overview
   totalSpent: signal<string>("0"),
