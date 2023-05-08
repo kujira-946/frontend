@@ -51,7 +51,9 @@ const NavigationButtons = styled.section`
 // ========================================================================================= //
 
 type Props = {
-  page: Types.DashboardPage | "Navigation";
+  page: Types.DashboardPage | "Navigation" | "Logbooks Filter";
+  caption?: string;
+  closeAction: () => void;
   children: React.ReactNode;
 };
 
@@ -73,12 +75,9 @@ export const MobileMenuModal = (props: Props) => {
         exit={Constants.mobileMenuMotion.initial}
         transition={{ delay: 0.1 }}
       >
-        <MobileNavbarContainer page="Navigation">
+        <MobileNavbarContainer page={props.page} caption={props.caption}>
           {theme.value && (
-            <Globals.IconButton
-              type="button"
-              onClick={() => (mobileMenuOpen.value = false)}
-            >
+            <Globals.IconButton type="button" onClick={props.closeAction}>
               <Icons.Close
                 width={16}
                 height={16}

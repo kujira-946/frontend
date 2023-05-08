@@ -7,19 +7,11 @@ import { ClientRoutes } from "@/utils/constants";
 
 import { MobileMenuModal } from "./mobile-menu-modal";
 
-// ========================================================================================= //
-// [ STYLED COMPONENTS ] =================================================================== //
-// ========================================================================================= //
-
-// ========================================================================================= //
-// [ EXPORTED COMPONENT ] ================================================================== //
-// ========================================================================================= //
-
 type Props = {
   page: Types.DashboardPage;
 };
 
-export const NavigationModal = (props: Props) => {
+export const MobileNavigationModal = (props: Props) => {
   const router = useRouter();
 
   const { mobileMenuOpen } = useSignalsStore().dashboard;
@@ -32,7 +24,10 @@ export const NavigationModal = (props: Props) => {
   }
 
   return (
-    <MobileMenuModal page="Navigation">
+    <MobileMenuModal
+      page="Navigation"
+      closeAction={() => (mobileMenuOpen.value = false)}
+    >
       <FilterButton
         key="dashboard-mobile-navigation-modal-logbooks-filter-button"
         type="button"

@@ -74,8 +74,10 @@ const Children = styled.div`
 // [ DYNAMIC IMPORT ] ====================================================================== //
 // ========================================================================================= //
 
-const DynamicNavigationModal = dynamic(() =>
-  import("../modals/navigation-modal").then((mod) => mod.NavigationModal)
+const DynamicMobileNavigationModal = dynamic(() =>
+  import("../modals/mobile-navigation-modal").then(
+    (mod) => mod.MobileNavigationModal
+  )
 );
 
 // ========================================================================================= //
@@ -119,7 +121,9 @@ export const DashboardLayout = (props: Props) => {
   return (
     <>
       <AnimatePresence>
-        {mobileMenuOpen.value && <DynamicNavigationModal page={props.page} />}
+        {mobileMenuOpen.value && (
+          <DynamicMobileNavigationModal page={props.page} />
+        )}
       </AnimatePresence>
 
       <Container>
