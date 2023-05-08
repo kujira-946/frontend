@@ -134,7 +134,7 @@ export const DashboardLayout = (props: Props) => {
       <Container>
         <Mobile>
           <Navbars.DashboardMobileNavbar page={props.page} />
-          <MobileLogbooksOverviewHeader />
+          {props.page === "Logbooks" && <MobileLogbooksOverviewHeader />}
         </Mobile>
 
         <Main>
