@@ -48,6 +48,12 @@ const NavigationButtons = styled.section<NavigationButtonsProps>`
       ? `${Styles.pxAsRem.twenty} ${Styles.pxAsRem.twentyFour}`
       : "0rem";
   }};
+
+  ${(props) => {
+    return (
+      !props.noHeader && Styles.setMediaPaddings("twenty", "twenty", "fourteen")
+    );
+  }};
 `;
 
 // ========================================================================================= //

@@ -16,18 +16,26 @@ import { LogbooksOverviewGroup } from "./logbooks-overview-group";
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
-const OverviewGroups = styled.section`
+type OverviewGroupsProps = { inModal?: true };
+
+const OverviewGroups = styled.section<OverviewGroupsProps>`
   display: flex;
   flex-direction: column;
   gap: ${Styles.pxAsRem.twelve};
   padding: ${Styles.pxAsRem.twelve};
+
+  ${(props) => {
+    return (
+      props.inModal && Styles.setMediaPaddings("twenty", "twenty", "fourteen")
+    );
+  }};
 `;
 
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-export const LogbookOverviewGroups = () => {
+export const LogbookOverviewGroups = (props: OverviewGroupsProps) => {
   const dispatch = Functions.useAppDispatch();
 
   const { loadingOverviewGroups } = Functions.useUiSlice();
@@ -52,7 +60,7 @@ export const LogbookOverviewGroups = () => {
     return null;
   } else {
     return (
-      <OverviewGroups>
+      <OverviewGroups inModal={props.inModal}>
         {loadingOverviewGroups ? (
           <>
             <OverviewShimmer />

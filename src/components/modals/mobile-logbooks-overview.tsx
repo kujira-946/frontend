@@ -13,7 +13,7 @@ export const MobileLogbooksOverview = () => {
       noHeader
     >
       <Dashboard.LogbooksUserSummary inModal />
-      <Dashboard.LogbookOverviewGroups />
+      <Dashboard.LogbookOverviewGroups inModal />
     </MobileMenuModal>
   );
 };

@@ -22,9 +22,9 @@ const Container = styled.section`
   border-bottom: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
 `;
 
-type HeaderProps = { inModal?: true };
+type SharedProps = { inModal?: true };
 
-const Header = styled.header<HeaderProps>`
+const Header = styled.header<SharedProps>`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -66,18 +66,24 @@ const ErrorMessage = styled.p`
   font-weight: ${Styles.fontWeights.semiBold};
 `;
 
-const InfoCells = styled.article`
+const InfoCells = styled.article<SharedProps>`
   display: flex;
   flex-direction: column;
   gap: ${Styles.pxAsRem.four};
   padding: ${Styles.pxAsRem.twelve};
+
+  ${(props) => {
+    return (
+      props.inModal && Styles.setMediaPaddings("twenty", "twenty", "fourteen")
+    );
+  }};
 `;
 
 // ========================================================================================= //
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-export const LogbooksUserSummary = (props: HeaderProps) => {
+export const LogbooksUserSummary = (props: SharedProps) => {
   const dispatch = Functions.useAppDispatch();
 
   const { theme } = Functions.useSignalsStore().ui;
@@ -242,7 +248,7 @@ export const LogbooksUserSummary = (props: HeaderProps) => {
         )}
       </Header>
 
-      <InfoCells>
+      <InfoCells inModal={props.inModal}>
         {/* Income */}
         <LogbooksOverviewUserInfoCell
           description="Income"
