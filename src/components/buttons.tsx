@@ -6,6 +6,7 @@ import { ThemeProps } from "./layout";
 
 type ButtonProps = {
   type: "button" | "submit";
+  disabled?: boolean;
   size: "large" | "medium" | "small" | "smaller";
   borderRadius?: Types.PxAsRem;
 
@@ -16,7 +17,6 @@ type ButtonProps = {
   borderColor?: string;
   borderColorHover?: string;
 
-  disabled?: boolean;
   primary?: true;
   outlined?: true;
 };

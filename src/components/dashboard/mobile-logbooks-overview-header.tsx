@@ -61,17 +61,16 @@ export const MobileLogbooksOverviewHeader = () => {
 
   return (
     <Container>
-      {selectedLogbookId.value && (
-        <Globals.Button
-          type="button"
-          onClick={createLogbookEntry}
-          size="medium"
-          style={{ height: "100%" }}
-          primary
-        >
-          Create Logbook Entry
-        </Globals.Button>
-      )}
+      <Globals.Button
+        type="button"
+        disabled={!selectedLogbookId.value}
+        onClick={createLogbookEntry}
+        size="medium"
+        style={{ height: "100%" }}
+        primary
+      >
+        Create Logbook Entry
+      </Globals.Button>
 
       {theme.value && (
         <OverviewButton

@@ -57,18 +57,17 @@ export const LogbooksOverviewHeader = (props: Props) => {
         openModal={() => (props.filtersOpen.value = true)}
       />
 
-      {selectedLogbookId.value && (
-        <Globals.Button
-          type="button"
-          onClick={createLogbookEntry}
-          size="medium"
-          borderRadius="six"
-          style={{ marginTop: Styles.pxAsRem.twelve }}
-          primary
-        >
-          Create Logbook Entry
-        </Globals.Button>
-      )}
+      <Globals.Button
+        type="button"
+        disabled={!selectedLogbookId.value}
+        onClick={createLogbookEntry}
+        size="medium"
+        borderRadius="six"
+        style={{ marginTop: Styles.pxAsRem.twelve }}
+        primary
+      >
+        Create Logbook Entry
+      </Globals.Button>
     </Container>
   );
 };
