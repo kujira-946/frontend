@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import styled from "styled-components";
-import { useEffect } from "react";
-import { useSignal } from "@preact/signals-react";
+import { useCallback, useEffect } from "react";
+import { effect, useSignal } from "@preact/signals-react";
 import { AnimatePresence } from "framer-motion";
 
 import * as Globals from "@/components";
@@ -9,7 +9,10 @@ import * as Icons from "@/components/icons";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { deleteLogbookEntryRequest } from "@/sagas/logbook-entries.saga";
+import {
+  deleteLogbookEntryRequest,
+  updateLogbookEntryRequest,
+} from "@/sagas/logbook-entries.saga";
 import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
@@ -70,7 +73,32 @@ export const LogbookEntryHeader = (props: Props) => {
 
   const date = useSignal("...");
   const budget = useSignal("...");
+  const budgetError = useSignal(false);
   const confirmLogbookEntryDelete = useSignal(false);
+
+  const updateBudget = useCallback(
+    Functions.debounce((): void => {
+      if (logbookEntry && !budgetError.value) {
+        if (budget.value === "" && logbookEntry.budget !== null) {
+          dispatch(
+            updateLogbookEntryRequest(props.logbookEntryId, {
+              budget: null,
+            })
+          );
+        } else if (
+          budget.value !== "" &&
+          Number(budget.value) !== logbookEntry.budget
+        ) {
+          dispatch(
+            updateLogbookEntryRequest(props.logbookEntryId, {
+              budget: Number(budget.value),
+            })
+          );
+        }
+      }
+    }),
+    [logbookEntry]
+  );
 
   function openDeleteConfirmationModal(event: Types.OnClick): void {
     event.stopPropagation();
@@ -81,16 +109,37 @@ export const LogbookEntryHeader = (props: Props) => {
     dispatch(deleteLogbookEntryRequest(props.logbookEntryId));
   }
 
+  // ↓↓↓ Initial state setup. ↓↓↓ //
   useEffect(() => {
     if (logbookEntry) {
       date.value = logbookEntry.date;
-      if (logbookEntry.budget) {
+      if (logbookEntry.budget === 0) {
+        budget.value = Functions.roundNumber(0, 2);
+      } else if (logbookEntry.budget) {
         budget.value = Functions.roundNumber(logbookEntry.budget, 2);
       } else {
         budget.value = "";
       }
     }
   }, [logbookEntry]);
+
+  // ↓↓↓ Handling budget update ↓↓↓ //
+  useEffect(() => {
+    updateBudget();
+  }, [logbookEntry, budgetError.value, budget.value]);
+
+  // ↓↓↓ Handling budget error ↓↓↓ //
+  effect(() => {
+    if (
+      budget.value !== "" &&
+      !Number(budget.value) &&
+      Number(budget.value) !== 0
+    ) {
+      budgetError.value = true;
+    } else {
+      budgetError.value = false;
+    }
+  });
 
   if (!logbookEntry) {
     return null;
@@ -110,6 +159,7 @@ export const LogbookEntryHeader = (props: Props) => {
         </AnimatePresence>
 
         <Container>
+          {/* Date */}
           <Section
             key={`dashboard-logbooks-logbook-entry-header-${props.logbookEntryId}-date`}
           >
@@ -124,6 +174,7 @@ export const LogbookEntryHeader = (props: Props) => {
             />
           </Section>
 
+          {/* Spent */}
           <Section
             key={`dashboard-logbooks-logbook-entry-header-${props.logbookEntryId}-spent`}
           >
@@ -137,6 +188,7 @@ export const LogbookEntryHeader = (props: Props) => {
             />
           </Section>
 
+          {/* Budget */}
           <Section
             key={`dashboard-logbooks-logbook-entry-header-${props.logbookEntryId}-budget`}
           >
@@ -147,11 +199,13 @@ export const LogbookEntryHeader = (props: Props) => {
                 budget.value = event.currentTarget.value;
               }}
               placeholder="Budget"
+              error={budgetError.value}
               type="large"
               isCost
             />
           </Section>
 
+          {/* Delete Button */}
           {theme.value && (
             <Globals.IconContainer onClick={openDeleteConfirmationModal}>
               <Icons.Close

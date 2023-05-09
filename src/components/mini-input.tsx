@@ -30,9 +30,7 @@ const Container = styled.section<ContainerProps>`
   padding: ${(props) => {
     return props.frozen ? 0 : `${Styles.pxAsRem.four} ${Styles.pxAsRem.six}`;
   }};
-  color: ${(props: ContainerProps & ThemeProps) => {
-    return props.frozen ? props.theme.text : "inherit";
-  }};
+  color: ${(props: ThemeProps) => props.theme.text};
   background-color: ${(props: ContainerProps & ThemeProps) => {
     if (props.frozen) return "transparent";
     else if (props.hasContent) return props.theme.backgroundThree;
@@ -91,6 +89,7 @@ const Container = styled.section<ContainerProps>`
 `;
 
 const CostText = styled.span`
+  color: inherit;
   font-size: inherit;
   font-weight: inherit;
   transform: translateY(-${Styles.pxAsRem.one});
@@ -99,7 +98,7 @@ const CostText = styled.span`
 const Textarea = styled(TextareaAutosize)`
   width: 100%;
   height: 100% !important;
-  color: ${(props: ThemeProps) => props.theme.text};
+  color: inherit;
   background-color: transparent;
   border: none;
   border-radius: 0;
