@@ -85,7 +85,6 @@ type Props = {
   deletePurchase: (purchaseId: number, purchaseCost: number) => void;
 
   showDrag?: boolean;
-  showCheck?: boolean;
   showCategories?: boolean;
   showDelete?: boolean;
 };
@@ -134,8 +133,7 @@ const ExportedComponent = (props: Props) => {
       )}
 
       {/* Check */}
-      {props.showCheck &&
-        props.selectAction &&
+      {props.selectAction &&
         theme.value &&
         (selected.value ? (
           <Globals.IconContainer

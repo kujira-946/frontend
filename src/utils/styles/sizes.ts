@@ -1,4 +1,5 @@
 export const pxAsRem = {
+  one: "0.063rem",
   two: "0.125rem",
   three: "0.188rem",
   four: "0.25rem",

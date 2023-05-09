@@ -1,7 +1,7 @@
 import * as Drag from "react-beautiful-dnd";
 
+import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
-import * as Types from "@/utils/types";
 import {
   deletePurchaseRequest,
   updatePurchaseRequest,
@@ -49,6 +49,7 @@ export function updatePurchase(
 ) {
   // On purchase description update.
   if (description !== purchaseDescription) {
+    dispatch(Redux.uiActions.setLoadingPurchases(true));
     dispatch(updatePurchaseRequest(purchaseId, { description }));
   }
   // On purchase cost update.
@@ -63,6 +64,7 @@ export function updatePurchase(
     const associationUpdateData = {
       [association]: { id: associationId, totalSpent: newTotalSpent },
     };
+    dispatch(Redux.uiActions.setLoadingPurchases(true));
     dispatch(
       updatePurchaseRequest(
         purchaseId,

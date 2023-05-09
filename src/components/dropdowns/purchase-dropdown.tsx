@@ -51,13 +51,33 @@ const Body = styled(motion.div)`
   flex-direction: column;
 `;
 
-const PurchaseCells = styled.article`
+type PurchaseCellsProps = { updatingPurchases: boolean };
+
+const PurchaseCells = styled.article<PurchaseCellsProps>`
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: ${Styles.pxAsRem.four};
   padding: ${Styles.pxAsRem.twelve};
   max-height: 400px;
   overflow-y: auto;
+
+  ${(props) =>
+    props.updatingPurchases &&
+    css`
+      ${Styles.preventUserInteraction};
+      opacity: 0.5;
+    `};
+`;
+
+const PurchaseCellsUpdateLoader = styled(motion.div)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: ${Styles.pxAsRem.four};
+  background-color: ${(props: ThemeProps) => props.theme.primaryMain};
+  transform-origin: left;
 `;
 
 const Buttons = styled.article`
@@ -134,8 +154,10 @@ type PurchaseIds = { [key: string]: number };
 export const PurchaseDropdown = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
+  const { loadingPurchases } = Functions.useUiSlice();
+
   const open = useSignal(!!props.startOpened);
-  const loadingPurchases = useSignal(false);
+  const loadingPurchasesLocal = useSignal(false);
   const selectedPurchases = useSignal<PurchaseIds>({});
   const purchasesSelected = useSignal(false);
 
@@ -198,7 +220,7 @@ export const PurchaseDropdown = (props: Props) => {
 
   useEffect(() => {
     if (open.value) {
-      loadingPurchases.value = true;
+      loadingPurchasesLocal.value = true;
       if (props.type === "overview") {
         dispatch(fetchOverviewGroupPurchasesRequest(props.associationId));
       } else {
@@ -208,8 +230,8 @@ export const PurchaseDropdown = (props: Props) => {
   }, [open.value]);
 
   useEffect(() => {
-    if (props.purchases && loadingPurchases.value) {
-      loadingPurchases.value = false;
+    if (props.purchases && loadingPurchasesLocal.value) {
+      loadingPurchasesLocal.value = false;
     }
   }, [props.purchases]);
 
@@ -233,8 +255,8 @@ export const PurchaseDropdown = (props: Props) => {
       <AnimatePresence>
         {open.value && (
           <Body>
-            {loadingPurchases.value ? (
-              <PurchaseCells>
+            {loadingPurchasesLocal.value ? (
+              <PurchaseCells updatingPurchases={false}>
                 <Globals.PurchaseShimmer borderRadius="six" />
                 <Globals.PurchaseShimmer borderRadius="six" />
                 <Globals.PurchaseShimmer borderRadius="six" />
@@ -242,7 +264,18 @@ export const PurchaseDropdown = (props: Props) => {
             ) : (
               props.purchases &&
               props.purchases.length > 0 && (
-                <PurchaseCells>
+                <PurchaseCells updatingPurchases={loadingPurchases}>
+                  <AnimatePresence>
+                    {loadingPurchases && (
+                      <PurchaseCellsUpdateLoader
+                        initial={{ width: "0%" }}
+                        animate={{ width: "100%" }}
+                        exit={{ width: "0%" }}
+                        transition={{ duration: 0.2 }}
+                      />
+                    )}
+                  </AnimatePresence>
+
                   {props.purchases.map(
                     (purchase: Types.Purchase, index: number) => {
                       return (
@@ -259,7 +292,6 @@ export const PurchaseDropdown = (props: Props) => {
                           updatePurchase={updatePurchase}
                           deletePurchase={deletePurchase}
                           showDrag={props.type === "logbook"}
-                          showCheck={props.type === "logbook"}
                           showCategories={props.type === "logbook"}
                           showDelete
                         />

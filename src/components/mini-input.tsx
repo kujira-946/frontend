@@ -25,10 +25,11 @@ const Container = styled.section<ContainerProps>`
   ${Styles.transition};
   display: flex;
   flex: 1;
-  justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
-  padding: ${(props) => (props.frozen ? 0 : `0 ${Styles.pxAsRem.six}`)};
+  padding: ${(props) => {
+    return props.frozen ? 0 : `${Styles.pxAsRem.four} ${Styles.pxAsRem.six}`;
+  }};
   color: ${(props: ContainerProps & ThemeProps) => {
     return props.frozen ? props.theme.text : "inherit";
   }};
@@ -89,24 +90,21 @@ const Container = styled.section<ContainerProps>`
   }
 `;
 
-type TextareaProps = { type: Type };
+const CostText = styled.span`
+  font-size: inherit;
+  font-weight: inherit;
+  transform: translateY(-${Styles.pxAsRem.one});
+`;
 
-const Textarea = styled(TextareaAutosize)<TextareaProps>`
+const Textarea = styled(TextareaAutosize)`
   width: 100%;
-  padding: ${Styles.pxAsRem.four} 0;
+  height: 100% !important;
   color: ${(props: ThemeProps) => props.theme.text};
   background-color: transparent;
   border: none;
-  font-size: ${(props) => {
-    return props.type === "large"
-      ? Styles.pxAsRem.sixteen
-      : Styles.pxAsRem.fourteen;
-  }};
-  font-weight: ${(props) => {
-    return props.type === "large"
-      ? Styles.fontWeights.semiBold
-      : Styles.fontWeights.regular;
-  }};
+  border-radius: 0;
+  font-size: inherit;
+  font-weight: inherit;
   outline: none;
   resize: none;
   cursor: pointer;
@@ -169,7 +167,7 @@ export const MiniInput = (props: Props) => {
       error={!!props.error}
       frozen={props.frozen}
     >
-      {props.isCost && props.userInput.length > 0 && "$"}
+      {props.isCost && props.userInput.length > 0 && <CostText>$</CostText>}
       <Textarea
         value={props.userInput}
         placeholder={props.placeholder}
@@ -179,12 +177,6 @@ export const MiniInput = (props: Props) => {
         onFocus={textareaOnFocus}
         onBlur={textareaOnBlur}
         onKeyPress={preventEnterPress}
-        type={props.type}
-        style={{
-          borderRadius: props.borderRadius
-            ? Styles.pxAsRem[props.borderRadius]
-            : Styles.pxAsRem.eight,
-        }}
       />
     </Container>
   );
