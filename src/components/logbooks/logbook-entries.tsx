@@ -75,8 +75,9 @@ export const LogbookEntries = (props: Props) => {
         </>
       ) : (
         logbookEntries &&
-        logbookEntries.map(
-          (logbookEntry: Types.LogbookEntry, index: number) => {
+        Functions.deepCopy(logbookEntries)
+          .reverse()
+          .map((logbookEntry: Types.LogbookEntry, index: number) => {
             return (
               <LogbookEntry
                 key={`logbooks-logbook-entries-entry-${logbookEntry.id}-${index}`}
@@ -88,8 +89,7 @@ export const LogbookEntries = (props: Props) => {
                 addPurchase={addPurchase}
               />
             );
-          }
-        )
+          })
       )}
     </Container>
   );
