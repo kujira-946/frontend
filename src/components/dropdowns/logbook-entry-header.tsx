@@ -49,6 +49,13 @@ const SectionTitle = styled.h3`
   font-weight: ${Styles.fontWeights.bold};
 `;
 
+const SectionError = styled.p`
+  margin: 0;
+  color: ${(props: ThemeProps) => props.theme.failure};
+  font-size: ${Styles.pxAsRem.twelve};
+  font-weight: ${Styles.fontWeights.bold};
+`;
+
 type SpentStatusProps = { status: "OK" | "OVER" };
 
 const SpentStatus = styled.span<SpentStatusProps>`
@@ -85,19 +92,31 @@ export const LogbookEntryHeader = (props: Props) => {
   const budget = useSignal("...");
   const confirmLogbookEntryDelete = useSignal(false);
 
-  const dateError = useSignal(false);
-  const budgetError = useSignal(false);
+  const dateErrorMessage = useSignal("");
+  const budgetErrorMessage = useSignal("");
 
   const updateDate = useCallback(
     Functions.debounce((): void => {
-      console.log("Update Date");
+      if (logbookEntry && !dateErrorMessage.value) {
+        const formattedDateInput = Functions.generateFormattedDate(
+          new Date(date.value),
+          true
+        );
+        if (formattedDateInput !== logbookEntry.date) {
+          dispatch(
+            updateLogbookEntryRequest(props.logbookEntryId, {
+              date: formattedDateInput,
+            })
+          );
+        }
+      }
     }),
     [logbookEntry]
   );
 
   const updateBudget = useCallback(
     Functions.debounce((): void => {
-      if (logbookEntry && !budgetError.value) {
+      if (logbookEntry && !budgetErrorMessage.value) {
         if (budget.value === "" && logbookEntry.budget !== null) {
           dispatch(
             updateLogbookEntryRequest(props.logbookEntryId, {
@@ -138,28 +157,6 @@ export const LogbookEntryHeader = (props: Props) => {
     }
   }
 
-  function validateDateFormat(): boolean {
-    const splitDate = date.value.split("/");
-    const month = splitDate[0];
-    const day = splitDate[1];
-    const year = splitDate[2];
-
-    return (
-      splitDate.length !== 3 ||
-      month.length > 2 ||
-      !Number(month) ||
-      Number(month) < 1 ||
-      Number(month) > 12 ||
-      day.length > 2 ||
-      !Number(day) ||
-      Number(day) < 1 ||
-      Number(day) > Functions.getMonthMaxDay(Number(month)) ||
-      year.length > 4 ||
-      !Number(year) ||
-      Number(year) > new Date().getFullYear()
-    );
-  }
-
   // ↓↓↓ Initial state setup. ↓↓↓ //
   useEffect(() => {
     if (logbookEntry) {
@@ -177,35 +174,71 @@ export const LogbookEntryHeader = (props: Props) => {
   // ↓↓↓ Handling date update ↓↓↓ //
   useEffect(() => {
     updateDate();
-  }, [logbookEntry, dateError.value, date.value]);
+  }, [logbookEntry, dateErrorMessage.value, date.value]);
 
   // ↓↓↓ Handling budget update ↓↓↓ //
   useEffect(() => {
     updateBudget();
-  }, [logbookEntry, budgetError.value, budget.value]);
+  }, [logbookEntry, budgetErrorMessage.value, budget.value]);
+
+  // ↓↓↓ Handling date error ↓↓↓ //
+  useEffect(() => {
+    if (logbookEntry && date.value !== "...") {
+      effect(() => {
+        const splitDate = date.value.split("/");
+        const month = splitDate[0];
+        const day = splitDate[1];
+        const year = splitDate[2];
+
+        if (date.value.length !== 0 && date.value !== logbookEntry.date) {
+          if (splitDate.length !== 3) {
+            dateErrorMessage.value = "Incorrect format.";
+          } else if (month.length > 2) {
+            dateErrorMessage.value = "Month too big.";
+          } else if (!Number(month)) {
+            dateErrorMessage.value = "Month must be a number.";
+          } else if (Number(month) < 1) {
+            dateErrorMessage.value = "Month too small.";
+          } else if (Number(month) > 12) {
+            dateErrorMessage.value = "Month too big.";
+          } else if (day.length > 2) {
+            dateErrorMessage.value = "Day too big.";
+          } else if (!Number(day)) {
+            dateErrorMessage.value = "Day must be a number.";
+          } else if (Number(day) < 1) {
+            dateErrorMessage.value = "Day too small.";
+          } else if (Number(day) > Functions.getMonthMaxDay(Number(month))) {
+            dateErrorMessage.value = "Day too big.";
+          } else if (year.length < 4) {
+            dateErrorMessage.value = "Year too small.";
+          } else if (year.length > 4) {
+            dateErrorMessage.value = "Year too big.";
+          } else if (!Number(year)) {
+            dateErrorMessage.value = "Year must be a number.";
+          } else if (Number(year) > new Date().getFullYear()) {
+            dateErrorMessage.value = "Year too big.";
+          } else {
+            dateErrorMessage.value = "";
+          }
+        } else {
+          dateErrorMessage.value = "";
+        }
+      });
+    }
+  }, [logbookEntry, date.value]);
 
   // ↓↓↓ Handling budget error ↓↓↓ //
   effect(() => {
-    // Date Error
-    if (date.value.length !== 0) {
-      if (validateDateFormat()) {
-        dateError.value = true;
+    if (budget.value !== "" && budget.value !== "...") {
+      if (!Number(budget.value) && Number(budget.value) !== 0) {
+        budgetErrorMessage.value = "Must be a number.";
+      } else if (Number(budget.value) === 0 || Number(budget.value) < 1) {
+        budgetErrorMessage.value = "Must be greater than zero.";
       } else {
-        dateError.value = false;
+        budgetErrorMessage.value = "";
       }
     } else {
-      dateError.value = false;
-    }
-
-    // Budget Error
-    if (
-      budget.value !== "" &&
-      !Number(budget.value) &&
-      Number(budget.value) !== 0
-    ) {
-      budgetError.value = true;
-    } else {
-      budgetError.value = false;
+      budgetErrorMessage.value = "";
     }
   });
 
@@ -232,13 +265,16 @@ export const LogbookEntryHeader = (props: Props) => {
             key={`dashboard-logbooks-logbook-entry-header-${props.logbookEntryId}-date`}
           >
             <SectionTitle>Date</SectionTitle>
+            {!!dateErrorMessage.value && (
+              <SectionError>{dateErrorMessage.value}</SectionError>
+            )}
             <Globals.MiniInput
               userInput={date.value}
               setUserInput={(event: Types.Input) => {
                 date.value = event.currentTarget.value;
               }}
               placeholder="MM/DD/YYYY"
-              error={dateError.value}
+              error={!!dateErrorMessage.value}
               type="large"
             />
           </Section>
@@ -264,13 +300,16 @@ export const LogbookEntryHeader = (props: Props) => {
             key={`dashboard-logbooks-logbook-entry-header-${props.logbookEntryId}-budget`}
           >
             <SectionTitle>Budget</SectionTitle>
+            {!!budgetErrorMessage.value && (
+              <SectionError>{budgetErrorMessage.value}</SectionError>
+            )}
             <Globals.MiniInput
               userInput={budget.value}
               setUserInput={(event: Types.Input) => {
                 budget.value = event.currentTarget.value;
               }}
               placeholder="Budget"
-              error={budgetError.value}
+              error={!!budgetErrorMessage.value}
               type="large"
               isCost
             />
