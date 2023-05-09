@@ -83,8 +83,17 @@ export const LogbookEntryHeader = (props: Props) => {
 
   const date = useSignal("...");
   const budget = useSignal("...");
-  const budgetError = useSignal(false);
   const confirmLogbookEntryDelete = useSignal(false);
+
+  const dateError = useSignal(false);
+  const budgetError = useSignal(false);
+
+  const updateDate = useCallback(
+    Functions.debounce((): void => {
+      console.log("Update Date");
+    }),
+    [logbookEntry]
+  );
 
   const updateBudget = useCallback(
     Functions.debounce((): void => {
@@ -129,6 +138,28 @@ export const LogbookEntryHeader = (props: Props) => {
     }
   }
 
+  function validateDateFormat(): boolean {
+    const splitDate = date.value.split("/");
+    const month = splitDate[0];
+    const day = splitDate[1];
+    const year = splitDate[2];
+
+    return (
+      splitDate.length !== 3 ||
+      month.length > 2 ||
+      !Number(month) ||
+      Number(month) < 1 ||
+      Number(month) > 12 ||
+      day.length > 2 ||
+      !Number(day) ||
+      Number(day) < 1 ||
+      Number(day) > Functions.getMonthMaxDay(Number(month)) ||
+      year.length > 4 ||
+      !Number(year) ||
+      Number(year) > new Date().getFullYear()
+    );
+  }
+
   // ↓↓↓ Initial state setup. ↓↓↓ //
   useEffect(() => {
     if (logbookEntry) {
@@ -143,6 +174,11 @@ export const LogbookEntryHeader = (props: Props) => {
     }
   }, [logbookEntry]);
 
+  // ↓↓↓ Handling date update ↓↓↓ //
+  useEffect(() => {
+    updateDate();
+  }, [logbookEntry, dateError.value, date.value]);
+
   // ↓↓↓ Handling budget update ↓↓↓ //
   useEffect(() => {
     updateBudget();
@@ -150,6 +186,18 @@ export const LogbookEntryHeader = (props: Props) => {
 
   // ↓↓↓ Handling budget error ↓↓↓ //
   effect(() => {
+    // Date Error
+    if (date.value.length !== 0) {
+      if (validateDateFormat()) {
+        dateError.value = true;
+      } else {
+        dateError.value = false;
+      }
+    } else {
+      dateError.value = false;
+    }
+
+    // Budget Error
     if (
       budget.value !== "" &&
       !Number(budget.value) &&
@@ -190,6 +238,7 @@ export const LogbookEntryHeader = (props: Props) => {
                 date.value = event.currentTarget.value;
               }}
               placeholder="MM/DD/YYYY"
+              error={dateError.value}
               type="large"
             />
           </Section>
