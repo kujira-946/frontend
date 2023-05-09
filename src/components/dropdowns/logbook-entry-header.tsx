@@ -49,6 +49,16 @@ const SectionTitle = styled.h3`
   font-weight: ${Styles.fontWeights.bold};
 `;
 
+type SpentStatusProps = { status: "OK" | "OVER" };
+
+const SpentStatus = styled.span<SpentStatusProps>`
+  color: ${(props: SpentStatusProps & ThemeProps) => {
+    return props.status === "OK" ? props.theme.success : props.theme.failure;
+  }};
+  font-size: inherit;
+  font-weight: inherit;
+`;
+
 // ========================================================================================= //
 // [ DYNAMIC IMPORT ] ====================================================================== //
 // ========================================================================================= //
@@ -107,6 +117,16 @@ export const LogbookEntryHeader = (props: Props) => {
 
   function deleteLogbookEntry(): void {
     dispatch(deleteLogbookEntryRequest(props.logbookEntryId));
+  }
+
+  function determineSpentStatus() {
+    if (logbookEntry && logbookEntry.budget) {
+      if (logbookEntry.totalSpent <= logbookEntry.budget) {
+        return <SpentStatus status="OK">(OK)</SpentStatus>;
+      } else {
+        return <SpentStatus status="OVER">(OVER)</SpentStatus>;
+      }
+    }
   }
 
   // ↓↓↓ Initial state setup. ↓↓↓ //
@@ -178,7 +198,9 @@ export const LogbookEntryHeader = (props: Props) => {
           <Section
             key={`dashboard-logbooks-logbook-entry-header-${props.logbookEntryId}-spent`}
           >
-            <SectionTitle>Spent</SectionTitle>
+            <SectionTitle>
+              Spent {logbookEntry.budget && determineSpentStatus()}
+            </SectionTitle>
             <Globals.MiniInput
               userInput={Functions.roundNumber(logbookEntry.totalSpent, 2)}
               placeholder="Spent"
