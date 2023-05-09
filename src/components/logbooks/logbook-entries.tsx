@@ -12,6 +12,7 @@ import {
   createPurchaseRequest,
   deleteAssociatedPurchasesRequest,
 } from "@/sagas/purchases.saga";
+import { batchDeletePurchasesRequest } from "@/sagas/purchases.saga";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -38,6 +39,10 @@ export const LogbookEntries = (props: Props) => {
   const logbookEntries = Functions.useGetLogbookLogbookEntries(
     props.selectedLogbookId
   );
+
+  const deleteSelectedPurchases = useCallback((purchaseIds: number[]): void => {
+    dispatch(batchDeletePurchasesRequest(purchaseIds));
+  }, []);
 
   const deleteAllPurchases = useCallback(
     (purchaseIds: number[], logbookEntryId: number): void => {
@@ -78,6 +83,7 @@ export const LogbookEntries = (props: Props) => {
                 logbookEntryId={logbookEntry.id}
                 logbookEntryTotalSpent={logbookEntry.totalSpent}
                 logbookEntryPurchaseIds={logbookEntry.purchaseIds || []}
+                deleteSelectedPurchases={deleteSelectedPurchases}
                 deleteAllPurchases={deleteAllPurchases}
                 addPurchase={addPurchase}
               />

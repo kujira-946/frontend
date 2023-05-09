@@ -5,6 +5,7 @@ type Props = {
   logbookEntryId: number;
   logbookEntryTotalSpent: number;
   logbookEntryPurchaseIds: number[];
+  deleteSelectedPurchases: (purchaseIds: number[]) => void;
   deleteAllPurchases: (purchaseIds: number[], logbookEntryId: number) => void;
   addPurchase: (logbookEntryId: number) => void;
 };
@@ -19,6 +20,7 @@ export const LogbookEntry = (props: Props) => {
       associationTotalSpent={props.logbookEntryTotalSpent}
       purchases={purchases}
       purchaseIds={props.logbookEntryPurchaseIds}
+      deleteSelectedPurchases={props.deleteSelectedPurchases}
       deleteAllPurchases={props.deleteAllPurchases}
       addPurchase={props.addPurchase}
     />

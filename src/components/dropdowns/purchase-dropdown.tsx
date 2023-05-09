@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { memo, useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -137,12 +137,17 @@ export const PurchaseDropdown = (props: Props) => {
   const open = useSignal(!!props.startOpened);
   const loadingPurchases = useSignal(false);
   const selectedPurchases = useSignal<PurchaseIds>({});
+  const purchasesSelected = useSignal(false);
 
   const selectPurchase = useCallback((purchaseId: number): void => {
     if (selectedPurchases.value[purchaseId]) {
       delete selectedPurchases.value[purchaseId];
+      if (Object.values(selectedPurchases.value).length === 0) {
+        purchasesSelected.value = false;
+      }
     } else {
       selectedPurchases.value[purchaseId] = purchaseId;
+      purchasesSelected.value = true;
     }
   }, []);
 
@@ -266,7 +271,7 @@ export const PurchaseDropdown = (props: Props) => {
             )}
 
             <Buttons>
-              {Object.keys(selectedPurchases.value).length > 0 && (
+              {props.deleteSelectedPurchases && purchasesSelected.value && (
                 <DeleteButton type="button" onClick={deleteSelectedPurchases}>
                   Delete Selected
                 </DeleteButton>
