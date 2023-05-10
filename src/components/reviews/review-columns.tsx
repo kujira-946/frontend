@@ -15,9 +15,9 @@ import { ReviewColumn } from "./review-column";
 
 const Container = styled.section`
   display: flex;
-  gap: ${Styles.pxAsRem.sixteen};
+  gap: ${Styles.pxAsRem.eight};
   height: 100%;
-  padding: ${Styles.pxAsRem.sixteen};
+  overflow-x: auto;
 `;
 
 // ========================================================================================= //

@@ -48,7 +48,7 @@ const Mobile = styled.div`
   display: none;
   flex-direction: column;
 
-  @media (max-width: ${Styles.breakpoints.navbarWidth}px) {
+  @media (max-width: ${Styles.breakpoints.dashboardWidth}px) {
     display: flex;
   }
 `;
@@ -59,7 +59,7 @@ const Sidebar = styled.section`
   border-radius: ${Styles.pxAsRem.eight};
   overflow: hidden;
 
-  @media (max-width: ${Styles.breakpoints.navbarWidth}px) {
+  @media (max-width: ${Styles.breakpoints.dashboardWidth}px) {
     display: none;
   }
 `;

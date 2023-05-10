@@ -28,7 +28,7 @@ export type Purchase = {
   placement: number;
   category?: Category;
   description: string;
-  cost?: number;
+  cost: number | null;
   overviewGroupId?: number; // belongs to an overview group
   logbookEntryId?: number; // belongs to a logbook entry
 } & Dates;
@@ -60,7 +60,7 @@ export type LogbookEntry = {
   id: number;
   date: string;
   totalSpent: number;
-  budget?: number | null;
+  budget: number | null;
   purchaseIds?: number[]; // has many purchases
   logbookId: number; // belongs to a logbook
 } & Dates;

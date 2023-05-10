@@ -47,9 +47,9 @@ const Reviews: NextPageWithLayout = () => {
         )}
       </AnimatePresence>
 
-      {/* {selectedLogbookId.value && (
+      {selectedLogbookId.value && (
         <Components.ReviewColumns logbookId={selectedLogbookId.value} />
-      )} */}
+      )}
     </>
   );
 };

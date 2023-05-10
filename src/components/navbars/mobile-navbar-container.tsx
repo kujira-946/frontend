@@ -31,7 +31,7 @@ const Page = styled.h1`
   font-size: ${Styles.pxAsRem.sixteen};
   font-weight: ${Styles.fontWeights.bold};
 
-  @media (max-height: ${Styles.breakpoints.navbarHeight}px) {
+  @media (max-height: ${Styles.breakpoints.dashboardHeight}px) {
     font-size: ${Styles.pxAsRem.fourteen};
   }
 `;
@@ -42,7 +42,7 @@ const Caption = styled.p`
   font-size: ${Styles.pxAsRem.fourteen};
   font-weight: ${Styles.fontWeights.regular};
 
-  @media (max-height: ${Styles.breakpoints.navbarHeight}px) {
+  @media (max-height: ${Styles.breakpoints.dashboardHeight}px) {
     font-size: ${Styles.pxAsRem.twelve};
   }
 `;

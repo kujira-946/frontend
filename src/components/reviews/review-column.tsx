@@ -8,6 +8,8 @@ import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { ThemeProps } from "../layout";
 
+import { ReviewCell } from "./review-cell";
+
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
@@ -15,10 +17,15 @@ import { ThemeProps } from "../layout";
 const Container = styled.section`
   flex: 1;
   height: 100%;
-  background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
+  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
   border: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
-  border-radius: ${Styles.pxAsRem.six};
+  border-radius: ${Styles.pxAsRem.eight};
   overflow: hidden;
+
+  @media (max-width: ${Styles.breakpoints.dashboardWidth}px) {
+    min-width: 300px;
+    width: 100%;
+  }
 `;
 
 const Header = styled.header`
@@ -56,7 +63,7 @@ type SpentProps = { price?: true };
 const Spent = styled.span<SpentProps>`
   margin: 0;
   color: ${(props: SpentProps & ThemeProps) => {
-    return props.price ? props.theme.primaryMain : "inherit";
+    return props.price ? props.theme.primaryMain : props.theme.backgroundTen;
   }};
   font-size: ${Styles.pxAsRem.fourteen};
   font-weight: ${(props) => {
@@ -66,11 +73,18 @@ const Spent = styled.span<SpentProps>`
   }};
 `;
 
-// const Count = styled.span`
-//   color: ${(props: ThemeProps) => props.theme.secondaryMain};
-//   font-size: ${Styles.pxAsRem.fourteen};
-//   font-weight: ${Styles.fontWeights.semiBold};
-// `;
+const Count = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: ${Styles.pxAsRem.forty};
+  height: ${Styles.pxAsRem.forty};
+  color: ${(props: ThemeProps) => props.theme.text};
+  border: ${(props: ThemeProps) => props.theme.backgroundThree} solid 1px;
+  border-radius: ${Styles.pxAsRem.six};
+  font-size: ${Styles.pxAsRem.sixteen};
+  font-weight: ${Styles.fontWeights.bold};
+`;
 
 const Purchases = styled.article`
   display: flex;
@@ -104,44 +118,28 @@ export const ReviewColumn = (props: Props) => {
 
   return (
     <Container>
-      {/* <Header>
+      <Header>
         <Descriptor>
           <Title category={props.category}>{props.category}</Title>
           <Spent>
             You've spent{" "}
-            <Spent price>${Functions.formattedNumber(totalSpent.value)}</Spent>{" "}
-            on{" "}
-            {props.category === "Need"
-              ? "need purchases"
-              : props.category === "Planned"
-              ? "planned purchases"
-              : "impulsive purchases"}
-            .
+            <Spent price>${Functions.formattedNumber(totalSpent.value)}</Spent>.
           </Spent>
         </Descriptor>
         <Count>{props.purchases.length}</Count>
       </Header>
 
       <Purchases>
-        {props.purchases.map((purchase: Types.Purchase) => {
+        {props.purchases.map((purchase: Types.Purchase, index: number) => {
           return (
-            <Globals.PurchaseCell
-              key={`dashboard-reviews-page-purchase-cell-${purchase.id}`}
-              borderRadius="four"
-              purchaseId={purchase.id}
+            <ReviewCell
+              key={`dashboard-reviews-page-purchase-cell-${purchase.id}-${index}`}
               description={purchase.description}
-              cost={Functions.roundNumber(purchase.cost || 0, 2)}
-              costForwardText="$"
-              hideDrag
-              hideCheck
-              hideCategories
-              hideClose
-              descriptionFrozen
-              costFrozen
+              cost={purchase.cost}
             />
           );
         })}
-      </Purchases> */}
+      </Purchases>
     </Container>
   );
 };
