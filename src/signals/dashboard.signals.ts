@@ -8,10 +8,6 @@ export type DashboardSignals = {
   mobileMenuOpen: Signal<boolean>;
   mobileOverviewOpen: Signal<boolean>;
 
-  // Dashboard Overview
-  totalSpent: Signal<string>;
-  remainingBudget: Signal<string>;
-
   // Dashboard Logbooks
   selectedLogbookId: Signal<number | null>;
   logbookTotalSpent: Signal<number>;
@@ -25,10 +21,6 @@ export const dashboardSignals: DashboardSignals = {
   mobileFiltersOpen: signal<boolean>(false),
   mobileMenuOpen: signal<boolean>(false),
   mobileOverviewOpen: signal<boolean>(false),
-
-  // Dashboard Overview
-  totalSpent: signal<string>("0"),
-  remainingBudget: signal<string>("0"),
 
   // Dashboard Logbooks
   selectedLogbookId: signal<number | null>(null),

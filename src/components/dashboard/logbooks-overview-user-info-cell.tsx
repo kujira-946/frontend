@@ -20,6 +20,7 @@ const Container = styled.section`
 
 type StaticCellProps = {
   primary?: boolean;
+  inputError?: boolean;
   bold?: true;
 };
 
@@ -28,7 +29,11 @@ const StaticCell = styled.article<StaticCellProps>`
   flex-shrink: 0;
   padding: ${Styles.pxAsRem.six} ${Styles.pxAsRem.eight};
   color: ${(props: StaticCellProps & ThemeProps) => {
-    return props.primary ? props.theme.primaryMain : props.theme.text;
+    return props.inputError
+      ? props.theme.failure
+      : props.primary
+      ? props.theme.primaryMain
+      : props.theme.text;
   }};
   border-radius: ${Styles.pxAsRem.four};
   font-size: ${Styles.pxAsRem.fourteen};
@@ -37,9 +42,13 @@ const StaticCell = styled.article<StaticCellProps>`
   }};
 `;
 
-const Caption = styled.p`
+type CaptionProps = { inputError: boolean };
+
+const Caption = styled.p<CaptionProps>`
   margin: 0;
-  color: ${(props: ThemeProps) => props.theme.backgroundTen};
+  color: ${(props: CaptionProps & ThemeProps) => {
+    return props.inputError ? props.theme.failure : props.theme.backgroundTen;
+  }};
   font-size: ${Styles.pxAsRem.twelve};
   font-weight: ${Styles.fontWeights.medium};
 `;
@@ -53,7 +62,7 @@ type Props = {
   caption?: string;
   cost: string;
   setUserInput?: (event: Types.Input) => void;
-  inputError?: boolean;
+  inputError: boolean;
 };
 
 const ExportedComponent = (props: Props) => {
@@ -61,12 +70,18 @@ const ExportedComponent = (props: Props) => {
     <Container>
       <StaticCell>
         {props.description}
-        {props.caption && <Caption>{props.caption}</Caption>}
+        {props.caption && (
+          <Caption inputError={props.inputError}>{props.caption}</Caption>
+        )}
       </StaticCell>
 
       {props.description === "Total Spent" ||
       props.description === "Remaining" ? (
-        <StaticCell primary={props.description === "Remaining"} bold>
+        <StaticCell
+          primary={props.description === "Remaining"}
+          inputError={props.inputError}
+          bold
+        >
           {props.cost}
         </StaticCell>
       ) : (

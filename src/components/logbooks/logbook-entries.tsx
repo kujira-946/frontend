@@ -35,6 +35,7 @@ type Props = {
 export const LogbookEntries = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
+  const { logbookTotalSpent } = Functions.useSignalsStore().dashboard;
   const { loadingLogbookEntries } = Functions.useUiSlice();
   const logbookEntries = Functions.useGetLogbookLogbookEntries(
     props.selectedLogbookId
@@ -63,6 +64,12 @@ export const LogbookEntries = (props: Props) => {
     if (!logbookEntries) {
       dispatch(uiActions.setLoadingLogbookEntries(true));
       dispatch(fetchLogbookLogbookEntriesRequest(props.selectedLogbookId));
+    } else {
+      let totalSpentSum = 0;
+      logbookEntries.forEach((logbookEntry: Types.LogbookEntry) => {
+        totalSpentSum += logbookEntry.totalSpent;
+      });
+      logbookTotalSpent.value = totalSpentSum;
     }
   }, [logbookEntries]);
 

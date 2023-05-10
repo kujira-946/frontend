@@ -87,16 +87,20 @@ export const LogbooksUserSummary = (props: SharedProps) => {
   const dispatch = Functions.useAppDispatch();
 
   const { theme } = Functions.useSignalsStore().ui;
-  const { logbookTotalSpent, totalSpent, remainingBudget, mobileOverviewOpen } =
+  const { logbookTotalSpent, mobileOverviewOpen } =
     Functions.useSignalsStore().dashboard;
   const { overview } = Functions.useEntitiesSlice();
   const overviewGroups = Functions.useGetOverviewOverviewGroups();
 
   const income = useSignal("...");
   const savings = useSignal("...");
+  const totalSpent = useSignal("0");
+  const remainingBudget = useSignal("0");
 
   const incomeError = useSignal(false);
   const savingsError = useSignal(false);
+  const totalSpentError = useSignal(false);
+  const remainingBudgetError = useSignal(false);
   const errorMessages = useSignal<string[]>([]);
 
   const updateOverviewIncome = useCallback(
@@ -117,9 +121,9 @@ export const LogbooksUserSummary = (props: SharedProps) => {
     []
   );
 
-  // ↓↓↓ Initializations and calculations. ↓↓↓ //
+  // ↓↓↓ Initializations, calculations, and error setting. ↓↓↓ //
   useEffect(() => {
-    if (overview && overviewGroups) {
+    if (overview && overviewGroups && overviewGroups[0]) {
       // Setting initial income and savings states.
       income.value = Functions.roundNumber(overview.income, 2);
       savings.value = String(overview.savings);
@@ -127,16 +131,26 @@ export const LogbooksUserSummary = (props: SharedProps) => {
       // Calculating & setting total spent.
       const recurringOverviewGroupTotalSpent = overviewGroups[0].totalSpent;
       const spent = logbookTotalSpent.value + recurringOverviewGroupTotalSpent;
-      totalSpent.value = String(spent);
+      totalSpent.value = Functions.formattedNumber(spent);
 
       // Calculating & setting remaining budget.
       const savedIncome = overview.income * (overview.savings / 100);
-      const budget =
-        overview.income - recurringOverviewGroupTotalSpent - savedIncome;
+      const budget = overview.income - savedIncome - spent;
+      remainingBudget.value = Functions.formattedNumber(budget);
 
-      remainingBudget.value = String(budget);
+      // Total Spent & Remaining Budget Error Handling
+      if (spent > overview.income) {
+        totalSpentError.value = true;
+      } else {
+        totalSpentError.value = false;
+      }
+      if (budget < 0) {
+        remainingBudgetError.value = true;
+      } else {
+        remainingBudgetError.value = false;
+      }
     }
-  }, [overview, overviewGroups]);
+  }, [overview, overviewGroups, logbookTotalSpent.value]);
 
   // ↓↓↓ Updating Overview Income ↓↓↓ //
   useEffect(() => {
@@ -162,7 +176,7 @@ export const LogbooksUserSummary = (props: SharedProps) => {
     }
   }, [overview, savingsError.value, savings.value]);
 
-  // ↓↓↓ Error Handling ↓↓↓ //
+  // ↓↓↓ Income & Savings Error Handling ↓↓↓ //
   effect(() => {
     // Income Error
     if (income.value !== "..." && Number(income.value) !== 0) {
@@ -279,15 +293,25 @@ export const LogbooksUserSummary = (props: SharedProps) => {
         {/* Total Spent */}
         <LogbooksOverviewUserInfoCell
           description="Total Spent"
-          cost={`$${Functions.formattedNumber(Number(totalSpent.value))}`}
-          inputError={false}
+          cost={`$${totalSpent.value}`}
+          caption={
+            totalSpentError.value
+              ? "You've spent more than your income allows!"
+              : ""
+          }
+          inputError={totalSpentError.value}
         />
 
         {/* Remaining Budget */}
         <LogbooksOverviewUserInfoCell
           description="Remaining"
-          cost={`$${Functions.formattedNumber(Number(remainingBudget.value))}`}
-          inputError={false}
+          cost={`$${remainingBudget.value}`}
+          caption={
+            remainingBudgetError.value
+              ? "You've spent more than you can afford!"
+              : ""
+          }
+          inputError={remainingBudgetError.value}
         />
       </InfoCells>
     </Container>
