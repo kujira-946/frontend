@@ -58,10 +58,12 @@ const Logbooks: NextPageWithLayout = () => {
         {mobileOverviewOpen.value && <DynamicMobileOverview />}
       </AnimatePresence>
 
-      {selectedLogbookId.value && (
+      {selectedLogbookId.value ? (
         <Components.LogbookEntries
           selectedLogbookId={selectedLogbookId.value}
         />
+      ) : (
+        <Components.LogbookSelectionCTA />
       )}
     </>
   );
