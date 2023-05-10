@@ -41,14 +41,14 @@ export const ReviewColumns = (props: Props) => {
   const purchasesLoading = useSignal(true);
 
   // ↓↓↓ Fetching logbook entry purchases. ↓↓↓ //
-  useEffect(() => {
-    if (logbookEntries && purchasesLoading.value) {
-      for (const logbookEntry of logbookEntries) {
-        dispatch(fetchLogbookEntryPurchasesByCategoryRequest(logbookEntry.id));
-      }
-      purchasesLoading.value = false;
-    }
-  }, [logbookEntries, purchasesLoading.value]);
+  // useEffect(() => {
+  //   if (logbookEntries && purchasesLoading.value) {
+  //     for (const logbookEntry of logbookEntries) {
+  //       dispatch(fetchLogbookEntryPurchasesByCategoryRequest(logbookEntry.id));
+  //     }
+  //     purchasesLoading.value = false;
+  //   }
+  // }, [logbookEntries, purchasesLoading.value]);
 
   return (
     <Container>
