@@ -18,7 +18,6 @@ type ContainerProps = { selected: boolean };
 const Container = styled.section<ContainerProps>`
   ${Styles.transition};
   display: flex;
-  /* align-items: center; */
   gap: ${Styles.pxAsRem.eight};
   width: 100%;
   padding: ${Styles.pxAsRem.six} ${Styles.pxAsRem.eight};
@@ -71,8 +70,10 @@ const categories: Types.Category[] = ["need", "planned", "impulse"];
 
 type Props = {
   purchaseId: number;
-  category?: Types.Category;
   selectAction?: (purchaseId: number) => void;
+  category: Types.Category | null;
+  setPurchaseCategory?: (purchaseId: number, category: Types.Category) => void;
+
   description: string;
   cost: number;
   updatePurchase: (
@@ -93,6 +94,7 @@ const ExportedComponent = (props: Props) => {
   const { theme } = Functions.useSignalsStore().ui;
 
   const selected = useSignal(false);
+  const showCategoryButtons = useSignal(!props.category);
   const description = useSignal(props.description);
   const cost = useSignal(
     props.cost ? Functions.roundNumber(props.cost, 2) : ""
@@ -168,31 +170,41 @@ const ExportedComponent = (props: Props) => {
         ))}
 
       {/* Categories */}
-      {props.showCategories &&
-        (!props.category ? (
-          <CategoryButtons>
-            {categories.map((category: (typeof categories)[number]) => {
-              return (
-                <CategoryButton
-                  key={`purchase-cell-category-button-${category}-${props.purchaseId}`}
-                  type="button"
-                  category={category}
-                  tabIndex={-1}
-                >
-                  {category.slice(0, 1).toUpperCase() + category.slice(1)}
-                </CategoryButton>
-              );
-            })}
-          </CategoryButtons>
-        ) : (
+      {props.setPurchaseCategory &&
+        (props.category && !showCategoryButtons.value ? (
           <CategoryButton
             key={`purchase-cell-category-button-${props.category}-${props.purchaseId}`}
             type="button"
             category={props.category}
+            onClick={() => (showCategoryButtons.value = true)}
             tabIndex={-1}
+            style={{ alignSelf: "center" }}
           >
             {props.category.slice(0, 1).toUpperCase() + props.category.slice(1)}
           </CategoryButton>
+        ) : (
+          showCategoryButtons.value && (
+            <CategoryButtons>
+              {categories.map((category: Types.Category) => {
+                return (
+                  <CategoryButton
+                    key={`purchase-cell-category-button-${category}-${props.purchaseId}`}
+                    type="button"
+                    onClick={() => {
+                      if (props.setPurchaseCategory) {
+                        props.setPurchaseCategory(props.purchaseId, category);
+                        showCategoryButtons.value = false;
+                      }
+                    }}
+                    category={category}
+                    tabIndex={-1}
+                  >
+                    {category.slice(0, 1).toUpperCase() + category.slice(1)}
+                  </CategoryButton>
+                );
+              })}
+            </CategoryButtons>
+          )
         ))}
 
       {/* Description */}

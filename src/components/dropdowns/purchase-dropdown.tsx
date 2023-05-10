@@ -10,6 +10,7 @@ import * as Types from "@/utils/types";
 import {
   fetchLogbookEntryPurchasesRequest,
   fetchOverviewGroupPurchasesRequest,
+  updatePurchaseRequest,
 } from "@/sagas/purchases.saga";
 import { ThemeProps } from "../layout";
 
@@ -179,6 +180,13 @@ export const PurchaseDropdown = (props: Props) => {
     }
   }
 
+  const setPurchaseCategory = useCallback(
+    (purchaseId: number, category: Types.Category): void => {
+      dispatch(updatePurchaseRequest(purchaseId, { category }));
+    },
+    []
+  );
+
   const updatePurchase = useCallback(
     Functions.debounce(
       (
@@ -285,6 +293,12 @@ export const PurchaseDropdown = (props: Props) => {
                           selectAction={
                             props.type === "logbook"
                               ? selectPurchase
+                              : undefined
+                          }
+                          category={purchase.category}
+                          setPurchaseCategory={
+                            props.type === "logbook"
+                              ? setPurchaseCategory
                               : undefined
                           }
                           description={purchase.description}

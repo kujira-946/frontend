@@ -26,7 +26,7 @@ export type Category = "need" | "planned" | "impulse" | "regret";
 export type Purchase = {
   id: number;
   placement: number;
-  category?: Category;
+  category: Category | null;
   description: string;
   cost: number | null;
   overviewGroupId?: number; // belongs to an overview group
