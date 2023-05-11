@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 
 import * as Navbars from "@/components/navbars";
+import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
@@ -15,6 +16,7 @@ import { ThemeProps } from "../layout";
 
 import { DashboardSidebar } from "./dashboard-sidebar";
 import { MobileLogbooksOverviewHeader } from "./mobile-logbooks-overview-header";
+import { fetchLogbookLogbookEntriesRequest } from "@/sagas/logbook-entries.saga";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -97,7 +99,8 @@ type Props = {
 export const DashboardLayout = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
-  const { mobileMenuOpen } = Functions.useSignalsStore().dashboard;
+  const { selectedLogbookId, mobileMenuOpen } =
+    Functions.useSignalsStore().dashboard;
   const { currentUser, overview, overviewGroups, logbooks } =
     Functions.useEntitiesSlice(true);
 
@@ -122,6 +125,14 @@ export const DashboardLayout = (props: Props) => {
       dispatch(fetchUserLogbooksRequest(currentUser.id));
     }
   }, [currentUser, logbooks]);
+
+  // ↓↓↓ Fetching logbook entries. ↓↓↓ //
+  useEffect(() => {
+    if (selectedLogbookId.value) {
+      dispatch(Redux.uiActions.setLoadingLogbookEntries(true));
+      dispatch(fetchLogbookLogbookEntriesRequest(selectedLogbookId.value));
+    }
+  }, [selectedLogbookId.value]);
 
   return (
     <>

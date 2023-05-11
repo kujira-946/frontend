@@ -61,10 +61,7 @@ export const LogbookEntries = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    if (!logbookEntries) {
-      dispatch(uiActions.setLoadingLogbookEntries(true));
-      dispatch(fetchLogbookLogbookEntriesRequest(props.selectedLogbookId));
-    } else {
+    if (logbookEntries) {
       let totalSpentSum = 0;
       logbookEntries.forEach((logbookEntry: Types.LogbookEntry) => {
         totalSpentSum += logbookEntry.totalSpent;

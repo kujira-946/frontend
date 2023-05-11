@@ -41,6 +41,10 @@ type CategoryButtonProps = { category: Types.Category };
 const CategoryButton = styled.button<CategoryButtonProps>`
   ${Styles.clearButton};
   ${Styles.transition};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3.25rem;
   padding: ${Styles.pxAsRem.two} ${Styles.pxAsRem.four};
   color: ${(props: CategoryButtonProps & ThemeProps) => {
     if (props.category === "need") return props.theme.need;

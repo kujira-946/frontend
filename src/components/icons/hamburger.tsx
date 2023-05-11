@@ -16,7 +16,7 @@ export const Hamburger = (props: SVGProps) => {
       onMouseLeave={() => props.addHover && (hovered.value = false)}
       style={{ cursor: props.addHover ? "pointer" : "default" }}
     >
-      <g clip-path="url(#clip0_7_20)">
+      <g clipPath="url(#clip0_7_20)">
         <path
           d="M94 0H6C2.68629 0 0 2.68629 0 6V18C0 21.3137 2.68629 24 6 24H94C97.3137 24 100 21.3137 100 18V6C100 2.68629 97.3137 0 94 0Z"
           fill={hovered.value ? props.hoveredFill || props.fill : props.fill}

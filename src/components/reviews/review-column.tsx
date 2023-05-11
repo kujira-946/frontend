@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 
-import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
@@ -20,7 +19,7 @@ const Container = styled.section`
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
   border: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
   border-radius: ${Styles.pxAsRem.eight};
-  overflow: hidden;
+  overflow-y: auto;
 
   @media (max-width: ${Styles.breakpoints.dashboardWidth}px) {
     min-width: 300px;
@@ -29,6 +28,10 @@ const Container = styled.section`
 `;
 
 const Header = styled.header`
+  position: sticky;
+  top: 0;
+  right: 0;
+  left: 0;
   display: flex;
   gap: ${Styles.pxAsRem.twelve};
   padding: ${Styles.pxAsRem.ten} ${Styles.pxAsRem.sixteen};

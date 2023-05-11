@@ -65,14 +65,14 @@ export function fetchLogbookEntryPurchasesRequest(
 }
 
 type LogbookEntryPurchasesByCategoryAction = Types.SagaAction<{
-  logbookEntryId: number;
+  logbookEntryIds: number[];
 }>;
 export function fetchLogbookEntryPurchasesByCategoryRequest(
-  logbookEntryId: number
+  logbookEntryIds: number[]
 ): LogbookEntryPurchasesByCategoryAction {
   return {
     type: PurchasesActionTypes.FETCH_LOGBOOK_ENTRY_PURCHASES_BY_CATEGORY,
-    payload: { logbookEntryId },
+    payload: { logbookEntryIds },
   };
 }
 
@@ -265,79 +265,20 @@ function* fetchLogbookEntryPurchasesByCategory(
   action: LogbookEntryPurchasesByCategoryAction
 ) {
   try {
-    const { logbookEntryId } = action.payload;
+    const { logbookEntryIds } = action.payload;
     const endpoint =
       ApiRoutes.PURCHASES + `/fetch-logbook-entry-purchases-by-category`;
+    const { data } = yield Saga.call(axios.post, endpoint, { logbookEntryIds });
+    const { needPurchases, plannedPurchases, impulsePurchases } = data.data;
 
-    // ↓↓↓ Need Purchases ↓↓↓ //
-    const { data: needData } = yield Saga.call(axios.post, endpoint, {
-      logbookEntryId,
-      category: "need",
-    });
-    const normalizedNeedData = normalize(needData.data, [purchasesSchema]);
-    yield Saga.put(Redux.uiActions.setReviewsNeedPurchases(needData.data));
-
-    // ↓↓↓ Planned Purchases ↓↓↓ //
-    const { data: plannedData } = yield Saga.call(axios.post, endpoint, {
-      logbookEntryId,
-      category: "planned",
-    });
-    const normalizedPlannedData = normalize(plannedData.data, [
-      purchasesSchema,
-    ]);
+    yield Saga.put(Redux.uiActions.setReviewsNeedPurchases(needPurchases));
     yield Saga.put(
-      Redux.uiActions.setReviewsPlannedPurchases(plannedData.data)
-    );
-
-    // ↓↓↓ Impulse Purchases ↓↓↓ //
-    const { data: impulseData } = yield Saga.call(axios.post, endpoint, {
-      logbookEntryId,
-      category: "impulse",
-    });
-    const normalizedImpulseData = normalize(impulseData.data, [
-      purchasesSchema,
-    ]);
-    yield Saga.put(
-      Redux.uiActions.setReviewsImpulsePurchases(impulseData.data)
-    );
-
-    // ↓↓↓ Adding fetched purchases and purchase relations to state. ↓↓↓ //
-    const { purchases: needPurchases } = normalizedNeedData.entities;
-    const needPurchaseIds = normalizedNeedData.result;
-
-    const { purchases: plannedPurchases } = normalizedPlannedData.entities;
-    const plannedPurchaseIds = normalizedPlannedData.result;
-
-    const { purchases: impulsePurchases } = normalizedImpulseData.entities;
-    const impulsePurchaseIds = normalizedImpulseData.result;
-
-    const purchases = { ...needPurchases, plannedPurchases, impulsePurchases };
-    const purchaseIds = [
-      ...needPurchaseIds,
-      plannedPurchaseIds,
-      impulsePurchaseIds,
-    ];
-    yield Saga.put(
-      Redux.entitiesActions.addPurchase(purchases as Types.PurchasesEntity)
+      Redux.uiActions.setReviewsPlannedPurchases(plannedPurchases)
     );
     yield Saga.put(
-      Redux.entitiesActions.updateLogbookEntryRelations({
-        logbookEntryId,
-        purchaseIds:
-          purchaseIds.length > 0
-            ? purchaseIds
-            : purchaseIds.length === 1
-            ? [purchaseIds]
-            : [],
-      })
+      Redux.uiActions.setReviewsImpulsePurchases(impulsePurchases)
     );
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
-
-    console.log("needData:", needData);
-    console.log("plannedData:", plannedData);
-    console.log("impulseData:", impulseData);
-    console.log("purchases:", purchases);
-    console.log("purchaseIds:", purchaseIds);
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
     yield Functions.sagaError(error);

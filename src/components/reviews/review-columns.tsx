@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import { memo, useEffect } from "react";
-import { useSignal } from "@preact/signals-react";
+import { useEffect } from "react";
 
 import * as Globals from "@/components";
+import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
+import * as Types from "@/utils/types";
 import { fetchLogbookEntryPurchasesByCategoryRequest } from "@/sagas/purchases.saga";
 
 import { ReviewColumn } from "./review-column";
@@ -25,48 +26,53 @@ const Container = styled.section`
 // ========================================================================================= //
 
 type Props = {
-  logbookId: number;
+  selectedLogbookId: number;
 };
 
 export const ReviewColumns = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
   const {
+    loadingPurchases,
     reviewsNeedPurchases,
     reviewsPlannedPurchases,
     reviewsImpulsePurchases,
   } = Functions.useUiSlice();
-  const logbookEntries = Functions.useGetLogbookLogbookEntries(props.logbookId);
 
-  const purchasesLoading = useSignal(true);
+  const logbookEntries = Functions.useGetLogbookLogbookEntries(
+    props.selectedLogbookId
+  );
 
   // ↓↓↓ Fetching logbook entry purchases. ↓↓↓ //
-  // useEffect(() => {
-  //   if (logbookEntries && purchasesLoading.value) {
-  //     for (const logbookEntry of logbookEntries) {
-  //       dispatch(fetchLogbookEntryPurchasesByCategoryRequest(logbookEntry.id));
-  //     }
-  //     purchasesLoading.value = false;
-  //   }
-  // }, [logbookEntries, purchasesLoading.value]);
+  useEffect(() => {
+    if (logbookEntries) {
+      dispatch(Redux.uiActions.setLoadingPurchases(true));
+      const logbookEntryIds = logbookEntries.map(
+        (logbookEntry: Types.LogbookEntry) => {
+          return logbookEntry.id;
+        }
+      );
+      dispatch(fetchLogbookEntryPurchasesByCategoryRequest(logbookEntryIds));
+    }
+  }, [logbookEntries]);
 
   return (
     <Container>
-      {purchasesLoading.value ? (
+      {loadingPurchases ? (
         <>
           <Globals.Shimmer
             key="dashboard-reviews-page-loading-shimmer-1"
-            borderRadius="six"
+            borderRadius="eight"
             style={{ flex: 1 }}
           />
           <Globals.Shimmer
             key="dashboard-reviews-page-loading-shimmer-2"
-            borderRadius="six"
+            borderRadius="eight"
             style={{ flex: 1 }}
           />
           <Globals.Shimmer
             key="dashboard-reviews-page-loading-shimmer-3"
-            borderRadius="six"
+            borderRadius="eight"
             style={{ flex: 1 }}
           />
         </>

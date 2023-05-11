@@ -42,13 +42,13 @@ const Reviews: NextPageWithLayout = () => {
         {mobileFiltersOpen.value && (
           <DynamicFiltersModal
             page="Reviews"
-            caption="Select a logbook to review your purchasing habits."
+            caption="Select a logbook below to review your purchasing habits."
           />
         )}
       </AnimatePresence>
 
       {selectedLogbookId.value && (
-        <Components.ReviewColumns logbookId={selectedLogbookId.value} />
+        <Components.ReviewColumns selectedLogbookId={selectedLogbookId.value} />
       )}
     </>
   );
