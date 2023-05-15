@@ -5,8 +5,6 @@ import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { uiActions } from "@/redux";
-import { fetchLogbookLogbookEntriesRequest } from "@/sagas/logbook-entries.saga";
 import { LogbookEntry } from "./logbook-entry";
 import {
   createPurchaseRequest,
@@ -22,6 +20,8 @@ const Container = styled.section`
   display: flex;
   flex-direction: column;
   gap: ${Styles.pxAsRem.twenty};
+  min-width: 540px;
+  width: 100%;
 `;
 
 // ========================================================================================= //
