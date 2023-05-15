@@ -1,12 +1,27 @@
 import dynamic from "next/dynamic";
 import Head from "next/head";
+import styled from "styled-components";
 import { ReactElement, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 
 import * as Components from "@/components/reviews";
+import * as Logbooks from "@/components/logbooks";
+import * as Styles from "@/utils/styles";
 import { DashboardLayout } from "@/components/dashboard";
 import { useSignalsStore } from "@/utils/functions";
 import { NextPageWithLayout } from "../_app";
+
+// ========================================================================================= //
+// [ STYLED COMPONENTS ] =================================================================== //
+// ========================================================================================= //
+
+const MobileLogbookSelectionCTA = styled.div`
+  display: none;
+
+  @media (max-width: ${Styles.breakpoints.dashboardWidth}px) {
+    display: block;
+  }
+`;
 
 // ========================================================================================= //
 // [ DYNAMIC IMPORT ] ====================================================================== //
@@ -47,8 +62,12 @@ const Reviews: NextPageWithLayout = () => {
         )}
       </AnimatePresence>
 
-      {selectedLogbookId.value && (
+      {selectedLogbookId.value ? (
         <Components.ReviewColumns selectedLogbookId={selectedLogbookId.value} />
+      ) : (
+        <MobileLogbookSelectionCTA>
+          <Logbooks.LogbookSelectionCTA />
+        </MobileLogbookSelectionCTA>
       )}
     </>
   );

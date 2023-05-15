@@ -9,7 +9,7 @@ export function setMediaPaddings(
   mobileVerticalPadding?: PxAsRem
 ) {
   return css`
-    @media (max-width: ${Sizes.widths.desktop}px) {
+    @media (max-width: ${Sizes.widths.desktop + 48}px) {
       padding: ${desktopVerticalPadding
           ? Sizes.pxAsRem[desktopVerticalPadding]
           : "0rem"}

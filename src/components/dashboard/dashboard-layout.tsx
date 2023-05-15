@@ -28,6 +28,8 @@ const Container = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Main = styled.main`
@@ -38,8 +40,9 @@ const Main = styled.main`
   height: 100%;
   margin: 0 auto;
   padding: ${Styles.pxAsRem.twenty} 0;
+  overflow-x: auto;
 
-  ${Styles.setMediaPaddings("twenty")};
+  ${Styles.setMediaPaddings("twenty", "twenty", "fourteen")};
 `;
 
 const Mobile = styled.div`
@@ -64,12 +67,6 @@ const Sidebar = styled.section`
   @media (max-width: ${Styles.breakpoints.dashboardWidth}px) {
     display: none;
   }
-`;
-
-const Body = styled.section`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
 `;
 
 const Children = styled.div`
@@ -154,9 +151,7 @@ export const DashboardLayout = (props: Props) => {
             <DashboardSidebar page={props.page} />
           </Sidebar>
 
-          <Body>
-            <Children>{props.children}</Children>
-          </Body>
+          <Children>{props.children}</Children>
         </Main>
       </Container>
     </>

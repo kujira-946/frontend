@@ -18,7 +18,6 @@ const Container = styled.section`
   display: flex;
   gap: ${Styles.pxAsRem.eight};
   height: 100%;
-  overflow-x: auto;
 `;
 
 // ========================================================================================= //
