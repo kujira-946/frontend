@@ -125,7 +125,7 @@ export const ReviewColumn = (props: Props) => {
         <Descriptor>
           <Title category={props.category}>{props.category}</Title>
           <Spent>
-            You've spent{" "}
+            {"You've spent "}
             <Spent price>${Functions.formattedNumber(totalSpent.value)}</Spent>.
           </Spent>
         </Descriptor>

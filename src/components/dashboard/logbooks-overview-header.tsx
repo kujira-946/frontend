@@ -52,7 +52,7 @@ export const LogbooksOverviewHeader = (props: Props) => {
         caption={
           logbooks && selectedLogbookId.value
             ? logbooks[selectedLogbookId.value].name
-            : "Select a logbook using the button to the right."
+            : "Select a logbook."
         }
         openModal={() => (props.filtersOpen.value = true)}
       />

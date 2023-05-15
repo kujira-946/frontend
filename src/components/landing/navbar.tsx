@@ -20,7 +20,7 @@ const Nav = styled.nav`
   padding: 8px 0px;
   background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
 
-  ${Styles.setMediaPaddings(8)};
+  ${Styles.setMediaPaddings("eight")};
 `;
 
 const Main = styled.main`

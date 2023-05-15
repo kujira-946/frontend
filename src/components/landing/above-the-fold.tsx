@@ -18,7 +18,7 @@ const Container = styled.section`
   background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
   padding-top: 180px;
 
-  ${Styles.setMediaPaddings(140)};
+  ${Styles.setMediaPaddings("twenty", "twenty", "fourteen")};
 `;
 
 const ATFContent = styled.div`

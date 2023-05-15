@@ -43,7 +43,7 @@ export const DashboardMobileNavbar = (props: Props) => {
       ) {
         caption.value = logbooks[selectedLogbookId.value].name;
       } else if (props.page === "Logbooks") {
-        caption.value = "Select a logbook using the button to the right.";
+        caption.value = "Select a logbook.";
       } else {
         caption.value = "";
       }
