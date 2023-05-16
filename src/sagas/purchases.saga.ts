@@ -8,6 +8,7 @@ import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
 import { updateOverviewGroupRequest } from "./overview-groups.saga";
 import { updateLogbookEntryRequest } from "./logbook-entries.saga";
+import { GlobalState } from "@/store";
 
 // ========================================================================================= //
 // [ SCHEMAS ] ============================================================================= //
@@ -30,6 +31,7 @@ enum PurchasesActionTypes {
   CREATE_PURCHASE = "CREATE_PURCHASE",
   BULK_CREATE_PURCHASES = "BULK_CREATE_PURCHASES",
   UPDATE_PURCHASE = "UPDATE_PURCHASE",
+  UPDATE_PURCHASE_PLACEMENT = "UPDATE_PURCHASE_PLACEMENT",
   DELETE_PURCHASE = "DELETE_PURCHASE",
   BULK_DELETE_PURCHASES = "BULK_DELETE_PURCHASES",
   DELETE_ASSOCIATED_PURCHASES = "DELETE_ASSOCIATED_PURCHASES",
@@ -124,7 +126,7 @@ export function bulkCreatePurchasesRequest(
   };
 }
 
-type Association = {
+type AssociationPayload = {
   overviewGroup?: { id: number; totalSpent: number };
   logbookEntry?: { id: number; totalSpent: number };
 };
@@ -132,12 +134,12 @@ type Association = {
 type PurchaseUpdateAction = Types.SagaAction<{
   purchaseId: number;
   updateData: Types.PurchaseUpdateData;
-  association?: Association;
+  association?: AssociationPayload;
 }>;
 export function updatePurchaseRequest(
   purchaseId: number,
   updateData: Types.PurchaseUpdateData,
-  association?: Association
+  association?: AssociationPayload
 ): PurchaseUpdateAction {
   return {
     type: PurchasesActionTypes.UPDATE_PURCHASE,
@@ -145,13 +147,32 @@ export function updatePurchaseRequest(
   };
 }
 
+export type Association = "Overview Group" | "Logbook Entry";
+type PurchasePlacementUpdateAction = Types.SagaAction<{
+  purchaseId: number;
+  association: Association;
+  previousPlacement: number;
+  updatedPlacement: number;
+}>;
+export function updatePurchasePlacementRequest(
+  purchaseId: number,
+  association: Association,
+  previousPlacement: number,
+  updatedPlacement: number
+): PurchasePlacementUpdateAction {
+  return {
+    type: PurchasesActionTypes.UPDATE_PURCHASE_PLACEMENT,
+    payload: { purchaseId, association, previousPlacement, updatedPlacement },
+  };
+}
+
 type PurchaseDeleteAction = Types.SagaAction<{
   purchaseId: number;
-  association?: Association;
+  association?: AssociationPayload;
 }>;
 export function deletePurchaseRequest(
   purchaseId: number,
-  association?: Association
+  association?: AssociationPayload
 ): PurchaseDeleteAction {
   return {
     type: PurchasesActionTypes.DELETE_PURCHASE,
@@ -421,6 +442,54 @@ function* updatePurchase(action: PurchaseUpdateAction) {
   }
 }
 
+function* updatePurchasePlacement(action: PurchasePlacementUpdateAction) {
+  try {
+    const { purchaseId, association, previousPlacement, updatedPlacement } =
+      action.payload;
+    const endpoint =
+      ApiRoutes.PURCHASES + `/${purchaseId}/update-purchase-placement`;
+    const { data } = yield Saga.call(axios.patch, endpoint, {
+      association,
+      previousPlacement,
+      updatedPlacement,
+    });
+
+    const logbookEntry: Types.LogbookEntry | null = yield Saga.select(
+      (state: GlobalState) => {
+        if (data.data.overviewGroupId) {
+          return Functions.getOverviewGroup(state, data.data.overviewGroupId);
+        } else if (data.data.logbookEntryId) {
+          return Functions.getLogbookEntry(state, data.data.logbookEntryId);
+        } else {
+          return null;
+        }
+      }
+    );
+
+    if (logbookEntry && logbookEntry.purchaseIds) {
+      const previousIndex = previousPlacement - 1;
+      const updatedIndex = updatedPlacement - 1;
+
+      const updatedPurchaseIds = Functions.deepCopy(logbookEntry.purchaseIds);
+      const draggedPurchaseId = updatedPurchaseIds.splice(previousIndex, 1);
+      updatedPurchaseIds.splice(updatedIndex, 0, draggedPurchaseId[0]);
+
+      yield Saga.put(
+        Redux.entitiesActions.updateLogbookEntryRelations({
+          logbookEntryId: logbookEntry.id,
+          purchaseIds: updatedPurchaseIds,
+          resetRelations: true,
+        })
+      );
+    }
+
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+  } catch (error) {
+    yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
+    yield Functions.sagaError(error);
+  }
+}
+
 function* deletePurchase(action: PurchaseDeleteAction) {
   try {
     const { purchaseId, association } = action.payload;
@@ -511,6 +580,10 @@ export function* purchasesSaga() {
       bulkCreatePurchases
     ),
     Saga.takeEvery(PurchasesActionTypes.UPDATE_PURCHASE, updatePurchase),
+    Saga.takeEvery(
+      PurchasesActionTypes.UPDATE_PURCHASE_PLACEMENT,
+      updatePurchasePlacement
+    ),
     Saga.takeEvery(PurchasesActionTypes.DELETE_PURCHASE, deletePurchase),
     Saga.takeEvery(
       PurchasesActionTypes.BULK_DELETE_PURCHASES,

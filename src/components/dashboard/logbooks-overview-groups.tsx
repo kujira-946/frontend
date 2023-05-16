@@ -53,7 +53,7 @@ export const LogbookOverviewGroups = (props: OverviewGroupsProps) => {
   );
 
   const addPurchase = useCallback((overviewGroupId: number): void => {
-    dispatch(createPurchaseRequest({ placement: 0, overviewGroupId }));
+    dispatch(createPurchaseRequest({ overviewGroupId }));
   }, []);
 
   if (!overviewGroups) {

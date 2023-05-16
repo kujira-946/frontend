@@ -112,7 +112,7 @@ export type LogbookEntryUpdateData = Partial<LogbookEntryCreateData>;
 // ========================================================================================= //
 
 export type PurchaseCreateData = {
-  placement: number;
+  placement?: number;
   category?: Category;
   description?: string;
   cost?: number;

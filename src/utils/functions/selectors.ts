@@ -69,7 +69,7 @@ export function useGetOverviewOverviewGroups() {
 // [ OVERVIEW GROUPS ] ===================================================================== //
 // ========================================================================================= //
 
-const getOverviewGroup = createCachedSelector(
+export const getOverviewGroup = createCachedSelector(
   (state: GlobalState) => state.entities.overviewGroups,
   (state: GlobalState, overviewGroupId: number) => overviewGroupId,
   (overviewGroups, overviewGroupId) => {
@@ -152,7 +152,7 @@ export function useGetLogbookTotalSpent(logbookId: number) {
   return useAppSelector((state) => getLogbookTotalSpent(state, logbookId));
 }
 
-const getLogbookEntry = createCachedSelector(
+export const getLogbookEntry = createCachedSelector(
   (state: GlobalState) => state.entities.logbookEntries,
   (state: GlobalState, logbookEntryId: number) => logbookEntryId,
   (logbookEntries, logbookEntryId) => {

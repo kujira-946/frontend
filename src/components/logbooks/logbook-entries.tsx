@@ -44,7 +44,7 @@ export const LogbookEntries = (props: Props) => {
 
   const onDragEnd = useCallback(
     (result: Drag.DropResult, provided: Drag.ResponderProvided): void => {
-      return Functions.onDragEnd(result, provided);
+      return Functions.onDragEnd(result, provided, "Logbook Entry", dispatch);
     },
     []
   );
@@ -65,7 +65,7 @@ export const LogbookEntries = (props: Props) => {
   );
 
   const addPurchase = useCallback((logbookEntryId: number): void => {
-    dispatch(createPurchaseRequest({ placement: 0, logbookEntryId }));
+    dispatch(createPurchaseRequest({ logbookEntryId }));
   }, []);
 
   useEffect(() => {

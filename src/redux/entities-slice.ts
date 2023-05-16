@@ -351,24 +351,25 @@ const entitiesSlice = createSlice({
     },
     updateLogbookEntryRelations: (
       state: EntitiesState,
-      action: PayloadAction<{ logbookEntryId: number; purchaseIds: number[] }>
+      action: PayloadAction<{
+        logbookEntryId: number;
+        purchaseIds: number[];
+        resetRelations?: boolean;
+      }>
     ) => {
       if (state.logbookEntries) {
-        const { logbookEntryId, purchaseIds } = action.payload;
+        const { logbookEntryId, purchaseIds, resetRelations } = action.payload;
         const logbookEntriesCopy = Functions.deepCopy(state.logbookEntries);
         const logbookEntry = logbookEntriesCopy[logbookEntryId];
         const relationalIds = logbookEntry.purchaseIds;
-        if (relationalIds) {
-          logbookEntry.purchaseIds = Functions.sortArray(
-            Functions.removeDuplicatesFromArray([
-              ...relationalIds,
-              ...purchaseIds,
-            ])
-          );
+        if (resetRelations || !relationalIds) {
+          logbookEntry.purchaseIds =
+            Functions.removeDuplicatesFromArray(purchaseIds);
         } else {
-          logbookEntry.purchaseIds = Functions.sortArray(
-            Functions.removeDuplicatesFromArray(purchaseIds)
-          );
+          logbookEntry.purchaseIds = Functions.removeDuplicatesFromArray([
+            ...relationalIds,
+            ...purchaseIds,
+          ]);
         }
         state.logbookEntries = logbookEntriesCopy;
       }

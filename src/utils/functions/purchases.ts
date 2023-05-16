@@ -3,25 +3,34 @@ import * as Drag from "react-beautiful-dnd";
 import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
 import {
+  Association,
   deletePurchaseRequest,
+  updatePurchasePlacementRequest,
   updatePurchaseRequest,
 } from "@/sagas/purchases.saga";
 
 export function onDragEnd(
   result: Drag.DropResult,
-  provided: Drag.ResponderProvided
+  provided: Drag.ResponderProvided,
+  association: Association,
+  dispatch: any
 ): void {
-  console.log("Onboarding Dragged");
   const previousIndex = result.source.index;
   const newIndex = result.destination?.index;
+
   if (newIndex && newIndex !== previousIndex) {
     const purchaseId = Number(result.draggableId);
+    const previousPlacement = previousIndex + 1;
     const updatedPlacement = newIndex + 1;
-    console.log("Purchase Id:", purchaseId);
-    console.log("Updated Placement:", updatedPlacement);
-    // dispatch(
-    //   PurchasesSagas.updatePurchaseRequest(purchaseId, { placement: updatedPlacement })
-    // );
+
+    dispatch(
+      updatePurchasePlacementRequest(
+        purchaseId,
+        association,
+        previousPlacement,
+        updatedPlacement
+      )
+    );
   }
 }
 

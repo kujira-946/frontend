@@ -1,3 +1,4 @@
+import * as Drag from "react-beautiful-dnd";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useEffect } from "react";
@@ -61,7 +62,12 @@ const Onboarding = () => {
     }
   }
 
-  const onDragEnd = useCallback(Functions.onDragEnd, []);
+  const onDragEnd = useCallback(
+    (result: Drag.DropResult, provided: Drag.ResponderProvided): void => {
+      return Functions.onDragEnd(result, provided, "Overview Group", dispatch);
+    },
+    []
+  );
 
   const deleteAllPurchases = useCallback(
     (purchaseIds: number[], overviewGroupId: number): void => {
@@ -75,9 +81,7 @@ const Onboarding = () => {
   );
 
   const addPurchase = useCallback((overviewGroupId: number): void => {
-    dispatch(
-      PurchasesSagas.createPurchaseRequest({ placement: 0, overviewGroupId })
-    );
+    dispatch(PurchasesSagas.createPurchaseRequest({ overviewGroupId }));
   }, []);
 
   // ↓↓↓ Auth redirection ↓↓↓ //
