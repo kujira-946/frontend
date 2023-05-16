@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { memo, useEffect } from "react";
 import { effect, useSignal } from "@preact/signals-react";
+import { DraggableProvided } from "react-beautiful-dnd";
 
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
@@ -74,6 +75,7 @@ const categories: Types.Category[] = ["need", "planned", "impulse"];
 
 type Props = {
   purchaseId: number;
+  provided: DraggableProvided;
   selectAction?: (purchaseId: number) => void;
   category: Types.Category | null;
   setPurchaseCategory?: (purchaseId: number, category: Types.Category) => void;
@@ -127,7 +129,11 @@ const ExportedComponent = (props: Props) => {
     <Container selected={selected.value}>
       {/* Drag */}
       {props.showDrag && theme.value && (
-        <Globals.IconContainer cursor="grab">
+        <Globals.IconContainer
+          {...props.provided.dragHandleProps}
+          tabIndex={-1}
+          cursor="grab"
+        >
           <Icons.Drag
             width={14}
             height={14}

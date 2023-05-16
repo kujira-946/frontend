@@ -1,8 +1,8 @@
 import dynamic from "next/dynamic";
 import styled from "styled-components";
-
 import { useSignal } from "@preact/signals-react";
 import { AnimatePresence } from "framer-motion";
+import { DragDropContext } from "react-beautiful-dnd";
 
 import { ThemeProps } from "../layout";
 
@@ -43,7 +43,9 @@ export const LogbooksOverview = () => {
 
       <LogbooksUserSummary />
 
-      <LogbookOverviewGroups />
+      <DragDropContext onDragEnd={() => console.log("")}>
+        <LogbookOverviewGroups />
+      </DragDropContext>
 
       <AnimatePresence>
         {filtersOpen.value && <DynamicLogbookFiltersModal open={filtersOpen} />}

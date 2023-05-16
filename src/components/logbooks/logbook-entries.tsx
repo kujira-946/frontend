@@ -1,3 +1,4 @@
+import * as Drag from "react-beautiful-dnd";
 import styled from "styled-components";
 import { useCallback, useEffect } from "react";
 
@@ -41,6 +42,13 @@ export const LogbookEntries = (props: Props) => {
     props.selectedLogbookId
   );
 
+  const onDragEnd = useCallback(
+    (result: Drag.DropResult, provided: Drag.ResponderProvided): void => {
+      return Functions.onDragEnd(result, provided);
+    },
+    []
+  );
+
   const deleteSelectedPurchases = useCallback((purchaseIds: number[]): void => {
     dispatch(batchDeletePurchasesRequest(purchaseIds));
   }, []);
@@ -71,30 +79,32 @@ export const LogbookEntries = (props: Props) => {
   }, [logbookEntries]);
 
   return (
-    <Container>
-      {loadingLogbookEntries ? (
-        <>
-          <Globals.LogbookEntryShimmer />
-          <Globals.LogbookEntryShimmer />
-        </>
-      ) : (
-        logbookEntries &&
-        Functions.deepCopy(logbookEntries)
-          .reverse()
-          .map((logbookEntry: Types.LogbookEntry, index: number) => {
-            return (
-              <LogbookEntry
-                key={`logbooks-logbook-entries-entry-${logbookEntry.id}-${index}`}
-                logbookEntryId={logbookEntry.id}
-                logbookEntryTotalSpent={logbookEntry.totalSpent}
-                logbookEntryPurchaseIds={logbookEntry.purchaseIds || []}
-                deleteSelectedPurchases={deleteSelectedPurchases}
-                deleteAllPurchases={deleteAllPurchases}
-                addPurchase={addPurchase}
-              />
-            );
-          })
-      )}
-    </Container>
+    <Drag.DragDropContext onDragEnd={onDragEnd}>
+      <Container>
+        {loadingLogbookEntries ? (
+          <>
+            <Globals.LogbookEntryShimmer />
+            <Globals.LogbookEntryShimmer />
+          </>
+        ) : (
+          logbookEntries &&
+          Functions.deepCopy(logbookEntries)
+            .reverse()
+            .map((logbookEntry: Types.LogbookEntry, index: number) => {
+              return (
+                <LogbookEntry
+                  key={`logbooks-logbook-entries-entry-${logbookEntry.id}-${index}`}
+                  logbookEntryId={logbookEntry.id}
+                  logbookEntryTotalSpent={logbookEntry.totalSpent}
+                  logbookEntryPurchaseIds={logbookEntry.purchaseIds || []}
+                  deleteSelectedPurchases={deleteSelectedPurchases}
+                  deleteAllPurchases={deleteAllPurchases}
+                  addPurchase={addPurchase}
+                />
+              );
+            })
+        )}
+      </Container>
+    </Drag.DragDropContext>
   );
 };

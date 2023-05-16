@@ -1,3 +1,4 @@
+import * as Drag from "react-beautiful-dnd";
 import styled, { css } from "styled-components";
 import { useCallback, useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
@@ -195,7 +196,7 @@ export const PurchaseDropdown = (props: Props) => {
         purchaseCost: number,
         description: string,
         cost: string
-      ) => {
+      ): void => {
         return Functions.updatePurchase(
           purchaseId,
           purchaseDescription,
@@ -213,7 +214,7 @@ export const PurchaseDropdown = (props: Props) => {
   );
 
   const deletePurchase = useCallback(
-    (purchaseId: number, purchaseCost: number) => {
+    (purchaseId: number, purchaseCost: number): void => {
       return Functions.deletePurchase(
         purchaseId,
         purchaseCost,
@@ -272,47 +273,90 @@ export const PurchaseDropdown = (props: Props) => {
             ) : (
               props.purchases &&
               props.purchases.length > 0 && (
-                <PurchaseCells updatingPurchases={loadingPurchases}>
-                  <AnimatePresence>
-                    {loadingPurchases && (
-                      <PurchaseCellsUpdateLoader
-                        initial={{ width: "0%" }}
-                        animate={{ width: "100%" }}
-                        exit={{ width: "0%" }}
-                        transition={{ duration: 0.2 }}
-                      />
-                    )}
-                  </AnimatePresence>
+                <Drag.Droppable
+                  droppableId={
+                    props.type === "overview"
+                      ? Styles.overviewDropdownDroppableId
+                      : Styles.logbookEntryDropdownDroppableId
+                  }
+                >
+                  {(
+                    provided: Drag.DroppableProvided,
+                    snapshot: Drag.DroppableStateSnapshot
+                  ) => {
+                    return (
+                      <PurchaseCells
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        updatingPurchases={loadingPurchases}
+                      >
+                        <AnimatePresence>
+                          {loadingPurchases && (
+                            <PurchaseCellsUpdateLoader
+                              initial={{ width: "0%" }}
+                              animate={{ width: "100%" }}
+                              exit={{ width: "0%" }}
+                              transition={{ duration: 0.2 }}
+                            />
+                          )}
+                        </AnimatePresence>
 
-                  {props.purchases.map(
-                    (purchase: Types.Purchase, index: number) => {
-                      return (
-                        <Globals.PurchaseCell
-                          key={`${props.type}-purchase-dropdown-purchases-${purchase.id}-${index}`}
-                          purchaseId={purchase.id}
-                          selectAction={
-                            props.type === "logbook"
-                              ? selectPurchase
-                              : undefined
-                          }
-                          category={purchase.category}
-                          setPurchaseCategory={
-                            props.type === "logbook"
-                              ? setPurchaseCategory
-                              : undefined
-                          }
-                          description={purchase.description}
-                          cost={purchase.cost ? purchase.cost : 0}
-                          updatePurchase={updatePurchase}
-                          deletePurchase={deletePurchase}
-                          showDrag={props.type === "logbook"}
-                          showCategories={props.type === "logbook"}
-                          showDelete
-                        />
-                      );
-                    }
-                  )}
-                </PurchaseCells>
+                        {props.purchases &&
+                          props.purchases.map(
+                            (purchase: Types.Purchase, index: number) => {
+                              return (
+                                <Drag.Draggable
+                                  key={`${props.type}-dropdown-purchase-${purchase.id}-${index}`}
+                                  draggableId={`${purchase.id}`}
+                                  index={index}
+                                >
+                                  {(
+                                    provided: Drag.DraggableProvided,
+                                    snapshot: Drag.DraggableStateSnapshot
+                                  ) => {
+                                    return (
+                                      <div
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                      >
+                                        <Globals.PurchaseCell
+                                          key={`${props.type}-purchase-dropdown-purchases-${purchase.id}-${index}`}
+                                          purchaseId={purchase.id}
+                                          provided={provided}
+                                          selectAction={
+                                            props.type === "logbook"
+                                              ? selectPurchase
+                                              : undefined
+                                          }
+                                          category={purchase.category}
+                                          setPurchaseCategory={
+                                            props.type === "logbook"
+                                              ? setPurchaseCategory
+                                              : undefined
+                                          }
+                                          description={purchase.description}
+                                          cost={
+                                            purchase.cost ? purchase.cost : 0
+                                          }
+                                          updatePurchase={updatePurchase}
+                                          deletePurchase={deletePurchase}
+                                          showDrag={props.type === "logbook"}
+                                          showCategories={
+                                            props.type === "logbook"
+                                          }
+                                          showDelete
+                                        />
+                                      </div>
+                                    );
+                                  }}
+                                </Drag.Draggable>
+                              );
+                            }
+                          )}
+                      </PurchaseCells>
+                    );
+                  }}
+                </Drag.Droppable>
               )
             )}
 

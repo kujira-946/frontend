@@ -14,7 +14,9 @@ export const Drag = (props: SVGProps) => {
       xmlns="http://www.w3.org/2000/svg"
       onMouseEnter={() => props.addHover && (hovered.value = true)}
       onMouseLeave={() => props.addHover && (hovered.value = false)}
-      style={{ cursor: props.addHover ? "pointer" : "default" }}
+      style={{
+        cursor: props.addHover ? "grab" : "default",
+      }}
     >
       <g clipPath="url(#clip0_618_9)">
         <path
