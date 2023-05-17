@@ -13,6 +13,7 @@ import { ThemeProps } from "../layout";
 
 import { OverviewHeader } from "./overview-header";
 import { LogbookEntryHeader } from "./logbook-entry-header";
+import { PurchaseCell } from "./purchase-cell";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -315,7 +316,7 @@ export const PurchaseDropdown = (props: Props) => {
                                         ref={provided.innerRef}
                                         {...provided.draggableProps}
                                       >
-                                        <Globals.PurchaseCell
+                                        <PurchaseCell
                                           key={`${props.type}-purchase-dropdown-purchases-${purchase.id}-${index}`}
                                           purchaseId={purchase.id}
                                           provided={provided}

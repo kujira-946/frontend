@@ -8,7 +8,7 @@ import * as Icons from "@/components/icons";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { ThemeProps } from "./layout";
+import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
