@@ -32,8 +32,6 @@ type Props = {
 };
 
 const ExportedComponent = (props: Props) => {
-  console.log("Dashboard Sidebar Rendered");
-
   return (
     <Container page={props.page}>
       {props.page === "Logbooks" ? (

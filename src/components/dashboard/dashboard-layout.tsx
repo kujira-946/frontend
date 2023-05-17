@@ -99,12 +99,16 @@ export const DashboardLayout = (props: Props) => {
   const { currentUser, overview, overviewGroups, logbooks } =
     Functions.useEntitiesSlice(true);
 
-  // ↓↓↓ Fetching current user's overview. ↓↓↓ //
+  // ↓↓↓ Fetching current user's overview and logbooks. ↓↓↓ //
   useEffect(() => {
-    if (currentUser && !overview) {
-      dispatch(Sagas.fetchUserOverviewRequest(currentUser.id));
+    if (currentUser) {
+      if (!overview) {
+        dispatch(Sagas.fetchUserOverviewRequest(currentUser.id));
+      } else if (!logbooks) {
+        dispatch(Sagas.fetchUserLogbooksRequest(currentUser.id));
+      }
     }
-  }, [currentUser, overview]);
+  }, [currentUser, overview, logbooks]);
 
   // ↓↓↓ Fetching overview overview groups. ↓↓↓ //
   useEffect(() => {
@@ -113,13 +117,6 @@ export const DashboardLayout = (props: Props) => {
       dispatch(Sagas.fetchOverviewOverviewGroupsRequest(overview.id));
     }
   }, [overview, overviewGroups]);
-
-  // ↓↓↓ Fetching current user's logbooks. ↓↓↓ //
-  useEffect(() => {
-    if (currentUser && !logbooks) {
-      dispatch(Sagas.fetchUserLogbooksRequest(currentUser.id));
-    }
-  }, [currentUser, logbooks]);
 
   // ↓↓↓ Fetching logbook entries. ↓↓↓ //
   useEffect(() => {

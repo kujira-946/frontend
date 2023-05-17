@@ -56,8 +56,6 @@ type Props = {
 };
 
 const ExportedComponent = (props: Props) => {
-  console.log("Dashboard Desktop Navbar Rendered");
-
   const router = useRouter();
 
   const { theme } = Functions.useSignalsStore().ui;
