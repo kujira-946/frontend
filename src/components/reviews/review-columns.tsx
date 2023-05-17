@@ -36,7 +36,7 @@ export const ReviewColumns = (props: Props) => {
     reviewsNeedPurchases,
     reviewsPlannedPurchases,
     reviewsImpulsePurchases,
-  } = Functions.useUiSlice();
+  } = Functions.useUiSlice(true);
 
   const logbookEntries = Functions.useGetLogbookLogbookEntries(
     props.selectedLogbookId
@@ -44,8 +44,8 @@ export const ReviewColumns = (props: Props) => {
 
   // ↓↓↓ Fetching logbook entry purchases. ↓↓↓ //
   useEffect(() => {
+    dispatch(Redux.uiActions.setLoadingPurchases(true));
     if (logbookEntries) {
-      dispatch(Redux.uiActions.setLoadingPurchases(true));
       const logbookEntryIds = logbookEntries.map(
         (logbookEntry: Types.LogbookEntry) => {
           return logbookEntry.id;

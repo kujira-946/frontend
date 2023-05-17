@@ -69,8 +69,8 @@ export const PersonalInformation = () => {
     if (currentUser) {
       email.value = currentUser.email;
       username.value = currentUser.username;
-      if (currentUser.firstName) firstName.value = currentUser.firstName;
-      if (currentUser.lastName) lastName.value = currentUser.lastName;
+      currentUser.firstName && (firstName.value = currentUser.firstName);
+      currentUser.lastName && (lastName.value = currentUser.lastName);
     }
   }, [currentUser]);
 
