@@ -25,6 +25,11 @@ const initialState: EntitiesState = {
   purchases: null,
 };
 
+type UserRelation = {
+  relationalField: "overviewId";
+  id: number;
+};
+
 type UserRelations = {
   relationalField: "logbookIds";
   ids: number[];
@@ -53,6 +58,17 @@ const entitiesSlice = createSlice({
         const updatedUser = action.payload;
         if (logbookIds) updatedUser.logbookIds = logbookIds;
         state.currentUser = updatedUser;
+      }
+    },
+    updateCurrentUserRelation: (
+      state: EntitiesState,
+      action: PayloadAction<UserRelation>
+    ) => {
+      if (state.currentUser) {
+        const { relationalField, id } = action.payload;
+        const currentUserCopy = Functions.deepCopy(state.currentUser);
+        currentUserCopy[relationalField] = id;
+        state.currentUser = currentUserCopy;
       }
     },
     updateCurrentUserRelations: (

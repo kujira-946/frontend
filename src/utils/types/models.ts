@@ -19,6 +19,7 @@ export type User = {
   emailVerified: boolean;
   loggedIn: boolean;
   signedVerificationCode?: string;
+  overviewId: number; // one to one
   logbookIds: number[]; // has many logbooks
 } & Dates;
 

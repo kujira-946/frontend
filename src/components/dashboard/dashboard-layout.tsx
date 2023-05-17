@@ -5,18 +5,14 @@ import { AnimatePresence } from "framer-motion";
 
 import * as Navbars from "@/components/navbars";
 import * as Redux from "@/redux";
+import * as Sagas from "@/sagas";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { uiActions } from "@/redux";
-import { fetchUserOverviewRequest } from "@/sagas/overviews.saga";
-import { fetchOverviewOverviewGroupsRequest } from "@/sagas/overview-groups.saga";
-import { fetchUserLogbooksRequest } from "@/sagas/logbooks.saga";
 import { ThemeProps } from "../layout";
 
 import { DashboardSidebar } from "./dashboard-sidebar";
 import { MobileLogbooksOverviewHeader } from "./mobile-logbooks-overview-header";
-import { fetchLogbookLogbookEntriesRequest } from "@/sagas/logbook-entries.saga";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -106,22 +102,22 @@ export const DashboardLayout = (props: Props) => {
   // ↓↓↓ Fetching current user's overview. ↓↓↓ //
   useEffect(() => {
     if (currentUser && !overview) {
-      dispatch(fetchUserOverviewRequest(currentUser.id));
+      dispatch(Sagas.fetchUserOverviewRequest(currentUser.id));
     }
   }, [currentUser, overview]);
 
   // ↓↓↓ Fetching overview overview groups. ↓↓↓ //
   useEffect(() => {
     if (overview && !overviewGroups) {
-      dispatch(uiActions.setLoadingOverviewGroups(true));
-      dispatch(fetchOverviewOverviewGroupsRequest(overview.id));
+      dispatch(Redux.uiActions.setLoadingOverviewGroups(true));
+      dispatch(Sagas.fetchOverviewOverviewGroupsRequest(overview.id));
     }
   }, [overview, overviewGroups]);
 
   // ↓↓↓ Fetching current user's logbooks. ↓↓↓ //
   useEffect(() => {
     if (currentUser && !logbooks) {
-      dispatch(fetchUserLogbooksRequest(currentUser.id));
+      dispatch(Sagas.fetchUserLogbooksRequest(currentUser.id));
     }
   }, [currentUser, logbooks]);
 
@@ -129,7 +125,9 @@ export const DashboardLayout = (props: Props) => {
   useEffect(() => {
     if (selectedLogbookId.value) {
       dispatch(Redux.uiActions.setLoadingLogbookEntries(true));
-      dispatch(fetchLogbookLogbookEntriesRequest(selectedLogbookId.value));
+      dispatch(
+        Sagas.fetchLogbookLogbookEntriesRequest(selectedLogbookId.value)
+      );
     }
   }, [selectedLogbookId.value]);
 

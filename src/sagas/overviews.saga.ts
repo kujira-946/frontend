@@ -67,6 +67,12 @@ function* fetchUserOverview(action: UserOverviewAction) {
         overviewGroupIds: [],
       })
     );
+    yield Saga.put(
+      Redux.entitiesActions.updateCurrentUserRelation({
+        relationalField: "overviewId",
+        id: data.data.id,
+      })
+    );
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingOverviews(false));
