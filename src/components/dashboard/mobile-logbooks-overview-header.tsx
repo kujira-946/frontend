@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { memo } from "react";
 
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
@@ -41,7 +42,7 @@ const OverviewButton = styled(Globals.IconButton)`
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-export const MobileLogbooksOverviewHeader = () => {
+const ExportedComponent = () => {
   const dispatch = Functions.useAppDispatch();
 
   const { theme } = Functions.useSignalsStore().ui;
@@ -88,3 +89,5 @@ export const MobileLogbooksOverviewHeader = () => {
     </Container>
   );
 };
+
+export const MobileLogbooksOverviewHeader = memo(ExportedComponent);

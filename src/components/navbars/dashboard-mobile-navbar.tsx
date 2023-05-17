@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
@@ -26,31 +26,28 @@ type Props = {
   page: Types.DashboardPage;
 };
 
-export const DashboardMobileNavbar = (props: Props) => {
+const ExportedComponent = (props: Props) => {
   const { theme } = Functions.useSignalsStore().ui;
   const { mobileFiltersOpen, mobileMenuOpen, selectedLogbookId } =
     Functions.useSignalsStore().dashboard;
-  const { logbooks } = Functions.useEntitiesSlice();
+
+  const logbook = Functions.useAppSelector((state) => {
+    return selectedLogbookId.value
+      ? Functions.getLogbook(state, selectedLogbookId.value)
+      : undefined;
+  });
 
   const caption = useSignal("");
 
   useEffect(() => {
     if (props.page !== "Settings") {
-      if (
-        logbooks &&
-        selectedLogbookId.value &&
-        logbooks[selectedLogbookId.value]
-      ) {
-        caption.value = logbooks[selectedLogbookId.value].name;
-      } else if (props.page === "Logbooks") {
-        caption.value = "Select a logbook.";
-      } else {
-        caption.value = "";
-      }
+      if (logbook) caption.value = logbook.name;
+      else if (props.page === "Logbooks") caption.value = "Select a logbook.";
+      else caption.value = "";
     } else {
       caption.value = "";
     }
-  }, [props.page, logbooks, selectedLogbookId.value]);
+  }, [props.page, logbook]);
 
   return (
     <MobileNavbarContainer page={props.page} caption={caption.value}>
@@ -83,3 +80,5 @@ export const DashboardMobileNavbar = (props: Props) => {
     </MobileNavbarContainer>
   );
 };
+
+export const DashboardMobileNavbar = memo(ExportedComponent);

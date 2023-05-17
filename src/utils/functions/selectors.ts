@@ -120,7 +120,7 @@ export function useGetUserLogbooks() {
   return useAppSelector(getUserLogbooks);
 }
 
-const getLogbook = createCachedSelector(
+export const getLogbook = createCachedSelector(
   (state: GlobalState) => state.entities.logbooks,
   (state: GlobalState, logbookId: number) => logbookId,
   (logbooks, logbookId) => {
