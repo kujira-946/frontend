@@ -2,7 +2,7 @@ import styled, { keyframes } from "styled-components";
 
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { ThemeProps } from "./layout";
+import { ThemeProps } from "@/components/layout";
 
 type Props = {
   width?: number;

@@ -7,8 +7,8 @@ import * as Icons from "@/components/icons";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
+import { ThemeProps } from "@/components/layout";
 import { updateOverviewRequest } from "@/sagas/overviews.saga";
-import { ThemeProps } from "../layout";
 
 import { LogbooksOverviewUserInfoCell } from "./logbooks-overview-user-info-cell";
 

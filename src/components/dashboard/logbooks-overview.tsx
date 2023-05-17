@@ -4,7 +4,7 @@ import { useSignal } from "@preact/signals-react";
 import { DragDropContext } from "react-beautiful-dnd";
 import { AnimatePresence } from "framer-motion";
 
-import { ThemeProps } from "../layout";
+import { ThemeProps } from "@/components/layout";
 
 import { LogbooksOverviewHeader } from "./logbooks-overview-header";
 import { LogbooksUserSummary } from "./logbooks-user-summary";

@@ -8,8 +8,8 @@ import * as Globals from "@/components";
 import * as Sagas from "@/sagas";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
+import { ThemeProps } from "@/components/layout";
 import { ClientRoutes } from "@/utils/constants";
-import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //

@@ -5,7 +5,7 @@ import { useSignal } from "@preact/signals-react";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { ThemeProps } from "../layout";
+import { ThemeProps } from "@/components/layout";
 
 import { ReviewCell } from "./review-cell";
 

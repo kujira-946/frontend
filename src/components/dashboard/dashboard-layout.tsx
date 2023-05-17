@@ -9,7 +9,7 @@ import * as Sagas from "@/sagas";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import { ThemeProps } from "../layout";
+import { ThemeProps } from "@/components/layout";
 
 import { DashboardSidebar } from "./dashboard-sidebar";
 import { MobileLogbooksOverviewHeader } from "./mobile-logbooks-overview-header";

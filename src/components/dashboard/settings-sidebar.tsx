@@ -3,8 +3,8 @@ import styled from "styled-components";
 import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
+import { ThemeProps } from "@/components/layout";
 import { DashboardSettingsTab } from "@/utils/types";
-import { ThemeProps } from "../layout";
 
 import { DashboardSidebarHeader } from "./dashboard-sidebar-header";
 

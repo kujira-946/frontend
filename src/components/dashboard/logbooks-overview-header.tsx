@@ -4,8 +4,8 @@ import { Signal } from "@preact/signals-react";
 import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
+import { ThemeProps } from "@/components/layout";
 import { createLogbookEntryRequest } from "@/sagas/logbook-entries.saga";
-import { ThemeProps } from "../layout";
 
 import { DashboardSidebarHeader } from "./dashboard-sidebar-header";
 

@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import * as Styles from "@/utils/styles";
 import { formattedNumber } from "@/utils/functions";
-import { ThemeProps } from "../layout";
+import { ThemeProps } from "@/components/layout";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //

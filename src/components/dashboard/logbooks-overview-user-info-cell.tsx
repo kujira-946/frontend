@@ -3,8 +3,8 @@ import { memo } from "react";
 
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
+import { ThemeProps } from "@/components/layout";
 import { MiniInput } from "../mini-input";
-import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
