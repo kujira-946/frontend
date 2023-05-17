@@ -94,6 +94,8 @@ type Props = {
 };
 
 export const DashboardLayout = (props: Props) => {
+  console.log("Dashboard Layout Rendered");
+
   const dispatch = Functions.useAppDispatch();
 
   const { selectedLogbookId, mobileMenuOpen } =

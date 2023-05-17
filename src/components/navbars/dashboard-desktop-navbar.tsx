@@ -1,6 +1,7 @@
 import Image from "next/image";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import { memo } from "react";
 
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
@@ -54,7 +55,9 @@ type Props = {
   page: Types.DashboardPage;
 };
 
-export const DashboardDesktopNavbar = (props: Props) => {
+const ExportedComponent = (props: Props) => {
+  console.log("Dashboard Desktop Navbar Rendered");
+
   const router = useRouter();
 
   const { theme } = Functions.useSignalsStore().ui;
@@ -144,3 +147,5 @@ export const DashboardDesktopNavbar = (props: Props) => {
     );
   }
 };
+
+export const DashboardDesktopNavbar = memo(ExportedComponent);

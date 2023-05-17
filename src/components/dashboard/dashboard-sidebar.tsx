@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { memo } from "react";
 
 import * as Types from "@/utils/types";
 import { ThemeProps } from "../layout";
@@ -30,7 +31,9 @@ type Props = {
   page: Types.DashboardPage;
 };
 
-export const DashboardSidebar = (props: Props) => {
+const ExportedComponent = (props: Props) => {
+  console.log("Dashboard Sidebar Rendered");
+
   return (
     <Container page={props.page}>
       {props.page === "Logbooks" ? (
@@ -43,3 +46,5 @@ export const DashboardSidebar = (props: Props) => {
     </Container>
   );
 };
+
+export const DashboardSidebar = memo(ExportedComponent);
