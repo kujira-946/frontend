@@ -1,8 +1,8 @@
 import dynamic from "next/dynamic";
 import styled from "styled-components";
 import { useSignal } from "@preact/signals-react";
-import { AnimatePresence } from "framer-motion";
 import { DragDropContext } from "react-beautiful-dnd";
+import { AnimatePresence } from "framer-motion";
 
 import { ThemeProps } from "../layout";
 

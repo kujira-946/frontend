@@ -7,9 +7,9 @@ import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
+import { MobileNavbarContainer } from "../navbars/mobile-navbar-container";
 import { ThemeProps } from "../layout";
 
-import { MobileNavbarContainer } from "../navbars/mobile-navbar-container";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //

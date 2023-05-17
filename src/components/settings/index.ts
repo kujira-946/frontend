@@ -1,4 +1,4 @@
 export * from "./personal-information";
 export * from "./security";
-export * from "./authentication";
 export * from "./personalization";
+export * from "./authentication";

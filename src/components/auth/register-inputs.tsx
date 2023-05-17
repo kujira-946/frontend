@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { effect, Signal, useSignal } from "@preact/signals-react";
+import { effect, Signal } from "@preact/signals-react";
 
-import * as Redux from "@/redux";
 import * as Globals from "@/components";
+import * as Redux from "@/redux";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";

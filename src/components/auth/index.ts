@@ -1,4 +1,2 @@
-import { AuthForm } from "./auth-form";
-import { Verification } from "./verification";
-
-export { AuthForm, Verification };
+export * from "./auth-form";
+export * from "./verification";

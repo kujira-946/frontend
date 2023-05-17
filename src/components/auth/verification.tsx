@@ -2,8 +2,8 @@ import Image from "next/image";
 import styled from "styled-components";
 import { Signal, useSignal } from "@preact/signals-react";
 
-import * as AuthActions from "@/sagas/auth.saga";
 import * as Globals from "@/components";
+import * as AuthActions from "@/sagas/auth.saga";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";

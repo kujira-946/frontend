@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -8,7 +9,6 @@ import * as Styles from "@/utils/styles";
 import { uiActions } from "@/redux";
 import { ThemeProps } from "@/components/layout";
 import { NotificationType } from "@/utils/types";
-import { useRouter } from "next/router";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //

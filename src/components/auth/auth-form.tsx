@@ -4,8 +4,8 @@ import styled from "styled-components";
 import { useEffect } from "react";
 import { Signal, effect, useSignal } from "@preact/signals-react";
 
-import * as Redux from "@/redux";
 import * as Globals from "@/components";
+import * as Redux from "@/redux";
 import * as AuthActions from "@/sagas/auth.saga";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";

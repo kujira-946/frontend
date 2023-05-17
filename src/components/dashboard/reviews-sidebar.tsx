@@ -8,9 +8,9 @@ import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { monthsAsNumber } from "@/utils/constants";
+import { ThemeProps } from "../layout";
 
 import { DashboardSidebarHeader } from "./dashboard-sidebar-header";
-import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //

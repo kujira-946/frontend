@@ -8,8 +8,9 @@ import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { updateOverviewRequest } from "@/sagas/overviews.saga";
-import { LogbooksOverviewUserInfoCell } from "./logbooks-overview-user-info-cell";
 import { ThemeProps } from "../layout";
+
+import { LogbooksOverviewUserInfoCell } from "./logbooks-overview-user-info-cell";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //

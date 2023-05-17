@@ -1,14 +1,13 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
+import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
 import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { ThemeProps } from "../layout";
-
-import { Button, IconButton } from "../buttons";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -87,7 +86,7 @@ const BodyText = styled.p`
   font-weight: ${Styles.fontWeights.regular};
 `;
 
-const SubmitButton = styled(Button)`
+const SubmitButton = styled(Globals.Button)`
   svg {
     ${Styles.transition};
   }
@@ -144,7 +143,7 @@ export const ConfirmationModal = (props: Props) => {
       >
         <Header>
           {props.showBackButton && props.backButtonAction && theme.value && (
-            <IconButton
+            <Globals.IconButton
               type="button"
               onClick={props.backButtonAction}
               borderRadius="six"
@@ -155,7 +154,7 @@ export const ConfirmationModal = (props: Props) => {
                 fill={Styles.background[theme.value].eight}
                 addHover
               />
-            </IconButton>
+            </Globals.IconButton>
           )}
           <HeaderTitle>{props.headerTitle}</HeaderTitle>
           {props.headerSupportingText && (
