@@ -1,14 +1,11 @@
 import styled from "styled-components";
 import { useCallback } from "react";
 
+import * as Sagas from "@/sagas";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { OverviewShimmer } from "@/components/shimmer";
-import {
-  createPurchaseRequest,
-  deleteAssociatedPurchasesRequest,
-} from "@/sagas/purchases.saga";
 
 import { LogbooksOverviewGroup } from "./logbooks-overview-group";
 
@@ -44,7 +41,7 @@ export const LogbookOverviewGroups = (props: OverviewGroupsProps) => {
   const deleteAllPurchases = useCallback(
     (purchaseIds: number[], overviewGroupId: number): void => {
       dispatch(
-        deleteAssociatedPurchasesRequest(purchaseIds, {
+        Sagas.deleteAssociatedPurchasesRequest(purchaseIds, {
           overviewGroupId,
         })
       );
@@ -53,7 +50,7 @@ export const LogbookOverviewGroups = (props: OverviewGroupsProps) => {
   );
 
   const addPurchase = useCallback((overviewGroupId: number): void => {
-    dispatch(createPurchaseRequest({ overviewGroupId }));
+    dispatch(Sagas.createPurchaseRequest({ overviewGroupId }));
   }, []);
 
   if (!overviewGroups) {

@@ -6,11 +6,10 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 import * as Redux from "@/redux";
+import * as Sagas from "@/sagas";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { Theme } from "@/signals/ui.signals";
-import { fetchUserRequest } from "@/sagas/users.saga";
-import { logoutRequest } from "@/sagas/auth.saga";
 import { ClientRoutes } from "@/utils/constants";
 
 import { Notification } from "./notification";
@@ -335,12 +334,12 @@ export const Layout = (props: Props) => {
       router.push(ClientRoutes.LANDING);
     } else if (userId && !jwtAccessToken) {
       Cookies.remove("id");
-      dispatch(logoutRequest(Number(userId)));
+      dispatch(Sagas.logoutRequest(Number(userId)));
     }
 
     if (userId && !currentUser) {
       dispatch(Redux.uiActions.setLoadingUsers(true));
-      dispatch(fetchUserRequest(Number(userId)));
+      dispatch(Sagas.fetchUserRequest(Number(userId)));
     }
   }, []);
 

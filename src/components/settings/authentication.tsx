@@ -5,10 +5,9 @@ import { useSignal } from "@preact/signals-react";
 import { AnimatePresence } from "framer-motion";
 
 import * as Globals from "@/components";
+import * as Sagas from "@/sagas";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
-import { logoutRequest } from "@/sagas/auth.saga";
-import { deleteUserRequest } from "@/sagas/users.saga";
 import { ClientRoutes } from "@/utils/constants";
 import { ThemeProps } from "../layout";
 
@@ -59,14 +58,14 @@ export const Authentication = () => {
 
   function logOut(): void {
     if (currentUser) {
-      dispatch(logoutRequest(currentUser.id));
+      dispatch(Sagas.logoutRequest(currentUser.id));
       router.push(ClientRoutes.LANDING);
     }
   }
 
   function deleteAccount(): void {
     if (currentUser) {
-      dispatch(deleteUserRequest(currentUser.id));
+      dispatch(Sagas.deleteUserRequest(currentUser.id));
       router.push(ClientRoutes.LANDING);
     }
   }

@@ -4,15 +4,12 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect } from "react";
 import { effect, useSignal } from "@preact/signals-react";
 
-import * as Redux from "@/redux";
-import * as Modals from "@/components/modals";
 import * as Components from "@/components/onboarding";
-import * as OverviewsSagas from "@/sagas/overviews.saga";
-import * as OverviewGroupsSagas from "@/sagas/overview-groups.saga";
-import * as PurchasesSagas from "@/sagas/purchases.saga";
+import * as Modals from "@/components/modals";
+import * as Redux from "@/redux";
+import * as Sagas from "@/sagas";
 import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
-import { onboardNewUserRequest } from "@/sagas/onboarding.saga";
 
 const Onboarding = () => {
   const dispatch = Functions.useAppDispatch();
@@ -41,7 +38,7 @@ const Onboarding = () => {
     ) {
       dispatch(Redux.uiActions.setLoadingUsers(true));
       dispatch(
-        onboardNewUserRequest(
+        Sagas.onboardNewUserRequest(
           overview.id,
           Number(income.value),
           Number(savings.value),
@@ -72,7 +69,7 @@ const Onboarding = () => {
   const deleteAllPurchases = useCallback(
     (purchaseIds: number[], overviewGroupId: number): void => {
       dispatch(
-        PurchasesSagas.deleteAssociatedPurchasesRequest(purchaseIds, {
+        Sagas.deleteAssociatedPurchasesRequest(purchaseIds, {
           overviewGroupId,
         })
       );
@@ -81,7 +78,7 @@ const Onboarding = () => {
   );
 
   const addPurchase = useCallback((overviewGroupId: number): void => {
-    dispatch(PurchasesSagas.createPurchaseRequest({ overviewGroupId }));
+    dispatch(Sagas.createPurchaseRequest({ overviewGroupId }));
   }, []);
 
   // ↓↓↓ Auth redirection ↓↓↓ //
@@ -94,7 +91,7 @@ const Onboarding = () => {
   // ↓↓↓ Fetching over's overview ↓↓↓ //
   useEffect(() => {
     if (currentUser && !overview) {
-      dispatch(OverviewsSagas.fetchUserOverviewRequest(currentUser.id));
+      dispatch(Sagas.fetchUserOverviewRequest(currentUser.id));
     }
   }, [currentUser, overview]);
 
@@ -102,9 +99,7 @@ const Onboarding = () => {
   useEffect(() => {
     if (overview && !overviewGroups) {
       dispatch(Redux.uiActions.setLoadingOverviewGroups(true));
-      dispatch(
-        OverviewGroupsSagas.fetchOverviewOverviewGroupsRequest(overview.id)
-      );
+      dispatch(Sagas.fetchOverviewOverviewGroupsRequest(overview.id));
     }
   }, [overview, overviewGroups]);
 

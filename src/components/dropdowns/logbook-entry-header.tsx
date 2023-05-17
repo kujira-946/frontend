@@ -6,13 +6,10 @@ import { AnimatePresence } from "framer-motion";
 
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
+import * as Sagas from "@/sagas";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import {
-  deleteLogbookEntryRequest,
-  updateLogbookEntryRequest,
-} from "@/sagas/logbook-entries.saga";
 import { ThemeProps } from "../layout";
 
 // ========================================================================================= //
@@ -104,7 +101,7 @@ export const LogbookEntryHeader = (props: Props) => {
         );
         if (formattedDateInput !== logbookEntry.date) {
           dispatch(
-            updateLogbookEntryRequest(props.logbookEntryId, {
+            Sagas.updateLogbookEntryRequest(props.logbookEntryId, {
               date: formattedDateInput,
             })
           );
@@ -119,7 +116,7 @@ export const LogbookEntryHeader = (props: Props) => {
       if (logbookEntry && !budgetErrorMessage.value) {
         if (budget.value === "" && logbookEntry.budget !== null) {
           dispatch(
-            updateLogbookEntryRequest(props.logbookEntryId, {
+            Sagas.updateLogbookEntryRequest(props.logbookEntryId, {
               budget: null,
             })
           );
@@ -128,7 +125,7 @@ export const LogbookEntryHeader = (props: Props) => {
           Number(budget.value) !== logbookEntry.budget
         ) {
           dispatch(
-            updateLogbookEntryRequest(props.logbookEntryId, {
+            Sagas.updateLogbookEntryRequest(props.logbookEntryId, {
               budget: Number(budget.value),
             })
           );
@@ -144,7 +141,7 @@ export const LogbookEntryHeader = (props: Props) => {
   }
 
   function deleteLogbookEntry(): void {
-    dispatch(deleteLogbookEntryRequest(props.logbookEntryId));
+    dispatch(Sagas.deleteLogbookEntryRequest(props.logbookEntryId));
   }
 
   function determineSpentStatus() {

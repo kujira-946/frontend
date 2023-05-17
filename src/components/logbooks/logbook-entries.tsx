@@ -3,15 +3,11 @@ import styled from "styled-components";
 import { useCallback, useEffect } from "react";
 
 import * as Globals from "@/components";
+import * as Sagas from "@/sagas";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
 import { LogbookEntry } from "./logbook-entry";
-import {
-  createPurchaseRequest,
-  deleteAssociatedPurchasesRequest,
-} from "@/sagas/purchases.saga";
-import { batchDeletePurchasesRequest } from "@/sagas/purchases.saga";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -50,13 +46,13 @@ export const LogbookEntries = (props: Props) => {
   );
 
   const deleteSelectedPurchases = useCallback((purchaseIds: number[]): void => {
-    dispatch(batchDeletePurchasesRequest(purchaseIds));
+    dispatch(Sagas.batchDeletePurchasesRequest(purchaseIds));
   }, []);
 
   const deleteAllPurchases = useCallback(
     (purchaseIds: number[], logbookEntryId: number): void => {
       dispatch(
-        deleteAssociatedPurchasesRequest(purchaseIds, {
+        Sagas.deleteAssociatedPurchasesRequest(purchaseIds, {
           logbookEntryId,
         })
       );
@@ -65,7 +61,7 @@ export const LogbookEntries = (props: Props) => {
   );
 
   const addPurchase = useCallback((logbookEntryId: number): void => {
-    dispatch(createPurchaseRequest({ logbookEntryId }));
+    dispatch(Sagas.createPurchaseRequest({ logbookEntryId }));
   }, []);
 
   useEffect(() => {

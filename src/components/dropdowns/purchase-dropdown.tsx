@@ -5,14 +5,10 @@ import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import * as Globals from "@/components";
+import * as Sagas from "@/sagas";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import * as Types from "@/utils/types";
-import {
-  fetchLogbookEntryPurchasesRequest,
-  fetchOverviewGroupPurchasesRequest,
-  updatePurchaseRequest,
-} from "@/sagas/purchases.saga";
 import { ThemeProps } from "../layout";
 
 import { OverviewHeader } from "./overview-header";
@@ -183,7 +179,7 @@ export const PurchaseDropdown = (props: Props) => {
 
   const setPurchaseCategory = useCallback(
     (purchaseId: number, category: Types.Category): void => {
-      dispatch(updatePurchaseRequest(purchaseId, { category }));
+      dispatch(Sagas.updatePurchaseRequest(purchaseId, { category }));
     },
     []
   );
@@ -231,9 +227,9 @@ export const PurchaseDropdown = (props: Props) => {
     if (open.value) {
       loadingPurchasesLocal.value = true;
       if (props.type === "overview") {
-        dispatch(fetchOverviewGroupPurchasesRequest(props.associationId));
+        dispatch(Sagas.fetchOverviewGroupPurchasesRequest(props.associationId));
       } else {
-        dispatch(fetchLogbookEntryPurchasesRequest(props.associationId));
+        dispatch(Sagas.fetchLogbookEntryPurchasesRequest(props.associationId));
       }
     }
   }, [open.value]);
