@@ -113,7 +113,10 @@ type Props = {
   purchases: Types.Purchase[] | undefined;
   purchaseIds: number[];
 
-  deleteSelectedPurchases?: (purchaseIds: number[]) => void;
+  deleteSelectedPurchases?: (
+    purchaseIds: number[],
+    associationId: number
+  ) => void;
   deleteAllPurchases: (purchaseIds: number[], associationId: number) => void;
   addPurchase: (associationId: number) => void;
 
@@ -144,7 +147,10 @@ export const PurchaseDropdown = (props: Props) => {
 
   function deleteSelectedPurchases(): void {
     if (props.deleteSelectedPurchases) {
-      props.deleteSelectedPurchases(Object.values(selectedPurchases.value));
+      props.deleteSelectedPurchases(
+        Object.values(selectedPurchases.value),
+        props.associationId
+      );
     }
   }
 

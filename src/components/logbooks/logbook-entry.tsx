@@ -5,7 +5,10 @@ type Props = {
   logbookEntryId: number;
   logbookEntryTotalSpent: number;
   logbookEntryPurchaseIds: number[];
-  deleteSelectedPurchases: (purchaseIds: number[]) => void;
+  deleteSelectedPurchases: (
+    purchaseIds: number[],
+    associationId: number
+  ) => void;
   deleteAllPurchases: (purchaseIds: number[], logbookEntryId: number) => void;
   addPurchase: (logbookEntryId: number) => void;
 };

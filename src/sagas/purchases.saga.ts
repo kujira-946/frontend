@@ -180,13 +180,19 @@ export function deletePurchaseRequest(
   };
 }
 
-type PurchaseBulkDeleteAction = Types.SagaAction<{ purchaseIds: number[] }>;
+type PurchaseBulkDeleteAction = Types.SagaAction<{
+  purchaseIds: number[];
+  association?: Association;
+  associationId?: number;
+}>;
 export function bulkDeletePurchasesRequest(
-  purchaseIds: number[]
+  purchaseIds: number[],
+  association?: Association,
+  associationId?: number
 ): PurchaseBulkDeleteAction {
   return {
     type: PurchasesActionTypes.BULK_DELETE_PURCHASES,
-    payload: { purchaseIds },
+    payload: { purchaseIds, association, associationId },
   };
 }
 
@@ -228,8 +234,6 @@ function* fetchPurchases() {
 
 function* fetchOverviewGroupPurchases(action: OverviewGroupPurchasesAction) {
   try {
-    console.log("Fetch overview group purchases");
-
     const { overviewGroupId } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/fetch-overview-group-purchases`;
     const { data } = yield Saga.call(axios.post, endpoint, { overviewGroupId });
@@ -514,9 +518,29 @@ function* deletePurchase(action: PurchaseDeleteAction) {
 
 function* bulkDeletePurchases(action: PurchaseBulkDeleteAction) {
   try {
-    const { purchaseIds } = action.payload;
+    const { purchaseIds, association, associationId } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/bulk-delete`;
-    yield Saga.call(axios.post, endpoint, { purchaseIds });
+
+    // ↓↓↓ If the purchases either belongs to an overview group           ↓↓↓ //
+    // ↓↓↓ or logbook entry, fix the purchase placements on bulk delete.  ↓↓↓ //
+    if (association && associationId) {
+      if (association === "Overview Group") {
+        yield Saga.call(axios.post, endpoint, {
+          purchaseIds,
+          overviewGroupId: associationId,
+        });
+      } else {
+        yield Saga.call(axios.post, endpoint, {
+          purchaseIds,
+          logbookEntryId: associationId,
+        });
+      }
+    }
+    // ↓↓↓ Otherwise, just delete the purchases without caring for placements. ↓↓↓ //
+    else {
+      yield Saga.call(axios.post, endpoint, { purchaseIds });
+    }
+
     yield Saga.put(Redux.entitiesActions.bulkDeletePurchases(purchaseIds));
     // yield Saga.put(updateLogbookEntryRequest(logbookEntryId, { totalSpent }));
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
