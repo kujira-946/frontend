@@ -26,7 +26,6 @@ export function onDragEnd(
     dispatch(
       updatePurchasePlacementRequest(
         purchaseId,
-        association,
         previousPlacement,
         updatedPlacement
       )

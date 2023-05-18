@@ -150,19 +150,17 @@ export function updatePurchaseRequest(
 export type Association = "Overview Group" | "Logbook Entry";
 type PurchasePlacementUpdateAction = Types.SagaAction<{
   purchaseId: number;
-  association: Association;
   previousPlacement: number;
   updatedPlacement: number;
 }>;
 export function updatePurchasePlacementRequest(
   purchaseId: number,
-  association: Association,
   previousPlacement: number,
   updatedPlacement: number
 ): PurchasePlacementUpdateAction {
   return {
     type: PurchasesActionTypes.UPDATE_PURCHASE_PLACEMENT,
-    payload: { purchaseId, association, previousPlacement, updatedPlacement },
+    payload: { purchaseId, previousPlacement, updatedPlacement },
   };
 }
 
@@ -450,13 +448,10 @@ function* updatePurchase(action: PurchaseUpdateAction) {
 
 function* updatePurchasePlacement(action: PurchasePlacementUpdateAction) {
   try {
-    const { purchaseId, association, previousPlacement, updatedPlacement } =
-      action.payload;
+    const { purchaseId, previousPlacement, updatedPlacement } = action.payload;
     const endpoint =
       ApiRoutes.PURCHASES + `/${purchaseId}/update-purchase-placement`;
     const { data } = yield Saga.call(axios.patch, endpoint, {
-      association,
-      previousPlacement,
       updatedPlacement,
     });
 
