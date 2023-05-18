@@ -14,6 +14,8 @@ type Props = {
 };
 
 export const LogbookEntry = (props: Props) => {
+  console.log("Logbook entry rendered");
+
   const purchases = Functions.useGetLogbookEntryPurchases(props.logbookEntryId);
 
   return (

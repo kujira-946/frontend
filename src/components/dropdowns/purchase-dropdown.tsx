@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { useCallback, useEffect } from "react";
+import { memo, useCallback, useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -125,7 +125,9 @@ type Props = {
 
 type PurchaseIds = { [key: string]: number };
 
-export const PurchaseDropdown = (props: Props) => {
+const ExportedComponent = (props: Props) => {
+  console.log("Purchase dropdown rendered");
+
   const dispatch = Functions.useAppDispatch();
 
   const open = useSignal(!!props.startOpened);
@@ -297,3 +299,5 @@ export const PurchaseDropdown = (props: Props) => {
     </Container>
   );
 };
+
+export const PurchaseDropdown = memo(ExportedComponent);

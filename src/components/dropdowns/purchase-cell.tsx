@@ -16,7 +16,7 @@ import { ThemeProps } from "@/components/layout";
 
 type ContainerProps = { selected: boolean };
 
-const Container = styled.section<ContainerProps>`
+const Container = styled.section<ContainerProps>`                                  
   ${Styles.transition};
   display: flex;
   gap: ${Styles.pxAsRem.eight};

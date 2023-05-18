@@ -309,16 +309,13 @@ const entitiesSlice = createSlice({
         const currentLogbook = logbooksCopy[logbookId];
         const relationalIds = currentLogbook.logbookEntryIds;
         if (relationalIds) {
-          currentLogbook.logbookEntryIds = Functions.sortArray(
-            Functions.removeDuplicatesFromArray([
-              ...relationalIds,
-              ...logbookEntryIds,
-            ])
-          );
+          currentLogbook.logbookEntryIds = Functions.removeDuplicatesFromArray([
+            ...logbookEntryIds,
+            ...relationalIds,
+          ]);
         } else {
-          currentLogbook.logbookEntryIds = Functions.sortArray(
-            Functions.removeDuplicatesFromArray(logbookEntryIds)
-          );
+          currentLogbook.logbookEntryIds =
+            Functions.removeDuplicatesFromArray(logbookEntryIds);
         }
         state.logbooks = logbooksCopy;
       }
