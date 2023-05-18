@@ -35,10 +35,9 @@ const Main = styled.main`
   width: 100%;
   height: 100%;
   margin: 0 auto;
-  padding: ${Styles.pxAsRem.twenty} 0;
   overflow-x: auto;
 
-  ${Styles.setMediaPaddings("twenty", "twenty", "fourteen")};
+  ${Styles.setMediaPaddings()};
 `;
 
 const Mobile = styled.div`
@@ -56,6 +55,7 @@ const Mobile = styled.div`
 
 const Sidebar = styled.section`
   display: flex;
+  margin: ${Styles.pxAsRem.twenty} 0;
   border: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
   border-radius: ${Styles.pxAsRem.eight};
   overflow: hidden;
@@ -68,6 +68,12 @@ const Sidebar = styled.section`
 const Children = styled.div`
   position: relative;
   flex: 1;
+  padding: ${Styles.pxAsRem.twenty} 0;
+  overflow-y: auto;
+
+  @media (max-width: ${Styles.widths.mobile}px) {
+    padding: ${Styles.pxAsRem.fourteen} 0;
+  }
 `;
 
 // ========================================================================================= //
