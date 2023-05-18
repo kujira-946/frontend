@@ -180,10 +180,10 @@ export function deletePurchaseRequest(
   };
 }
 
-type PurchaseBatchDeleteAction = Types.SagaAction<{ purchaseIds: number[] }>;
-export function batchDeletePurchasesRequest(
+type PurchaseBulkDeleteAction = Types.SagaAction<{ purchaseIds: number[] }>;
+export function bulkDeletePurchasesRequest(
   purchaseIds: number[]
-): PurchaseBatchDeleteAction {
+): PurchaseBulkDeleteAction {
   return {
     type: PurchasesActionTypes.BULK_DELETE_PURCHASES,
     payload: { purchaseIds },
@@ -512,7 +512,7 @@ function* deletePurchase(action: PurchaseDeleteAction) {
   }
 }
 
-function* bulkDeletePurchases(action: PurchaseBatchDeleteAction) {
+function* bulkDeletePurchases(action: PurchaseBulkDeleteAction) {
   try {
     const { purchaseIds } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/bulk-delete`;

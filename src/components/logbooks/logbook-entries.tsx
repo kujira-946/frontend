@@ -48,7 +48,7 @@ export const LogbookEntries = (props: Props) => {
   );
 
   const deleteSelectedPurchases = useCallback((purchaseIds: number[]): void => {
-    dispatch(Sagas.batchDeletePurchasesRequest(purchaseIds));
+    dispatch(Sagas.bulkDeletePurchasesRequest(purchaseIds));
   }, []);
 
   const deleteAllPurchases = useCallback(
