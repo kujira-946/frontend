@@ -228,6 +228,8 @@ function* fetchPurchases() {
 
 function* fetchOverviewGroupPurchases(action: OverviewGroupPurchasesAction) {
   try {
+    console.log("Fetch overview group purchases");
+
     const { overviewGroupId } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/fetch-overview-group-purchases`;
     const { data } = yield Saga.call(axios.post, endpoint, { overviewGroupId });

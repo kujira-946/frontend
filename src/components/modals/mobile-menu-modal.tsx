@@ -10,13 +10,11 @@ import * as Types from "@/utils/types";
 import { ThemeProps } from "@/components/layout";
 import { MobileNavbarContainer } from "../navbars/mobile-navbar-container";
 
-
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
 const Overlay = styled(motion.div)`
-  position: fixed;
   position: fixed;
   top: 0;
   right: 0;

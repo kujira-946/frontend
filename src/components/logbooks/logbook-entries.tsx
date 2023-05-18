@@ -30,6 +30,8 @@ type Props = {
 };
 
 export const LogbookEntries = (props: Props) => {
+  console.log("Logbook entries rendered");
+
   const dispatch = Functions.useAppDispatch();
 
   const { logbookTotalSpent } = Functions.useSignalsStore().dashboard;

@@ -29,6 +29,8 @@ const DynamicMobileOverview = dynamic(() =>
 // ========================================================================================= //
 
 const Logbooks: NextPageWithLayout = () => {
+  console.log("Logbooks page rendered");
+
   const { selectedLogbookId, mobileFiltersOpen, mobileOverviewOpen } =
     useSignalsStore().dashboard;
 

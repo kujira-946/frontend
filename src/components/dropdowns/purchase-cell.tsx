@@ -75,7 +75,7 @@ const categories: Types.Category[] = ["need", "planned", "impulse"];
 
 type Props = {
   purchaseId: number;
-  provided: DraggableProvided;
+  provided?: DraggableProvided;
   selectAction?: (purchaseId: number) => void;
   category: Types.Category | null;
   setPurchaseCategory?: (purchaseId: number, category: Types.Category) => void;
@@ -90,10 +90,7 @@ type Props = {
     cost: string
   ) => void;
   deletePurchase: (purchaseId: number, purchaseCost: number) => void;
-
-  showDrag?: boolean;
-  showCategories?: boolean;
-  showDelete?: boolean;
+  showDelete?: true;
 };
 
 const ExportedComponent = (props: Props) => {
@@ -128,7 +125,7 @@ const ExportedComponent = (props: Props) => {
   return (
     <Container selected={selected.value}>
       {/* Drag */}
-      {props.showDrag && theme.value && (
+      {props.provided && theme.value && (
         <Globals.IconContainer
           {...props.provided.dragHandleProps}
           tabIndex={-1}

@@ -1,4 +1,3 @@
-import * as Drag from "react-beautiful-dnd";
 import styled, { css } from "styled-components";
 import { useCallback, useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
@@ -13,7 +12,9 @@ import { ThemeProps } from "@/components/layout";
 
 import { OverviewHeader } from "./overview-header";
 import { LogbookEntryHeader } from "./logbook-entry-header";
-import { PurchaseCell } from "./purchase-cell";
+import { PurchaseCells } from "./purchase-cells";
+import { OverviewPurchases } from "./overview-purchases";
+import { LogbookEntryPurchases } from "./logbook-entry-purchases";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -48,35 +49,6 @@ const Header = styled.button<HeaderProps>`
 const Body = styled(motion.div)`
   display: flex;
   flex-direction: column;
-`;
-
-type PurchaseCellsProps = { updatingPurchases: boolean };
-
-const PurchaseCells = styled.article<PurchaseCellsProps>`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: ${Styles.pxAsRem.four};
-  padding: ${Styles.pxAsRem.twelve};
-  max-height: 400px;
-  overflow-y: auto;
-
-  ${(props) =>
-    props.updatingPurchases &&
-    css`
-      ${Styles.preventUserInteraction};
-      opacity: 0.5;
-    `};
-`;
-
-const PurchaseCellsUpdateLoader = styled(motion.div)`
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: ${Styles.pxAsRem.four};
-  background-color: ${(props: ThemeProps) => props.theme.primaryMain};
-  transform-origin: left;
 `;
 
 const Buttons = styled.article`
@@ -136,8 +108,8 @@ const AddButton = styled.button`
 type Props = {
   type: "overview" | "logbook";
   title?: string;
-  associationId: number; // overview group or logbook entry
-  associationTotalSpent: number;
+  associationId: number; // overview group or logbook entry id
+  associationTotalSpent: number; // overview group or logbook entry total spent
   purchases: Types.Purchase[] | undefined;
   purchaseIds: number[];
 
@@ -152,8 +124,6 @@ type PurchaseIds = { [key: string]: number };
 
 export const PurchaseDropdown = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
-
-  const { loadingPurchases } = Functions.useUiSlice();
 
   const open = useSignal(!!props.startOpened);
   const loadingPurchasesLocal = useSignal(false);
@@ -224,6 +194,7 @@ export const PurchaseDropdown = (props: Props) => {
     [props.associationTotalSpent]
   );
 
+  // ↓↓↓ Fetching associated purchases (overview group / logbook entry) ↓↓↓ //
   useEffect(() => {
     if (open.value) {
       loadingPurchasesLocal.value = true;
@@ -235,6 +206,7 @@ export const PurchaseDropdown = (props: Props) => {
     }
   }, [open.value]);
 
+  // ↓↓↓ Setting local loadingPurchases state to `false` when purchases have loaded in. ↓↓↓ //
   useEffect(() => {
     if (props.purchases && loadingPurchasesLocal.value) {
       loadingPurchasesLocal.value = false;
@@ -269,92 +241,22 @@ export const PurchaseDropdown = (props: Props) => {
               </PurchaseCells>
             ) : (
               props.purchases &&
-              props.purchases.length > 0 && (
-                <Drag.Droppable
-                  droppableId={
-                    props.type === "overview"
-                      ? Styles.overviewDropdownDroppableId
-                      : Styles.logbookEntryDropdownDroppableId
-                  }
-                >
-                  {(
-                    provided: Drag.DroppableProvided,
-                    snapshot: Drag.DroppableStateSnapshot
-                  ) => {
-                    return (
-                      <PurchaseCells
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        updatingPurchases={loadingPurchases}
-                      >
-                        <AnimatePresence>
-                          {loadingPurchases && (
-                            <PurchaseCellsUpdateLoader
-                              initial={{ width: "0%" }}
-                              animate={{ width: "100%" }}
-                              exit={{ width: "0%" }}
-                              transition={{ duration: 0.2 }}
-                            />
-                          )}
-                        </AnimatePresence>
-
-                        {props.purchases &&
-                          props.purchases.map(
-                            (purchase: Types.Purchase, index: number) => {
-                              return (
-                                <Drag.Draggable
-                                  key={`${props.type}-dropdown-purchase-${purchase.id}-${index}`}
-                                  draggableId={`${purchase.id}`}
-                                  index={index}
-                                >
-                                  {(
-                                    provided: Drag.DraggableProvided,
-                                    snapshot: Drag.DraggableStateSnapshot
-                                  ) => {
-                                    return (
-                                      <div
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                      >
-                                        <PurchaseCell
-                                          key={`${props.type}-purchase-dropdown-purchases-${purchase.id}-${index}`}
-                                          purchaseId={purchase.id}
-                                          provided={provided}
-                                          selectAction={
-                                            props.type === "logbook"
-                                              ? selectPurchase
-                                              : undefined
-                                          }
-                                          category={purchase.category}
-                                          setPurchaseCategory={
-                                            props.type === "logbook"
-                                              ? setPurchaseCategory
-                                              : undefined
-                                          }
-                                          description={purchase.description}
-                                          cost={
-                                            purchase.cost ? purchase.cost : 0
-                                          }
-                                          updatePurchase={updatePurchase}
-                                          deletePurchase={deletePurchase}
-                                          showDrag={props.type === "logbook"}
-                                          showCategories={
-                                            props.type === "logbook"
-                                          }
-                                          showDelete
-                                        />
-                                      </div>
-                                    );
-                                  }}
-                                </Drag.Draggable>
-                              );
-                            }
-                          )}
-                      </PurchaseCells>
-                    );
-                  }}
-                </Drag.Droppable>
-              )
+              props.purchases.length > 0 &&
+              (props.type === "overview" ? (
+                <OverviewPurchases
+                  purchases={props.purchases}
+                  updatePurchase={updatePurchase}
+                  deletePurchase={deletePurchase}
+                />
+              ) : (
+                <LogbookEntryPurchases
+                  purchases={props.purchases}
+                  selectPurchase={selectPurchase}
+                  setPurchaseCategory={setPurchaseCategory}
+                  updatePurchase={updatePurchase}
+                  deletePurchase={deletePurchase}
+                />
+              ))
             )}
 
             <Buttons>
