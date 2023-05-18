@@ -43,9 +43,9 @@ export const LogbooksOverview = () => {
 
       <LogbooksUserSummary />
 
-      <DragDropContext onDragEnd={() => console.log("")}>
-        <LogbookOverviewGroups />
-      </DragDropContext>
+      {/* <DragDropContext onDragEnd={() => console.log("")}> */}
+      <LogbookOverviewGroups />
+      {/* </DragDropContext> */}
 
       <AnimatePresence>
         {filtersOpen.value && <DynamicLogbookFiltersModal open={filtersOpen} />}

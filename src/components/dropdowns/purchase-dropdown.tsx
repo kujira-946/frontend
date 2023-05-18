@@ -131,7 +131,6 @@ const ExportedComponent = (props: Props) => {
   const dispatch = Functions.useAppDispatch();
 
   const open = useSignal(!!props.startOpened);
-  const loadingPurchasesLocal = useSignal(false);
   const selectedPurchases = useSignal<PurchaseIds>({});
   const purchasesSelected = useSignal(false);
 
@@ -205,7 +204,6 @@ const ExportedComponent = (props: Props) => {
   // ↓↓↓ Fetching associated purchases (overview group / logbook entry) ↓↓↓ //
   useEffect(() => {
     if (open.value) {
-      loadingPurchasesLocal.value = true;
       if (props.type === "overview") {
         dispatch(Sagas.fetchOverviewGroupPurchasesRequest(props.associationId));
       } else {
@@ -213,13 +211,6 @@ const ExportedComponent = (props: Props) => {
       }
     }
   }, [open.value]);
-
-  // ↓↓↓ Setting local loadingPurchases state to `false` when purchases have loaded in. ↓↓↓ //
-  useEffect(() => {
-    if (props.purchases && loadingPurchasesLocal.value) {
-      loadingPurchasesLocal.value = false;
-    }
-  }, [props.purchases]);
 
   return (
     <Container open={open.value}>
@@ -241,14 +232,13 @@ const ExportedComponent = (props: Props) => {
       <AnimatePresence>
         {open.value && (
           <Body>
-            {loadingPurchasesLocal.value ? (
+            {!props.purchases ? (
               <PurchaseCells updatingPurchases={false}>
                 <Globals.PurchaseShimmer borderRadius="six" />
                 <Globals.PurchaseShimmer borderRadius="six" />
                 <Globals.PurchaseShimmer borderRadius="six" />
               </PurchaseCells>
             ) : (
-              props.purchases &&
               props.purchases.length > 0 &&
               (props.type === "overview" ? (
                 <OverviewPurchases

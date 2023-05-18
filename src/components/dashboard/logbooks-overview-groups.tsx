@@ -53,35 +53,32 @@ export const LogbookOverviewGroups = (props: OverviewGroupsProps) => {
     dispatch(Sagas.createPurchaseRequest({ overviewGroupId }));
   }, []);
 
-  if (!overviewGroups) {
-    return null;
-  } else {
-    return (
-      <OverviewGroups inModal={props.inModal}>
-        {loadingOverviewGroups ? (
-          <>
-            <OverviewShimmer />
-            <OverviewShimmer />
-          </>
-        ) : (
-          overviewGroups.map(
-            (overviewGroup: Types.OverviewGroup, index: number) => {
-              return (
-                <LogbooksOverviewGroup
-                  key={`logbooks-overview-overview-group-${overviewGroup.id}-${index}`}
-                  overviewGroupId={overviewGroup.id}
-                  overviewGroupName={overviewGroup.name}
-                  overviewGroupTotalSpent={overviewGroup.totalSpent}
-                  overviewGroupPurchaseIds={overviewGroup.purchaseIds || []}
-                  deleteAllPurchases={deleteAllPurchases}
-                  addPurchase={addPurchase}
-                  startOpened={index === 0}
-                />
-              );
-            }
-          )
-        )}
-      </OverviewGroups>
-    );
-  }
+  return (
+    <OverviewGroups inModal={props.inModal}>
+      {loadingOverviewGroups ? (
+        <>
+          <OverviewShimmer />
+          <OverviewShimmer />
+        </>
+      ) : (
+        overviewGroups &&
+        overviewGroups.map(
+          (overviewGroup: Types.OverviewGroup, index: number) => {
+            return (
+              <LogbooksOverviewGroup
+                key={`logbooks-overview-overview-group-${overviewGroup.id}-${index}`}
+                overviewGroupId={overviewGroup.id}
+                overviewGroupName={overviewGroup.name}
+                overviewGroupTotalSpent={overviewGroup.totalSpent}
+                overviewGroupPurchaseIds={overviewGroup.purchaseIds || []}
+                deleteAllPurchases={deleteAllPurchases}
+                addPurchase={addPurchase}
+                startOpened={index === 0}
+              />
+            );
+          }
+        )
+      )}
+    </OverviewGroups>
+  );
 };

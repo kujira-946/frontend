@@ -6,7 +6,6 @@ import * as Types from "@/utils/types";
 export type EntitiesState = {
   currentUser: Types.User | null;
   overview: Types.Overview | null;
-
   users: Types.UsersEntity | null;
   overviewGroups: Types.OverviewGroupsEntity | null;
   logbooks: Types.LogbooksEntity | null;
@@ -17,7 +16,6 @@ export type EntitiesState = {
 const initialState: EntitiesState = {
   currentUser: null,
   overview: null,
-
   users: null,
   overviewGroups: null,
   logbooks: null,
@@ -54,10 +52,10 @@ const entitiesSlice = createSlice({
       action: PayloadAction<Types.User>
     ) => {
       if (state.currentUser) {
-        const { logbookIds } = state.currentUser;
-        const updatedUser = action.payload;
-        if (logbookIds) updatedUser.logbookIds = logbookIds;
-        state.currentUser = updatedUser;
+        const { overviewId, logbookIds } = state.currentUser;
+        if (overviewId) action.payload.overviewId = overviewId;
+        if (logbookIds) action.payload.logbookIds = logbookIds;
+        state.currentUser = action.payload;
       }
     },
     updateCurrentUserRelation: (
@@ -66,9 +64,7 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.currentUser) {
         const { relationalField, id } = action.payload;
-        const currentUserCopy = Functions.deepCopy(state.currentUser);
-        currentUserCopy[relationalField] = id;
-        state.currentUser = currentUserCopy;
+        state.currentUser[relationalField] = id;
       }
     },
     updateCurrentUserRelations: (
@@ -77,18 +73,16 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.currentUser) {
         const { relationalField, ids } = action.payload;
-        const currentUserCopy = Functions.deepCopy(state.currentUser);
         const relationalIds = state.currentUser[relationalField];
         if (relationalIds) {
-          currentUserCopy[relationalField] = Functions.sortArray(
+          state.currentUser[relationalField] = Functions.sortArray(
             Functions.removeDuplicatesFromArray([...relationalIds, ...ids])
           );
         } else {
-          currentUserCopy[relationalField] = Functions.sortArray(
+          state.currentUser[relationalField] = Functions.sortArray(
             Functions.removeDuplicatesFromArray(ids)
           );
         }
-        state.currentUser = currentUserCopy;
       }
     },
 
@@ -108,11 +102,10 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.overview) {
         const { overviewGroupIds } = state.overview;
-        const updatedOverview = action.payload;
         if (overviewGroupIds) {
-          updatedOverview.overviewGroupIds = overviewGroupIds;
+          action.payload.overviewGroupIds = overviewGroupIds;
         }
-        state.overview = updatedOverview;
+        state.overview = action.payload;
       }
     },
     updateOverviewRelations: (
@@ -121,22 +114,19 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.overview) {
         const { overviewGroupIds } = action.payload;
-        const overviewCopy = Functions.deepCopy(state.overview);
         const relationalIds = state.overview.overviewGroupIds;
-
         if (relationalIds) {
-          overviewCopy.overviewGroupIds = Functions.sortArray(
+          state.overview.overviewGroupIds = Functions.sortArray(
             Functions.removeDuplicatesFromArray([
               ...relationalIds,
               ...overviewGroupIds,
             ])
           );
         } else {
-          overviewCopy.overviewGroupIds = Functions.sortArray(
+          state.overview.overviewGroupIds = Functions.sortArray(
             Functions.removeDuplicatesFromArray(overviewGroupIds)
           );
         }
-        state.overview = overviewCopy;
       }
     },
 
@@ -162,12 +152,11 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.users) {
         const { userId, user } = action.payload;
-        const updatedUsers = Functions.deepCopy(state.users);
-        updatedUsers[userId] = user;
-        if (state.users[userId].logbookIds) {
-          updatedUsers[userId]["logbookIds"] = state.users[userId].logbookIds;
-        }
-        state.users = updatedUsers;
+        const overviewId = state.users[userId].overviewId;
+        const logbookIds = state.users[userId].logbookIds;
+        state.users[userId] = user;
+        state.users[userId]["overviewId"] = overviewId;
+        state.users[userId]["logbookIds"] = logbookIds;
       }
     },
     updateUserRelations: (
@@ -176,26 +165,22 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.users) {
         const { userId, relationalField, ids } = action.payload;
-        const usersCopy = Functions.deepCopy(state.users);
-        const selectedUser = usersCopy[userId];
-        const relationalIds = selectedUser[relationalField];
+        const user = state.users[userId];
+        const relationalIds = user[relationalField];
         if (relationalIds) {
-          selectedUser[relationalField] = Functions.sortArray(
+          user[relationalField] = Functions.sortArray(
             Functions.removeDuplicatesFromArray([...relationalIds, ...ids])
           );
         } else {
-          selectedUser[relationalField] = Functions.sortArray(
+          user[relationalField] = Functions.sortArray(
             Functions.removeDuplicatesFromArray(ids)
           );
         }
-        state.users = usersCopy;
       }
     },
     deleteUser: (state: EntitiesState, action: PayloadAction<number>) => {
-      if (state.users) {
-        const usersCopy = Functions.deepCopy(state.users);
-        delete usersCopy[action.payload];
-        state.users = usersCopy;
+      if (state.users && state.users[action.payload]) {
+        delete state.users[action.payload];
       }
     },
 
@@ -224,13 +209,10 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.overviewGroups) {
         const { overviewGroupId, overviewGroup } = action.payload;
-        const updatedOverviewGroups = Functions.deepCopy(state.overviewGroups);
-        updatedOverviewGroups[overviewGroupId] = overviewGroup;
-        if (state.overviewGroups[overviewGroupId].purchaseIds) {
-          updatedOverviewGroups[overviewGroupId]["purchaseIds"] =
-            state.overviewGroups[overviewGroupId].purchaseIds;
-        }
-        state.overviewGroups = updatedOverviewGroups;
+        const purchaseIds = state.overviewGroups[overviewGroupId].purchaseIds;
+        state.overviewGroups[overviewGroupId] = overviewGroup;
+        state.overviewGroups[overviewGroupId]["purchaseIds"] =
+          purchaseIds || [];
       }
     },
     updateOverviewGroupRelations: (
@@ -239,32 +221,28 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.overviewGroups) {
         const { overviewGroupId, purchaseIds } = action.payload;
-        const overviewGroupsCopy = Functions.deepCopy(state.overviewGroups);
-        const currentOverviewGroup = overviewGroupsCopy[overviewGroupId];
-        const relationalIds = currentOverviewGroup.purchaseIds;
+        const overviewGroup = state.overviewGroups[overviewGroupId];
+        const relationalIds = overviewGroup.purchaseIds;
         if (relationalIds) {
-          currentOverviewGroup.purchaseIds = Functions.sortArray(
+          overviewGroup.purchaseIds = Functions.sortArray(
             Functions.removeDuplicatesFromArray([
               ...relationalIds,
               ...purchaseIds,
             ])
           );
         } else {
-          currentOverviewGroup.purchaseIds = Functions.sortArray(
+          overviewGroup.purchaseIds = Functions.sortArray(
             Functions.removeDuplicatesFromArray(purchaseIds)
           );
         }
-        state.overviewGroups = overviewGroupsCopy;
       }
     },
     deleteOverviewGroup: (
       state: EntitiesState,
       action: PayloadAction<number>
     ) => {
-      if (state.overviewGroups) {
-        const overviewGroupsCopy = Functions.deepCopy(state.overviewGroups);
-        delete overviewGroupsCopy[action.payload];
-        state.overviewGroups = overviewGroupsCopy;
+      if (state.overviewGroups && state.overviewGroups[action.payload]) {
+        delete state.overviewGroups[action.payload];
       }
     },
 
@@ -290,13 +268,9 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.logbooks) {
         const { logbookId, logbook } = action.payload;
-        const updatedLogbooks = Functions.deepCopy(state.logbooks);
-        updatedLogbooks[logbookId] = logbook;
-        if (state.logbooks[logbookId].logbookEntryIds) {
-          updatedLogbooks[logbookId]["logbookEntryIds"] =
-            state.logbooks[logbookId].logbookEntryIds;
-        }
-        state.logbooks = updatedLogbooks;
+        const logbookEntryIds = state.logbooks[logbookId].logbookEntryIds;
+        state.logbooks[logbookId] = logbook;
+        state.logbooks[logbookId]["logbookEntryIds"] = logbookEntryIds || [];
       }
     },
     updateLogbookRelations: (
@@ -305,26 +279,22 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.logbooks) {
         const { logbookId, logbookEntryIds } = action.payload;
-        const logbooksCopy = Functions.deepCopy(state.logbooks);
-        const currentLogbook = logbooksCopy[logbookId];
-        const relationalIds = currentLogbook.logbookEntryIds;
+        const logbook = state.logbooks[logbookId];
+        const relationalIds = logbook.logbookEntryIds;
         if (relationalIds) {
-          currentLogbook.logbookEntryIds = Functions.removeDuplicatesFromArray([
+          logbook.logbookEntryIds = Functions.removeDuplicatesFromArray([
             ...logbookEntryIds,
             ...relationalIds,
           ]);
         } else {
-          currentLogbook.logbookEntryIds =
+          logbook.logbookEntryIds =
             Functions.removeDuplicatesFromArray(logbookEntryIds);
         }
-        state.logbooks = logbooksCopy;
       }
     },
     deleteLogbook: (state: EntitiesState, action: PayloadAction<number>) => {
-      if (state.logbooks) {
-        const logbooksCopy = Functions.deepCopy(state.logbooks);
-        delete logbooksCopy[action.payload];
-        state.logbooks = logbooksCopy;
+      if (state.logbooks && state.logbooks[action.payload]) {
+        delete state.logbooks[action.payload];
       }
     },
 
@@ -353,13 +323,9 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.logbookEntries) {
         const { logbookEntryId, logbookEntry } = action.payload;
-        const updatedLogbookEntry = Functions.deepCopy(state.logbookEntries);
-        updatedLogbookEntry[logbookEntryId] = logbookEntry;
-        if (state.logbookEntries[logbookEntryId].purchaseIds) {
-          updatedLogbookEntry[logbookEntryId]["purchaseIds"] =
-            state.logbookEntries[logbookEntryId].purchaseIds;
-        }
-        state.logbookEntries = updatedLogbookEntry;
+        const purchaseIds = state.logbookEntries[logbookEntryId].purchaseIds;
+        state.logbookEntries[logbookEntryId] = logbookEntry;
+        state.logbookEntries[logbookEntryId]["purchaseIds"] = purchaseIds || [];
       }
     },
     updateLogbookEntryRelations: (
@@ -372,8 +338,7 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.logbookEntries) {
         const { logbookEntryId, purchaseIds, resetRelations } = action.payload;
-        const logbookEntriesCopy = Functions.deepCopy(state.logbookEntries);
-        const logbookEntry = logbookEntriesCopy[logbookEntryId];
+        const logbookEntry = state.logbookEntries[logbookEntryId];
         const relationalIds = logbookEntry.purchaseIds;
         if (resetRelations || !relationalIds) {
           logbookEntry.purchaseIds =
@@ -384,27 +349,24 @@ const entitiesSlice = createSlice({
             ...purchaseIds,
           ]);
         }
-        state.logbookEntries = logbookEntriesCopy;
       }
     },
     deleteLogbookEntry: (
       state: EntitiesState,
       action: PayloadAction<number>
     ) => {
-      if (state.logbookEntries) {
-        const logbookEntriesCopy = Functions.deepCopy(state.logbookEntries);
-        if (state.logbooks) {
-          const logbookEntry = state.logbookEntries[action.payload];
-          const updatedLogbooks = Functions.deepCopy(state.logbooks);
-          const { logbookEntryIds } = updatedLogbooks[logbookEntry.logbookId];
-          if (logbookEntryIds) {
-            const logbookEntryIndex = logbookEntryIds.indexOf(action.payload);
-            logbookEntryIds.splice(logbookEntryIndex, 1);
-            state.logbooks = updatedLogbooks;
-          }
-          delete logbookEntriesCopy[action.payload];
-          state.logbookEntries = logbookEntriesCopy;
+      if (
+        state.logbookEntries &&
+        state.logbooks &&
+        state.logbookEntries[action.payload]
+      ) {
+        const logbookEntry = state.logbookEntries[action.payload];
+        const { logbookEntryIds } = state.logbooks[logbookEntry.logbookId];
+        if (logbookEntryIds) {
+          const logbookEntryIndex = logbookEntryIds.indexOf(action.payload);
+          logbookEntryIds.splice(logbookEntryIndex, 1);
         }
+        delete state.logbookEntries[action.payload];
       }
     },
 
@@ -430,46 +392,35 @@ const entitiesSlice = createSlice({
     ) => {
       if (state.purchases) {
         const { purchaseId, purchase } = action.payload;
-        const updatedPurchases = Functions.deepCopy(state.purchases);
-        updatedPurchases[purchaseId] = purchase;
-        state.purchases = updatedPurchases;
+        state.purchases[purchaseId] = purchase;
       }
     },
     deletePurchase: (state: EntitiesState, action: PayloadAction<number>) => {
-      if (state.purchases) {
-        const purchasesCopy = Functions.deepCopy(state.purchases);
-        const purchase = purchasesCopy[action.payload];
+      if (state.purchases && state.purchases[action.payload]) {
+        const purchase = state.purchases[action.payload];
+
         // ↓↓↓ Overview Group ↓↓↓ //
-        if (purchase.overviewGroupId && state.overviewGroups) {
-          const updatedOverviewGroups = Functions.deepCopy(
-            state.overviewGroups
-          );
+        if (state.overviewGroups && purchase.overviewGroupId) {
           const { purchaseIds } =
-            updatedOverviewGroups[purchase.overviewGroupId];
+            state.overviewGroups[purchase.overviewGroupId];
           if (purchaseIds) {
             const purchaseIndex = purchaseIds.indexOf(action.payload);
             purchaseIds.splice(purchaseIndex, 1);
-            state.overviewGroups = updatedOverviewGroups;
           }
         }
         // ↓↓↓ Logbook Entry ↓↓↓ //
-        else if (purchase.logbookEntryId && state.logbookEntries) {
-          const updatedLogbookEntries = Functions.deepCopy(
-            state.logbookEntries
-          );
-          const { purchaseIds } =
-            updatedLogbookEntries[purchase.logbookEntryId];
+        else if (state.logbookEntries && purchase.logbookEntryId) {
+          const { purchaseIds } = state.logbookEntries[purchase.logbookEntryId];
           if (purchaseIds) {
             const purchaseIndex = purchaseIds.indexOf(action.payload);
             purchaseIds.splice(purchaseIndex, 1);
-            state.logbookEntries = updatedLogbookEntries;
           }
         }
-        delete purchasesCopy[action.payload];
-        if (Object.keys(purchasesCopy).length === 0) {
+
+        delete state.purchases[action.payload];
+
+        if (Object.keys(state.purchases).length === 0) {
           state.purchases = null;
-        } else {
-          state.purchases = purchasesCopy;
         }
       }
     },
@@ -478,32 +429,26 @@ const entitiesSlice = createSlice({
       action: PayloadAction<number[]>
     ) => {
       if (state.purchases) {
-        const purchasesCopy = Functions.deepCopy(state.purchases);
         if (state.logbookEntries) {
-          const updatedLogbookEntries = Functions.deepCopy(
-            state.logbookEntries
-          );
           for (const purchaseId of action.payload) {
-            const { logbookEntryId } = purchasesCopy[purchaseId];
+            const { logbookEntryId } = state.purchases[purchaseId];
             if (logbookEntryId) {
-              const { purchaseIds } = updatedLogbookEntries[logbookEntryId];
+              const { purchaseIds } = state.logbookEntries[logbookEntryId];
               if (purchaseIds) {
                 const purchaseIndex = purchaseIds.indexOf(purchaseId);
                 purchaseIds.splice(purchaseIndex, 1);
               }
             }
-            delete purchasesCopy[purchaseId];
+            if (state.purchases[purchaseId]) delete state.purchases[purchaseId];
           }
-          state.logbookEntries = updatedLogbookEntries;
         }
 
         for (const purchaseId of action.payload) {
-          delete purchasesCopy[purchaseId];
+          if (state.purchases[purchaseId]) delete state.purchases[purchaseId];
         }
-        if (Object.keys(purchasesCopy).length === 0) {
+
+        if (Object.keys(state.purchases).length === 0) {
           state.purchases = null;
-        } else {
-          state.purchases = purchasesCopy;
         }
       }
     },
@@ -516,48 +461,32 @@ const entitiesSlice = createSlice({
       }>
     ) => {
       if (state.purchases) {
-        const updatedPurchases = Functions.deepCopy(state.purchases);
-        const { overviewGroupId, logbookEntryId } = action.payload;
-        for (const purchaseId of action.payload.purchaseIds) {
-          delete updatedPurchases[purchaseId];
+        const { purchaseIds, overviewGroupId, logbookEntryId } = action.payload;
+        for (const purchaseId of purchaseIds) {
+          if (state.purchases[purchaseId]) delete state.purchases[purchaseId];
         }
 
         // ↓↓↓ Overview Groups ↓↓↓ //
-        if (overviewGroupId && state.overviewGroups) {
+        if (state.overviewGroups && overviewGroupId) {
           if (overviewGroupId) {
-            const updatedOverviewGroups = Functions.deepCopy(
-              state.overviewGroups
-            );
-            const { purchaseIds } = updatedOverviewGroups[overviewGroupId];
+            const { purchaseIds } = state.overviewGroups[overviewGroupId];
             if (purchaseIds) {
-              purchaseIds.forEach((purchaseId: number) => {
-                delete updatedPurchases[purchaseId];
-              });
-              updatedOverviewGroups[overviewGroupId].purchaseIds = [];
-              state.overviewGroups = updatedOverviewGroups;
+              state.overviewGroups[overviewGroupId].purchaseIds = [];
             }
           }
         }
         // ↓↓↓ Logbook Entries ↓↓↓ //
-        else if (logbookEntryId && state.logbookEntries) {
+        else if (state.logbookEntries && logbookEntryId) {
           if (logbookEntryId) {
-            const updatedLogbookEntries = Functions.deepCopy(
-              state.logbookEntries
-            );
-            const { purchaseIds } = updatedLogbookEntries[logbookEntryId];
+            const { purchaseIds } = state.logbookEntries[logbookEntryId];
             if (purchaseIds) {
-              purchaseIds.forEach((purchaseId: number) => {
-                delete updatedPurchases[purchaseId];
-              });
-              updatedLogbookEntries[logbookEntryId].purchaseIds = [];
-              state.logbookEntries = updatedLogbookEntries;
+              state.logbookEntries[logbookEntryId].purchaseIds = [];
             }
           }
         }
-        if (Object.keys(updatedPurchases).length === 0) {
+
+        if (Object.keys(state.purchases).length === 0) {
           state.purchases = null;
-        } else {
-          state.purchases = updatedPurchases;
         }
       }
     },
