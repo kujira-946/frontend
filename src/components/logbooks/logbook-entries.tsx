@@ -30,8 +30,6 @@ type Props = {
 };
 
 export const LogbookEntries = (props: Props) => {
-  console.log("Logbook entries rendered");
-
   const dispatch = Functions.useAppDispatch();
 
   const { logbookTotalSpent } = Functions.useSignalsStore().dashboard;
@@ -75,6 +73,7 @@ export const LogbookEntries = (props: Props) => {
     dispatch(Sagas.createPurchaseRequest({ logbookEntryId }));
   }, []);
 
+  // ↓↓↓ Incorporating logbook entries `spent` values into global logbook total spent. ↓↓↓ //
   useEffect(() => {
     if (logbookEntries) {
       let totalSpentSum = 0;

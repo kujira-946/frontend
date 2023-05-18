@@ -126,8 +126,6 @@ type Props = {
 type PurchaseIds = { [key: string]: number };
 
 const ExportedComponent = (props: Props) => {
-  console.log("Purchase dropdown rendered");
-
   const dispatch = Functions.useAppDispatch();
 
   const open = useSignal(!!props.startOpened);
