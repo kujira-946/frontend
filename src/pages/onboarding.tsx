@@ -154,6 +154,7 @@ const Onboarding = () => {
         </Head>
 
         <Modals.ConfirmationModal
+          shouldEnter={true}
           showBackButton={currentPage.value === 1 ? false : true}
           backButtonAction={toPreviousPage}
           headerTitle={Constants.onboardingCopies[currentPage.value - 1].title}

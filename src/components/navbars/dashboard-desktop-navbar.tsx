@@ -2,8 +2,10 @@ import Image from "next/image";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { memo } from "react";
+import { AnimatePresence } from "framer-motion";
 
 import * as Globals from "@/components";
+import * as Modals from "@/components/modals";
 import * as Icons from "@/components/icons";
 import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
@@ -59,89 +61,96 @@ const ExportedComponent = (props: Props) => {
   const router = useRouter();
 
   const { theme } = Functions.useSignalsStore().ui;
+  const { bugReportModalOpen } = Functions.useSignalsStore().dashboard;
 
   if (!theme.value) {
     return null;
   } else {
     return (
-      <Container>
-        <Header>
-          {theme.value === "light" ? (
-            <Image
-              width={28}
-              height={28}
-              src="/logo-symbol-light.svg"
-              alt="Light Theme Logo"
+      <>
+        <AnimatePresence>
+          {bugReportModalOpen.value && <Modals.BugReportModal />}
+        </AnimatePresence>
+
+        <Container>
+          <Header>
+            {theme.value === "light" ? (
+              <Image
+                width={28}
+                height={28}
+                src="/logo-symbol-light.svg"
+                alt="Light Theme Logo"
+              />
+            ) : (
+              <Image
+                width={28}
+                height={28}
+                src="/logo-symbol-dark.svg"
+                alt="Dark Theme Logo"
+              />
+            )}
+
+            <Links>
+              {/* Logbooks Button */}
+              <NavigationButton
+                onClick={() => router.push(Constants.ClientRoutes.LOGBOOKS)}
+              >
+                <Icons.Dashboard
+                  width={16}
+                  height={16}
+                  fill={
+                    props.page === "Logbooks"
+                      ? Styles.text[theme.value]
+                      : Styles.background[theme.value].eight
+                  }
+                  addHover
+                />
+              </NavigationButton>
+
+              {/* Reviews Button */}
+              <NavigationButton
+                onClick={() => router.push(Constants.ClientRoutes.REVIEWS)}
+              >
+                <Icons.Reviews
+                  width={16}
+                  height={16}
+                  fill={
+                    props.page === "Reviews"
+                      ? Styles.text[theme.value]
+                      : Styles.background[theme.value].eight
+                  }
+                  addHover
+                />
+              </NavigationButton>
+
+              {/* Settings Button */}
+              <NavigationButton
+                onClick={() => router.push(Constants.ClientRoutes.SETTINGS)}
+              >
+                <Icons.Settings
+                  width={16}
+                  height={16}
+                  fill={
+                    props.page === "Settings"
+                      ? Styles.text[theme.value]
+                      : Styles.background[theme.value].eight
+                  }
+                  addHover
+                />
+              </NavigationButton>
+            </Links>
+          </Header>
+
+          <NavigationButton onClick={() => (bugReportModalOpen.value = true)}>
+            <Icons.BugReport
+              width={16}
+              height={16}
+              fill={Styles.background[theme.value].eight}
+              addHover
             />
-          ) : (
-            <Image
-              width={28}
-              height={28}
-              src="/logo-symbol-dark.svg"
-              alt="Dark Theme Logo"
-            />
-          )}
-
-          <Links>
-            {/* Logbooks Button */}
-            <NavigationButton
-              onClick={() => router.push(Constants.ClientRoutes.LOGBOOKS)}
-            >
-              <Icons.Dashboard
-                width={16}
-                height={16}
-                fill={
-                  props.page === "Logbooks"
-                    ? Styles.text[theme.value]
-                    : Styles.background[theme.value].eight
-                }
-                addHover
-              />
-            </NavigationButton>
-
-            {/* Reviews Button */}
-            <NavigationButton
-              onClick={() => router.push(Constants.ClientRoutes.REVIEWS)}
-            >
-              <Icons.Reviews
-                width={16}
-                height={16}
-                fill={
-                  props.page === "Reviews"
-                    ? Styles.text[theme.value]
-                    : Styles.background[theme.value].eight
-                }
-                addHover
-              />
-            </NavigationButton>
-
-            {/* Settings Button */}
-            <NavigationButton
-              onClick={() => router.push(Constants.ClientRoutes.SETTINGS)}
-            >
-              <Icons.Settings
-                width={16}
-                height={16}
-                fill={
-                  props.page === "Settings"
-                    ? Styles.text[theme.value]
-                    : Styles.background[theme.value].eight
-                }
-                addHover
-              />
-            </NavigationButton>
-          </Links>
-        </Header>
-
-        <NavigationButton onClick={() => console.log("Report Bug")}>
-          <Icons.BugReport
-            width={16}
-            height={16}
-            fill={Styles.background[theme.value].eight}
-            addHover
-          />
-        </NavigationButton>
-      </Container>
+          </NavigationButton>
+        </Container>
+      </>
     );
   }
 };

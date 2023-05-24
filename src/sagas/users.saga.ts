@@ -125,6 +125,7 @@ function* fetchUser(action: UserIdAction) {
           ...data.data,
           overviewId: null,
           logbookIds: [],
+          bugReportIds: [],
         })
       );
     }

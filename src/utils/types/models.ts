@@ -21,6 +21,7 @@ export type User = {
   signedVerificationCode?: string;
   overviewId: number; // one to one
   logbookIds: number[]; // has many logbooks
+  bugReportIds: number[]; // has many bug reports
 } & Dates;
 
 export type Category = "need" | "planned" | "impulse" | "regret";
@@ -64,4 +65,11 @@ export type LogbookEntry = {
   budget: number | null;
   purchaseIds?: number[]; // has many purchases
   logbookId: number; // belongs to a logbook
+} & Dates;
+
+export type BugReport = {
+  id: number;
+  title: string;
+  body: string | null;
+  ownerId: number; // belongs to a user
 } & Dates;

@@ -6,3 +6,4 @@ export * from "./overview-groups.saga";
 export * from "./logbooks.saga";
 export * from "./logbook-entries.saga";
 export * from "./purchases.saga";
+export * from "./bug-reports.saga";

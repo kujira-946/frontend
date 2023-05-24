@@ -56,6 +56,6 @@ export const breakpoints = {
 export const zIndexes = {
   loading: 10,
   notification: 9,
-  deleteConfirmation: 8,
+  confirmationModal: 8,
   mobileMenuModal: 7,
 };

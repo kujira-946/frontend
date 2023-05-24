@@ -24,13 +24,17 @@ type ThemeButtonProps = {
 const ThemeButton = styled(Globals.Button)<ThemeButtonProps>`
   color: ${(props: ThemeButtonProps & ThemeProps) => {
     if (props.selected) return props.theme.text;
-    else return props.theme.backgroundSix;
+    else return props.theme.backgroundEight;
   }};
   background-color: ${(props: ThemeButtonProps & ThemeProps) => {
     if (props.selected) return props.theme.backgroundFour;
     else return "transparent";
   }};
-  border: ${(props: ThemeProps) => `${props.theme.backgroundFour} solid 1px`};
+  border: ${(props: ThemeButtonProps & ThemeProps) => {
+    return props.selected
+      ? `${props.theme.backgroundFour} solid 1px`
+      : `${props.theme.backgroundEight} solid 1px`;
+  }};
 
   @media (hover: hover) {
     :hover {
@@ -41,7 +45,7 @@ const ThemeButton = styled(Globals.Button)<ThemeButtonProps>`
       }};
       border: ${(props: ThemeButtonProps & ThemeProps) => {
         if (props.selected) return `${props.theme.backgroundFour} solid 1px`;
-        else return `${props.theme.backgroundSix} solid 1px`;
+        else return `${props.theme.backgroundNine} solid 1px`;
       }};
     }
   }

@@ -26,7 +26,7 @@ const Parent = styled(motion.section)<ParentProps>`
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: ${Styles.zIndexes.deleteConfirmation};
+  z-index: ${Styles.zIndexes.confirmationModal};
   display: flex;
   justify-content: center;
   align-items: center;

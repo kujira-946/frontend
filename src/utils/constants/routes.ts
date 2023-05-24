@@ -6,6 +6,7 @@ export enum ApiRoutes {
   OVERVIEW_GROUPS = "/api/v1/overview-groups",
   LOGBOOKS = "/api/v1/logbooks",
   LOGBOOK_ENTRIES = "/api/v1/logbook-entries",
+  BUG_REPORTS = "/api/v1/bug-reports",
 }
 
 export enum ClientRoutes {

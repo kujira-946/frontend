@@ -11,6 +11,7 @@ export type EntitiesState = {
   logbooks: Types.LogbooksEntity | null;
   logbookEntries: Types.LogbookEntriesEntity | null;
   purchases: Types.PurchasesEntity | null;
+  bugReports: Types.BugReport | null;
 };
 
 const initialState: EntitiesState = {
@@ -21,6 +22,7 @@ const initialState: EntitiesState = {
   logbooks: null,
   logbookEntries: null,
   purchases: null,
+  bugReports: null,
 };
 
 type UserRelation = {
@@ -29,7 +31,7 @@ type UserRelation = {
 };
 
 type UserRelations = {
-  relationalField: "logbookIds";
+  relationalField: "logbookIds" | "bugReportIds";
   ids: number[];
 };
 
@@ -489,6 +491,17 @@ const entitiesSlice = createSlice({
           state.purchases = null;
         }
       }
+    },
+
+    // ========================================================================================= //
+    // [ BUG REPORTS ] ========================================================================= //
+    // ========================================================================================= //
+
+    setBugReports: (
+      state: EntitiesState,
+      action: PayloadAction<Types.BugReport | null>
+    ) => {
+      state.bugReports = action.payload;
     },
   },
 });

@@ -121,3 +121,13 @@ export type PurchaseCreateData = {
 };
 
 export type PurchaseUpdateData = Partial<PurchaseCreateData>;
+
+// ========================================================================================= //
+// [ BUG REPORTS DATA ] ==================================================================== //
+// ========================================================================================= //
+
+export type BugReportCreateData = {
+  title: string;
+  body: string | null;
+  ownerId: number;
+};

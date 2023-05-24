@@ -4,6 +4,7 @@ import { DashboardSettingsTab } from "@/utils/types";
 
 export type DashboardSignals = {
   // Dashboard
+  bugReportModalOpen: Signal<boolean>;
   mobileFiltersOpen: Signal<boolean>;
   mobileMenuOpen: Signal<boolean>;
   mobileOverviewOpen: Signal<boolean>;
@@ -18,6 +19,7 @@ export type DashboardSignals = {
 
 export const dashboardSignals: DashboardSignals = {
   // Dashboard
+  bugReportModalOpen: signal<boolean>(false),
   mobileFiltersOpen: signal<boolean>(false),
   mobileMenuOpen: signal<boolean>(false),
   mobileOverviewOpen: signal<boolean>(false),

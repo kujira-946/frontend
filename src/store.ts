@@ -27,6 +27,7 @@ function* rootSaga() {
     Sagas.logbooksSaga(),
     Sagas.logbookEntriesSaga(),
     Sagas.purchasesSaga(),
+    Sagas.bugReportsSaga(),
   ]);
 }
 const sagaMiddleware = createSagaMiddleware();
