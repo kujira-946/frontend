@@ -31,7 +31,7 @@ export function setMediaPaddings(
           : desktopVerticalPadding
           ? Sizes.pxAsRem[desktopVerticalPadding]
           : "0rem"}
-        ${Sizes.pxAsRem.fourteen};
+        ${Sizes.pxAsRem.sixteen};
     }
   `;
 }
