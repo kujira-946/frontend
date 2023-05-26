@@ -17,4 +17,7 @@ export enum ClientRoutes {
   LOGBOOKS = "/dashboard/logbooks",
   REVIEWS = "/dashboard/reviews",
   SETTINGS = "/dashboard/settings",
+  TERMS = "/legal/terms",
+  PRIVACY = "/legal/privacy",
+  COOKIE = "/legal/cookie",
 }

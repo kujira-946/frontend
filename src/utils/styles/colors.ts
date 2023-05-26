@@ -86,14 +86,14 @@ export const warning = {
 
 export const shadow = {
   light: {
-    one: "box-shadow: 0px 8px 16px 0px #F5F5F5",
+    one: "box-shadow: 0px 4px 8px #EEEEEE;",
     two: "box-shadow: 0px 12px 24px 0px #F0F0F0",
     three: "box-shadow: 0px 16px 32px 0px #EBEBEB",
     four: "box-shadow: 0px 20px 40px 0px #E5E5E5",
     five: "box-shadow: 0px 24px 48px 0px #E0E0E0",
   },
   dark: {
-    one: "box-shadow: 0px 8px 16px 0px #121212",
+    one: "box-shadow: 0px 4px 8px #121212;",
     two: "box-shadow: 0px 12px 24px 0px #0F0F0F",
     three: "box-shadow: 0px 16px 32px 0px #0D0D0D",
     four: "box-shadow: 0px 20px 40px 0px #0A0A0A",

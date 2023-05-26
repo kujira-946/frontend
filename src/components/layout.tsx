@@ -5,15 +5,13 @@ import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
+import * as Globals from "@/components";
 import * as Redux from "@/redux";
 import * as Sagas from "@/sagas";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { Theme } from "@/signals/ui.signals";
 import { ClientRoutes } from "@/utils/constants";
-
-import { Notification } from "./notification";
-import { Loading } from "./loading";
 
 const poppins = localFont({
   src: [
@@ -301,6 +299,8 @@ if (jwtAccessToken) {
   axios.defaults.headers.common["Authorization"] = jwtAccessToken;
 }
 
+const cookiePolicyAcceptance = Cookies.get("cookiePolicyAcceptance");
+
 const authedRoutes: string[] = [
   ClientRoutes.ONBOARDING,
   ClientRoutes.LOGBOOKS,
@@ -361,10 +361,14 @@ export const Layout = (props: Props) => {
       <ThemeProvider theme={themes[theme.value]}>
         <GlobalStyles />
         <Portal id="app-portal" />
-        <Notification />
+        <Globals.Notification />
+
+        {cookiePolicyAcceptance !== "accepted" && (
+          <Globals.CookieNotification />
+        )}
 
         {loadingUsers ? (
-          <Loading text="Loading your information..." />
+          <Globals.Loading text="Loading your information..." />
         ) : (
           props.children
         )}

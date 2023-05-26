@@ -9,3 +9,4 @@ export * from "./icon-container";
 export * from "./form-input";
 export * from "./mini-input";
 export * from "./buttons";
+export * from "./cookie-notification";

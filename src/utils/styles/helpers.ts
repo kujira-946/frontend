@@ -36,6 +36,10 @@ export function setMediaPaddings(
   `;
 }
 
+export const transition = css`
+  transition: 0.1s ease-in;
+`;
+
 export const clearButton = css`
   margin: 0;
   padding: 0;
@@ -44,6 +48,25 @@ export const clearButton = css`
   border-radius: 0;
   outline: none;
   cursor: pointer;
+
+  ${transition};
+
+  @media (hover: hover) {
+    :hover {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+`;
+
+export const clearLink = css`
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  text-decoration: none;
+  cursor: pointer;
+
+  ${transition};
 
   @media (hover: hover) {
     :hover {
@@ -62,8 +85,4 @@ export const preventUserInteraction = css`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-`;
-
-export const transition = css`
-  transition: 0.1s ease-in;
 `;
