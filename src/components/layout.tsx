@@ -301,12 +301,18 @@ if (jwtAccessToken) {
 
 const cookiePolicyAcceptance = Cookies.get("cookiePolicyAcceptance");
 
-const authedRoutes: string[] = [
+const authPages: string[] = [
   ClientRoutes.ONBOARDING,
   ClientRoutes.LOGBOOKS,
   ClientRoutes.REVIEWS,
   ClientRoutes.SETTINGS,
 ];
+
+const legalPages: string[] = [
+  ClientRoutes.TERMS,
+  ClientRoutes.PRIVACY,
+  ClientRoutes.COOKIE,
+]
 
 type Props = { children: React.ReactNode };
 
@@ -318,7 +324,8 @@ export const Layout = (props: Props) => {
   const { currentUser } = Functions.useEntitiesSlice();
   const { loadingUsers } = Functions.useUiSlice();
 
-  const inAuthedRoute = authedRoutes.includes(router.pathname);
+  const inAuthPage = authPages.includes(router.pathname);
+  const notInLegalPage = !legalPages.includes(router.pathname)
 
   useEffect(() => {
     if (!!window) {
@@ -330,7 +337,7 @@ export const Layout = (props: Props) => {
       }
     }
 
-    if (!userId && !jwtAccessToken && inAuthedRoute) {
+    if (!userId && !jwtAccessToken && inAuthPage) {
       router.push(ClientRoutes.LANDING);
     } else if (userId && !jwtAccessToken) {
       Cookies.remove("id");
@@ -347,9 +354,9 @@ export const Layout = (props: Props) => {
     if (currentUser) {
       localStorage.setItem("theme", currentUser.theme);
 
-      if (!inAuthedRoute) {
-        // if (currentUser.onboarded) router.push(ClientRoutes.LOGBOOKS);
-        // else router.push(ClientRoutes.ONBOARDING);
+      if (!inAuthPage && notInLegalPage) {
+        if (currentUser.onboarded) router.push(ClientRoutes.LOGBOOKS);
+        else router.push(ClientRoutes.ONBOARDING);
       }
     }
   }, [currentUser]);
