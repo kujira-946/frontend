@@ -348,8 +348,8 @@ export const Layout = (props: Props) => {
       localStorage.setItem("theme", currentUser.theme);
 
       if (!inAuthedRoute) {
-        if (currentUser.onboarded) router.push(ClientRoutes.LOGBOOKS);
-        else router.push(ClientRoutes.ONBOARDING);
+        // if (currentUser.onboarded) router.push(ClientRoutes.LOGBOOKS);
+        // else router.push(ClientRoutes.ONBOARDING);
       }
     }
   }, [currentUser]);

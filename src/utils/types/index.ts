@@ -6,3 +6,4 @@ export * from "./models";
 export * from "./normalizr";
 export * from "./dashboard";
 export * from "./settings";
+export * from "./legal";
