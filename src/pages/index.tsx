@@ -35,11 +35,10 @@ const Home = () => {
       </Head>
 
       <Main>
-        <Components.Navbar />
         <Components.AboveTheFold />
-        <Components.About />
-        <Components.CTA />
-        <Components.Footer />
+        {/* <Components.About /> */}
+        {/* <Components.CTA /> */}
+        {/* <Components.Footer /> */}
       </Main>
     </>
   );

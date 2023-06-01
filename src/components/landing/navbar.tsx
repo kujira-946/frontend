@@ -13,14 +13,19 @@ import { ThemeProps } from "@/components/layout";
 // ========================================================================================= //
 
 const Nav = styled.nav`
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 8px 0px;
-  background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
+  padding: ${Styles.pxAsRem.twelve} 0;
+  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
+  border-bottom: ${(props: ThemeProps) => props.theme.backgroundFour} solid 1px;
 
-  ${Styles.setMediaPaddings("eight")};
+  ${Styles.setMediaPaddings("twelve")};
 `;
 
 const Main = styled.main`
@@ -28,7 +33,7 @@ const Main = styled.main`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: ${Styles.widths.content}px;
+  max-width: ${Styles.widths.landingATF}px;
 `;
 
 const Links = styled.section`
@@ -37,19 +42,9 @@ const Links = styled.section`
   gap: 40px;
 `;
 
-const ThemeButton = styled.button`
-  ${Styles.transition};
-  ${Styles.clearButton};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: inherit;
-  border-radius: 6px;
-
-  @media (hover: hover) {
-    :hover {
-      background-color: ${(props: ThemeProps) => props.theme.backgroundThree};
-    }
+const IconButton = styled(Globals.IconButton)`
+  @media (max-width: 400px) {
+    display: none;
   }
 `;
 
@@ -103,23 +98,21 @@ export const Navbar = () => {
         )}
 
         <Links>
-          <ThemeButton type="button" onClick={toggleTheme}>
+          <IconButton type="button" onClick={toggleTheme}>
             {theme.value === "light" ? (
               <Icons.ThemeDark
                 height={12}
                 fill={Styles.background[theme.value].six}
-                hoveredFill={Styles.background[theme.value].eight}
                 addHover
               />
             ) : theme.value === "dark" ? (
               <Icons.ThemeLight
                 height={12}
                 fill={Styles.background[theme.value].six}
-                hoveredFill={Styles.background[theme.value].eight}
                 addHover
               />
             ) : null}
-          </ThemeButton>
+          </IconButton>
 
           <LoginButton href="/login">Log In</LoginButton>
 

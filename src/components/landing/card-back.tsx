@@ -9,7 +9,7 @@ import { ThemeProps } from "@/components/layout";
 
 const Container = styled(motion.article)`
   position: absolute;
-  right: 0;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   width: 280px;
@@ -88,11 +88,11 @@ export const CardBack = () => {
     <Container
       initial={{
         opacity: 0,
-        transform: "rotate(0deg) translateX(0px) translateY(-20%)",
+        transform: "rotate(0deg) translateX(0px) translateY(0px)",
       }}
       animate={{
         opacity: 1,
-        transform: "rotate(-15deg) translateX(-10px) translateY(-78%)",
+        transform: "rotate(-15deg) translateX(-15px) translateY(-105px)",
       }}
       transition={{ duration: 0.3, delay: 1.5 }}
     >

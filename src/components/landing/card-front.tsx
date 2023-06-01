@@ -8,9 +8,8 @@ import { ThemeProps } from "@/components/layout";
 // ========================================================================================= //
 
 const Container = styled(motion.article)`
-  position: absolute;
-  right: 0;
-  transform: translateY(-20%);
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   width: 280px;

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
@@ -8,62 +7,93 @@ import { ThemeProps } from "@/components/layout";
 
 import { CardBack } from "./card-back";
 import { CardFront } from "./card-front";
+import { Navbar } from "./navbar";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
 const Container = styled.section`
-  height: 100vh;
-  background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
-  padding-top: 180px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100dvh;
+  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
 
-  ${Styles.setMediaPaddings("twenty", "twenty", "fourteen")};
+  ${Styles.setMediaPaddings()};
 `;
 
 const ATFContent = styled.div`
-  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 80px;
-  margin: 0px auto;
+  gap: 100px;
   width: 100%;
-  max-width: ${Styles.widths.content}px;
+  max-width: ${Styles.widths.landingATF}px;
 `;
 
 const CopyAndButtons = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  align-items: flex-start;
+  gap: 3.75rem;
+  width: 100%;
+  max-width: 37.5rem;
+
+  @media (max-width: 800px) {
+    max-width: 100%;
+  }
 `;
 
 const Copy = styled.article`
   width: 100%;
-  max-width: 500px;
-  color: ${(props: ThemeProps) => props.theme.text};
 `;
 
 const CopyHeader = styled.h1`
-  font-size: ${Styles.pxAsRem.thirtyTwo};
+  margin: 0rem 0rem ${Styles.pxAsRem.forty};
+  color: ${(props: ThemeProps) => props.theme.text};
+  font-size: ${Styles.pxAsRem.thirtySix};
   font-weight: ${Styles.fontWeights.bold};
-  margin: 0 0 ${Styles.pxAsRem.twelve};
 `;
 
 const CopyBody = styled.p`
-  font-size: ${Styles.pxAsRem.eighteen};
-  font-weight: ${Styles.fontWeights.medium};
-  margin: 0;
+  margin: 0rem;
+  color: ${(props: ThemeProps) => props.theme.backgroundTen};
+  font-size: ${Styles.pxAsRem.twenty};
+  font-weight: ${Styles.fontWeights.regular};
 `;
 
-const Buttons = styled.article`
-  display: flex;
-  gap: 20px;
+const LearnMoreButton = styled.button`
+  ${Styles.clearButton};
+  ${Styles.transition};
+
+  padding: ${Styles.pxAsRem.eight} ${Styles.pxAsRem.sixteen};
+  color: ${(props: ThemeProps) => props.theme.primaryMain};
+  border: ${(props: ThemeProps) => props.theme.primaryMain} solid 1px;
+  border-radius: ${Styles.pxAsRem.eight};
+  font-size: ${Styles.pxAsRem.sixteen};
+  font-weight: ${Styles.fontWeights.semiBold};
+
+  @media (hover: hover) {
+    :hover {
+      color: ${(props: ThemeProps) => props.theme.primaryDark};
+      border: ${(props: ThemeProps) => props.theme.primaryDark} solid 1px;
+    }
+  }
+
+  @media (max-width: ${Styles.widths.mobile}px) {
+    width: 100%;
+  }
 `;
 
 const Cards = styled.article`
   position: relative;
-  flex: 1;
+  top: ${Styles.pxAsRem.forty};
+
+  @media (max-width: 800px) {
+    display: none;
+  }
 `;
 
 // ========================================================================================= //
@@ -79,44 +109,27 @@ function scrollToAbout(): void {
 export const AboveTheFold = () => {
   return (
     <Container>
+      <Navbar />
+
       <ATFContent>
         <CopyAndButtons
-          initial={{ opacity: 0, transform: "translateY(-4px)" }}
-          animate={{ opacity: 1, transform: "translateY(0px)" }}
-          transition={{ duration: 0.3, delay: 0.5 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.4 }}
         >
           <Copy>
-            <CopyHeader>
-              You have a money problem. Or two. We all do.
-            </CopyHeader>
+            <CopyHeader>More Money, Less Anxiety</CopyHeader>
             <CopyBody>
-              So, how do we fix them? With a little bit of perspective.
+              Money is one of those things that can disappear before we know
+              it’s gone, and because it’s one of the biggest supporting pillars
+              of our livelihoods, it comes as no surprise that it can be very
+              anxiety-inducing. But it doesn’t have to be.
             </CopyBody>
           </Copy>
 
-          <Buttons>
-            <Link href="/register" style={{ width: "100%" }}>
-              <Globals.Button
-                type="button"
-                size="large"
-                borderRadius="eight"
-                primary
-              >
-                Register
-              </Globals.Button>
-            </Link>
-
-            <Globals.Button
-              onClick={scrollToAbout}
-              type="button"
-              size="large"
-              borderRadius="eight"
-              primary
-              outlined
-            >
-              Learn More
-            </Globals.Button>
-          </Buttons>
+          <LearnMoreButton type="button" onClick={scrollToAbout}>
+            Learn More
+          </LearnMoreButton>
         </CopyAndButtons>
 
         <Cards>

@@ -43,9 +43,13 @@ export const Button = styled.button.attrs((props: ButtonProps) => ({
     }
   }};
   color: ${(props: ButtonProps & ThemeProps) => {
-    return props.primary
-      ? Styles.text.button
-      : props.textColor || props.theme.text;
+    if (props.outlined) {
+      if (props.primary) return props.theme.primaryMain;
+      else return props.textColor || props.theme.text;
+    } else {
+      if (props.primary) return Styles.text.button;
+      else return props.textColor || props.theme.text;
+    }
   }};
   background-color: ${(props: ButtonProps & ThemeProps) => {
     if (props.outlined) return "transparent";
@@ -84,9 +88,13 @@ export const Button = styled.button.attrs((props: ButtonProps) => ({
   @media (hover: hover) {
     :hover {
       color: ${(props: ButtonProps & ThemeProps) => {
-        return props.primary
-          ? Styles.text.button
-          : props.textColorHover || props.theme.text;
+        if (props.outlined) {
+          if (props.primary) return props.theme.primaryDark;
+          else return props.textColorHover || props.theme.text;
+        } else {
+          if (props.primary) return Styles.text.button;
+          else return props.textColorHover || props.theme.text;
+        }
       }};
       background-color: ${(props: ButtonProps & ThemeProps) => {
         if (props.outlined) return "transparent";

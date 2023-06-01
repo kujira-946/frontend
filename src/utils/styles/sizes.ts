@@ -44,6 +44,7 @@ export const widths = {
   tablet: 1024,
   mobile: 500,
 
+  landingATF: 1040,
   content: 920,
   dashboardSidebar: 260,
 };
