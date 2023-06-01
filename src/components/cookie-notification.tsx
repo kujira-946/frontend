@@ -91,11 +91,11 @@ export const CookieNotification = () => {
 
   const { theme } = Functions.useSignalsStore().ui;
 
-  function allowCookies(): void {
+  function acceptCookies(): void {
     Cookies.set("cookiePolicyAcceptance", "accepted");
   }
 
-  function dontAllowCookies(): void {
+  function denyCookies(): void {
     Cookies.remove("cookiePolicyAcceptance");
     Cookies.remove("id");
     Cookies.remove("token");
@@ -126,7 +126,7 @@ export const CookieNotification = () => {
         <Buttons>
           <Globals.Button
             type="button"
-            onClick={allowCookies}
+            onClick={acceptCookies}
             size="large"
             borderRadius="six"
             primary
@@ -136,7 +136,7 @@ export const CookieNotification = () => {
 
           <Globals.Button
             type="button"
-            onClick={dontAllowCookies}
+            onClick={denyCookies}
             size="large"
             borderRadius="six"
             outlined
