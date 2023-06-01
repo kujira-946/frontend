@@ -14,30 +14,33 @@ const Container = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 80px 20px;
-  background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
+  padding: 5rem ${Styles.pxAsRem.twenty};
+  background-color: ${(props: ThemeProps) => props.theme.backgroundThree};
+
+  ${Styles.setMediaPaddings("eighty", "eighty", "forty")};
 `;
 
 const Copy = styled.article`
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: ${Styles.pxAsRem.twelve};
   width: 100%;
   max-width: 600px;
   margin: 0 auto ${Styles.pxAsRem.forty};
-  color: ${(props: ThemeProps) => props.theme.text};
 `;
 
 const CopyHeader = styled.h2`
   margin: 0 0;
-  font-size: ${Styles.pxAsRem.twentyFour};
+  color: ${(props: ThemeProps) => props.theme.text};
+  font-size: ${Styles.pxAsRem.twentyEight};
   font-weight: ${Styles.fontWeights.bold};
   text-align: center;
 `;
 
 const CopyBody = styled.h2`
   margin: 0 0;
-  font-size: ${Styles.pxAsRem.sixteen};
+  color: ${(props: ThemeProps) => props.theme.backgroundTen};
+  font-size: ${Styles.pxAsRem.twenty};
   font-weight: ${Styles.fontWeights.medium};
   text-align: center;
 `;
@@ -56,11 +59,8 @@ export const CTA = () => {
         transition={Constants.landingMotion.transition}
       >
         <Copy>
-          <CopyHeader>Interested?</CopyHeader>
-          <CopyBody>
-            Register with Kujira to keep track of your monthly purchases and
-            gain control of your financial health.
-          </CopyBody>
+          <CopyHeader>Take control of your financial health.</CopyHeader>
+          <CopyBody>Create an account to start today.</CopyBody>
         </Copy>
 
         <Link href="/register">

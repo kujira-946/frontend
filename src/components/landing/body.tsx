@@ -32,7 +32,7 @@ const CopyAndFigure = styled.article`
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-export const About = () => {
+export const Body = () => {
   return (
     <Container id="landing-about">
       <Globals.LazyLoad

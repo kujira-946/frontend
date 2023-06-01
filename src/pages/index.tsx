@@ -36,9 +36,9 @@ const Home = () => {
 
       <Main>
         <Components.AboveTheFold />
-        {/* <Components.About /> */}
-        {/* <Components.CTA /> */}
-        {/* <Components.Footer /> */}
+        <Components.Body />
+        <Components.CTA />
+        <Components.Footer />
       </Main>
     </>
   );
