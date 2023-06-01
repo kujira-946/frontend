@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import { normalize, schema } from "normalizr";
 
 import * as Redux from "@/redux";
+import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
@@ -134,8 +135,8 @@ function* fetchUser(action: UserIdAction) {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
     const { forCurrentUser } = action.payload;
     if (forCurrentUser) {
-      Cookies.remove("id");
-      Cookies.remove("token");
+      Cookies.remove(Constants.userId);
+      Cookies.remove(Constants.token);
     }
     yield Functions.sagaError(error);
   }
@@ -188,8 +189,8 @@ function* deleteUser(action: UserIdAction) {
     yield Saga.call(axios.delete, endpoint);
 
     if (forCurrentUser) {
-      Cookies.remove("id");
-      Cookies.remove("token");
+      Cookies.remove(Constants.userId);
+      Cookies.remove(Constants.token);
       yield Saga.put(Redux.entitiesActions.setCurrentUser(null));
       yield Saga.put(
         Redux.uiActions.setNotification({

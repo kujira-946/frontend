@@ -63,8 +63,8 @@ export function useDetectInView(
 }
 
 export function useDetectAuthorizedUser(callback?: Function): void {
-  const userId = Cookies.get("id");
-  const jwtAccessToken = Cookies.get("token");
+  const userId = Cookies.get(Constants.userId);
+  const jwtAccessToken = Cookies.get(Constants.token);
   const router = useRouter();
   useEffect(() => {
     const userNotLoggedIn = !userId && !jwtAccessToken;

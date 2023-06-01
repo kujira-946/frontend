@@ -3,6 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 import * as Redux from "@/redux";
+import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
 import * as Types from "@/utils/types";
 import { ApiRoutes } from "@/utils/constants/routes";
@@ -108,8 +109,8 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
       email,
       verificationCode,
     });
-    Cookies.set("id", data.data.id, { secure: true });
-    Cookies.set("token", data.accessToken, {
+    Cookies.set(Constants.userId, data.data.id, { secure: true });
+    Cookies.set(Constants.token, data.accessToken, {
       secure: true,
       expires: 30,
     });
@@ -166,8 +167,8 @@ function* verifyLogin(action: VerifyLoginAction) {
       verificationCode,
       thirtyDays,
     });
-    Cookies.set("id", data.data.id, { secure: true });
-    Cookies.set("token", data.accessToken, {
+    Cookies.set(Constants.userId, data.data.id, { secure: true });
+    Cookies.set(Constants.token, data.accessToken, {
       secure: true,
       expires: thirtyDays ? 30 : 7,
     });
@@ -201,8 +202,8 @@ function* logout(action: UserIdAction) {
     const { userId } = action.payload;
     const endpoint = ApiRoutes.AUTH + `/logout/${userId}`;
     const { data } = yield Saga.call(axios.patch, endpoint);
-    Cookies.remove("id");
-    Cookies.remove("token");
+    Cookies.remove(Constants.userId);
+    Cookies.remove(Constants.token);
     yield Saga.put(Redux.entitiesActions.setCurrentUser(null));
     yield Saga.put(
       Redux.uiActions.setNotification({
@@ -222,8 +223,8 @@ function* requestNewVerificationCode(action: NewVerificationAction) {
     const { email } = action.payload;
     const endpoint = ApiRoutes.AUTH + `/request-new-verification-code`;
     const { data } = yield Saga.call(axios.patch, endpoint, { email });
-    Cookies.remove("id");
-    Cookies.remove("token");
+    Cookies.remove(Constants.userId);
+    Cookies.remove(Constants.token);
     yield Saga.put(Redux.uiActions.setVerificationCodeSent(true));
     yield Saga.put(
       Redux.uiActions.setNotification({

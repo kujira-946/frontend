@@ -39,7 +39,7 @@ const Body = styled.div`
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-const userLoggedIn = Cookies.get("token");
+const userLoggedIn = Cookies.get(Constants.token);
 
 export const LegalNavbar = () => {
   const { theme } = Functions.useSignalsStore().ui;

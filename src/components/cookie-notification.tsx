@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 
 import * as Globals from "@/components";
 import * as Icons from "@/components/icons";
+import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { ThemeProps } from "@/components/layout";
@@ -92,13 +93,13 @@ export const CookieNotification = () => {
   const { theme } = Functions.useSignalsStore().ui;
 
   function acceptCookies(): void {
-    Cookies.set("cookiePolicyAcceptance", "accepted");
+    Cookies.set(Constants.cookiePolicyAcceptance, "accepted");
   }
 
   function denyCookies(): void {
-    Cookies.remove("cookiePolicyAcceptance");
-    Cookies.remove("id");
-    Cookies.remove("token");
+    Cookies.remove(Constants.cookiePolicyAcceptance);
+    Cookies.remove(Constants.userId);
+    Cookies.remove(Constants.token);
     router.push(ClientRoutes.LANDING);
   }
 

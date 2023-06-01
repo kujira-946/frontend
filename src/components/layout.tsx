@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import * as Globals from "@/components";
 import * as Redux from "@/redux";
 import * as Sagas from "@/sagas";
+import * as Constants from "@/utils/constants";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { Theme } from "@/signals/ui.signals";
@@ -293,13 +294,13 @@ if (process.env.NODE_ENV === "production") {
 } else {
   axios.defaults.baseURL = "http://localhost:8000";
 }
-const userId = Cookies.get("id");
-const jwtAccessToken = Cookies.get("token");
+const userId = Cookies.get(Constants.userId);
+const jwtAccessToken = Cookies.get(Constants.token);
 if (jwtAccessToken) {
   axios.defaults.headers.common["Authorization"] = jwtAccessToken;
 }
 
-const cookiePolicyAcceptance = Cookies.get("cookiePolicyAcceptance");
+const cookiePolicyAcceptance = Cookies.get(Constants.cookiePolicyAcceptance);
 
 const authPages: string[] = [
   ClientRoutes.ONBOARDING,
@@ -312,7 +313,7 @@ const legalPages: string[] = [
   ClientRoutes.TERMS,
   ClientRoutes.PRIVACY,
   ClientRoutes.COOKIE,
-]
+];
 
 type Props = { children: React.ReactNode };
 
@@ -325,7 +326,7 @@ export const Layout = (props: Props) => {
   const { loadingUsers } = Functions.useUiSlice();
 
   const inAuthPage = authPages.includes(router.pathname);
-  const notInLegalPage = !legalPages.includes(router.pathname)
+  const notInLegalPage = !legalPages.includes(router.pathname);
 
   useEffect(() => {
     if (!!window) {
@@ -340,7 +341,7 @@ export const Layout = (props: Props) => {
     if (!userId && !jwtAccessToken && inAuthPage) {
       router.push(ClientRoutes.LANDING);
     } else if (userId && !jwtAccessToken) {
-      Cookies.remove("id");
+      Cookies.remove(Constants.userId);
       dispatch(Sagas.logoutRequest(Number(userId)));
     }
 
