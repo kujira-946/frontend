@@ -1,11 +1,10 @@
 import Image from "next/image";
-import Link from "next/link";
 import styled from "styled-components";
 
-import * as Globals from "@/components";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { ThemeProps } from "@/components/layout";
+import { FooterLinkGroup } from "./footer-link-group";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -16,97 +15,75 @@ const Container = styled.footer`
   justify-content: center;
   align-items: center;
   background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
-  padding: 100px 20px;
+
+  ${Styles.setMediaPaddings()};
 `;
 
 const Content = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 60px;
+  gap: ${Styles.pxAsRem.eighty};
   width: 100%;
   max-width: ${Styles.widths.content}px;
+  padding: ${Styles.pxAsRem.hundred} 0rem;
+
+  @media (max-width: ${Styles.widths.mobile}px) {
+    gap: ${Styles.pxAsRem.forty};
+    padding: ${Styles.pxAsRem.forty} 0rem;
+  }
 `;
 
 const Body = styled.section`
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   gap: 40px;
+  width: 100%;
+
+  @media (max-width: 690px) {
+    flex-direction: column;
+  }
 `;
 
-const BodyLinks = styled.div`
+const Copyright = styled.span`
+  color: ${(props: ThemeProps) => props.theme.backgroundSix};
+  font-size: ${Styles.pxAsRem.twelve};
+  font-weight: ${Styles.fontWeights.regular};
+`;
+
+const FooterLinkGroups = styled.div`
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(${Styles.pxAsRem.hundred}, 1fr)
+  );
+  gap: ${Styles.pxAsRem.forty};
+  flex: 1;
+`;
+
+const BackToTopButton = styled.button`
+  ${Styles.clearButton};
+  ${Styles.transition};
+
   display: flex;
-  gap: 40px;
-`;
-
-const BodyLinkGroup = styled.article`
-  display: flex;
-  flex-direction: column;
-  gap: ${Styles.pxAsRem.eight};
-  color: ${(props: ThemeProps) => props.theme.text};
-`;
-
-const BodyLinkHeader = styled.h5`
-  margin: 0 0 ${Styles.pxAsRem.four};
+  justify-content: center;
+  align-items: center;
+  padding: ${Styles.pxAsRem.eight} ${Styles.pxAsRem.fourteen};
+  color: ${(props: ThemeProps) => props.theme.primaryMain};
+  border: ${(props: ThemeProps) => props.theme.primaryMain} solid 1px;
+  border-radius: ${Styles.pxAsRem.eight};
   font-size: ${Styles.pxAsRem.fourteen};
   font-weight: ${Styles.fontWeights.semiBold};
-`;
-
-const BodyLinkRegister = styled(Link)`
-  ${Styles.transition};
-  color: ${(props: ThemeProps) => props.theme.primaryMain};
-  font-size: ${Styles.pxAsRem.twelve};
-  font-weight: ${Styles.fontWeights.medium};
 
   @media (hover: hover) {
     :hover {
       color: ${(props: ThemeProps) => props.theme.primaryDark};
+      border: ${(props: ThemeProps) => props.theme.primaryDark} solid 1px;
     }
   }
-`;
 
-const BodyLink = styled(Link)`
-  ${Styles.transition};
-  color: ${(props: ThemeProps) => props.theme.backgroundEight};
-  font-size: ${Styles.pxAsRem.twelve};
-  font-weight: ${Styles.fontWeights.medium};
-
-  @media (hover: hover) {
-    :hover {
-      color: ${(props: ThemeProps) => props.theme.text};
-    }
-  }
-`;
-
-const CopyrightAndLegal = styled.section`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  transition: 0.1s ease-in;
-`;
-
-const Copyright = styled.span`
-  color: ${(props: ThemeProps) => props.theme.backgroundFive};
-  font-size: ${Styles.pxAsRem.ten};
-  font-weight: ${Styles.fontWeights.medium};
-`;
-
-const LegalLinks = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${Styles.pxAsRem.twenty};
-`;
-
-const LegalLink = styled(Link)`
-  ${Styles.transition};
-  color: ${(props: ThemeProps) => props.theme.backgroundSeven};
-  font-size: ${Styles.pxAsRem.ten};
-  font-weight: ${Styles.fontWeights.medium};
-
-  @media (hover: hover) {
-    :hover {
-      color: ${(props: ThemeProps) => props.theme.text};
-    }
+  @media (max-width: ${Styles.widths.mobile}px) {
+    width: 100%;
   }
 `;
 
@@ -114,11 +91,17 @@ const LegalLink = styled(Link)`
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-const legalLinks = {
-  privacy: "Privacy Policy",
-  terms: "Terms",
-  refunds: "Refunds",
+type FooterLinkGroup = {
+  title: string;
+  links: string[];
 };
+
+const footerLinkGroups: FooterLinkGroup[] = [
+  { title: "Product", links: ["Pricing", "Blog", "Releases", "Support"] },
+  { title: "Company", links: ["About", "Contract", "Careers", "Media"] },
+  { title: "Social", links: ["LinkedIn", "AngelList", "GitHub", "Twitter"] },
+  { title: "Legal", links: ["Terms", "Privacy", "Cookie", "Refunds"] },
+];
 
 function scrollToTop(): void {
   if (typeof window !== "undefined") {
@@ -133,52 +116,42 @@ export const Footer = () => {
     <Container>
       <Content>
         <Body>
+          <FooterLinkGroups>
+            {footerLinkGroups.map(
+              (linkGroup: FooterLinkGroup, index: number) => {
+                return (
+                  <FooterLinkGroup
+                    key={`footer-link-group-${linkGroup.title}-${index}`}
+                    title={linkGroup.title}
+                    links={linkGroup.links}
+                  />
+                );
+              }
+            )}
+          </FooterLinkGroups>
+
           {theme.value === "light" ? (
             <Image
-              src="/logo-text-outlined-light.svg"
+              src="/logo-full-vertical-light.svg"
               alt="Logo Text"
-              width={100}
-              height={30.55}
+              width={72.07}
+              height={80}
             />
           ) : theme.value === "dark" ? (
             <Image
-              src="/logo-text-outlined-dark.svg"
+              src="/logo-full-vertical-dark.svg"
               alt="Logo Text"
-              width={100}
-              height={30.55}
+              width={72.07}
+              height={80}
             />
           ) : null}
-
-          <BodyLinks>
-            <BodyLinkGroup>
-              <BodyLinkHeader>Navigation</BodyLinkHeader>
-              <BodyLinkRegister href="/register">Register</BodyLinkRegister>
-              <BodyLink href="/login">Log In</BodyLink>
-            </BodyLinkGroup>
-          </BodyLinks>
         </Body>
 
-        <Globals.Button
-          onClick={scrollToTop}
-          type="button"
-          size="medium"
-          primary
-        >
+        <BackToTopButton type="button" onClick={scrollToTop}>
           Back To Top
-        </Globals.Button>
+        </BackToTopButton>
 
-        <CopyrightAndLegal>
-          <Copyright>© 2023 Kujira. All rights reserved.</Copyright>
-          <LegalLinks>
-            {Object.entries(legalLinks).map((link: [string, string]) => {
-              return (
-                <LegalLink key={`/${link[0]}`} href={`/${link[0]}`}>
-                  {link[1]}
-                </LegalLink>
-              );
-            })}
-          </LegalLinks>
-        </CopyrightAndLegal>
+        <Copyright>© 2023 Kujira. All rights reserved.</Copyright>
       </Content>
     </Container>
   );
