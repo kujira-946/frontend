@@ -1,11 +1,13 @@
 import styled from "styled-components";
+import { useSignal } from "@preact/signals-react";
 
 import * as Globals from "@/components";
 import * as Constants from "@/utils/constants";
 import * as Styles from "@/utils/styles";
 import { ThemeProps } from "@/components/layout";
 
-import { AboutCopy } from "./about-copy";
+import { BodyCopy } from "./body-copy";
+import { BodyOverview } from "./body-overview";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //
@@ -14,18 +16,40 @@ import { AboutCopy } from "./about-copy";
 const Container = styled.section`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 140px;
-  padding: 140px 20px;
-  background-color: ${(props: ThemeProps) => props.theme.backgroundOne};
+  gap: ${Styles.pxAsRem.twoHundred};
+  padding: ${Styles.pxAsRem.twoHundred} ${Styles.pxAsRem.twenty};
+  background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
+
+  ${Styles.setMediaPaddings("twoHundred", "twoHundred", "forty")};
 `;
 
-const CopyAndFigure = styled.article`
+const DemoSection = styled.article`
   display: flex;
   align-items: center;
   gap: 3.75rem;
   width: 100%;
-  max-width: ${Styles.widths.content}px;
+  max-width: ${Styles.widths.desktop}px;
+  margin: 0 auto;
+`;
+
+const CopyAndOverview = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${Styles.pxAsRem.forty};
+  max-width: ${Styles.pxAsRem.fourHundred};
+  width: 100%;
+`;
+
+const Overview = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: ${Styles.pxAsRem.eight};
+`;
+
+const Figure = styled.div`
+  flex: 1;
+
+  border: blue solid 1px;
 `;
 
 // ========================================================================================= //
@@ -33,6 +57,9 @@ const CopyAndFigure = styled.article`
 // ========================================================================================= //
 
 export const Body = () => {
+  const totalSpent = useSignal(1638.13);
+  const remainingBudget = useSignal(1533.26);
+
   return (
     <Container id="landing-about">
       <Globals.LazyLoad
@@ -41,15 +68,22 @@ export const Body = () => {
         animate={Constants.landingMotion.animate}
         transition={Constants.landingMotion.transition}
       >
-        <CopyAndFigure>
-          <AboutCopy
-            header="Everything In One Place"
-            body="Easily track important information, such as your income, savings,
-              recurring costs, and remaining cash, all within your personal
-              monthly overview."
-          />
-        </CopyAndFigure>
-        {/* <Globals.NoInteraction></Globals.NoInteraction> */}
+        <DemoSection>
+          <CopyAndOverview>
+            <BodyCopy
+              header="Real-time tracking."
+              body="Tracking your monthly budget in real time is as simple as entering a few numbers."
+            />
+            <Overview>
+              <BodyOverview title="Total Spent" value={totalSpent.value} />
+              <BodyOverview
+                title="Remaining Budget"
+                value={remainingBudget.value}
+              />
+            </Overview>
+          </CopyAndOverview>
+          <Figure>Figure</Figure>
+        </DemoSection>
       </Globals.LazyLoad>
 
       <Globals.LazyLoad
@@ -58,14 +92,22 @@ export const Body = () => {
         animate={Constants.landingMotion.animate}
         transition={Constants.landingMotion.transition}
       >
-        <CopyAndFigure>
-          <AboutCopy
-            header="Real-Time Tracking"
-            body="Your personal monthly overview will update in real time as you log
-              your daily purchases, allowing you to have the most up-to-date
-              information on your financial health."
-          />
-        </CopyAndFigure>
+        <DemoSection>
+          <CopyAndOverview>
+            <BodyCopy
+              header="One-man army."
+              body="Keep a log of your monthly recurring purchases, potential incoming purchases, and daily purchases. Your wallet only needs one border control officer, and that’s you."
+            />
+            <Overview>
+              <BodyOverview title="Total Spent" value={totalSpent.value} />
+              <BodyOverview
+                title="Remaining Budget"
+                value={remainingBudget.value}
+              />
+            </Overview>
+          </CopyAndOverview>
+          <Figure>Figure</Figure>
+        </DemoSection>
       </Globals.LazyLoad>
 
       <Globals.LazyLoad
@@ -74,15 +116,22 @@ export const Body = () => {
         animate={Constants.landingMotion.animate}
         transition={Constants.landingMotion.transition}
       >
-        <CopyAndFigure>
-          <AboutCopy
-            header="Be In Control"
-            body="Learn and grow by reviewing your monthly purchases, organized by
-              category; reflect on your bad purchasing patterns; and be in
-              better control of your finances. Determine whether you’re in
-              control of your cash or if it’s in control of you."
-          />
-        </CopyAndFigure>
+        <DemoSection>
+          <CopyAndOverview>
+            <BodyCopy
+              header="Review and improve."
+              body="Review your monthly purchases, identify what kinds of purchases you tend to make, discover your spending habits as a result, and improve the way you spend."
+            />
+            <Overview>
+              <BodyOverview title="Total Spent" value={totalSpent.value} />
+              <BodyOverview
+                title="Remaining Budget"
+                value={remainingBudget.value}
+              />
+            </Overview>
+          </CopyAndOverview>
+          <Figure>Figure</Figure>
+        </DemoSection>
       </Globals.LazyLoad>
     </Container>
   );

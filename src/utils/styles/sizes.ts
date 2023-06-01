@@ -27,6 +27,8 @@ export const pxAsRem = {
   fortyEight: "3rem",
   eighty: "5rem",
   hundred: "6.25rem",
+  twoHundred: "12.5rem",
+  fourHundred: "25rem",
 };
 
 export const fontWeights = {

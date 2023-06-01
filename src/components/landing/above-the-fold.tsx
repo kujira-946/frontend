@@ -1,13 +1,12 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
-import * as Globals from "@/components";
 import * as Styles from "@/utils/styles";
 import { ThemeProps } from "@/components/layout";
 
+import { Navbar } from "./navbar";
 import { CardBack } from "./card-back";
 import { CardFront } from "./card-front";
-import { Navbar } from "./navbar";
 
 // ========================================================================================= //
 // [ STYLED COMPONENTS ] =================================================================== //

@@ -8,19 +8,23 @@ import { ThemeProps } from "@/components/layout";
 // ========================================================================================= //
 
 const Container = styled.article`
-  color: ${(props: ThemeProps) => props.theme.text};
+  display: flex;
+  flex-direction: column;
+  gap: ${Styles.pxAsRem.twelve};
 `;
 
 const Header = styled.h2`
-  margin: 0 0 ${Styles.pxAsRem.twelve};
+  margin: 0;
+  color: ${(props: ThemeProps) => props.theme.text};
   font-size: ${Styles.pxAsRem.twenty};
   font-weight: ${Styles.fontWeights.bold};
 `;
 
 const Body = styled.p`
   margin: 0;
-  font-size: ${Styles.pxAsRem.fourteen};
-  font-weight: ${Styles.fontWeights.medium};
+  color: ${(props: ThemeProps) => props.theme.backgroundTen};
+  font-size: ${Styles.pxAsRem.sixteen};
+  font-weight: ${Styles.fontWeights.regular};
 `;
 
 // ========================================================================================= //
@@ -32,7 +36,7 @@ type Props = {
   body: string;
 };
 
-export const AboutCopy = (props: Props) => {
+export const BodyCopy = (props: Props) => {
   return (
     <Container>
       <Header>{props.header}</Header>
