@@ -90,16 +90,18 @@ const Buttons = styled.div`
 export const CookieNotification = () => {
   const router = useRouter();
 
-  const { theme } = Functions.useSignalsStore().ui;
+  const { theme, cookieNotification } = Functions.useSignalsStore().ui;
 
   function acceptCookies(): void {
     Cookies.set(Constants.cookiePolicyAcceptance, "accepted");
+    cookieNotification.value = false;
   }
 
   function denyCookies(): void {
-    Cookies.remove(Constants.cookiePolicyAcceptance);
+    Cookies.set(Constants.cookiePolicyAcceptance, "denied");
     Cookies.remove(Constants.userId);
     Cookies.remove(Constants.token);
+    cookieNotification.value = false;
     router.push(ClientRoutes.LANDING);
   }
 

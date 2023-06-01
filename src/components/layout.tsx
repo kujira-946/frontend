@@ -321,7 +321,7 @@ export const Layout = (props: Props) => {
   const router = useRouter();
   const dispatch = Functions.useAppDispatch();
 
-  const { theme } = Functions.useSignalsStore().ui;
+  const { theme, cookieNotification } = Functions.useSignalsStore().ui;
   const { currentUser } = Functions.useEntitiesSlice();
   const { loadingUsers } = Functions.useUiSlice();
 
@@ -336,6 +336,13 @@ export const Layout = (props: Props) => {
       } else {
         theme.value = localStorage.getItem("theme") as Theme;
       }
+    }
+
+    if (!cookiePolicyAcceptance || cookiePolicyAcceptance === "pending") {
+      Cookies.set(Constants.cookiePolicyAcceptance, "pending");
+      cookieNotification.value = true;
+    } else {
+      cookieNotification.value = false;
     }
 
     if (!userId && !jwtAccessToken && inAuthPage) {
@@ -371,9 +378,7 @@ export const Layout = (props: Props) => {
         <Portal id="app-portal" />
         <Globals.Notification />
 
-        {cookiePolicyAcceptance !== "accepted" && (
-          <Globals.CookieNotification />
-        )}
+        {cookieNotification.value && <Globals.CookieNotification />}
 
         {loadingUsers ? (
           <Globals.Loading text="Loading your information..." />
