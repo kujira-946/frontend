@@ -15,7 +15,7 @@ const Container = styled.section`
 
   ${(props: ThemeProps) => props.theme.shadowOne};
 
-  @media (max-width: 400px) {
+  @media (max-width: ${Styles.breakpoints.landingBodyOverview}px) {
     flex-direction: column;
   }
 `;
@@ -55,7 +55,7 @@ export const BodyOverview = (props: Props) => {
   return (
     <Container>
       <Title>{props.title}</Title>
-      <Value title={props.title}>${props.value}</Value>
+      <Value title={props.title}>{props.value}</Value>
     </Container>
   );
 };

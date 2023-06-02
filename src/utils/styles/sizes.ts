@@ -28,7 +28,9 @@ export const pxAsRem = {
   eighty: "5rem",
   hundred: "6.25rem",
   twoHundred: "12.5rem",
+  threeHundred: "18.75rem",
   fourHundred: "25rem",
+  fourHundredForty: "27.5rem",
 };
 
 export const fontWeights = {
@@ -54,9 +56,13 @@ export const widths = {
 };
 
 export const breakpoints = {
+  landingBodyOverview: 400,
+  landingBodyIncomeSavings: 700,
+  landingBodyPurchases: 1050,
+  landingBodyReviews: 1208,
+
   dashboardWidth: 1000,
   dashboardHeight: 900,
-  landingDemo: 700,
 };
 
 export const zIndexes = {

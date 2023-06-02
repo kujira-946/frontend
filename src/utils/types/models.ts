@@ -24,7 +24,7 @@ export type User = {
   bugReportIds: number[]; // has many bug reports
 } & Dates;
 
-export type Category = "need" | "planned" | "impulse" | "regret";
+export type Category = "monthly" | "need" | "planned" | "impulse" | "regret";
 export type Purchase = {
   id: number;
   placement: number;

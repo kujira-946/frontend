@@ -201,6 +201,7 @@ type ThemeContents = {
   primaryLight: string;
   primaryMain: string;
   primaryDark: string;
+  monthly: string;
   need: string;
   planned: string;
   impulse: string;
@@ -238,6 +239,7 @@ const themes: Themes = {
     primaryLight: Styles.primary.dark.lighter,
     primaryMain: Styles.primary.dark.main,
     primaryDark: Styles.primary.dark.darker,
+    monthly: Styles.monthly.dark,
     need: Styles.need.dark,
     planned: Styles.planned.dark,
     impulse: Styles.impulse.dark,
@@ -268,6 +270,7 @@ const themes: Themes = {
     primaryLight: Styles.primary.light.lighter,
     primaryMain: Styles.primary.light.main,
     primaryDark: Styles.primary.light.darker,
+    monthly: Styles.monthly.light,
     need: Styles.need.light,
     planned: Styles.planned.light,
     impulse: Styles.impulse.light,
