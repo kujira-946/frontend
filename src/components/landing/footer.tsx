@@ -98,10 +98,11 @@ type FooterLinkGroup = {
 };
 
 const footerLinkGroups: FooterLinkGroup[] = [
-  { title: "Product", links: ["Pricing", "Blog", "Releases", "Support"] },
-  { title: "Company", links: ["About", "Contract", "Careers", "Media"] },
-  { title: "Social", links: ["LinkedIn", "AngelList", "GitHub", "Twitter"] },
-  { title: "Legal", links: ["Terms", "Privacy", "Cookie", "Refunds"] },
+  // { title: "Product", links: ["Pricing", "Blog", "Releases", "Support"] },
+  // { title: "Company", links: ["About", "Contract", "Careers", "Media"] },
+  // { title: "Social", links: ["LinkedIn", "AngelList", "GitHub", "Twitter"] },
+  // { title: "Legal", links: ["Terms", "Privacy", "Cookie", "Refunds"] },
+  { title: "Legal", links: ["Terms", "Privacy", "Cookie"] },
 ];
 
 function scrollToTop(): void {
