@@ -1,6 +1,5 @@
 import styled, { css } from "styled-components";
 
-import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
 import { ThemeProps } from "@/components/layout";
 
@@ -15,6 +14,10 @@ const Container = styled.section`
   border-radius: ${Styles.pxAsRem.eight};
 
   ${(props: ThemeProps) => props.theme.shadowOne};
+
+  @media (max-width: 400px) {
+    flex-direction: column;
+  }
 `;
 
 const textStyles = css`
@@ -45,16 +48,14 @@ const Value = styled.span<ValueProps>`
 // ========================================================================================= //
 
 type Props = {
-  value: number;
+  value: string;
 } & ValueProps;
 
 export const BodyOverview = (props: Props) => {
   return (
     <Container>
       <Title>{props.title}</Title>
-      <Value title={props.title}>
-        ${Functions.formattedNumber(props.value)}
-      </Value>
+      <Value title={props.title}>${props.value}</Value>
     </Container>
   );
 };

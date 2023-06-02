@@ -56,6 +56,7 @@ export const widths = {
 export const breakpoints = {
   dashboardWidth: 1000,
   dashboardHeight: 900,
+  landingDemo: 700,
 };
 
 export const zIndexes = {
