@@ -133,6 +133,7 @@ function* verifyRegistration(action: VerifyRegistrationAction) {
       })
     );
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
+    Cookies.set(Constants.cookiePolicyAcceptance, "pending");
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
     yield Functions.sagaError(error);
@@ -191,6 +192,7 @@ function* verifyLogin(action: VerifyLoginAction) {
     //   })
     // );
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
+    Cookies.set(Constants.cookiePolicyAcceptance, "pending");
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingUsers(false));
     yield Functions.sagaError(error);
@@ -213,6 +215,7 @@ function* logout(action: UserIdAction) {
         timeout: 5000,
       })
     );
+    Cookies.set(Constants.cookiePolicyAcceptance, "pending");
   } catch (error) {
     yield Functions.sagaError(error);
   }
