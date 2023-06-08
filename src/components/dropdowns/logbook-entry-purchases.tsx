@@ -13,14 +13,8 @@ type Props = {
   purchases: Types.Purchase[];
   selectPurchase: (purchaseId: number) => void;
   setPurchaseCategory: (purchaseId: number, category: Types.Category) => void;
-  updatePurchase: (
-    purchaseId: number,
-    purchaseDescription: string,
-    purchaseCost: number,
-    description: string,
-    cost: string
-  ) => void;
-  deletePurchase: (purchaseId: number, purchaseCost: number) => void;
+  updatePurchase: Types.UpdatePurchase;
+  deletePurchase: Types.DeletePurchase;
 };
 
 export const LogbookEntryPurchases = (props: Props) => {

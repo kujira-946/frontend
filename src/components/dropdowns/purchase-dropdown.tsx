@@ -4,6 +4,7 @@ import { useSignal } from "@preact/signals-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import * as Globals from "@/components";
+import * as Redux from "@/redux";
 import * as Sagas from "@/sagas";
 import * as Functions from "@/utils/functions";
 import * as Styles from "@/utils/styles";
@@ -155,7 +156,17 @@ const ExportedComponent = (props: Props) => {
 
   const setPurchaseCategory = useCallback(
     (purchaseId: number, category: Types.Category): void => {
-      dispatch(Sagas.updatePurchaseRequest(purchaseId, { category }));
+      const associationUpdateData = {
+        [props.type === "overview" ? "overviewGroupId" : "logbookEntryId"]:
+          props.associationId,
+      };
+      dispatch(
+        Sagas.updatePurchaseRequest(
+          purchaseId,
+          { category },
+          associationUpdateData
+        )
+      );
     },
     []
   );
@@ -166,34 +177,50 @@ const ExportedComponent = (props: Props) => {
         purchaseId: number,
         purchaseDescription: string,
         purchaseCost: number,
-        description: string,
-        cost: string
+        updatedDescription: string,
+        updatedCost: string
       ): void => {
-        return Functions.updatePurchase(
-          purchaseId,
-          purchaseDescription,
-          purchaseCost,
-          description,
-          cost,
-          props.type === "overview" ? "overviewGroup" : "logbookEntry",
-          props.associationId,
-          props.associationTotalSpent,
-          dispatch
-        );
+        // ↓↓↓ On purchase description update. ↓↓↓ //
+        if (updatedDescription !== purchaseDescription) {
+          dispatch(Redux.uiActions.setLoadingPurchases(true));
+          dispatch(
+            Sagas.updatePurchaseRequest(purchaseId, {
+              description: updatedDescription,
+            })
+          );
+        }
+        // ↓↓↓ On purchase cost update. ↓↓↓ //
+        else if (Number(updatedCost) && Number(updatedCost) !== purchaseCost) {
+          const formattedRoundedCost = Number(
+            Functions.roundNumber(Number(updatedCost), 2)
+          );
+          const associationUpdateData = {
+            [props.type === "overview" ? "overviewGroupId" : "logbookEntryId"]:
+              props.associationId,
+          };
+          dispatch(Redux.uiActions.setLoadingPurchases(true));
+          dispatch(
+            Sagas.updatePurchaseRequest(
+              purchaseId,
+              { cost: formattedRoundedCost },
+              associationUpdateData
+            )
+          );
+        }
       }
     ),
     [props.associationTotalSpent]
   );
 
   const deletePurchase = useCallback(
-    (purchaseId: number, purchaseCost: number): void => {
-      return Functions.deletePurchase(
-        purchaseId,
-        purchaseCost,
-        props.type === "overview" ? "overviewGroup" : "logbookEntry",
-        props.associationId,
-        props.associationTotalSpent,
-        dispatch
+    (purchaseId: number): void => {
+      dispatch(
+        Sagas.deletePurchaseRequest(purchaseId, {
+          [props.type === "overview" ? "overviewGroup" : "logbookEntry"]: {
+            id: props.associationId,
+            totalSpent: props.associationTotalSpent,
+          },
+        })
       );
     },
     [props.associationTotalSpent]

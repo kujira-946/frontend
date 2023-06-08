@@ -7,4 +7,5 @@ export * from "./normalizr";
 export * from "./landing";
 export * from "./dashboard";
 export * from "./settings";
+export * from "./purchases";
 export * from "./legal";

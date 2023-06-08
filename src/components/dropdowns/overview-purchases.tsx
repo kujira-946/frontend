@@ -9,14 +9,8 @@ import { PurchaseCell } from "./purchase-cell";
 
 type Props = {
   purchases: Types.Purchase[];
-  updatePurchase: (
-    purchaseId: number,
-    purchaseDescription: string,
-    purchaseCost: number,
-    description: string,
-    cost: string
-  ) => void;
-  deletePurchase: (purchaseId: number, purchaseCost: number) => void;
+  updatePurchase: Types.UpdatePurchase;
+  deletePurchase: Types.DeletePurchase;
 };
 
 export const OverviewPurchases = (props: Props) => {

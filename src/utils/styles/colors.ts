@@ -46,7 +46,7 @@ export const primary = {
 
 export const monthly = {
   dark: "#E8DD76",
-  light: "#EEDE4A",
+  light: "#E0B61F",
 };
 
 export const need = {

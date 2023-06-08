@@ -126,20 +126,18 @@ export function bulkCreatePurchasesRequest(
   };
 }
 
-type AssociationPayload = {
-  overviewGroup?: { id: number; totalSpent: number };
-  logbookEntry?: { id: number; totalSpent: number };
-};
-
 type PurchaseUpdateAction = Types.SagaAction<{
   purchaseId: number;
   updateData: Types.PurchaseUpdateData;
-  association?: AssociationPayload;
+  association?: {
+    overviewGroupId?: number;
+    logbookEntryId?: number;
+  };
 }>;
 export function updatePurchaseRequest(
   purchaseId: number,
   updateData: Types.PurchaseUpdateData,
-  association?: AssociationPayload
+  association?: { overviewGroupId?: number; logbookEntryId?: number }
 ): PurchaseUpdateAction {
   return {
     type: PurchasesActionTypes.UPDATE_PURCHASE,
@@ -164,13 +162,17 @@ export function updatePurchasePlacementRequest(
   };
 }
 
+type AssociationDeletePayload = {
+  overviewGroup?: { id: number; totalSpent: number };
+  logbookEntry?: { id: number; totalSpent?: number };
+};
 type PurchaseDeleteAction = Types.SagaAction<{
   purchaseId: number;
-  association?: AssociationPayload;
+  association?: AssociationDeletePayload;
 }>;
 export function deletePurchaseRequest(
   purchaseId: number,
-  association?: AssociationPayload
+  association?: AssociationDeletePayload
 ): PurchaseDeleteAction {
   return {
     type: PurchasesActionTypes.DELETE_PURCHASE,
@@ -430,15 +432,26 @@ function* updatePurchase(action: PurchaseUpdateAction) {
     const endpoint = ApiRoutes.PURCHASES + `/${purchaseId}`;
     const { data } = yield Saga.call(axios.patch, endpoint, updateData);
     yield Saga.put(
-      Redux.entitiesActions.updatePurchase({ purchaseId, purchase: data.data })
+      Redux.entitiesActions.updatePurchase({
+        purchaseId,
+        purchase: data.data.updatedPurchase,
+      })
     );
-    if (association?.overviewGroup) {
-      const { id, totalSpent } = association.overviewGroup;
-      yield Saga.put(updateOverviewGroupRequest(id, { totalSpent }));
-    } else if (association?.logbookEntry) {
-      const { id, totalSpent } = association.logbookEntry;
-      yield Saga.put(updateLogbookEntryRequest(id, { totalSpent }));
+
+    if (association?.overviewGroupId) {
+      yield Saga.put(
+        updateOverviewGroupRequest(association.overviewGroupId, {
+          totalSpent: data.data.newAssociatedTotalSpent,
+        })
+      );
+    } else if (association?.logbookEntryId) {
+      yield Saga.put(
+        updateLogbookEntryRequest(association.logbookEntryId, {
+          totalSpent: data.data.newAssociatedTotalSpent,
+        })
+      );
     }
+
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
@@ -495,15 +508,25 @@ function* deletePurchase(action: PurchaseDeleteAction) {
   try {
     const { purchaseId, association } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/${purchaseId}`;
-    yield Saga.call(axios.delete, endpoint);
+    const { data } = yield Saga.call(axios.delete, endpoint);
     yield Saga.put(Redux.entitiesActions.deletePurchase(purchaseId));
+
     if (association?.overviewGroup) {
       const { id, totalSpent } = association.overviewGroup;
-      yield Saga.put(updateOverviewGroupRequest(id, { totalSpent }));
+      yield Saga.put(
+        updateOverviewGroupRequest(id, {
+          totalSpent: data.data.newAssociatedTotalSpent || totalSpent,
+        })
+      );
     } else if (association?.logbookEntry) {
       const { id, totalSpent } = association.logbookEntry;
-      yield Saga.put(updateLogbookEntryRequest(id, { totalSpent }));
+      yield Saga.put(
+        updateLogbookEntryRequest(id, {
+          totalSpent: data.data.newAssociatedTotalSpent || totalSpent,
+        })
+      );
     }
+
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));

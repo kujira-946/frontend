@@ -16,7 +16,7 @@ import { ThemeProps } from "@/components/layout";
 
 type ContainerProps = { selected: boolean };
 
-const Container = styled.section<ContainerProps>`                                  
+const Container = styled.section<ContainerProps>`
   ${Styles.transition};
   display: flex;
   gap: ${Styles.pxAsRem.eight};
@@ -48,7 +48,8 @@ const CategoryButton = styled.button<CategoryButtonProps>`
   width: 3.25rem;
   padding: ${Styles.pxAsRem.two} ${Styles.pxAsRem.four};
   color: ${(props: CategoryButtonProps & ThemeProps) => {
-    if (props.category === "need") return props.theme.need;
+    if (props.category === "monthly") return props.theme.monthly;
+    else if (props.category === "need") return props.theme.need;
     else if (props.category === "planned") return props.theme.planned;
     else return props.theme.impulse;
   }};
@@ -71,7 +72,7 @@ const CategoryButton = styled.button<CategoryButtonProps>`
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-const categories: Types.Category[] = ["need", "planned", "impulse"];
+const categories: Types.Category[] = ["monthly", "need", "planned", "impulse"];
 
 type Props = {
   purchaseId: number;
@@ -82,14 +83,8 @@ type Props = {
 
   description: string;
   cost: number;
-  updatePurchase: (
-    purchaseId: number,
-    purchaseDescription: string,
-    purchaseCost: number,
-    description: string,
-    cost: string
-  ) => void;
-  deletePurchase: (purchaseId: number, purchaseCost: number) => void;
+  updatePurchase: Types.UpdatePurchase;
+  deletePurchase: Types.DeletePurchase;
   showDelete?: true;
 };
 
@@ -112,7 +107,7 @@ const ExportedComponent = (props: Props) => {
       description.value,
       cost.value
     );
-  }, [description.value, cost.value]);
+  }, [props.category, description.value, cost.value]);
 
   effect(() => {
     if (!Number(cost.value) || Number(cost.value) < 0) {
@@ -246,9 +241,7 @@ const ExportedComponent = (props: Props) => {
       {/* Delete */}
       {props.showDelete && theme.value && (
         <Globals.IconContainer
-          onClick={() =>
-            props.deletePurchase(props.purchaseId, Number(props.cost))
-          }
+          onClick={() => props.deletePurchase(props.purchaseId)}
         >
           <Icons.Close
             width={14}
