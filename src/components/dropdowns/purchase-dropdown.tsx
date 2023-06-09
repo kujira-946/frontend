@@ -215,10 +215,8 @@ const ExportedComponent = (props: Props) => {
   const deletePurchase = useCallback((purchaseId: number): void => {
     dispatch(
       Sagas.deletePurchaseRequest(purchaseId, {
-        [props.type === "overview" ? "overviewGroup" : "logbookEntry"]: {
-          id: props.associationId,
-          totalSpent: props.associationTotalSpent,
-        },
+        [props.type === "overview" ? "overviewGroupId" : "logbookEntryId"]:
+          props.associationId,
       })
     );
   }, []);

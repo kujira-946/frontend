@@ -61,7 +61,7 @@ const Onboarding = () => {
 
   const onDragEnd = useCallback(
     (result: Drag.DropResult, provided: Drag.ResponderProvided): void => {
-      return Functions.onDragEnd(result, provided, "Overview Group", dispatch);
+      return Functions.onDragEnd(result, provided, dispatch);
     },
     []
   );
