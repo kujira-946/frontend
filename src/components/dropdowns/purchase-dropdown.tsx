@@ -212,19 +212,16 @@ const ExportedComponent = (props: Props) => {
     [props.associationTotalSpent]
   );
 
-  const deletePurchase = useCallback(
-    (purchaseId: number): void => {
-      dispatch(
-        Sagas.deletePurchaseRequest(purchaseId, {
-          [props.type === "overview" ? "overviewGroup" : "logbookEntry"]: {
-            id: props.associationId,
-            totalSpent: props.associationTotalSpent,
-          },
-        })
-      );
-    },
-    [props.associationTotalSpent]
-  );
+  const deletePurchase = useCallback((purchaseId: number): void => {
+    dispatch(
+      Sagas.deletePurchaseRequest(purchaseId, {
+        [props.type === "overview" ? "overviewGroup" : "logbookEntry"]: {
+          id: props.associationId,
+          totalSpent: props.associationTotalSpent,
+        },
+      })
+    );
+  }, []);
 
   // ↓↓↓ Fetching associated purchases (overview group / logbook entry) ↓↓↓ //
   useEffect(() => {

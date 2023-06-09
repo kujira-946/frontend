@@ -539,19 +539,34 @@ function* bulkDeletePurchases(action: PurchaseBulkDeleteAction) {
     const { purchaseIds, association, associationId } = action.payload;
     const endpoint = ApiRoutes.PURCHASES + `/bulk-delete`;
 
-    // ↓↓↓ If the purchases either belongs to an overview group           ↓↓↓ //
-    // ↓↓↓ or logbook entry, fix the purchase placements on bulk delete.  ↓↓↓ //
+    // ↓↓↓ If purchases belong to an overview group or logbook entry, perform ↓↓↓ //
+    // ↓↓↓ a bulk delete and update their association. ↓↓↓ //
     if (association && associationId) {
+      // Updating overview group `totalSpent` and its remaining purchases' `placement`.
       if (association === "Overview Group") {
-        yield Saga.call(axios.post, endpoint, {
+        const { data } = yield Saga.call(axios.post, endpoint, {
           purchaseIds,
           overviewGroupId: associationId,
         });
-      } else {
-        yield Saga.call(axios.post, endpoint, {
+        yield Saga.put(
+          Redux.entitiesActions.updateOverviewGroup({
+            overviewGroupId: associationId,
+            overviewGroup: data.data.updatedOverviewGroup,
+          })
+        );
+      }
+      // Updating logbook entry `totalSpent` and its remaining purchases' `placement`.
+      else {
+        const { data } = yield Saga.call(axios.post, endpoint, {
           purchaseIds,
           logbookEntryId: associationId,
         });
+        yield Saga.put(
+          Redux.entitiesActions.updateLogbookEntry({
+            logbookEntryId: associationId,
+            logbookEntry: data.data.updatedLogbookEntry,
+          })
+        );
       }
     }
     // ↓↓↓ Otherwise, just delete the purchases without caring for placements. ↓↓↓ //
@@ -560,7 +575,6 @@ function* bulkDeletePurchases(action: PurchaseBulkDeleteAction) {
     }
 
     yield Saga.put(Redux.entitiesActions.bulkDeletePurchases(purchaseIds));
-    // yield Saga.put(updateLogbookEntryRequest(logbookEntryId, { totalSpent }));
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
   } catch (error) {
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
