@@ -41,6 +41,7 @@ type NavigationButtonsProps = { noHeader?: true };
 const NavigationButtons = styled.section<NavigationButtonsProps>`
   display: flex;
   flex-direction: column;
+  height: 100%;
   padding: ${(props) => {
     return !props.noHeader
       ? `${Styles.pxAsRem.twenty} ${Styles.pxAsRem.twentyFour}`
@@ -67,7 +68,6 @@ type Props = {
 
 export const MobileMenuModal = (props: Props) => {
   const { theme } = Functions.useSignalsStore().ui;
-  const { mobileMenuOpen } = Functions.useSignalsStore().dashboard;
 
   return (
     <Globals.Portal>

@@ -2,6 +2,28 @@ import * as Dashboard from "@/components/dashboard";
 import * as Functions from "@/utils/functions";
 
 import { MobileMenuModal } from "./mobile-menu-modal";
+import styled from "styled-components";
+
+// ========================================================================================= //
+// [ STYLED COMPONENTS ] =================================================================== //
+// ========================================================================================= //
+
+const Container = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
+const LogbookOverviewGroupsScrollContainer = styled.div`
+  position: relative;
+  flex: 1;
+  overflow-y: auto;
+`;
+
+// ========================================================================================= //
+// [ EXPORTED COMPONENT ] ================================================================== //
+// ========================================================================================= //
 
 export const MobileLogbooksOverview = () => {
   const { mobileOverviewOpen } = Functions.useSignalsStore().dashboard;
@@ -12,8 +34,12 @@ export const MobileLogbooksOverview = () => {
       closeAction={() => (mobileOverviewOpen.value = false)}
       noHeader
     >
-      <Dashboard.LogbooksUserSummary inModal />
-      <Dashboard.LogbookOverviewGroups inModal />
+      <Container>
+        <Dashboard.LogbooksUserSummary inModal />
+        <LogbookOverviewGroupsScrollContainer>
+          <Dashboard.LogbookOverviewGroups inModal />
+        </LogbookOverviewGroupsScrollContainer>
+      </Container>
     </MobileMenuModal>
   );
 };

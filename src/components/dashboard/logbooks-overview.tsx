@@ -16,8 +16,16 @@ import { LogbookOverviewGroups } from "./logbooks-overview-groups";
 
 const Container = styled.article`
   position: relative;
+  display: flex;
+  flex-direction: column;
   height: 100%;
   background-color: ${(props: ThemeProps) => props.theme.backgroundTwo};
+`;
+
+const LogbookOverviewGroupsScrollContainer = styled.div`
+  position: relative;
+  flex: 1;
+  overflow-y: auto;
 `;
 
 // ========================================================================================= //
@@ -43,9 +51,11 @@ export const LogbooksOverview = () => {
 
       <LogbooksUserSummary />
 
-      {/* <DragDropContext onDragEnd={() => console.log("")}> */}
-      <LogbookOverviewGroups />
-      {/* </DragDropContext> */}
+      <LogbookOverviewGroupsScrollContainer>
+        {/* <DragDropContext onDragEnd={() => console.log("")}> */}
+        <LogbookOverviewGroups />
+        {/* </DragDropContext> */}
+      </LogbookOverviewGroupsScrollContainer>
 
       <AnimatePresence>
         {filtersOpen.value && <DynamicLogbookFiltersModal open={filtersOpen} />}

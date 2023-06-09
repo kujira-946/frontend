@@ -13,11 +13,12 @@ import { LogbooksOverviewGroup } from "./logbooks-overview-group";
 // [ STYLED COMPONENTS ] =================================================================== //
 // ========================================================================================= //
 
-type OverviewGroupsProps = { inModal?: true };
+type ContainerProps = { inModal?: true };
 
-const OverviewGroups = styled.section<OverviewGroupsProps>`
+const Container = styled.section<ContainerProps>`
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   gap: ${Styles.pxAsRem.twelve};
   padding: ${Styles.pxAsRem.twelve};
 
@@ -32,7 +33,7 @@ const OverviewGroups = styled.section<OverviewGroupsProps>`
 // [ EXPORTED COMPONENT ] ================================================================== //
 // ========================================================================================= //
 
-export const LogbookOverviewGroups = (props: OverviewGroupsProps) => {
+export const LogbookOverviewGroups = (props: ContainerProps) => {
   const dispatch = Functions.useAppDispatch();
 
   const { loadingOverviewGroups } = Functions.useUiSlice();
@@ -54,7 +55,7 @@ export const LogbookOverviewGroups = (props: OverviewGroupsProps) => {
   }, []);
 
   return (
-    <OverviewGroups inModal={props.inModal}>
+    <Container inModal={props.inModal}>
       {loadingOverviewGroups ? (
         <>
           <OverviewShimmer />
@@ -79,6 +80,6 @@ export const LogbookOverviewGroups = (props: OverviewGroupsProps) => {
           }
         )
       )}
-    </OverviewGroups>
+    </Container>
   );
 };
