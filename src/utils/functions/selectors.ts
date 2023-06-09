@@ -202,3 +202,17 @@ export function useGetLogbookEntryPurchases(logbookEntryId: number) {
     getLogbookEntryPurchases(state, logbookEntryId)
   );
 }
+
+// ========================================================================================= //
+// [ PURCHASES ] =================================================================== //
+// ========================================================================================= //
+
+export const getPurchase = createCachedSelector(
+  (state: GlobalState) => state.entities.purchases,
+  (state: GlobalState, purchaseId: number) => purchaseId,
+  (purchases, purchaseId) => {
+    if (purchases && purchases[purchaseId]) {
+      return purchases[purchaseId];
+    }
+  }
+)((_state_: GlobalState, purchaseId: number) => purchaseId);

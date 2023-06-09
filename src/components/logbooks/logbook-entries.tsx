@@ -40,7 +40,7 @@ export const LogbookEntries = (props: Props) => {
 
   const onDragEnd = useCallback(
     (result: Drag.DropResult, provided: Drag.ResponderProvided): void => {
-      return Functions.onDragEnd(result, provided, "Logbook Entry", dispatch);
+      return Functions.onDragEnd(result, provided, dispatch);
     },
     []
   );

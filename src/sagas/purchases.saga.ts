@@ -145,7 +145,6 @@ export function updatePurchaseRequest(
   };
 }
 
-export type Association = "Overview Group" | "Logbook Entry";
 type PurchasePlacementUpdateAction = Types.SagaAction<{
   purchaseId: number;
   previousPlacement: number;
@@ -180,14 +179,15 @@ export function deletePurchaseRequest(
   };
 }
 
+export type PurchaseAssociation = "Overview Group" | "Logbook Entry";
 type PurchaseBulkDeleteAction = Types.SagaAction<{
   purchaseIds: number[];
-  association?: Association;
+  association?: PurchaseAssociation;
   associationId?: number;
 }>;
 export function bulkDeletePurchasesRequest(
   purchaseIds: number[],
-  association?: Association,
+  association?: PurchaseAssociation,
   associationId?: number
 ): PurchaseBulkDeleteAction {
   return {
@@ -464,37 +464,52 @@ function* updatePurchasePlacement(action: PurchasePlacementUpdateAction) {
     const { purchaseId, previousPlacement, updatedPlacement } = action.payload;
     const endpoint =
       ApiRoutes.PURCHASES + `/${purchaseId}/update-purchase-placement`;
-    const { data } = yield Saga.call(axios.patch, endpoint, {
-      updatedPlacement,
-    });
 
-    const logbookEntry: Types.LogbookEntry | null = yield Saga.select(
+    const purchase: Types.Purchase | null = yield Saga.select(
       (state: GlobalState) => {
-        if (data.data.overviewGroupId) {
-          return Functions.getOverviewGroup(state, data.data.overviewGroupId);
-        } else if (data.data.logbookEntryId) {
-          return Functions.getLogbookEntry(state, data.data.logbookEntryId);
-        } else {
-          return null;
-        }
+        return Functions.getPurchase(state, purchaseId);
       }
     );
 
-    if (logbookEntry && logbookEntry.purchaseIds) {
-      const previousIndex = previousPlacement - 1;
-      const updatedIndex = updatedPlacement - 1;
+    if (purchase) {
+      // ↓↓↓ Finding the overview group or logbook entry that is associated with the dragged purchase. ↓↓↓ //
+      let association: Types.OverviewGroup | Types.LogbookEntry | null = null;
 
-      const updatedPurchaseIds = Functions.deepCopy(logbookEntry.purchaseIds);
-      const draggedPurchaseId = updatedPurchaseIds.splice(previousIndex, 1);
-      updatedPurchaseIds.splice(updatedIndex, 0, draggedPurchaseId[0]);
+      if (purchase.overviewGroupId) {
+        association = yield Saga.select((state: GlobalState) => {
+          if (purchase.overviewGroupId) {
+            return Functions.getOverviewGroup(state, purchase.overviewGroupId);
+          }
+        });
+      } else if (purchase.logbookEntryId) {
+        association = yield Saga.select((state: GlobalState) => {
+          if (purchase.logbookEntryId) {
+            return Functions.getLogbookEntry(state, purchase.logbookEntryId);
+          }
+        });
+      }
 
-      yield Saga.put(
-        Redux.entitiesActions.updateLogbookEntryRelations({
-          logbookEntryId: logbookEntry.id,
-          purchaseIds: updatedPurchaseIds,
-          resetRelations: true,
-        })
-      );
+      // ↓↓↓ If an association was found, update the purchase order in the client and database. ↓↓↓ //
+      if (association) {
+        const previousIndex = previousPlacement - 1;
+        const updatedIndex = updatedPlacement - 1;
+        const updatedPurchaseIds = Functions.deepCopy(association.purchaseIds);
+
+        if (updatedPurchaseIds) {
+          const draggedPurchaseId = updatedPurchaseIds.splice(previousIndex, 1);
+          updatedPurchaseIds.splice(updatedIndex, 0, draggedPurchaseId[0]);
+          // Updating purchase placements in the client.
+          yield Saga.put(
+            Redux.entitiesActions.updateLogbookEntryRelations({
+              logbookEntryId: association.id,
+              purchaseIds: updatedPurchaseIds,
+              resetRelations: true,
+            })
+          );
+          // Updating purchase placements in the database.
+          yield Saga.call(axios.patch, endpoint, { updatedPurchaseIds });
+        }
+      }
     }
 
     yield Saga.put(Redux.uiActions.setLoadingPurchases(false));
