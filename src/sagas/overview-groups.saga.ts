@@ -125,7 +125,7 @@ function* fetchOverviewGroups() {
 function* fetchOverviewOverviewGroups(action: OverviewOverviewGroupsAction) {
   try {
     const { overviewId } = action.payload;
-    const endpoint = ApiRoutes.OVERVIEW_GROUPS + `/fetch-overview-groups`;
+    const endpoint = ApiRoutes.OVERVIEW_GROUPS + `/fetch-overview-overview-groups`;
     const { data } = yield Saga.call(axios.post, endpoint, { overviewId });
     const normalizedData = normalize(data.data, [overviewGroupsSchema]);
     const { overviewGroups } = normalizedData.entities;
