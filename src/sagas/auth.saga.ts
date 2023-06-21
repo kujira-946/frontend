@@ -32,11 +32,11 @@ export function registerRequest(data: Types.RegistrationData): RegisterAction {
 type VerifyRegistrationAction = Types.SagaAction<Types.VerificationData>;
 export function verifyRegistrationRequest(
   email: string,
-  verificationCode: string
+  signedVerificationCode: string
 ): VerifyRegistrationAction {
   return {
     type: AuthActionTypes.VERIFY_REGISTRATION,
-    payload: { email, verificationCode },
+    payload: { email, signedVerificationCode },
   };
 }
 
@@ -51,12 +51,12 @@ export function loginRequest(data: Types.LoginData): LoginAction {
 type VerifyLoginAction = Types.SagaAction<Types.VerificationData>;
 export function verifyLoginRequest(
   email: string,
-  verificationCode: string,
+  signedVerificationCode: string,
   thirtyDays?: boolean
 ): VerifyLoginAction {
   return {
     type: AuthActionTypes.VERIFY_LOGIN,
-    payload: { email, verificationCode, thirtyDays },
+    payload: { email, signedVerificationCode, thirtyDays },
   };
 }
 
@@ -103,11 +103,11 @@ function* register(action: RegisterAction) {
 
 function* verifyRegistration(action: VerifyRegistrationAction) {
   try {
-    const { email, verificationCode } = action.payload;
+    const { email, signedVerificationCode } = action.payload;
     const endpoint = ApiRoutes.AUTH + `/register/verify`;
     const { data } = yield Saga.call(axios.patch, endpoint, {
       email,
-      verificationCode,
+      signedVerificationCode,
     });
     Cookies.set(Constants.userId, data.data.id, { secure: true });
     Cookies.set(Constants.token, data.accessToken, {
@@ -160,11 +160,11 @@ function* login(action: LoginAction) {
 
 function* verifyLogin(action: VerifyLoginAction) {
   try {
-    const { email, verificationCode, thirtyDays } = action.payload;
+    const { email, signedVerificationCode, thirtyDays } = action.payload;
     const endpoint = ApiRoutes.AUTH + `/login/verify`;
     const { data } = yield Saga.call(axios.patch, endpoint, {
       email,
-      verificationCode,
+      signedVerificationCode,
       thirtyDays,
     });
     Cookies.set(Constants.userId, data.data.id, { secure: true });

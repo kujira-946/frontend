@@ -34,7 +34,7 @@ export type LoginData = {
 
 export type VerificationData = {
   email: string;
-  verificationCode: string;
+  signedVerificationCode: string;
   thirtyDays?: boolean;
 };
 
